@@ -1,6 +1,17 @@
 <svg id="svg" version="1.1" xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0,0,256,256">
+  <style>
+    .letter {
+      stroke: white;
+      stroke-width: 18px;
+      fill: transparent;
+      stroke-linecap: square;
+    }
+  </style>
   <g>
     <rect width="256" height="256" fill="CornflowerBlue" stroke="black"></rect>
-    <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="monospace" font-weight="bold" font-size="128" fill="white">edu</text>
+
+    <path class="letter" d="M 52 128 m -24 0 h 48 v -24 h -48 v 48 h 48"/>
+    <path class="letter" d="M 128 128 m 24 -72 v 96 h -48 v -48 h 48"/>
+    <path class="letter" d="M 204 128 m -24 -24 v 48 h 48 v -48"/>
   </g>
 </svg>
