@@ -1,7 +1,15 @@
 <script>
-	import { base } from '$app/paths'
-    import ThemeToggle from '$lib/ThemeToggle/ThemeToggle.svelte';
+import "bootstrap/dist/css/bootstrap.min.css";
+import scriptSrc from "bootstrap/dist/js/bootstrap.bundle.min.js?url";
+import "bootstrap-icons/font/bootstrap-icons.css";
+
+import { base } from '$app/paths'
+import ThemeToggle from '$lib/ThemeToggle/ThemeToggle.svelte';
 </script>
+
+<svelte:head>
+	<script src={scriptSrc}></script>
+</svelte:head>
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary">
 	<div class="container-fluid">
