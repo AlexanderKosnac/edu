@@ -1,4 +1,4 @@
-# edu 
+# [edu](https://alexanderkosnac.github.io/edu)
 
 Collection of programs with a focus on transparency and understanding of the
 underlying material.
