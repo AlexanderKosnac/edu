@@ -1,49 +1,14 @@
 <script>
-import { onMount } from "svelte";
-import Chart from "chart.js/auto";
+import IterationValueChart from "./IterationValueChart.svelte";
 
-let chart;
-const data = {
-    labels: [],
-    datasets: [{
-        label: "Iteration",
-        data: [],
-        backgroundColor: "#0d6efd",
-        borderWidth: 2,
-        borderColor: "#0d6efd",
-    }]
-};
-
-onMount(()=> {
-    const ctx = document.querySelector("#iteration-values-chart").getContext('2d');
-    chart = new Chart(ctx, {
-        type: "line",
-        data: data,
-        options: {
-            maintainAspectRatio: false,
-            animation: {
-                duration: 0
-            }
-        }
-    });
-})
-
-let iterationHook = (iteration, value) => {
-    chart.data.labels.push(iteration);
-    chart.data.datasets[0].data.push(value);
-    chart.update();
-};
+let startInput;
+let iterationValueChart;
 
 function collatz(n) {
     return (n % 2 == 0) ? n/2 : 3*n+1;
 }
 
-async function runCollatz() {
-    chart.data.labels = [];
-    chart.data.datasets[0].data = [];
-    chart.update();
-
-    const start = parseInt(document.querySelector("#start").value);
+function runCollatz(start, iterationHook = (it, n) => {}) {
     let n = start;
     let time = 0;
     let sequence = [n];
@@ -67,6 +32,20 @@ let run = {
     time: 0,
     sequence: [],
 };
+
+function sampleRunCollatz(e) {
+    startInput.value = e.target.innerText;
+    singleCollatzRun();
+}
+
+function singleCollatzRun() {
+    const start = parseInt(startInput.value);
+    iterationValueChart.clearData();
+    runCollatz(start, (it, n) => {
+        iterationValueChart.addDatapoint(it, n);
+    });
+}
+
 </script>
 
 <div class="row">
@@ -78,8 +57,16 @@ let run = {
 <div class="row">
     <div class="col">
         <div class="input-group mb-2">
-            <button type="button" class="btn btn-primary" on:click={runCollatz}>Run</button>
-            <input id="start" type="number" class="form-control" placeholder="Starting number" value="27">
+            <button type="button" class="btn btn-primary" on:click={singleCollatzRun}>Run</button>
+            <input bind:this={startInput} type="number" class="form-control" placeholder="Starting number" value="1024">
+        </div>
+
+        <div class="d-flex align-items-center gap-1 mb-2">
+            <div>Interesting starting points:</div>
+            <button type="button" class="btn btn-sm btn-outline-primary" on:click={sampleRunCollatz}>15</button>
+            <button type="button" class="btn btn-sm btn-outline-primary" on:click={sampleRunCollatz}>27</button>
+            <button type="button" class="btn btn-sm btn-outline-primary" on:click={sampleRunCollatz}>1024</button>
+            <button type="button" class="btn btn-sm btn-outline-primary" on:click={sampleRunCollatz}>9663</button>
         </div>
 
         <table class="table table-bordered">
@@ -100,7 +87,7 @@ let run = {
         </table>
 
         <div class="chart-container">
-            <canvas id="iteration-values-chart" height={400} />
+            <IterationValueChart bind:this={iterationValueChart}/>
         </div>
     </div>
 </div>
