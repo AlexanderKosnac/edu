@@ -4,15 +4,17 @@ import Chart from "chart.js/auto";
 
 export let canvas;
 
-export const addDatapoint = (iteration, value) => {
-    chart.data.labels.push(iteration);
-    chart.data.datasets[0].data.push(value);
-    chart.update();
+export const addDatapoint = (label, data) => {
+    chart.data.labels.push(label);
+    chart.data.datasets[0].data.push(data);
 };
 
 export function clearData() {
     chart.data.labels = [];
     chart.data.datasets[0].data = [];
+}
+
+export function update() {
     chart.update();
 }
 
@@ -21,12 +23,13 @@ let chart;
 const data = {
     labels: [],
     datasets: [{
-        label: "Iteration Value",
+        label: "Value",
         data: [],
+        pointRadius: 2,
         backgroundColor: "#0d6efd",
-        borderWidth: 2,
+        borderWidth: 1,
         borderColor: "#0d6efd",
-    }]
+    }],
 };
 
 onMount(()=> {
@@ -37,7 +40,7 @@ onMount(()=> {
             maintainAspectRatio: false,
             animation: {
                 duration: 0
-            }
+            },
         }
     });
 });
