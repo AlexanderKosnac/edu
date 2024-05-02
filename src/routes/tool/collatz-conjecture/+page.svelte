@@ -1,8 +1,13 @@
 <script>
 import IterationValueChart from "./IterationValueChart.svelte";
+import ValueStoppingtimeChart from "./ValueStoppingtimeChart.svelte";
 
 let startInput;
 let iterationValueChart;
+
+let rangeStartInput;
+let rangeEndInput;
+let valueStoppingtimeChart;
 
 function collatz(n) {
     return (n % 2 == 0) ? n/2 : 3*n+1;
@@ -20,7 +25,7 @@ function runCollatz(start, iterationHook = (it, n) => {}) {
         sequence.push(n);
         iterationHook(time, n);
     }
-    run = {
+    return {
         start: start,
         time: time,
         sequence: sequence,
@@ -41,11 +46,22 @@ function sampleRunCollatz(e) {
 function singleCollatzRun() {
     const start = parseInt(startInput.value);
     iterationValueChart.clearData();
-    runCollatz(start, (it, n) => {
+    run = runCollatz(start, (it, n) => {
         iterationValueChart.addDatapoint(it, n);
     });
+    iterationValueChart.update();
 }
 
+function massCollatzRun() {
+    const start = parseInt(rangeStartInput.value);
+    const end = parseInt(rangeEndInput.value);
+    valueStoppingtimeChart.clearData();
+    for (let i=start; i<=end; i++) {
+        const run = runCollatz(i);
+        valueStoppingtimeChart.addDatapoint(`${i}`, {x: i, y: run.time});
+    }
+    valueStoppingtimeChart.update();
+}
 </script>
 
 <div class="row">
@@ -89,6 +105,29 @@ function singleCollatzRun() {
         <div class="chart-container">
             <IterationValueChart bind:this={iterationValueChart}/>
         </div>
+    </div>
+</div>
+
+<div class="row">
+    <h2>Mass Analysis:</h2>
+    <div class="col">
+        <div class="d-flex align-items-center gap-1 mb-2">
+                <div class="input-group">
+                <span class="input-group-text">Start</span>
+                <input bind:this={rangeStartInput} type="number" class="form-control" value="1">
+            </div>
+            <div class="input-group">
+                <span class="input-group-text">End</span>
+                <input bind:this={rangeEndInput} type="number" class="form-control" value="99">
+            </div>
+            <button type="button" class="btn btn-primary" on:click={massCollatzRun}>Run</button>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <ValueStoppingtimeChart bind:this={valueStoppingtimeChart}/>
     </div>
 </div>
 
