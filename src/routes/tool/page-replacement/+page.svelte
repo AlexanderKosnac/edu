@@ -1,12 +1,5 @@
 <script>
-    let pageRequests = [];
-
-    function requestPage(e) {
-        let pageNumber = e.target.getAttribute("value");
-        pageNumber ??= document.querySelector("#custom-page-request").value.trim();
-        if (pageNumber.length === 0) return;
-        pageRequests.push(pageNumber);
-    }
+    const EMPTY_PAGE = "∅";
 
     const implementations = [
         {
@@ -36,14 +29,52 @@
         {
             abbrev: "LRU",
             full: "Least recently used",
-            description: "",
-            f: () => {
-                console.log("LRU")
+            description: "Discards the least recently used page first.",
+            newPage: () => ({page: undefined, age: 0}),
+            onPageInFrame: (page) => {page.age = 0},
+            getRemovalCandidate: (frames) => frames.reduce((max, obj) => obj.age > max.age ? obj : max, frames[0]),
+            replacePage: (frame, page) => {
+                frame.page = page;
+                frame.age = 0;
             },
         },
     ];
 
-    let algorithm = implementations[0];
+    let algorithm = implementations[3];
+
+    let history = [{
+        request: undefined,
+        frames: Array.from({ length: 3 }, () => algorithm.newPage()),
+    }];
+
+    let pageFaults = 0;
+
+    function isPageInFrames(page, frames) {
+        return frames.find(f => f.page === page);
+    }
+
+    function requestPage(e) {
+        let page = e.target.getAttribute("value");
+        page ??= document.querySelector("#custom-page-request").value.trim();
+        if (page.length === 0) return;
+
+        let timestep = {
+            request: page,
+            frames: [],
+        };
+        history[history.length - 1].frames.forEach(it => timestep.frames.push(structuredClone(it)));
+        timestep.frames.forEach(it => it.age++);
+
+        let frame = isPageInFrames(page, timestep.frames);
+        if (frame) {
+            algorithm.onPageInFrame(frame);
+        } else {
+            let candidate = algorithm.getRemovalCandidate(timestep.frames);
+            algorithm.replacePage(candidate, page);
+            pageFaults += 1;
+        }
+        history = [...history, timestep];
+    }
 </script>
 
 <div class="row">
@@ -54,40 +85,35 @@
 
 <div class="row">
     <div class="col">
-        <strong>Request Page:</strong><br>
-        explain here what this does
-        <div class="d-flex gap-1">
-            <button type="button" class="btn btn-secondary page-request-button" on:click={requestPage} value="1"/>
-            <button type="button" class="btn btn-secondary page-request-button" on:click={requestPage} value="2"/>
-            <button type="button" class="btn btn-secondary page-request-button" on:click={requestPage} value="3"/>
-            <button type="button" class="btn btn-secondary page-request-button" on:click={requestPage} value="4"/>
-            <button type="button" class="btn btn-secondary page-request-button" on:click={requestPage} value="5"/>
-            <button type="button" class="btn btn-secondary page-request-button" on:click={requestPage} value="6"/>
-            <button type="button" class="btn btn-secondary page-request-button" on:click={requestPage} value="7"/>
-            <button type="button" class="btn btn-secondary page-request-button" on:click={requestPage} value="8"/>
-            <button type="button" class="btn btn-secondary page-request-button" on:click={requestPage} value="9"/>
+        <div class="d-flex flex-row gap-3">
+            <strong>Algorithm to use:</strong>
+            {#each implementations as implementation, idx}
+            <div>
+                <input type="radio" class="form-check-input" name="algorithm" id="alg{idx}" autocomplete="off" checked="{idx === 0}"
+                    bind:group={algorithm} value={implementations[idx]}>
+                <label class="form-check-label" for="alg{idx}">{implementation.abbrev}</label>
+            </div>
+            {/each}
+        </div>
+        <div class="mb-3">
+            <span>{algorithm.full} ({algorithm.abbrev}):</span> {algorithm.description}
+        </div>
+
+        <strong class="text-nowrap">Request Page:</strong>
+        <div class="d-flex align-items-center gap-1">
+            <button type="button" class="btn btn-outline-primary page-request-button btn-request" on:click={requestPage} value="1"/>
+            <button type="button" class="btn btn-outline-primary page-request-button btn-request" on:click={requestPage} value="2"/>
+            <button type="button" class="btn btn-outline-primary page-request-button btn-request" on:click={requestPage} value="3"/>
+            <button type="button" class="btn btn-outline-primary page-request-button btn-request" on:click={requestPage} value="4"/>
+            <button type="button" class="btn btn-outline-primary page-request-button btn-request" on:click={requestPage} value="5"/>
+            <button type="button" class="btn btn-outline-primary page-request-button btn-request" on:click={requestPage} value="6"/>
+            <button type="button" class="btn btn-outline-primary page-request-button btn-request" on:click={requestPage} value="7"/>
+            <button type="button" class="btn btn-outline-primary page-request-button btn-request" on:click={requestPage} value="8"/>
+            <button type="button" class="btn btn-outline-primary page-request-button btn-request" on:click={requestPage} value="9"/>
 
             <div class="input-group">
                 <input id="custom-page-request" type="text" class="form-control" style="max-width: 50px">
-                <button type="button" class="btn btn-secondary" on:click={requestPage}>Request</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="col">
-        <strong>Algorithm:</strong>
-        <div class="d-flex flex-row gap-5">
-            <div class="d-flex flex-column gap-2">
-            {#each implementations as implementation, idx}
-                <div>
-                    <input type="radio" class="form-check-input" name="algorithm" id="alg{idx}" autocomplete="off" checked="{idx === 0}"
-                        bind:group={algorithm} value={implementations[idx]}>
-                    <label class="form-check-label" for="alg{idx}">{implementation.abbrev}</label>
-                </div>
-            {/each}
-            </div>
-            <div>
-                <strong>{algorithm.full} ({algorithm.abbrev}):</strong> {algorithm.description}
+                <button type="button" class="btn btn-outline-primary" on:click={requestPage}>Request</button>
             </div>
         </div>
     </div>
@@ -95,24 +121,26 @@
 
 <div class="row">
     <div class="col">
-        <table class="table table-bordered mt-3">
-        <tbody>
-            <tr id="page-request-history">
-                <th>Page Request</th>
-            </tr>
-            <tr>
-                <td>a</td>
-            </tr>
-            <tr>
-                <td>a</td>
-            </tr>
-            <tr>
-                <td>a</td>
-            </tr>
-        </tbody>
-        </table>
-        
-        <div>A {pageRequests.toString()} B</div>
+        <div class="mw-100 overflow-auto">
+            <table class="table table-bordered mt-3 page-table">
+                <tbody>
+                    <tr>
+                        <th class="text-center">Request</th>
+                        {#each history as timestep}
+                            <td>{timestep.request ?? EMPTY_PAGE}</td>
+                        {/each}
+                    </tr>
+                    {#each {length: 3} as _, i}
+                    <tr>
+                        <th class="text-center">Slot {i+1}</th>
+                        {#each history as timestep}
+                            <td>{timestep.frames[i].page ?? EMPTY_PAGE} ({timestep.frames[i].age})</td>
+                        {/each}
+                    </tr>
+                    {/each}
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
@@ -128,5 +156,11 @@
 <style>
 .page-request-button::after {
     content: attr(value);
+}
+.page-table tbody > tr > td:last-child {
+    width: 100%;
+}
+.btn-request {
+    width: 50px;
 }
 </style>
