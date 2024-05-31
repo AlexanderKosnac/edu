@@ -2,25 +2,22 @@
 import { onMount } from 'svelte';
 
 import img from '$lib/images/animal.png';
+import ConvolutionMask from './ConvolutionMask.svelte';
 
+let convolution = [
+    [ 0, -1,  0],
+    [-1,  5, -1],
+    [ 0, -1,  0],
+];
+
+let center = [1, 1];
+let dimension = [3, 3];
+let factor = 1;
+
+let matrixInput;
 let input;
 let original;
 let convoluted;
-
-const convolution = [
-    /*
-    [ 0, -1,  0],
-    [-1,  4, -1],
-    [ 0, -1,  0],
-    */
-    [1,  4,  6,  4, 1],
-    [4, 16, 24, 16, 4],
-    [6, 24, 36, 24, 6],
-    [4, 16, 24, 16, 4],
-    [1,  4,  6,  4, 1],
-]
-const factor = 1/256;
-const center = [2, 2];
 
 function run() {
     const ctxOriginal = original.getContext("2d");
@@ -50,8 +47,8 @@ function run() {
     }
 
     function getConvolutedValue(x, y, offset) {
-        const a = convolution.length;
-        const b = convolution[0].length;
+        const a = dimension[0];
+        const b = dimension[1];
         let acc = 0;
         for (let i=0; i<a; i++) {
             for (let j=0; j<b; j++) {
@@ -93,17 +90,20 @@ onMount(() => {
 
 <div class="row">
     <div class="col">
-        <img bind:this={input} src={img} alt="a"/>
-        <br>
-        <input type="file" id="img" name="img" accept="image/*">
-        <br>
-        <br>
-        <div class="d-flex justify-content-around mb-1">
-            <canvas bind:this={original}/>
-            <canvas bind:this={convoluted}/>
+        <div class="">
+            <div class="d-flex flex-column gap-1">
+                <ConvolutionMask bind:this={matrixInput} bind:matrix={convolution} bind:center={center} bind:dimension={dimension} bind:factor={factor}/>
+                <img bind:this={input} src={img} alt="a" width="100" height="100"/>
+                <input type="file" id="img" name="img" accept="image/*">
+                <button type="button" class="btn btn-primary" on:click={run}>Do convolution</button>
+            </div>
         </div>
-        <br>
-        <button type="button" class="btn btn-primary" on:click={run}>Do convolution</button>
+    </div>
+    <div class="col-3">
+        <canvas bind:this={original}/>
+    </div>
+    <div class="col-3">
+        <canvas bind:this={convoluted}/>
     </div>
 </div>
 
