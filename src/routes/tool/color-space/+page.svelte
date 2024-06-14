@@ -7,10 +7,22 @@
 
 	let selected = values[0];
     let colorInput = {
-        toRgbHex: () => "#??????",
+        toRgbHex: () => "#000000",
         toRgb: () => { return { r: 0, g: 0, b: 0 } },
+        toHsl: () => { return { h: 0, s: 0, l: 0 } },
     };
     let cssColor = "";
+
+    function updateColorInput() {
+       colorInput = colorInput;
+    }
+
+    let hex, rgb, hsl;
+    $: {
+        hex = colorInput.toRgbHex();
+        rgb = colorInput.toRgb();
+        hsl = colorInput.toHsl();
+    };
 </script>
     
 <div class="row">
@@ -31,7 +43,7 @@
             </div>
             {/each}
         </div>
-        <svelte:component this={selected.component} bind:this={colorInput} bind:cssColor={cssColor}></svelte:component>
+        <svelte:component this={selected.component} bind:this={colorInput} bind:cssColor={cssColor} on:change={updateColorInput}></svelte:component>
     </div>
     <div class="col-sm d-flex justify-content-center">
         <svg class="border" width="200" height="200">
@@ -45,10 +57,17 @@
         <div class="d-flex gap-1">
             <div class="d-flex flex-column border p-1">
                 <span class="fw-bold">RGB</span>
-                Hex: {colorInput.toRgbHex()}<br>
-                Red: {colorInput.toRgb().r}<br>
-                Green: {colorInput.toRgb().g}<br>
-                Blue: {colorInput.toRgb().b}<br>
+                Hex: {hex}<br>
+                Red: {rgb.r}<br>
+                Green: {rgb.g}<br>
+                Blue: {rgb.b}<br>
+            </div>
+
+            <div class="d-flex flex-column border p-1">
+                <span class="fw-bold">HSL</span>
+                Hue: {hsl.h.toFixed(2)}°<br>
+                Saturation: {hsl.s.toFixed(2)}%<br>
+                Lightness: {hsl.l.toFixed(2)}%<br>
             </div>
         </div>
     </div>

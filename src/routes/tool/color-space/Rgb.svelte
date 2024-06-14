@@ -1,4 +1,7 @@
 <script>
+    import { createEventDispatcher } from "svelte";
+    import { rgbToHsl } from "./conversions";
+
     export let cssColor;
 
     let red = 255;
@@ -10,7 +13,8 @@
     }
 
     export function toRgbHex() {
-        return `#${parseInt(red, 16)}${parseInt(green, 16)}${parseInt(blue, 16)}`;
+        const asHex = i => i.toString(16).padStart(length, "0").toUpperCase();
+        return `#${asHex(red)}${asHex(green)}${asHex(blue)}`;
     }
 
     export function toRgb() {
@@ -20,22 +24,32 @@
             b: blue,
         }
     }
+
+    export function toHsl() {
+        return rgbToHsl(toRgb());
+    }
+
+    const dispatch = createEventDispatcher();
+
+    function handleChange() {
+        dispatch("change");
+    }
 </script>
 
 <div class="d-flex flex-column">
     <label class="form-label">
         <span class="fw-bold">Red:</span> {red}
-        <input type="range" class="form-range" min="0" max="255" step="1" bind:value={red}>
+        <input type="range" class="form-range" min="0" max="255" step="1" bind:value={red} on:change={handleChange}>
     </label>
 
     <label class="form-label">
         <span class="fw-bold">Green:</span> {green}
-        <input type="range" class="form-range" min="0" max="255" step="1" bind:value={green}>
+        <input type="range" class="form-range" min="0" max="255" step="1" bind:value={green} on:change={handleChange}>
     </label>
 
     <label class="form-label">
         <span class="fw-bold">Blue:</span> {blue}
-        <input type="range" class="form-range" min="0" max="255" step="1" bind:value={blue}>
+        <input type="range" class="form-range" min="0" max="255" step="1" bind:value={blue} on:change={handleChange}>
     </label>
 </div>
 
