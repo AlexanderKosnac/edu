@@ -1,7 +1,6 @@
 <script>
 import { onMount } from 'svelte';
 
-import img from '$lib/images/animal.png';
 import ConvolutionMask from './ConvolutionMask.svelte';
 
 let convolution = [
@@ -14,26 +13,34 @@ let center = [1, 1];
 let dimension = [3, 3];
 let factor = 1;
 
+let fileInput;
 let matrixInput;
 let input;
 let original;
 let convoluted;
 
+function loadImage() {
+    if (fileInput.files.length < 1) return;
+    const file = fileInput.files[0];
+    const url = URL.createObjectURL(file);
+    input.src = url;
+}
+
 function run() {
     const ctxOriginal = original.getContext("2d");
     const ctxConvoluted = convoluted.getContext("2d");
 
-    original.width = input.width;
-    convoluted.width = input.width;
-
-    original.height = input.height;
-    convoluted.height = input.height;
+    let dim = [input.width, input.height];
+    [original.style.width, original.style.height] = dim;
+    [convoluted.style.width, convoluted.style.height] = dim;
+    [original.width, original.height] = dim;
+    [convoluted.width, convoluted.height] = dim;
 
     ctxOriginal.drawImage(input, 0, 0);
     ctxConvoluted.drawImage(input, 0, 0);
 
-    const imageDataOriginal = ctxOriginal.getImageData(0, 0, input.width, input.height);
-    const imageDataConvoluted = ctxConvoluted.getImageData(0, 0, input.width, input.height);
+    const imageDataOriginal = ctxOriginal.getImageData(0, 0, dim[0], dim[1]);
+    const imageDataConvoluted = ctxConvoluted.getImageData(0, 0, dim[0], dim[1]);
 
     const dataOriginal = imageDataOriginal.data;
     const dataConvoluted = imageDataConvoluted.data;
@@ -76,10 +83,6 @@ function clamp(value, lower, upper) {
     if (value > upper) return upper;
     return value;
 }
-
-onMount(() => {
-    run();
-});
 </script>
 
 <div class="row">
@@ -89,21 +92,22 @@ onMount(() => {
 </div>
 
 <div class="row">
-    <div class="col">
-        <div class="">
-            <div class="d-flex flex-column gap-1">
-                <ConvolutionMask bind:this={matrixInput} bind:matrix={convolution} bind:center={center} bind:dimension={dimension} bind:factor={factor}/>
-                <img bind:this={input} src={img} alt="a" width="100" height="100"/>
-                <input type="file" id="img" name="img" accept="image/*">
-                <button type="button" class="btn btn-primary" on:click={run}>Do convolution</button>
+    <div class="col-4">
+        <div class="d-flex flex-column gap-1">
+            <div class="d-flex gap-1 align-items-center">
+                <button type="button" class="btn btn-primary text-nowrap" on:click={loadImage}>Load Image</button>
+                <input type="file" id="img" name="img" accept="image/*" bind:this={fileInput}>
             </div>
+            <ConvolutionMask bind:this={matrixInput} bind:matrix={convolution} bind:center={center} bind:dimension={dimension} bind:factor={factor}/>
+            <button type="button" class="btn btn-primary" on:click={run}>Do convolution</button>
         </div>
     </div>
-    <div class="col-3">
-        <canvas bind:this={original}/>
-    </div>
-    <div class="col-3">
-        <canvas bind:this={convoluted}/>
+    <div class="col">
+        <div class="d-flex gap-1">
+            <img bind:this={input} alt=""/>
+            <canvas bind:this={original} style="display: none"/>
+            <canvas bind:this={convoluted}/>
+        </div>
     </div>
 </div>
 
@@ -117,8 +121,4 @@ onMount(() => {
 </div>
 
 <style>
-    canvas {
-        aspect-ratio: 1 / 1;
-        height: 40vh;
-    }
 </style>
