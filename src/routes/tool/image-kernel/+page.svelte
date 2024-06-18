@@ -1,6 +1,8 @@
 <script>
 import ConvolutionMask from "./ConvolutionMask.svelte";
+import Matrix from "./Matrix.svelte";
 
+import { presets } from "./presets"
 
 let convolution = [
     [ 0, -1,  0],
@@ -24,6 +26,14 @@ function loadImage() {
     const file = fileInput.files[0];
     const url = URL.createObjectURL(file);
     input.src = url;
+}
+
+function loadPreset(matrix) {
+    convolution = matrix;
+    let [length, width] = [matrix.length, matrix[0].length];
+    center = [Math.floor(length/2), Math.floor(width/2)];
+    dimension = [length, width];
+    factor = 1;
 }
 
 function run() {
@@ -119,9 +129,27 @@ function clamp(value, lower, upper) {
 
 <div class="row">
     <div class="col">
+        <h2>Preset Kernels:</h2>
+        <p>
+            Certain kernels are well known and named. A collection of them are provided below as presets.
+        </p>
+        <div class="d-flex flex-row gap-3 align-items-start">
+        {#each presets as preset}
+            <div class="d-flex flex-column gap-1 justify-content-center align-items-center border border-2 rounded-2 p-1">
+                <button type="button" class="btn btn-dark fw-bold" on:click={() => loadPreset(preset.matrix)}>{preset.label}</button>
+                <Matrix matrix={preset.matrix}/>
+            </div>
+        {/each}
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
         <h2>References:</h2>
         <ul>
             <li><a href="https://en.wikipedia.org/wiki/Kernel_(image_processing)" target="_blank">Kernel (image processing)</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Sobel_operator" target="_blank">Sobel operator</a></li>
         </ul>
     </div>
 </div>
