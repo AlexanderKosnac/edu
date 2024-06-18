@@ -71,7 +71,7 @@ function run() {
         let acc = 0;
         for (let i=0; i<a; i++) {
             for (let j=0; j<b; j++) {
-                acc += factor * normalization * convolution[i][j] * f(x+i-center[0], y+j-center[1], offset, 128);
+                acc += factor * normalization * convolution[j][i] * f(x+j-center[0], y+i-center[1], offset, 128);
             }
         }
         return clamp(acc, 0, 255);

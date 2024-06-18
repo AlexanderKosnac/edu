@@ -55,7 +55,7 @@ $: normalization = (sum == 0 || !normalize) ? 1 : 1/sum;
             {#each matrix as row, i}
             <div class="d-flex flex-row gap-1">
                 {#each row as _, j}
-                    <input class="matrix-input form-control" class:centerpoint={i == center[0] && j == center[1]} type="number" bind:value={matrix[i][j]}/>
+                    <input class="matrix-input form-control" class:centerpoint={i == center[0] && j == center[1]} type="number" bind:value={matrix[j][i]}/>
                 {/each}
             </div>
             {/each}

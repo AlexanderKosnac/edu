@@ -6,7 +6,7 @@ export let matrix;
     {#each matrix as row, i}
     <div class="d-flex flex-row gap-1">
         {#each row as _, j}
-            <span class="matrix-entry border">{matrix[i][j]}</span>
+            <span class="matrix-entry border">{matrix[j][i]}</span>
         {/each}
     </div>
     {/each}
