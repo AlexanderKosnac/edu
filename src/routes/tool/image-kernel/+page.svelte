@@ -28,12 +28,12 @@ function loadImage() {
     input.src = url;
 }
 
-function loadPreset(matrix) {
-    convolution = matrix;
-    let [length, width] = [matrix.length, matrix[0].length];
+function loadPreset(preset) {
+    convolution = preset.matrix;
+    let [length, width] = [convolution.length, convolution[0].length];
     center = [Math.floor(length/2), Math.floor(width/2)];
     dimension = [length, width];
-    factor = 1;
+    factor = preset?.factor ?? 1;
 }
 
 function run() {
@@ -136,8 +136,13 @@ function clamp(value, lower, upper) {
         <div class="d-flex flex-row gap-3 align-items-start">
         {#each presets as preset}
             <div class="d-flex flex-column gap-1 justify-content-center align-items-center border border-2 rounded-2 p-1">
-                <button type="button" class="btn btn-dark fw-bold" on:click={() => loadPreset(preset.matrix)}>{preset.label}</button>
-                <Matrix matrix={preset.matrix}/>
+                <button type="button" class="btn btn-dark fw-bold" on:click={() => loadPreset(preset)}>{preset.label}</button>
+                <div class="d-flex flex-row align-items-center gap-1">
+                    {#if preset.factorDisplay || preset.factor}
+                        <span>{preset.factorDisplay ?? preset.factor}</span>
+                    {/if}
+                    <Matrix matrix={preset.matrix}/>
+                </div>
             </div>
         {/each}
         </div>

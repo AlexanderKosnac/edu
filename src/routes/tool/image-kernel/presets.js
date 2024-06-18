@@ -25,6 +25,8 @@ export let presets = [
     },
     {
         label: "Box blur",
+        factor: 1/9,
+        factorDisplay: "1/9",
         matrix: [
             [1, 1, 1],
             [1, 1, 1],
@@ -33,6 +35,8 @@ export let presets = [
     },
     {
         label: "Gaussian blur (3x3)",
+        factor: 1/16,
+        factorDisplay: "1/16",
         matrix: [
             [1, 2, 1],
             [2, 4, 2],
@@ -41,6 +45,8 @@ export let presets = [
     },
     {
         label: "Gaussian blur (5x5)",
+        factor: 1/256,
+        factorDisplay: "1/256",
         matrix: [
             [1,  4,  6,  4, 1],
             [4, 16, 24, 16, 4],

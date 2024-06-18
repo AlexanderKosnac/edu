@@ -46,7 +46,13 @@ $: normalization = (sum == 0 || !normalize) ? 1 : 1/sum;
     <div class="form-check">
         <label class="form-check-label">
             <input class="form-check-input" type="checkbox" value="" bind:checked={normalize}>
-            Normalize over matrix sum. (Factor: 1/{sum} = {sum == 0 ? "n/a" : normalization.toFixed(5)})
+            Normalize over matrix sum.
+            {#if normalize && sum != 0}
+                (Factor: 1/{sum} = {normalization.toFixed(5)})
+            {/if}
+            {#if sum == 0}
+                (Sum is 0, can't normalize.)
+            {/if}
         </label>
     </div>
 
