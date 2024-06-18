@@ -1,7 +1,6 @@
 <script>
-import { onMount } from 'svelte';
+import ConvolutionMask from "./ConvolutionMask.svelte";
 
-import ConvolutionMask from './ConvolutionMask.svelte';
 
 let convolution = [
     [ 0, -1,  0],
@@ -12,6 +11,7 @@ let convolution = [
 let center = [1, 1];
 let dimension = [3, 3];
 let factor = 1;
+let normalization = 1;
 
 let fileInput;
 let matrixInput;
@@ -27,6 +27,8 @@ function loadImage() {
 }
 
 function run() {
+    if (input.src === "") return;
+
     const ctxOriginal = original.getContext("2d");
     const ctxConvoluted = convoluted.getContext("2d");
 
@@ -59,7 +61,7 @@ function run() {
         let acc = 0;
         for (let i=0; i<a; i++) {
             for (let j=0; j<b; j++) {
-                acc += factor * convolution[i][j] * f(x+i-center[0], y+j-center[1], offset, 128);
+                acc += factor * normalization * convolution[i][j] * f(x+i-center[0], y+j-center[1], offset, 128);
             }
         }
         return clamp(acc, 0, 255);
@@ -92,18 +94,22 @@ function clamp(value, lower, upper) {
 </div>
 
 <div class="row">
-    <div class="col-4">
-        <div class="d-flex flex-column gap-1">
-            <div class="d-flex gap-1 align-items-center">
-                <button type="button" class="btn btn-primary text-nowrap" on:click={loadImage}>Load Image</button>
-                <input type="file" id="img" name="img" accept="image/*" bind:this={fileInput}>
+    <div class="col-lg-4">
+        <div class="d-flex flex-column gap-1 mb-1">
+            <div class="input-group">
+                <button class="btn btn-primary text-nowrap" type="button" id="inputGroupFileAddon03" on:click={loadImage}>Load Image</button>
+                <input type="file" class="form-control" id="img" name="img" accept="image/*" bind:this={fileInput}>
             </div>
-            <ConvolutionMask bind:this={matrixInput} bind:matrix={convolution} bind:center={center} bind:dimension={dimension} bind:factor={factor}/>
+            <ConvolutionMask bind:this={matrixInput} bind:matrix={convolution} bind:center={center} bind:dimension={dimension} bind:factor={factor} bind:normalization={normalization}/>
             <button type="button" class="btn btn-primary" on:click={run}>Do convolution</button>
         </div>
     </div>
     <div class="col">
-        <div class="d-flex gap-1">
+        {#if input?.src === ""}
+            No image loaded.
+        {/if}
+
+        <div class="d-flex gap-1 justify-content-around">
             <img bind:this={input} alt=""/>
             <canvas bind:this={original} style="display: none"/>
             <canvas bind:this={convoluted}/>
