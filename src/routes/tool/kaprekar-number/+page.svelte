@@ -1,6 +1,10 @@
 <script>
 </script>
 
+<svelte:head>
+    <title>Kaprekar number</title> 
+</svelte:head>
+
 <div class="row">
     <div class="col">
         <h1>Kaprekar number</h1>

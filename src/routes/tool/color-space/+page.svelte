@@ -26,7 +26,11 @@
         hsl = colorInput.toHsl();
     };
 </script>
-    
+
+<svelte:head>
+    <title>Color space</title> 
+</svelte:head>
+
 <div class="row">
     <div class="col">
         <h1>Color space</h1>

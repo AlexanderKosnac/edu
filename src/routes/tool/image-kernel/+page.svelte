@@ -97,6 +97,10 @@ function clamp(value, lower, upper) {
 }
 </script>
 
+<svelte:head>
+    <title>Image kernels</title> 
+</svelte:head>
+
 <div class="row">
     <div class="col">
         <h1>Image Kernels</h1>

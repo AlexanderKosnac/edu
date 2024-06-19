@@ -89,6 +89,10 @@
     }
 </script>
 
+<svelte:head>
+    <title>Needleman-Wunsch Algorithm</title> 
+</svelte:head>
+
 <div class="row">
     <div class="col">
         <h1>Needleman-Wunsch Algorithm</h1>

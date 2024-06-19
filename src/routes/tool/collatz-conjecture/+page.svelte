@@ -64,6 +64,10 @@ function massCollatzRun() {
 }
 </script>
 
+<svelte:head>
+    <title>Collatz conjecture</title> 
+</svelte:head>
+
 <div class="row">
     <div class="col">
         <h1>Collatz conjecture</h1>
