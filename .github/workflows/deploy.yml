@@ -11,6 +11,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Install jq
+        run: sudo apt install -y jq
+
       - name: Install Node.js
         uses: actions/setup-node@v3
         with:
@@ -24,6 +27,7 @@ jobs:
         env:
           BASE_PATH: '/${{ github.event.repository.name }}'
         run: |
+          bash scripts/create-tool-data.sh
           npm run build
 
       - name: Upload Artifacts
