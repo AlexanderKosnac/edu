@@ -1,8 +1,10 @@
 <script>
     import Rgb from "./Rgb.svelte";
+    import Hsl from "./Hsl.svelte";
 
     const values = [
 		{ label: "RGB", component: Rgb },
+		{ label: "HSL", component: Hsl },
 	];
 
 	let selected = values[0];
@@ -55,7 +57,7 @@
 <div class="row">
     <div class="col">
         <div class="d-flex gap-1">
-            <div class="d-flex flex-column border p-1">
+            <div class="d-flex flex-column border border-3 p-1">
                 <span class="fw-bold">RGB</span>
                 Hex: {hex}<br>
                 Red: {rgb.r}<br>
@@ -63,7 +65,7 @@
                 Blue: {rgb.b}<br>
             </div>
 
-            <div class="d-flex flex-column border p-1">
+            <div class="d-flex flex-column border border-3 p-1">
                 <span class="fw-bold">HSL</span>
                 Hue: {hsl.h.toFixed(2)}°<br>
                 Saturation: {hsl.s.toFixed(2)}%<br>
