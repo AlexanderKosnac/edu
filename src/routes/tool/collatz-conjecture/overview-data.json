@@ -1,6 +1,7 @@
 {
     "name": "Collatz Conjecture",
     "url": "tool/collatz-conjecture",
+    "description": "An unsolved problem in mathematics, regarding the convergence of a sequence of numbers generated from two basic arithmetic operations.",
     "tags": [
         "Mathematics",
         "Visualization"

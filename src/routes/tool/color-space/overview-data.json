@@ -1,6 +1,7 @@
 {
     "name": "Color space",
     "url": "tool/color-space",
+    "description": "Organisations of color in space. There are many different models, which describe color in different ways.",
     "tags": [
         "Computer Science",
         "Colortheory",

@@ -1,6 +1,7 @@
 {
     "name": "Kaprekar Number",
     "url": "tool/kaprekar-number",
+    "description": "",
     "tags": [
         "Mathematics",
         "Visualization"
