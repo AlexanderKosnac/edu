@@ -1,5 +1,6 @@
 {
     "name": "Collatz Conjecture",
+    "url": "tool/collatz-conjecture",
     "tags": [
         "Mathematics",
         "Visualization"
