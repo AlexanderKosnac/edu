@@ -24,8 +24,8 @@
     <div class="card-body">
       <h5 class="card-title">
         <a class="icon-link icon-link-hover" href="{entry.url}">
-            {entry.name}
-            <i class="bi bi-arrow-right-short"></i>
+          {entry.name}
+          <i class="bi bi-arrow-right-short"></i>
         </a>
     </h5>
       <p class="card-text">{entry.description}</p>
