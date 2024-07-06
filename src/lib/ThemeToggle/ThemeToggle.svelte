@@ -1,8 +1,11 @@
 <script>
+    import { browser } from "$app/environment";
+
     function setTheme(theme) {
-        document.documentElement.dataset.theme = theme;
-        document.documentElement.setAttribute("data-bs-theme", theme);
-        document.cookie = `siteTheme=${theme};max-age=31536000;path="/"`;
+        if (browser) {
+            localStorage["edu-theme"] = theme;
+            document.documentElement.setAttribute("data-bs-theme", theme);
+        }
     }
 </script>
 

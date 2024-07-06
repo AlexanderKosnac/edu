@@ -11,5 +11,10 @@
 
 	<body data-sveltekit-preload-data="hover">
 		%sveltekit.body%
+
+		<script>
+			const fallback = window.matchMedia("(prefers-color-scheme: dark)") ? "dark" : "light";
+    	    document.documentElement.setAttribute("data-bs-theme", localStorage["edu-theme"] ?? fallback);
+		</script>
 	</body>
 </html>
