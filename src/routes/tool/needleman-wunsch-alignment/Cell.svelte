@@ -12,7 +12,7 @@
 
 <style>
 :root {
-  --arrow-scale: 0.3;
+  --arrow-scale: 0.2;
 }
 
 .field {
@@ -26,6 +26,7 @@
     vertical-align: middle;
 
     border: 1px solid lightgrey;
+    box-sizing: border-box;
 }
 
 .field.header {
@@ -34,7 +35,7 @@
 }
 
 .field[active="true"] {
-    border-width: 4px;
+    border-width: 3px;
     font-weight: bold;
 }
 

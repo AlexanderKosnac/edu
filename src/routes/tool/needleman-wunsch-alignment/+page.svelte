@@ -1,4 +1,5 @@
 <script>
+	import { onMount } from "svelte";
     import Cell from "./Cell.svelte";
 
     class Element {
@@ -9,21 +10,21 @@
         }
     }
 
-    const D = "diagonal"
-    const U = "up"
-    const L = "left"
+    const D = "diagonal";
+    const U = "up";
+    const L = "left";
 
     let sequence1 = "ACGTC";
     let sequence2 = "AGTC";
 
-    let gapCost = -1
+    let gapCost = -1;
 
     $: tableWidth = sequence2.length+1
     $: tableHeight = sequence1.length+1
 
-    $: m = alignmentArray(tableHeight, tableWidth)
+    $: m = getAlignmentArray(tableHeight, tableWidth)
 
-    function alignmentArray(height, width) {
+    function getAlignmentArray(height, width) {
         let arr = Array.from(Array(height), _ => Array(width).fill(NaN));
         arr[0][0] = new Element(0, null);
         for (let i=1; i<height; i++) arr[i][0] = new Element(arr[i-1][0].value + gapCost, U);
@@ -35,14 +36,24 @@
         return (a === b) ? 1 : -1;
     }
 
-    let sequence1alignment = "";
-    let sequence2alignment = "";
-    let sequenceAlignment = "";
+    let alignment = {
+        seq1: "",
+        seq2: "",
+        seqR: "",
+        add(one, two, res) {
+            this.seq1 = one + this.seq1;
+            this.seq2 = two + this.seq2;
+            this.seqR = res + this.seqR;
+        },
+        clear() {
+            this.seq1 = "";
+            this.seq2 = "";
+            this.seqR = "";
+        },
+    }
 
     function align() {
-        sequence1alignment = "";
-        sequence2alignment = "";
-        sequenceAlignment = "";
+        // Fill rest of table
         for (let i=1; i<tableHeight; i++) {
             for (let j=1; j<tableWidth; j++) {
                 m[i][j] = [
@@ -52,6 +63,9 @@
                 ].reduce((max, obj) => obj.value > max.value ? obj : max);
             }
         }
+
+        // Backtrace through table
+        alignment.clear();
         let i = tableHeight;
         let j = tableWidth;
         while (i > 0 && j > 0) {
@@ -66,27 +80,26 @@
                     j--;
                     break;
                 case D:
-                    sequence1alignment = seq1Char + sequence1alignment;
-                    sequence2alignment = seq2Char + sequence2alignment;
-                    sequenceAlignment = "+" + sequenceAlignment;
+                    alignment.add(seq1Char, seq2Char, "+");
                     i--;
                     j--;
                     break;
                 case U:
-                    sequence1alignment = seq1Char + sequence1alignment;
-                    sequence2alignment = "-" + sequence2alignment;
-                    sequenceAlignment = "-" + sequenceAlignment;
+                    alignment.add(seq1Char, "-", "-");
                     i--;
                     break;
                 case L:
-                    sequence1alignment = "-" + sequence1alignment;
-                    sequence2alignment = seq2Char + sequence2alignment;
-                    sequenceAlignment = "-" + sequenceAlignment;
+                    alignment.add("-", seq2Char, "-");
                     j--;
                     break;
             }
         }
+        alignment = alignment;
     }
+
+    onMount(() => {
+        align();
+	});
 </script>
 
 <svelte:head>
@@ -104,14 +117,18 @@
         <div class="d-flex flex-column gap-1">
             <div class="input-group flex-nowrap">
                 <span class="input-group-text font-monospace" id="sequence1">Sequence 1</span>
-                <input type="text" class="form-control font-monospace" bind:value="{sequence1}" on:input={align}>
+                <input type="text" class="form-control font-monospace" bind:value="{sequence1}" on:change={align}>
                 <span class="input-group-text">{sequence1.length}</span>
             </div>
         
             <div class="input-group flex-nowrap">
                 <span class="input-group-text font-monospace" id="sequence1">Sequence 2</span>
-                <input type="text" class="form-control font-monospace" bind:value="{sequence2}" on:input={align}>
+                <input type="text" class="form-control font-monospace" bind:value="{sequence2}" on:change={align}>
                 <span class="input-group-text">{sequence2.length}</span>
+            </div>
+
+            <div>
+                <button type="button" class="btn btn-primary" on:click={align}>Align!</button>
             </div>
         </div>
     </div>
@@ -119,9 +136,9 @@
 
 <h2>Alignment:</h2>
 <div class="overflow-auto font-monospace">
-Sequence 1:&nbsp;{sequence1alignment}<br>
-Sequence 2:&nbsp;{sequence2alignment}<br>
-Alignment:&nbsp;&nbsp;{sequenceAlignment}<br>
+Sequence 1:&nbsp;{alignment.seq1}<br>
+Sequence 2:&nbsp;{alignment.seq2}<br>
+Alignment&nbsp;:&nbsp;{alignment.seqR}<br>
 </div>
 
 <div class="row">
@@ -144,6 +161,15 @@ Alignment:&nbsp;&nbsp;{sequenceAlignment}<br>
                 {/each}
             </table>
         </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <h2>References:</h2>
+        <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Needleman%E2%80%93Wunsch_algorithm" target="_blank">Needleman-Wunsch algorithm</a></li>
+        </ul>
     </div>
 </div>
 
