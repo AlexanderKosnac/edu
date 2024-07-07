@@ -1,4 +1,5 @@
 <script>
+    import Display from "./Display.svelte";
     import Rgb from "./Rgb.svelte";
     import Hsl from "./Hsl.svelte";
 
@@ -61,20 +62,18 @@
 <div class="row">
     <div class="col">
         <div class="d-flex gap-1">
-            <div class="d-flex flex-column border border-3 p-1">
-                <span class="fw-bold">RGB</span>
-                Hex: {hex}<br>
-                Red: {rgb.r}<br>
-                Green: {rgb.g}<br>
-                Blue: {rgb.b}<br>
-            </div>
+            <Display name="RGB" values={[
+                ["Hex", hex],
+                ["Red", rgb.r],
+                ["Green", rgb.g],
+                ["Blue", rgb.b],
+            ]}/>
 
-            <div class="d-flex flex-column border border-3 p-1">
-                <span class="fw-bold">HSL</span>
-                Hue: {hsl.h.toFixed(2)}°<br>
-                Saturation: {hsl.s.toFixed(2)}%<br>
-                Lightness: {hsl.l.toFixed(2)}%<br>
-            </div>
+            <Display name="HSL" values={[
+                ["Hue", hsl.h.toFixed(2), "°"],
+                ["Saturation", hsl.s.toFixed(2), "%"],
+                ["Lightness", hsl.l.toFixed(2), "%"],
+            ]}/>
         </div>
     </div>
 </div>
