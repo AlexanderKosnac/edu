@@ -1,4 +1,6 @@
 <script>
+    import { rgbAsHex, rgbToHsl } from "./conversions";
+
     import Display from "./Display.svelte";
     import Rgb from "./Rgb.svelte";
     import Hsl from "./Hsl.svelte";
@@ -7,6 +9,17 @@
 		{ label: "RGB", component: Rgb },
 		{ label: "HSL", component: Hsl },
 	];
+
+    const colors = [
+        { name: "Black",   rgb: { r:   0, g:   0, b:   0 } },
+        { name: "White",   rgb: { r: 255, g: 255, b: 255 } },
+        { name: "Red",     rgb: { r: 255, g:   0, b:   0 } },
+        { name: "Green",   rgb: { r:   0, g: 255, b:   0 } },
+        { name: "Blue",    rgb: { r:   0, g:   0, b: 255 } },
+        { name: "Yellow",  rgb: { r: 255, g: 255, b:   0 } },
+        { name: "Cyan",    rgb: { r:   0, g: 255, b: 255 } },
+        { name: "Magenta", rgb: { r: 255, g:   0, b: 255 } },
+    ]
 
 	let selected = values[0];
     let colorInput = {
@@ -75,6 +88,32 @@
                 ["Lightness", hsl.l.toFixed(2), "%"],
             ]}/>
         </div>
+<div class="row">
+    <div class="col">
+        <h2>Preset Colors:</h2>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Color</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">(R, G, B)</th>
+                    <th scope="col">Hex</th>
+                    <th scope="col">(H, S, L)</th>
+                </tr>
+            </thead>
+            <tbody>
+                {#each colors as color}
+                {@const exHsl = rgbToHsl(color.rgb)}
+                <tr>
+                    <th><div class="color-showcase" style="background-color: rgb({color.rgb.r} {color.rgb.g} {color.rgb.b})"></div></th>
+                    <td>{color.name}</td>
+                    <td>({color.rgb.r}, {color.rgb.g}, {color.rgb.b})</td>
+                    <td>{rgbAsHex(color.rgb)}</td>
+                    <td>({exHsl.h}°, {exHsl.s}%, {exHsl.l}%)</td>
+                </tr>
+                {/each}
+            </tbody>
+        </table>
     </div>
 </div>
 
@@ -89,4 +128,9 @@
 </div>
 
 <style>
+    .color-showcase {
+        width: 30px;
+        height: 30px;
+        border: 1px solid black;
+    }
 </style>

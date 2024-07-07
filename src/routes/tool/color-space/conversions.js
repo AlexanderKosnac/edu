@@ -2,6 +2,10 @@ export function asHexTwoDig(n) {
     return n.toString(16).padStart(2, "0").toUpperCase();
 }
 
+export function rgbAsHex(rgb) {
+    return `#${asHexTwoDig(rgb.r)}${asHexTwoDig(rgb.g)}${asHexTwoDig(rgb.b)}`;
+}
+
 export function rgbToHsl(rgb) {
     const r = rgb.r / 255;
     const g = rgb.g / 255;
