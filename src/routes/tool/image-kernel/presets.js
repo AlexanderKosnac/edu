@@ -18,9 +18,9 @@ export let presets = [
     {
         label: "Edge detection 2",
         matrix: [
-            [ 0, -1,  0],
+            [-1, -1, -1],
             [-1,  8, -1],
-            [ 0, -1,  0],
+            [-1, -1, -1],
         ]
     },
     {
