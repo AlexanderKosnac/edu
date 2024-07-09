@@ -6,6 +6,7 @@
             abbrev: "OPT",
             full: "Optimal",
             description: "",
+            implemented: false,
             f: () => {
                 console.log("OPT")
             },
@@ -14,6 +15,7 @@
             abbrev: "NRU",
             full: "Not recently used",
             description: "",
+            implemented: false,
             f: () => {
                 console.log("NRU")
             },
@@ -22,6 +24,7 @@
             abbrev: "FIFO",
             full: "First-in, first-out",
             description: "",
+            implemented: false,
             f: () => {
                 console.log("FIFO")
             },
@@ -30,6 +33,7 @@
             abbrev: "LRU",
             full: "Least recently used",
             description: "Discards the least recently used page first.",
+            implemented: true,
             newPage: () => ({page: undefined, age: 0}),
             onPageInFrame: (page) => {page.age = 0},
             getRemovalCandidate: (frames) => frames.reduce((max, obj) => obj.age > max.age ? obj : max, frames[0]),
@@ -94,7 +98,7 @@
             {#each implementations as implementation, idx}
             <div>
                 <input type="radio" class="form-check-input" name="algorithm" id="alg{idx}" autocomplete="off" checked="{idx === 0}"
-                    bind:group={algorithm} value={implementations[idx]}>
+                    bind:group={algorithm} value={implementations[idx]} disabled="{!implementation.implemented}">
                 <label class="form-check-label" for="alg{idx}">{implementation.abbrev}</label>
             </div>
             {/each}
