@@ -8,10 +8,11 @@
     });
 </script>
 
-<h1><tt>EDU</tt></h1>
+<h1><tt style="letter-spacing: .4rem">edu</tt></h1>
 
 <p>
-    EDU is a collection of tools, visualizations, and implementations with a focus on education and learning.
+    EDU is a collection of tools, visualizations, and calculators with a focus on education and learning.
+    The name is derived from top-level domain <a href="https://en.wikipedia.org/wiki/.edu">.edu</a> which was created for organizations with a focus on education.
 </p>
 
 <p>
