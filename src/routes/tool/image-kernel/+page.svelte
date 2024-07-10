@@ -37,11 +37,11 @@ function run() {
     const ctxOriginal = original.getContext("2d");
     const ctxConvoluted = convoluted.getContext("2d");
 
-    let dim = [input.width, input.height];
-    [original.style.width, original.style.height] = dim;
-    [convoluted.style.width, convoluted.style.height] = dim;
+    let dim = [input.naturalWidth, input.naturalHeight];
     [original.width, original.height] = dim;
     [convoluted.width, convoluted.height] = dim;
+    [original.naturalWidth, original.naturalHeight] = dim;
+    [convoluted.naturalWidth, convoluted.naturalHeight] = dim;
 
     ctxOriginal.drawImage(input, 0, 0);
     ctxConvoluted.drawImage(input, 0, 0);
@@ -124,9 +124,9 @@ onMount(() => {
         {/if}
 
         <div class="d-flex gap-1 justify-content-around">
-            <img bind:this={input} alt=""/>
-            <canvas bind:this={original} style="display: none"/>
-            <canvas bind:this={convoluted}/>
+            <img style="max-width: 25%; width: auto; height: auto" bind:this={input} alt=""/>
+            <canvas style="max-width: 25%; width: auto; height: auto" bind:this={original}/>
+            <canvas style="max-width: 25%; width: auto; height: auto" bind:this={convoluted}/>
         </div>
     </div>
 </div>
