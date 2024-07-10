@@ -88,6 +88,9 @@
                 ["Lightness", hsl.l.toFixed(2), "%"],
             ]}/>
         </div>
+    </div>
+</div>
+
 <div class="row">
     <div class="col">
         <h2>Preset Colors:</h2>
