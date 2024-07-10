@@ -1,4 +1,18 @@
-export let presets = [
+import { readable, writable } from "svelte/store";
+
+export const activeKernel = writable({
+    convolution: [
+        [ 0, -1,  0],
+        [-1,  5, -1],
+        [ 0, -1,  0],
+    ],
+    center: [1, 1],
+    dimension: [3, 3],
+    factor: 1,
+    normalize: false,
+});
+
+export const presets = readable([
     {
         label: "Identity",
         matrix: [
@@ -71,4 +85,4 @@ export let presets = [
             [1, 0, -1],
         ]
     },
-];
+]);

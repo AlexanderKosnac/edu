@@ -1,22 +1,16 @@
 <script>
+import { onMount } from "svelte";
+
 import ConvolutionMask from "./ConvolutionMask.svelte";
 import Matrix from "./Matrix.svelte";
 
-import { presets } from "./presets"
+import { activeKernel, presets } from "./stores.js";
 
-let convolution = [
-    [ 0, -1,  0],
-    [-1,  5, -1],
-    [ 0, -1,  0],
-];
-
-let center = [1, 1];
-let dimension = [3, 3];
-let factor = 1;
-let normalization = 1;
+let kernelInput;
 
 let fileInput;
-let matrixInput;
+
+// Image and canvas elements
 let input;
 let original;
 let convoluted;
@@ -29,11 +23,12 @@ function loadImage() {
 }
 
 function loadPreset(preset) {
-    convolution = preset.matrix;
-    let [length, width] = [convolution.length, convolution[0].length];
-    center = [Math.floor(length/2), Math.floor(width/2)];
-    dimension = [length, width];
-    factor = preset?.factor ?? 1;
+    $activeKernel.convolution = preset.matrix;
+    let [length, width] = [$activeKernel.convolution.length, $activeKernel.convolution[0].length];
+    $activeKernel.center = [Math.floor(length/2), Math.floor(width/2)];
+    $activeKernel.dimension = [length, width];
+    $activeKernel.factor = preset.factor ?? 1;
+    $activeKernel.normalize = false;
 }
 
 function run() {
@@ -66,8 +61,8 @@ function run() {
     }
 
     function getConvolutedValue(x, y, offset) {
-        const a = dimension[0];
-        const b = dimension[1];
+        const a = $activeKernel.dimension[0];
+        const b = $activeKernel.dimension[1];
         let acc = 0;
         for (let i=0; i<a; i++) {
             for (let j=0; j<b; j++) {
@@ -95,10 +90,14 @@ function clamp(value, lower, upper) {
     if (value > upper) return upper;
     return value;
 }
+
+onMount(() => {
+    loadImage();
+});
 </script>
 
 <svelte:head>
-    <title>Image kernels</title> 
+    <title>Image Kernels</title> 
 </svelte:head>
 
 <div class="row">
@@ -111,11 +110,12 @@ function clamp(value, lower, upper) {
     <div class="col-lg-4">
         <div class="d-flex flex-column gap-1 mb-1">
             <div class="input-group">
-                <button class="btn btn-primary text-nowrap" type="button" id="inputGroupFileAddon03" on:click={loadImage}>Load Image</button>
-                <input type="file" class="form-control" id="img" name="img" accept="image/*" bind:this={fileInput}>
+                <input type="file" class="form-control" id="img" name="img" accept="image/*" bind:this={fileInput} on:change={loadImage}>
             </div>
-            <ConvolutionMask bind:this={matrixInput} bind:matrix={convolution} bind:center={center} bind:dimension={dimension} bind:factor={factor} bind:normalization={normalization}/>
-            <button type="button" class="btn btn-primary" on:click={run}>Do convolution</button>
+            <ConvolutionMask bind:this={kernelInput}/>
+            <div>
+                <button type="button" class="btn btn-primary" on:click={run}>Do convolution</button>
+            </div>
         </div>
     </div>
     <div class="col">
@@ -138,7 +138,7 @@ function clamp(value, lower, upper) {
             Certain kernels are well known and named. A collection of them are provided below as presets.
         </p>
         <div class="d-flex flex-row gap-3 align-items-start">
-        {#each presets as preset}
+        {#each $presets as preset}
             <div class="d-flex flex-column gap-1 justify-content-center align-items-center border border-2 rounded-2 p-1">
                 <button type="button" class="btn btn-dark fw-bold" on:click={() => loadPreset(preset)}>{preset.label}</button>
                 <div class="d-flex flex-row align-items-center gap-1">
