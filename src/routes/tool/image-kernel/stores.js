@@ -39,6 +39,14 @@ export const presets = readable([
         ]
     },
     {
+        label: "Sharpen",
+        matrix: [
+            [ 0, -1,  0],
+            [-1,  5, -1],
+            [ 0, -1,  0],
+        ]
+    },
+    {
         label: "Box blur",
         factor: 1/9,
         factorDisplay: "1/9",
