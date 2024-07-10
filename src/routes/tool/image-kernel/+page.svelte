@@ -87,7 +87,7 @@ onMount(() => {
 </script>
 
 <svelte:head>
-    <title>Image Kernels</title> 
+    <title>Image Kernels</title>
 </svelte:head>
 
 <div class="row">

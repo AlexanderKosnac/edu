@@ -50,7 +50,7 @@
 </script>
 
 <svelte:head>
-    <title>Kaprekar constant</title> 
+    <title>Kaprekar constant</title>
 </svelte:head>
 
 <div class="row">
@@ -69,7 +69,7 @@
 
     {#if run}
     <div>
-        {run.number} is a {run.p}-Kaprekar number. 
+        {run.number} is a {run.p}-Kaprekar number.
 
         {#if run.err}
         (<span class="text-danger">{run.err}</span>)

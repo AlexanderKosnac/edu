@@ -103,7 +103,7 @@
 </script>
 
 <svelte:head>
-    <title>Needleman-Wunsch Algorithm</title> 
+    <title>Needleman-Wunsch Algorithm</title>
 </svelte:head>
 
 <div class="row">
@@ -120,7 +120,7 @@
                 <input type="text" class="form-control font-monospace" bind:value="{sequence1}" on:change={align}>
                 <span class="input-group-text">{sequence1.length}</span>
             </div>
-        
+
             <div class="input-group flex-nowrap">
                 <span class="input-group-text font-monospace" id="sequence1">Sequence 2</span>
                 <input type="text" class="form-control font-monospace" bind:value="{sequence2}" on:change={align}>

@@ -82,7 +82,7 @@
 </script>
 
 <svelte:head>
-    <title>Page Replacement Algorithm</title> 
+    <title>Page Replacement Algorithm</title>
 </svelte:head>
 
 <div class="row">
