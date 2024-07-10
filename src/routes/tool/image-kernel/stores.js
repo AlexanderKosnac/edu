@@ -9,6 +9,7 @@ export const activeKernel = writable({
     center: [1, 1],
     dimension: [3, 3],
     factor: 1,
+    normFactor: 1,
     normalize: false,
 });
 
