@@ -1,3 +1,13 @@
+import { clamp } from "$lib/math.js";
+
+function clampAndIntegerRgb(rgb) {
+    return {
+        r: clamp(Math.floor(rgb.r), 0, 255),
+        g: clamp(Math.floor(rgb.g), 0, 255),
+        b: clamp(Math.floor(rgb.b), 0, 255),
+    }
+}
+
 export function asHexTwoDig(n) {
     return n.toString(16).padStart(2, "0").toUpperCase();
 }
@@ -6,6 +16,7 @@ export function rgbAsHex(rgb) {
     return `#${asHexTwoDig(rgb.r)}${asHexTwoDig(rgb.g)}${asHexTwoDig(rgb.b)}`;
 }
 
+// RGB to x
 export function rgbToHsl(rgb) {
     const r = rgb.r / 255;
     const g = rgb.g / 255;
@@ -38,18 +49,29 @@ export function rgbToHsl(rgb) {
     const l = (max + min)/2;
     return {
         h: hue,
-        s: cDelta == 0 ? 0 : cDelta/(1-Math.abs((2*l)-1))*100,
-        l: l*100,
+        s: cDelta == 0 ? 0 : cDelta/(1-Math.abs((2*l)-1)),
+        l: l,
     };
 }
 
-export function hslToRgb(hsl) {
-    const ll = hsl.l/100;
-    const ss = hsl.s/100;
+export function rgbToCmyk(rgb) {
+    const k = 255 - Math.max(rgb.r, rgb.g, rgb.b);
+    const ki = 255 - k;
+    let nanCase = undefined;
+    if (ki == 0) nanCase = 0;
+    return {
+        c: nanCase ?? (ki-rgb.r)/ki,
+        m: nanCase ?? (ki-rgb.g)/ki,
+        y: nanCase ?? (ki-rgb.b)/ki,
+        k: k,
+    };
+}
 
-    const c = (1-Math.abs(2*ll-1) * ss);
-    const x = c * (1-Math.abs((hsl.h/60)%2-1));
-    const m = ll - c/2;
+// HSL to x
+export function hslToRgb(hsl) {
+    const c = (1-Math.abs(2*hsl.l-1)) * hsl.s;
+    const x = c * (1-Math.abs(((hsl.h/60)%2)-1));
+    const m = hsl.l - c/2;
 
     function hueRange60(start) {
         return start <= hsl.h && hsl.h < (start+60);
@@ -71,9 +93,10 @@ export function hslToRgb(hsl) {
     } else {
         console.error(`Hue ${hsl.h} is out of range [0; 360]`);
     }
-    return {
-        r: Math.floor((tuple[0]+m) * 255),
-        g: Math.floor((tuple[1]+m) * 255),
-        b: Math.floor((tuple[2]+m) * 255),
-    }
+    return clampAndIntegerRgb({
+        r: Math.max(Math.floor((tuple[0] + m) * 255), 0),
+        g: Math.max(Math.floor((tuple[1] + m) * 255), 0),
+        b: Math.max(Math.floor((tuple[2] + m) * 255), 0),
+    });
+}
 }

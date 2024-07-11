@@ -2,14 +2,12 @@
     import { createEventDispatcher } from "svelte";
     import { asHexTwoDig, rgbAsHex, rgbToHsl } from "./conversions";
 
-    export let cssColor;
-
     let red = 255;
     let green = 127;
     let blue = 80;
 
-    $: {
-        cssColor = `rgb(${red} ${green} ${blue})`;
+    export function getCssColor() {
+        return `rgb(${red} ${green} ${blue})`;
     }
 
     export function toRgbHex() {

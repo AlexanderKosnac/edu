@@ -1,5 +1,6 @@
 <script>
     import { rgbAsHex, rgbToHsl } from "./conversions";
+	import { onMount } from "svelte";
 
     import Display from "./Display.svelte";
     import Rgb from "./Rgb.svelte";
@@ -9,6 +10,7 @@
 		{ label: "RGB", component: Rgb },
 		{ label: "HSL", component: Hsl },
 	];
+	let selected = values[0];
 
     const colors = [
         { name: "Black",   rgb: { r:   0, g:   0, b:   0 } },
@@ -21,12 +23,12 @@
         { name: "Magenta", rgb: { r: 255, g:   0, b: 255 } },
     ];
 
-	let selected = values[0];
     let colorInput = {
         toRgbHex: () => "#000000",
         toRgb: () => { return { r: 0, g: 0, b: 0 } },
         toHsl: () => { return { h: 0, s: 0, l: 0 } },
     };
+
     let cssColor = "";
 
     doConversions();
@@ -38,16 +40,16 @@
         hsl = colorInput.toHsl();
     }
 
-    function updateColorInput() {
-        colorInput = colorInput;
+    function onChange() {
         doConversions();
+        cssColor = colorInput.getCssColor();
     }
 
-    onMount(doConversions);
+    onMount(onChange);
 </script>
 
 <svelte:head>
-    <title>Color space</title> 
+    <title>Color space</title>
 </svelte:head>
 
 <div class="row">
@@ -62,13 +64,13 @@
             {#each values as value}
             <div class="form-check form-check-inline">
                 <label class="form-check-label">
-                    <input class="form-check-input" type="radio" bind:group={selected} on:change={doConversions} value={value}>
+                    <input class="form-check-input" type="radio" bind:group={selected} on:change={onChange} value={value}>
                     {value.label}
                 </label>
             </div>
             {/each}
         </div>
-        <svelte:component this={selected.component} bind:this={colorInput} bind:cssColor={cssColor} on:input={updateColorInput}></svelte:component>
+        <svelte:component this={selected.component} bind:this={colorInput} bind:cssColor={cssColor} on:input={onChange}></svelte:component>
     </div>
     <div class="col-sm d-flex justify-content-center">
         <svg class="border" width="200" height="200">
@@ -88,9 +90,10 @@
             ]}/>
 
             <Display name="HSL" values={[
-                ["Hue", hsl.h.toFixed(2), "°"],
-                ["Saturation", hsl.s.toFixed(2), "%"],
-                ["Lightness", hsl.l.toFixed(2), "%"],
+                ["Hue", hsl.h.toFixed(1), "°"],
+                ["Saturation", hsl.s.toFixed(2)],
+                ["Lightness", hsl.l.toFixed(2)],
+            ]}/>
             ]}/>
         </div>
     </div>
@@ -104,8 +107,8 @@
                 <tr>
                     <th scope="col">Color</th>
                     <th scope="col">Name</th>
-                    <th scope="col">(R, G, B)</th>
                     <th scope="col">Hex</th>
+                    <th scope="col">(R, G, B)</th>
                     <th scope="col">(H, S, L)</th>
                 </tr>
             </thead>
@@ -115,9 +118,9 @@
                 <tr>
                     <th><div class="color-showcase" style="background-color: rgb({color.rgb.r} {color.rgb.g} {color.rgb.b})"></div></th>
                     <td>{color.name}</td>
+                    <td><tt>{rgbAsHex(color.rgb)}</tt></td>
                     <td>({color.rgb.r}, {color.rgb.g}, {color.rgb.b})</td>
-                    <td>{rgbAsHex(color.rgb)}</td>
-                    <td>({exHsl.h}°, {exHsl.s}%, {exHsl.l}%)</td>
+                    <td>({exHsl.h}°, {exHsl.s}, {exHsl.l})</td>
                 </tr>
                 {/each}
             </tbody>

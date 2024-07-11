@@ -1,15 +1,12 @@
 <script>
     import { createEventDispatcher } from "svelte";
-    import { asHexTwoDig, hslToRgb } from "./conversions";
-
-    export let cssColor;
 
     let hue = 210;
-    let saturation = 80;
-    let lightness = 50;
+    let saturation = 0.80;
+    let lightness = 0.50;
 
-    $: {
-        cssColor = `hsl(${hue} ${saturation}% ${lightness}%)`;
+    export function getCssColor() {
+        return `hsl(${hue} ${saturation*100} ${lightness*100})`;
     }
 
     export function toRgbHex() {
