@@ -19,7 +19,7 @@
         { name: "Yellow",  rgb: { r: 255, g: 255, b:   0 } },
         { name: "Cyan",    rgb: { r:   0, g: 255, b: 255 } },
         { name: "Magenta", rgb: { r: 255, g:   0, b: 255 } },
-    ]
+    ];
 
 	let selected = values[0];
     let colorInput = {
@@ -29,16 +29,21 @@
     };
     let cssColor = "";
 
-    function updateColorInput() {
-       colorInput = colorInput;
-    }
+    doConversions();
 
     let hex, rgb, hsl;
-    $: {
+    function doConversions() {
         hex = colorInput.toRgbHex();
         rgb = colorInput.toRgb();
         hsl = colorInput.toHsl();
-    };
+    }
+
+    function updateColorInput() {
+        colorInput = colorInput;
+        doConversions();
+    }
+
+    onMount(doConversions);
 </script>
 
 <svelte:head>
@@ -57,13 +62,13 @@
             {#each values as value}
             <div class="form-check form-check-inline">
                 <label class="form-check-label">
-                    <input class="form-check-input" type="radio" bind:group={selected} value={value}>
+                    <input class="form-check-input" type="radio" bind:group={selected} on:change={doConversions} value={value}>
                     {value.label}
                 </label>
             </div>
             {/each}
         </div>
-        <svelte:component this={selected.component} bind:this={colorInput} bind:cssColor={cssColor} on:change={updateColorInput}></svelte:component>
+        <svelte:component this={selected.component} bind:this={colorInput} bind:cssColor={cssColor} on:input={updateColorInput}></svelte:component>
     </div>
     <div class="col-sm d-flex justify-content-center">
         <svg class="border" width="200" height="200">

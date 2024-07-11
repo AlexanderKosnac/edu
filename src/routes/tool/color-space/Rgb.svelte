@@ -30,8 +30,8 @@
 
     const dispatch = createEventDispatcher();
 
-    function handleChange() {
-        dispatch("change");
+    function handleInput() {
+        dispatch("input");
     }
 </script>
 
