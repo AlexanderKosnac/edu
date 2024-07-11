@@ -99,4 +99,13 @@ export function hslToRgb(hsl) {
         b: Math.max(Math.floor((tuple[2] + m) * 255), 0),
     });
 }
+
+// CMYK to x
+export function cmykToRgb(cmyk) {
+    let ki = 1 - cmyk.k;
+    return clampAndIntegerRgb({
+        r: 255 * (1-cmyk.c) * ki,
+        g: 255 * (1-cmyk.m) * ki,
+        b: 255 * (1-cmyk.y) * ki,
+    });
 }

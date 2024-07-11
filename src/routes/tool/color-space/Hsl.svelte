@@ -1,5 +1,6 @@
 <script>
     import { createEventDispatcher } from "svelte";
+    import { asHexTwoDig, hslToRgb, rgbToCmyk } from "./conversions";
 
     let hue = 210;
     let saturation = 0.80;
@@ -26,6 +27,10 @@
         };
     }
 
+    export function toCmyk() {
+        return rgbToCmyk(toRgb());
+    }
+
     const dispatch = createEventDispatcher();
 
     function handleInput() {
@@ -36,17 +41,17 @@
 <div class="d-flex flex-column">
     <label class="form-label">
         <span class="fw-bold">Hue:</span> {hue}°
-        <input type="range" class="form-range" min="0" max="360" step="1" bind:value={hue} on:change={handleChange}>
+        <input type="range" class="form-range" min="0" max="360" step="1" bind:value={hue} on:change={handleInput}>
     </label>
 
     <label class="form-label">
-        <span class="fw-bold">Saturation:</span> {saturation}%
-        <input type="range" class="form-range" min="0" max="100" step="1" bind:value={saturation} on:change={handleChange}>
+        <span class="fw-bold">Saturation:</span> {saturation.toFixed(2)}
+        <input type="range" class="form-range" min="0" max="1" step="0.01" bind:value={saturation} on:change={handleInput}>
     </label>
 
     <label class="form-label">
-        <span class="fw-bold">Lightness:</span> {lightness}%
-        <input type="range" class="form-range" min="0" max="100" step="1" bind:value={lightness} on:change={handleChange}>
+        <span class="fw-bold">Lightness:</span> {lightness.toFixed(2)}
+        <input type="range" class="form-range" min="0" max="1" step="0.01" bind:value={lightness} on:change={handleInput}>
     </label>
 </div>
 

@@ -1,14 +1,16 @@
 <script>
-    import { rgbAsHex, rgbToHsl } from "./conversions";
 	import { onMount } from "svelte";
+    import { rgbAsHex, rgbToCmyk, rgbToHsl } from "./conversions";
 
     import Display from "./Display.svelte";
     import Rgb from "./Rgb.svelte";
     import Hsl from "./Hsl.svelte";
+    import Cmyk from "./Cmyk.svelte";
 
     const values = [
 		{ label: "RGB", component: Rgb },
 		{ label: "HSL", component: Hsl },
+		{ label: "CMYK", component: Cmyk },
 	];
 	let selected = values[0];
 
@@ -27,17 +29,19 @@
         toRgbHex: () => "#000000",
         toRgb: () => { return { r: 0, g: 0, b: 0 } },
         toHsl: () => { return { h: 0, s: 0, l: 0 } },
+        toCmyk: () => { return { c: 0, m: 0, y: 0, k: 0 } },
     };
 
     let cssColor = "";
 
+    let hex, rgb, hsl, cmyk;
     doConversions();
 
-    let hex, rgb, hsl;
     function doConversions() {
         hex = colorInput.toRgbHex();
         rgb = colorInput.toRgb();
         hsl = colorInput.toHsl();
+        cmyk = colorInput.toCmyk();
     }
 
     function onChange() {
@@ -94,6 +98,12 @@
                 ["Saturation", hsl.s.toFixed(2)],
                 ["Lightness", hsl.l.toFixed(2)],
             ]}/>
+
+            <Display name="CMYK" values={[
+                ["Cyan", cmyk.c.toFixed(2)],
+                ["Magenta", cmyk.m.toFixed(2)],
+                ["Yellow", cmyk.y.toFixed(2)],
+                ["Black", cmyk.k.toFixed(2)],
             ]}/>
         </div>
     </div>
@@ -110,17 +120,20 @@
                     <th scope="col">Hex</th>
                     <th scope="col">(R, G, B)</th>
                     <th scope="col">(H, S, L)</th>
+                    <th scope="col">(C, M, Y, K)</th>
                 </tr>
             </thead>
             <tbody>
                 {#each colors as color}
                 {@const exHsl = rgbToHsl(color.rgb)}
+                {@const exCmyk = rgbToCmyk(color.rgb)}
                 <tr>
                     <th><div class="color-showcase" style="background-color: rgb({color.rgb.r} {color.rgb.g} {color.rgb.b})"></div></th>
                     <td>{color.name}</td>
                     <td><tt>{rgbAsHex(color.rgb)}</tt></td>
                     <td>({color.rgb.r}, {color.rgb.g}, {color.rgb.b})</td>
                     <td>({exHsl.h}°, {exHsl.s}, {exHsl.l})</td>
+                    <td>({exCmyk.c}, {exCmyk.m}, {exCmyk.y}, {exCmyk.k})</td>
                 </tr>
                 {/each}
             </tbody>
