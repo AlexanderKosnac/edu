@@ -109,15 +109,9 @@
 
         <strong class="text-nowrap">Request Page:</strong>
         <div class="d-flex align-items-center gap-1">
-            <button type="button" class="btn btn-outline-primary page-request-button btn-request" on:click={requestPage} value="1"/>
-            <button type="button" class="btn btn-outline-primary page-request-button btn-request" on:click={requestPage} value="2"/>
-            <button type="button" class="btn btn-outline-primary page-request-button btn-request" on:click={requestPage} value="3"/>
-            <button type="button" class="btn btn-outline-primary page-request-button btn-request" on:click={requestPage} value="4"/>
-            <button type="button" class="btn btn-outline-primary page-request-button btn-request" on:click={requestPage} value="5"/>
-            <button type="button" class="btn btn-outline-primary page-request-button btn-request" on:click={requestPage} value="6"/>
-            <button type="button" class="btn btn-outline-primary page-request-button btn-request" on:click={requestPage} value="7"/>
-            <button type="button" class="btn btn-outline-primary page-request-button btn-request" on:click={requestPage} value="8"/>
-            <button type="button" class="btn btn-outline-primary page-request-button btn-request" on:click={requestPage} value="9"/>
+            {#each {length: 9} as _, i}
+            <button type="button" class="btn btn-outline-primary page-request-button btn-request" on:click={requestPage} value="{i}"/>
+            {/each}
 
             <div class="input-group">
                 <input id="custom-page-request" type="text" class="form-control" style="max-width: 50px">
@@ -129,25 +123,23 @@
 
 <div class="row">
     <div class="col">
-        <div class="mw-100 overflow-auto">
-            <table class="table table-bordered mt-3 page-table">
-                <tbody>
-                    <tr>
-                        <th class="text-center">Request</th>
-                        {#each history as timestep}
-                            <td>{timestep.request ?? EMPTY_PAGE}</td>
-                        {/each}
-                    </tr>
-                    {#each {length: 3} as _, i}
-                    <tr>
-                        <th class="text-center">Slot {i+1}</th>
-                        {#each history as timestep}
-                            <td>{timestep.frames[i].page ?? EMPTY_PAGE} ({timestep.frames[i].age})</td>
-                        {/each}
-                    </tr>
-                    {/each}
-                </tbody>
-            </table>
+        <div class="d-flex flex-column overflow-auto">
+            <div class="d-flex gap-1 mt-1">
+                <div class="page slot">Request</div>
+                {#each history as timestep}
+                    <div class="page">{timestep.request ?? EMPTY_PAGE}</div>
+                {/each}
+            </div>
+            {#each {length: 3} as _, i}
+            <div class="d-flex gap-1 mt-1">
+                <div class="page slot">Slot {i+1}</div>
+                {#each history as timestep}
+                    <div class="page">
+                        <div>{timestep.frames[i].page ?? EMPTY_PAGE}</div>
+                    </div>
+                {/each}
+            </div>
+            {/each}
         </div>
     </div>
 </div>
@@ -165,10 +157,30 @@
 .page-request-button::after {
     content: attr(value);
 }
-.page-table tbody > tr > td:last-child {
-    width: 100%;
-}
 .btn-request {
     width: 50px;
+}
+
+.page {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    min-width: 50px;
+    min-height: 50px;
+    max-width: 50px;
+    max-height: 50px;
+    border: 2px solid #8b8b8b;
+    border-radius: 5px;
+
+    font-size: 1.2em;
+}
+
+.page.slot {
+    min-width: 80px;
+    max-width: 80px;
+    font-weight: 800;
+    font-size: 1em;
 }
 </style>
