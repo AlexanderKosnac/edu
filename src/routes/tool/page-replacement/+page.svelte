@@ -43,6 +43,7 @@
     ];
 
     let algorithm = implementations[1];
+    let customRequestValue;
 
     function setupHistory() {
         history = [{
@@ -61,8 +62,7 @@
     }
 
     function requestPage(e) {
-        let page = e.target.getAttribute("value");
-        page ??= document.querySelector("#custom-page-request").value.trim();
+        let page = e.target.getAttribute("value").trim();
         if (page.length === 0) return;
 
         let timestep = {
@@ -116,8 +116,8 @@
             {/each}
 
             <div class="input-group">
-                <input id="custom-page-request" type="text" class="form-control" style="max-width: 50px">
-                <button type="button" class="btn btn-outline-primary" on:click={requestPage}>Request</button>
+                <input type="text" class="form-control" bind:value="{customRequestValue}" style="max-width: 50px">
+                <button type="button" class="btn btn-outline-primary" on:click={requestPage} value="{customRequestValue}">Request</button>
             </div>
         </div>
     </div>
