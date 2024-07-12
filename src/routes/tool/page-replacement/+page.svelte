@@ -125,7 +125,8 @@
 
 <div class="row">
     <div class="col">
-        <div class="d-flex overflow-auto mt-1">
+        <strong>Page faults:</strong> {pageFaults}
+        <div class="d-flex overflow-auto">
             <div class="d-flex flex-column">
                 <div class="page slot">Request</div>
                 {#each {length: 3} as _, i}
