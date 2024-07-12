@@ -125,20 +125,21 @@
 
 <div class="row">
     <div class="col">
-        <div class="d-flex flex-column overflow-auto">
-            <div class="d-flex gap-1 mt-1">
+        <div class="d-flex overflow-auto mt-1">
+            <div class="d-flex flex-column">
                 <div class="page slot">Request</div>
-                {#each history as timestep}
-                    <div class="page">{timestep.request ?? EMPTY_PAGE}</div>
+                {#each {length: 3} as _, i}
+                <div class="page slot">Slot {i+1}</div>
                 {/each}
             </div>
-            {#each {length: 3} as _, i}
-            <div class="d-flex gap-1 mt-1">
-                <div class="page slot">Slot {i+1}</div>
-                {#each history as timestep}
-                    <div class="page">
-                        <div>{timestep.frames[i].page ?? EMPTY_PAGE}</div>
-                    </div>
+
+            {#each history as timestep}
+            <div class="d-flex flex-column ml-1">
+                <div class="page">{timestep.request ?? EMPTY_PAGE}</div>
+                {#each {length: 3} as _, i}
+                <div class="page">
+                    <div>{timestep.frames[i].page ?? EMPTY_PAGE}</div>
+                </div>
                 {/each}
             </div>
             {/each}
@@ -177,6 +178,9 @@
     border-radius: 5px;
 
     font-size: 1.2em;
+    margin: 1px;
+
+    overflow: hidden;
 }
 
 .page.slot {
