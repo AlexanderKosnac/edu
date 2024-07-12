@@ -3,15 +3,6 @@
 
     const implementations = [
         {
-            abbrev: "OPT",
-            full: "Optimal",
-            description: "",
-            implemented: false,
-            f: () => {
-                console.log("OPT")
-            },
-        },
-        {
             abbrev: "NRU",
             full: "Not recently used",
             description: "",
@@ -23,10 +14,16 @@
         {
             abbrev: "FIFO",
             full: "First-in, first-out",
-            description: "",
-            implemented: false,
-            f: () => {
-                console.log("FIFO")
+            description: "The first page loaded is the first page to be discarded.",
+            implemented: true,
+            pos: 1,
+            newPage: function() { return { page: undefined, pos: 0 } },
+            onPageInFrame: function(_) { },
+            onTick: function(_) { },
+            getRemovalCandidate: function(frames) { return frames.reduce((min, obj) => obj.pos < min.pos ? obj : min, frames[0]) },
+            replacePage: function(frame, page) {
+                frame.page = page;
+                frame.pos = this.pos++;
             },
         },
         {
@@ -34,22 +31,28 @@
             full: "Least recently used",
             description: "Discards the least recently used page first.",
             implemented: true,
-            newPage: () => ({page: undefined, age: 0}),
-            onPageInFrame: (page) => {page.age = 0},
-            getRemovalCandidate: (frames) => frames.reduce((max, obj) => obj.age > max.age ? obj : max, frames[0]),
-            replacePage: (frame, page) => {
+            newPage: function() { return { page: undefined, age: 0 } },
+            onPageInFrame: function(page) { page.age = 0 },
+            onTick: function(frames) { frames.forEach(it => it.age++) },
+            getRemovalCandidate: function(frames) { return frames.reduce((max, obj) => obj.age > max.age ? obj : max, frames[0]) },
+            replacePage: function(frame, page) {
                 frame.page = page;
                 frame.age = 0;
             },
         },
     ];
 
-    let algorithm = implementations[3];
+    let algorithm = implementations[1];
 
-    let history = [{
-        request: undefined,
-        frames: Array.from({ length: 3 }, () => algorithm.newPage()),
-    }];
+    function setupHistory() {
+        history = [{
+            request: undefined,
+            frames: Array.from({ length: 3 }, () => algorithm.newPage()),
+        }];
+    }
+
+    let history;
+    setupHistory();
 
     let pageFaults = 0;
 
@@ -64,10 +67,9 @@
 
         let timestep = {
             request: page,
-            frames: [],
+            frames: structuredClone(history[history.length - 1].frames),
         };
-        history[history.length - 1].frames.forEach(it => timestep.frames.push(structuredClone(it)));
-        timestep.frames.forEach(it => it.age++);
+        algorithm.onTick(timestep.frames);
 
         let frame = isPageInFrames(page, timestep.frames);
         if (frame) {
@@ -98,7 +100,7 @@
             {#each implementations as implementation, idx}
             <div>
                 <input type="radio" class="form-check-input" name="algorithm" id="alg{idx}" autocomplete="off" checked="{idx === 0}"
-                    bind:group={algorithm} value={implementations[idx]} disabled="{!implementation.implemented}">
+                    bind:group={algorithm} value={implementations[idx]} on:change={setupHistory} disabled="{!implementation.implemented}">
                 <label class="form-check-label" for="alg{idx}">{implementation.abbrev}</label>
             </div>
             {/each}
