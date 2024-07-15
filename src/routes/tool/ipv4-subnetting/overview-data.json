@@ -1,0 +1,10 @@
+{
+    "name": "IPv4 Subnetting",
+    "url": "tool/ipv4-subnetting",
+    "description": "Visualization of how IPv4 subnetting with CIDR works.",
+    "tags": [
+        "Computer Science",
+        "Networking",
+        "Visualization"
+    ]
+}
