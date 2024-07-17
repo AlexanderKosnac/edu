@@ -32,6 +32,12 @@ function loadImage() {
     const file = fileInput.files[0];
     const url = URL.createObjectURL(file);
     input.src = url;
+
+    let dim = [input.naturalWidth, input.naturalHeight];
+    [original.width, original.height] = dim;
+    [convoluted.width, convoluted.height] = dim;
+    [original.naturalWidth, original.naturalHeight] = dim;
+    [convoluted.naturalWidth, convoluted.naturalHeight] = dim;
 }
 
 function run() {
@@ -146,10 +152,10 @@ onMount(() => {
         <p>
             Certain kernels are well known and named. A collection of them are provided below as presets.
         </p>
-        <div class="d-flex flex-row gap-3 align-items-start">
+        <div class="d-flex flex-row gap-3 align-items-start overflow-scroll overflow-x">
         {#each $presets as preset}
             <div class="d-flex flex-column gap-1 justify-content-center align-items-center border border-2 rounded-2 p-1">
-                <button type="button" class="btn btn-dark fw-bold" on:click={() => loadPreset(preset)}>{preset.label}</button>
+                <button type="button" class="btn btn-dark fw-bold text-nowrap" on:click={() => loadPreset(preset)}>{preset.label}</button>
                 <div class="d-flex flex-row align-items-center gap-1">
                     {#if preset.factorDisplay || preset.factor}
                         <span>{preset.factorDisplay ?? preset.factor}</span>
