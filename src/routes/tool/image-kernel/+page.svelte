@@ -78,7 +78,7 @@ function run() {
                 });
             }
         }
-        return acc.map(i => clamp(i, 0, 255));
+        return acc.map(i => clamp(Math.abs(i), 0, 255));
     }
 
     for (let y=0; y<imageDataConvoluted.height; y++) {
