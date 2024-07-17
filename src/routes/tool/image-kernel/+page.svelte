@@ -11,6 +11,7 @@ import { activeKernel, presets } from "./stores.js";
 let kernelInput;
 
 let fileInput;
+let useGraylevel = false;
 
 // Image and canvas elements
 let input;
@@ -54,26 +55,39 @@ function run() {
         return (y * imageDataOriginal.width + x) * 4;
     }
 
-    function f(x, y, i, fallback) {
-        return (x < 0 || x >= imageDataOriginal.width || y < 0 || y >= imageDataOriginal.height) ? fallback : imageDataOriginal.data[getIdx(x, y) + i];
+    function f(x, y, fallback) {
+        if (x < 0 || x >= imageDataOriginal.width || y < 0 || y >= imageDataOriginal.height) return fallback;
+        const idx = getIdx(x, y);
+        const rgb = imageDataOriginal.data.slice(idx, idx+3);
+        if (useGraylevel) {
+            let grey = 0.2126*rgb[0] + 0.7152*rgb[1] + 0.0722*rgb[2];
+            return [grey, grey, grey];
+        } else {
+            return rgb;
+        }
     }
 
-    function getConvolutedValue(x, y, offset) {
-        let acc = 0;
+    function getConvolutedValue(x, y) {
+        let acc = [0, 0, 0];
+        const xc = x - $activeKernel.center[1];
+        const yc = y - $activeKernel.center[0];
         for (let i=0; i<$activeKernel.dimension[0]; i++) {
             for (let j=0; j<$activeKernel.dimension[1]; j++) {
-                acc += $activeKernel.factor * $activeKernel.normFactor * $activeKernel.convolution[j][i] * f(x+j-$activeKernel.center[1], y+i-$activeKernel.center[0], offset, 128);
+                f(xc+j, yc+i, [128, 128, 128]).forEach((v, idx) => {
+                    acc[idx] += $activeKernel.factor * $activeKernel.normFactor * $activeKernel.convolution[j][i] * v;
+                });
             }
         }
-        return clamp(acc, 0, 255);
+        return acc.map(i => clamp(i, 0, 255));
     }
 
     for (let y=0; y<imageDataConvoluted.height; y++) {
         for (let x=0; x<imageDataConvoluted.width; x++) {
             const i = getIdx(x, y);
-            imageDataConvoluted.data[i+0] = getConvolutedValue(x, y, 0);
-            imageDataConvoluted.data[i+1] = getConvolutedValue(x, y, 1);
-            imageDataConvoluted.data[i+2] = getConvolutedValue(x, y, 2);
+            const conv = getConvolutedValue(x, y);
+            imageDataConvoluted.data[i+0] = conv[0]
+            imageDataConvoluted.data[i+1] = conv[1];
+            imageDataConvoluted.data[i+2] = conv[2];
             imageDataConvoluted.data[i+3] = 255;
         }
     }
@@ -101,6 +115,12 @@ onMount(() => {
         <div class="d-flex flex-column gap-1 mb-1">
             <div class="input-group">
                 <input type="file" class="form-control" id="img" name="img" accept="image/*" bind:this={fileInput} on:change={loadImage}>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" type="checkbox" value="" bind:checked={useGraylevel}>
+                    Use graylevel for processing
+                </label>
             </div>
             <ConvolutionMask bind:this={kernelInput}/>
             <div class="d-flex align-items-center gap-2">
