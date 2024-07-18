@@ -1,7 +1,7 @@
 {
     "name": "Image Kernel",
     "url": "tool/image-kernel",
-    "description": "A technique apllied onto images to achieve different effects, like blurring, sharpening, embossing and even edge detection.",
+    "description": "A technique applied onto images to achieve different effects, like blurring, sharpening, embossing and even edge detection.",
     "tags": [
         "Computer Science",
         "Tool"

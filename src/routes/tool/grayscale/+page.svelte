@@ -13,10 +13,6 @@ $: sum = coefficients.reduce((psum, a) => psum + a, 0);
 
 let presets = [
     {
-        name: "Rec. 709",
-        coefficients: [0.2126, 0.7152, 0.0722],
-    },
-    {
         name: "Thirds",
         coefficients: [0.3333, 0.3333, 0.3333],
     },
@@ -35,10 +31,22 @@ let presets = [
     {
         name: "Rec. 601",
         coefficients: [0.299, 0.587, 0.114],
+        ref: "https://en.wikipedia.org/wiki/Grayscale#Luma_coding_in_video_systems",
+    },
+    {
+        name: "Rec. 709",
+        coefficients: [0.2126, 0.7152, 0.0722],
+        ref: "https://en.wikipedia.org/wiki/Grayscale#Colorimetric_(perceptual_luminance-preserving)_conversion_to_grayscale",
     },
     {
         name: "Rec. 2100",
         coefficients: [0.2627, 0.6780, 0.0593],
+        ref: "https://en.wikipedia.org/wiki/Rec._2100#Luma_coefficients",
+    },
+    {
+        name: "Human",
+        coefficients: [0.62, 0.31, 0.07],
+        ref: "https://en.wikipedia.org/wiki/Cone_cell"
     },
 ]
 
@@ -150,7 +158,15 @@ onMount(() => {
                 <h2>Presets</h2>
                 <ul>
                     {#each presets as preset, idx}
-                    <li><input type="button" class="btn btn-link" on:click={() => loadPreset(idx)} value={preset.name}/> [{preset.coefficients.join(", ")}]</li>
+                    <li>
+                        <div class="d-flex gap-2">
+                            <a href="/#" on:click={() => loadPreset(idx)}>{preset.name}</a>
+                            <tt>[{preset.coefficients.map(i => i.toFixed(3)).join(", ")}]</tt>
+                            {#if preset.ref}
+                            <a href="{preset.ref}" target="_blank"><i class="bi bi-box-arrow-up-right"></i></a>
+                            {/if}
+                        </div>
+                    </li>
                     {/each}
                 </ul>
             </div>
