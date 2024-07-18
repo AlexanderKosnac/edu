@@ -1,0 +1,9 @@
+{
+    "name": "Grayscale",
+    "url": "tool/grayscale",
+    "description": "Converting colored images into grayscale based on different configurations.",
+    "tags": [
+        "Computer Science",
+        "Tool"
+    ]
+}
