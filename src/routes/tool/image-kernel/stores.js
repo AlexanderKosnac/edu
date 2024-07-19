@@ -47,6 +47,14 @@ export const presets = readable([
         ]
     },
     {
+        label: "Emboss",
+        matrix: [
+            [-1, -1,  0],
+            [-1,  1,  1],
+            [ 0,  1,  1],
+        ]
+    },
+    {
         label: "Box blur",
         factor: 1/9,
         factorDisplay: "1/9",
