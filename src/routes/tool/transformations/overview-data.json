@@ -1,0 +1,10 @@
+{
+    "name": "Transformations",
+    "url": "tool/transformations",
+    "description": "Transformations and related calculations used in computer graphics.",
+    "tags": [
+        "Computer Science",
+        "Computer Graphics",
+        "Calculator"
+    ]
+}
