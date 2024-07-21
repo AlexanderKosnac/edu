@@ -5,16 +5,33 @@
 
     let canvas;
 
+    const POINT = [["x"], ["y"]];
+
     let transformations = [
         {
-            matrix: [["_s", 0], [0, "_t"]],
-            point: [["x"], ["y"]],
+            name: "Scaling",
+            matrix: [["s", 0], [0, "t"]],
+            editable: [[true, false] ,[false, true]],
             getResult: function() {
                 return [[`${this.matrix[0][0]}*x`], [`${this.matrix[1][1]}*y`]];
             },
+        }, {
+            name: "Shear X",
+            matrix: [[1, "s"], [0, 1]],
+            editable: [[false, true] ,[false, false]],
+            getResult: function() {
+                return [[`x+${this.matrix[0][1]}*y`], [`y`]];
+            },
+        }, {
+            name: "Shear Y",
+            matrix: [[1, 0], ["s", 1]],
+            editable: [[false, false] ,[true, false]],
+            getResult: function() {
+                return [[`x`], [`${this.matrix[1][0]}*x+y`]];
+            },
         },
-    ]
-    let activeTransformation = transformations[0];
+    ];
+    let activeTransformation = transformations[2];
 
     let shape = [
         [[20], [20]],
@@ -62,6 +79,11 @@
         drawShape(getTransformedShape(), [255, 0, 0, 0.5]);
     }
 
+    function onMatrixChange() {
+        render();
+        activeTransformation = activeTransformation;
+    }
+
     onMount(async () => {
         render();
 	});
@@ -79,11 +101,11 @@
 
 <div class="row">
     <div class="col">
-        <h4>Scaling</h4>
+        <h4>{activeTransformation.name}</h4>
         <div class="d-flex align-items-center gap-2">
-            <Matrix matrix={activeTransformation.matrix} on:change={render}/>
+            <Matrix matrix={activeTransformation.matrix} editable={activeTransformation.editable} on:change={onMatrixChange}/>
             <span class="symbol">*</span>
-            <Matrix matrix={activeTransformation.point}/>
+            <Matrix matrix={POINT}/>
             <span class="symbol">=</span>
             <Matrix matrix={activeTransformation.getResult()}/>
         </div>

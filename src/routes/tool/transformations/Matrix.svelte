@@ -2,8 +2,7 @@
     import { createEventDispatcher } from 'svelte';
 
     export let matrix;
-
-    let editable = matrix.map(row => row.map(e => `${e}`.startsWith("_")));
+    export let editable = matrix.map(row => row.map(e => false));
 
     const dispatch = createEventDispatcher();
 
