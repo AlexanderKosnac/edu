@@ -1,8 +1,9 @@
 <script>
     import { createEventDispatcher } from 'svelte';
+    import MatrixBracket from './MatrixBracket.svelte';
 
     export let matrix;
-    export let editable = matrix.map(row => row.map(e => false));
+    export let editable = matrix.map(row => row.map(_ => false));
 
     const dispatch = createEventDispatcher();
 
@@ -11,32 +12,38 @@
     }
 </script>
 
-<div class="d-flex flex-column gap-1">
-    {#each matrix as row, i}
-    <div class="d-flex gap-1">
-        {#each row as element, j}
-            {#if editable[i][j]}
-            <div class="field" bind:textContent={element} contenteditable on:focusout={changeCallback}></div>
-            {:else}
-            <div class="field">{element}</div>
-            {/if}
+<div class="d-flex flex-row align-items-center">
+    <MatrixBracket height="{matrix.length*32}" direction="l"/>
+
+    <div class="d-flex flex-column gap-1">
+        {#each matrix as row, i}
+        <div class="d-flex gap-1">
+            {#each row as element, j}
+                {#if editable[i][j]}
+                <div class="field" bind:textContent={element} contenteditable on:focusout={changeCallback}></div>
+                {:else}
+                <div class="field">{element}</div>
+                {/if}
+            {/each}
+        </div>
         {/each}
-    </div>
-    {/each}
+    </div>    
+
+    <MatrixBracket height="{matrix.length*32}" direction="r"/>
 </div>
 
 <style>
     .field {
         border-width: 1px;
-        border-style: solid;
+        border-style: dashed;
         border-color: #555555;
         border-radius: 5px;
         display: flex;
         align-items: center;
         justify-content: center;
 
-        min-width: 45px;
-        height: 45px;
+        min-width: 25px;
+        height: 25px;
 
         padding-left: 5px;
         padding-right: 5px;
@@ -44,6 +51,7 @@
         font-size: 1.2em;
     }
     .field[contenteditable] {
+        border-style: solid;
         border-color: white;
         font-weight: 900;
     }
