@@ -2,36 +2,11 @@
 	import { onMount } from "svelte";
     import Matrix from "./Matrix.svelte";
     import { matMult } from "./math";
+    import { transformations } from "./transformations";
 
     let canvas;
     let canvas_dimensions = [1000, 1000];
 
-    const POINT = [["x"], ["y"]];
-
-    let transformations = [
-        {
-            name: "Scaling",
-            matrix: [["s", 0], [0, "t"]],
-            editable: [[true, false] ,[false, true]],
-            getResult: function() {
-                return [[`${this.matrix[0][0]}*x`], [`${this.matrix[1][1]}*y`]];
-            },
-        }, {
-            name: "Shear X",
-            matrix: [[1, "s"], [0, 1]],
-            editable: [[false, true] ,[false, false]],
-            getResult: function() {
-                return [[`x+${this.matrix[0][1]}*y`], [`y`]];
-            },
-        }, {
-            name: "Shear Y",
-            matrix: [[1, 0], ["s", 1]],
-            editable: [[false, false] ,[true, false]],
-            getResult: function() {
-                return [[`x`], [`${this.matrix[1][0]}*x+y`]];
-            },
-        },
-    ];
     let activeTransformation = transformations[2];
 
     let ctx;
@@ -48,10 +23,6 @@
         [[320], [ 80]],
     ]
 
-    function parseMatrixArray(arr) {
-        return arr.map(col => col.map(e => parseFloat(e)));
-    }
-
     function getTransformedShape() {
         const m = parseMatrixArray(activeTransformation.matrix);
         if (!validMatrix(m)) return shape;
@@ -61,8 +32,8 @@
     function drawShape(points, color) {
         ctx.beginPath();
         ctx.fillStyle = `rgba(${color.join(",")})`;
-        ctx.moveTo(points[0][0], points[0][1]);
-        points.forEach(point => ctx.lineTo(point[0], point[1]));
+        ctx.moveTo(points[0][0][0]+offset[0], points[0][1][0]+offset[1]);
+        points.forEach(point => ctx.lineTo(point[0][0]+offset[0], point[1][0]+offset[1]));
         ctx.fill();
     }
 
@@ -121,7 +92,7 @@
         <div class="d-flex align-items-center gap-2">
             <Matrix bind:this={inputMatrix} inputs={activeTransformation.inputs} editable={activeTransformation.editable} on:change={onMatrixChange}/>
             <span class="symbol">*</span>
-            <Matrix matrix={POINT}/>
+            <Matrix inputs={activeTransformation.point}/>
             <span class="symbol">=</span>
             <Matrix matrix={activeTransformation.getResult()}/>
         </div>

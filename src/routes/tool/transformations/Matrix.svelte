@@ -2,8 +2,11 @@
     import { createEventDispatcher } from 'svelte';
     import MatrixBracket from './MatrixBracket.svelte';
 
-    export let matrix;
-    export let editable = matrix.map(row => row.map(_ => false));
+    export let inputs;
+
+    export function getEvalMatrix() {
+        return inputs.map(i => i.map(j => j.fnEval()));
+    }
 
     const dispatch = createEventDispatcher();
 
@@ -12,24 +15,36 @@
     }
 </script>
 
-<div class="d-flex flex-row align-items-center">
-    <MatrixBracket height="{matrix.length*32}" direction="l"/>
+<div class="d-flex align-items-center">
+    <MatrixBracket height="{inputs.length*32}" direction="l"/>
 
-    <div class="d-flex flex-column gap-1">
-        {#each matrix as row, i}
-        <div class="d-flex gap-1">
+    <table class="matrix">
+        {#each inputs as row, i}
+        <tr>
             {#each row as element, j}
-                {#if editable[i][j]}
-                <div class="field" bind:textContent={element} contenteditable on:focusout={changeCallback}></div>
-                {:else}
-                <div class="field">{element}</div>
-                {/if}
-            {/each}
-        </div>
-        {/each}
-    </div>    
+            <td>
+                <div class="d-flex align-items-center justify-content-center">
+                    {#if element.displayPrefix}
+                    <span>{element.displayPrefix}</span>
+                    {/if}
 
-    <MatrixBracket height="{matrix.length*32}" direction="r"/>
+                    {#if element.editable}
+                    <div class="field" bind:textContent={element.value} contenteditable on:focusout={changeCallback}></div>
+                    {:else}
+                    <div class="field">{element.value}</div>
+                    {/if}
+
+                    {#if element.displaySuffix}
+                    <span>{element.displaySuffix}</span>
+                    {/if}
+                </div>
+            </td>
+            {/each}
+        </tr>
+        {/each}
+    </table>
+
+    <MatrixBracket height="{inputs.length*32}" direction="r"/>
 </div>
 
 <style>
