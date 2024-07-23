@@ -33,10 +33,14 @@
 </div>
 
 <style>
+    .matrix > tr > td {
+        padding: 2px;
+        font-size: 1.2em;
+        font-family: "Computer Modern";
+        font-style: italic;
+    }
     .field {
         border-width: 1px;
-        border-style: dashed;
-        border-color: #555555;
         border-radius: 5px;
         display: flex;
         align-items: center;
@@ -47,12 +51,12 @@
 
         padding-left: 5px;
         padding-right: 5px;
-
-        font-size: 1.2em;
     }
     .field[contenteditable] {
-        border-style: solid;
-        border-color: white;
+        border-style: dashed;
+        border-color: var(--bs-body-color);
         font-weight: 900;
+        margin-left: 5px;
+        margin-right: 5px;
     }
 </style>
