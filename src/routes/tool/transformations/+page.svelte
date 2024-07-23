@@ -34,6 +34,8 @@
     ];
     let activeTransformation = transformations[2];
 
+    let ctx;
+
     let shape = [
         [[160], [160]],
         [[320], [240]],
@@ -57,7 +59,6 @@
     }
 
     function drawShape(points, color) {
-        const ctx = canvas.getContext("2d");
         ctx.beginPath();
         ctx.fillStyle = `rgba(${color.join(",")})`;
         ctx.moveTo(points[0][0], points[0][1]);
@@ -70,7 +71,6 @@
     }
 
     function clearCanvas() {
-        const ctx = canvas.getContext("2d");
         ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
 
@@ -78,6 +78,20 @@
         clearCanvas();
         drawShape(shape, [0, 0, 255, 1.0]);
         drawShape(getTransformedShape(), [255, 0, 0, 0.5]);
+
+        ctx.lineWidth = 5;
+        ctx.strokeStyle = `rgba(128, 128, 128, 1.0)`;
+
+        // Axes
+        ctx.beginPath();
+        ctx.moveTo(0, canvas_dimensions[1]/2);
+        ctx.lineTo(canvas_dimensions[0], canvas_dimensions[1]/2);
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.moveTo(canvas_dimensions[0]/2, 0);
+        ctx.lineTo(canvas_dimensions[0]/2, canvas_dimensions[1]);
+        ctx.stroke();
     }
 
     function onMatrixChange() {
@@ -86,6 +100,7 @@
     }
 
     onMount(async () => {
+        ctx = canvas.getContext("2d");
         render();
 	});
 </script>
@@ -104,7 +119,7 @@
     <div class="col">
         <h4>{activeTransformation.name}</h4>
         <div class="d-flex align-items-center gap-2">
-            <Matrix matrix={activeTransformation.matrix} editable={activeTransformation.editable} on:change={onMatrixChange}/>
+            <Matrix bind:this={inputMatrix} inputs={activeTransformation.inputs} editable={activeTransformation.editable} on:change={onMatrixChange}/>
             <span class="symbol">*</span>
             <Matrix matrix={POINT}/>
             <span class="symbol">=</span>
