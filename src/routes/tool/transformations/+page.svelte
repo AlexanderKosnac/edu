@@ -11,7 +11,7 @@
 
     let ctx;
 
-    let activeTransformation = transformations[6];
+    let activeTransformation = transformations[0];
 
     let shape = [
         [[160], [160]],
@@ -75,7 +75,7 @@
 
     onMount(async () => {
         ctx = canvas.getContext("2d");
-        render();
+        onMatrixChange();
 	});
 </script>
 
@@ -91,7 +91,17 @@
 
 <div class="row">
     <div class="col">
-        <h4>{activeTransformation.name}</h4>
+        <div class="d-flex gap-3 mb-3">
+            {#each transformations as transformation, idx}
+            <label class="form-check-label">
+                <input type="radio" class="form-check-input" name="transformation" autocomplete="off"
+                    bind:group={activeTransformation} value={transformation} on:change={onMatrixChange}>
+                {transformation.name}
+            </label>
+            {/each}
+        </div>
+
+        <h3>{activeTransformation.name}</h3>
         <div class="d-flex align-items-center gap-2">
             <Matrix bind:this={inputMatrix} inputs={activeTransformation.inputs} editable={activeTransformation.editable} on:change={onMatrixChange}/>
             <span class="symbol">*</span>
@@ -109,6 +119,7 @@
     <div class="col">
         <h2>References:</h2>
         <ul>
+            <li>Missing</li>
         </ul>
     </div>
 </div>

@@ -23,7 +23,7 @@
         <tr>
             {#each row as element, j}
             <td>
-                <div class="d-flex align-items-center justify-content-center">
+                <div class="d-flex align-items-center justify-content-center flex-nowrap">
                     {#if element.displayPrefix}
                     <span>{element.displayPrefix}</span>
                     {/if}

@@ -68,7 +68,7 @@ export let transformations = [
         point: POINT_2D,
         inputs: [
             [
-                field(0, false),
+                field(1, false),
                 field("s", true),
             ], [
                 field(0, false),
