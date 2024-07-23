@@ -1,9 +1,10 @@
 <script>
 	import { onMount } from "svelte";
     import Matrix from "./Matrix.svelte";
-    import { matMult } from "./math.js";
+    import { matMult } from "./math";
 
     let canvas;
+    let canvas_dimensions = [1000, 1000];
 
     const POINT = [["x"], ["y"]];
 
@@ -34,15 +35,15 @@
     let activeTransformation = transformations[2];
 
     let shape = [
-        [[20], [20]],
-        [[36], [28]],
-        [[28], [36]],
-        [[12], [36]],
-        [[ 4], [28]],
-        [[ 4], [12]],
-        [[12], [ 4]],
-        [[28], [ 4]],
-        [[36], [12]],
+        [[160], [160]],
+        [[320], [240]],
+        [[240], [320]],
+        [[ 80], [320]],
+        [[  0], [240]],
+        [[  0], [ 80]],
+        [[ 80], [  0]],
+        [[240], [  0]],
+        [[320], [ 80]],
     ]
 
     function parseMatrixArray(arr) {
@@ -111,7 +112,7 @@
         </div>
     </div>
     <div class="col">
-        <canvas bind:this={canvas} width="100" height="100" class="border visualization"></canvas>
+        <canvas bind:this={canvas} width="{canvas_dimensions[0]}" height="{canvas_dimensions[1]}" class="border visualization"></canvas>
     </div>
 </div>
 
