@@ -7,9 +7,11 @@
     let canvas;
     let canvas_dimensions = [1000, 1000];
 
-    let activeTransformation = transformations[2];
+    let inputMatrix;
 
     let ctx;
+
+    let activeTransformation = transformations[6];
 
     let shape = [
         [[160], [160]],
@@ -23,13 +25,14 @@
         [[320], [ 80]],
     ]
 
-    function getTransformedShape() {
-        const m = parseMatrixArray(activeTransformation.matrix);
+    function getTransformedShape(isAffine) {
+        const m = inputMatrix.getEvalMatrix();
         if (!validMatrix(m)) return shape;
-        return shape.map(p => matMult(m, p));
+        return shape.map(p => isAffine ? [...p, [1]] : p).map(p => matMult(m, p));
     }
 
     function drawShape(points, color) {
+        let offset = canvas_dimensions.map(i => i/2);
         ctx.beginPath();
         ctx.fillStyle = `rgba(${color.join(",")})`;
         ctx.moveTo(points[0][0][0]+offset[0], points[0][1][0]+offset[1]);
@@ -48,7 +51,7 @@
     function render() {
         clearCanvas();
         drawShape(shape, [0, 0, 255, 1.0]);
-        drawShape(getTransformedShape(), [255, 0, 0, 0.5]);
+        drawShape(getTransformedShape(activeTransformation.isAffine), [255, 0, 0, 0.5]);
 
         ctx.lineWidth = 5;
         ctx.strokeStyle = `rgba(128, 128, 128, 1.0)`;
@@ -94,7 +97,7 @@
             <span class="symbol">*</span>
             <Matrix inputs={activeTransformation.point}/>
             <span class="symbol">=</span>
-            <Matrix matrix={activeTransformation.getResult()}/>
+            <Matrix inputs={activeTransformation.getResult()}/>
         </div>
     </div>
     <div class="col">
