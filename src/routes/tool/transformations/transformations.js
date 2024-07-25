@@ -46,6 +46,24 @@ function asNegSin() {
 
 export let transformations = [
     {
+        name: "Identity",
+        point: POINT_2D,
+        inputs: [
+            [
+                field(1, false),
+                field(0, false),
+            ], [
+                field(0, false),
+                field(1, false),
+            ]
+        ],
+        getResult: function() {
+            return [
+                [fieldStatic("x")],
+                [fieldStatic("y")],
+            ];
+        },
+    }, {
         name: "Scaling",
         point: POINT_2D,
         inputs: [
