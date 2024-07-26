@@ -61,10 +61,20 @@
         return frames.find(f => f.page === page);
     }
 
-    function requestPage(e) {
+    function onRequestPage(e) {
         let page = e.target.getAttribute("value").trim();
         if (page.length === 0) return;
+        requestPage(page);
+    }
 
+    function onRequestPageKey(e) {
+        const page = e.key;
+        if (isNaN(parseInt(page))) return;
+        e.preventDefault();
+        requestPage(page);
+    }
+
+    function requestPage(page) {
         let timestep = {
             request: page,
             frames: structuredClone(history[history.length - 1].frames),
@@ -93,6 +103,8 @@
     </div>
 </div>
 
+<svelte:window on:keydown={onRequestPageKey} />
+
 <div class="row">
     <div class="col">
         <div class="d-flex flex-row gap-3">
@@ -112,7 +124,7 @@
         <strong class="text-nowrap">Request Page:</strong>
         <div class="d-flex align-items-center gap-1">
             {#each {length: 9} as _, i}
-            <button type="button" class="btn btn-outline-primary page-request-button btn-request" on:click={requestPage} value="{i}"/>
+            <button type="button" class="btn btn-outline-primary page-request-button btn-request" on:click={onRequestPage} value="{i}"/>
             {/each}
 
             <div class="input-group">
@@ -180,9 +192,14 @@
     border-radius: 5px;
 
     font-size: 1.2em;
+    font-weight: 900;
     margin: 1px;
 
     overflow: hidden;
+}
+
+.page.translucent {
+    opacity: .5;
 }
 
 .page.slot {
