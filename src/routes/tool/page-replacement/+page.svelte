@@ -118,31 +118,33 @@
 
 <div class="row">
     <div class="col">
-        <div class="d-flex flex-row gap-3">
-            <strong>Algorithm to use:</strong>
-            {#each implementations as implementation, idx}
-            <div>
-                <input type="radio" class="form-check-input" name="algorithm" id="alg{idx}" autocomplete="off" checked="{idx === 0}"
-                    bind:group={algorithm} value={implementations[idx]} on:change={setupHistory} disabled="{!implementation.implemented}">
-                <label class="form-check-label" for="alg{idx}">{implementation.abbrev}</label>
+        <fieldset>
+            <div class="mb-3">
+                <label class="form-label" for="algorithmPick">
+                    Algorithm
+                </label>
+                <div id="algorithmPick" class="d-flex gap-3">
+                    {#each implementations as implementation, idx}
+                    <label class="form-check-label">
+                        <input type="radio" class="form-check-input" name="algorithm" autocomplete="off" checked="{idx === 0}"
+                            bind:group={algorithm} value={implementations[idx]} on:change={setupHistory}>
+                        {implementation.abbrev}
+                    </label>
+                    {/each}
+                </div>
+                <div class="form-text"><strong>{algorithm.full} ({algorithm.abbrev}):</strong> {algorithm.description}</div>
             </div>
-            {/each}
-        </div>
-        <div class="mb-3">
-            <span>{algorithm.full} ({algorithm.abbrev}):</span> {algorithm.description}
-        </div>
 
-        <strong class="text-nowrap">Request Page:</strong>
-        <div class="d-flex align-items-center gap-1">
-            {#each {length: 9} as _, i}
-            <button type="button" class="btn btn-outline-primary page-request-button btn-request" on:click={onRequestPage} value="{i}"/>
-            {/each}
-
-            <div class="input-group">
-                <input type="text" class="form-control" bind:value="{customRequestValue}" style="max-width: 50px">
-                <button type="button" class="btn btn-outline-primary" on:click={requestPage} value="{customRequestValue}">Request</button>
+            <div class="mb-3">
+                <label class="form-label" for="pageRequest">Request Page</label>
+                <div class="d-flex align-items-center gap-1" id="pageRequest">
+                    {#each {length: 9} as _, i}
+                    <button type="button" class="btn btn-outline-primary page-request-button" on:click={onRequestPage} value="{i+1}"/>
+                    {/each}
+                </div>
+                <div class="form-text">Or request page via number keys on your keyboard.</div>
             </div>
-        </div>
+        </fieldset>
     </div>
 </div>
 
@@ -161,6 +163,7 @@
             <div class="d-flex flex-column ml-1">
                 <div class="page">{timestep.request ?? EMPTY_PAGE}</div>
                 {#each {length: nSlots} as _, i}
+                <div class="page" class:translucent={!timestep.frames[i].page}>
                     <div>{timestep.frames[i].page ?? EMPTY_PAGE}</div>
                 </div>
                 {/each}
