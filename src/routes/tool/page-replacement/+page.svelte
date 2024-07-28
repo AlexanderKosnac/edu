@@ -3,19 +3,9 @@
 
     const implementations = [
         {
-            abbrev: "NRU",
-            full: "Not recently used",
-            description: "",
-            implemented: false,
-            f: () => {
-                console.log("NRU")
-            },
-        },
-        {
             abbrev: "FIFO",
             full: "First-in, first-out",
             description: "The first page loaded is the first page to be discarded.",
-            implemented: true,
             pos: 1,
             newPage: function() { return { page: undefined, pos: 0 } },
             onPageInFrame: function(_) { },
@@ -25,12 +15,32 @@
                 frame.page = page;
                 frame.pos = this.pos++;
             },
-        },
-        {
+        }, {
+            abbrev: "FIFO SC",
+            full: "Second-chance",
+            description: "Like FIFO, but pages can be prevented from being swapped out by being recently referenced.",
+            pos: 1,
+            newPage: function() { return { page: undefined, pos: 0, referenced: true } },
+            onPageInFrame: function(page) { page.referenced = true },
+            onTick: function(_) { },
+            getRemovalCandidate: function(frames) {
+                let candidate = frames.reduce((min, obj) => obj.pos < min.pos ? obj : min, frames[0]);
+                while (candidate.referenced) {
+                    candidate.pos = Math.min(...frames.map(f => f.pos)) - 1;
+                    candidate.referenced = false;
+                    candidate = frames.reduce((min, obj) => obj.pos < min.pos ? obj : min, frames[0]);
+                }
+                return candidate;
+            },
+            replacePage: function(frame, page) {
+                frame.page = page;
+                frame.pos = this.pos++;
+                frame.referenced = true;
+            },
+        }, {
             abbrev: "LRU",
             full: "Least recently used",
             description: "Discards the least recently used page first.",
-            implemented: true,
             newPage: function() { return { page: undefined, age: 0 } },
             onPageInFrame: function(page) { page.age = 0 },
             onTick: function(frames) { frames.forEach(it => it.age++) },
@@ -166,6 +176,7 @@
         <ul>
             <li><a href="https://en.wikipedia.org/wiki/Page_replacement_algorithm" target="_blank">Page replacement algorithm</a></li>
             <li><a href="https://en.wikipedia.org/wiki/Memory_paging" target="_blank">Memory paging</a></li>
+            <li><a href="https://www.youtube.com/watch?v=P1icI9X3sR4" target="_blank">Second-chance explained</a></li>
         </ul>
     </div>
 </div>
