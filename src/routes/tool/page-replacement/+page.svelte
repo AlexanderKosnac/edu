@@ -1,6 +1,8 @@
 <script>
     const EMPTY_PAGE = "∅";
 
+    let nSlots = 3;
+
     const implementations = [
         {
             abbrev: "FIFO",
@@ -52,13 +54,12 @@
         },
     ];
 
-    let algorithm = implementations[1];
-    let customRequestValue;
+    let algorithm = implementations[0];
 
     function setupHistory() {
         history = [{
             request: undefined,
-            frames: Array.from({ length: 3 }, () => algorithm.newPage()),
+            frames: Array.from({ length: nSlots }, () => algorithm.newPage()),
         }];
     }
 
@@ -151,7 +152,7 @@
         <div class="d-flex overflow-auto">
             <div class="d-flex flex-column">
                 <div class="page slot">Request</div>
-                {#each {length: 3} as _, i}
+                {#each {length: nSlots} as _, i}
                 <div class="page slot">Slot {i+1}</div>
                 {/each}
             </div>
@@ -159,8 +160,7 @@
             {#each history as timestep}
             <div class="d-flex flex-column ml-1">
                 <div class="page">{timestep.request ?? EMPTY_PAGE}</div>
-                {#each {length: 3} as _, i}
-                <div class="page">
+                {#each {length: nSlots} as _, i}
                     <div>{timestep.frames[i].page ?? EMPTY_PAGE}</div>
                 </div>
                 {/each}
@@ -184,9 +184,6 @@
 <style>
 .page-request-button::after {
     content: attr(value);
-}
-.btn-request {
-    width: 50px;
 }
 
 .page {
