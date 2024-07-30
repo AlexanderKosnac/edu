@@ -91,8 +91,9 @@
 
 <div class="row">
     <div class="col">
+        <h2>Basic 2D</h2>
         <div class="d-flex gap-3 mb-3">
-            {#each transformations as transformation, idx}
+            {#each transformations as transformation}
             <label class="form-check-label">
                 <input type="radio" class="form-check-input" name="transformation" autocomplete="off"
                     bind:group={activeTransformation} value={transformation} on:change={onMatrixChange}>
@@ -103,7 +104,7 @@
 
         <h3>{activeTransformation.name}</h3>
         <div class="d-flex align-items-center gap-2">
-            <Matrix bind:this={inputMatrix} inputs={activeTransformation.inputs} editable={activeTransformation.editable} on:change={onMatrixChange}/>
+            <Matrix bind:this={inputMatrix} inputs={activeTransformation.inputs} on:change={onMatrixChange}/>
             <span class="symbol">*</span>
             <Matrix inputs={activeTransformation.point}/>
             <span class="symbol">=</span>

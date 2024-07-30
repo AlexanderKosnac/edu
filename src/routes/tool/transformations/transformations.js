@@ -197,5 +197,5 @@ export let transformations = [
                 [fieldStatic("1")],
             ];
         },
-    }
+    },
 ];
