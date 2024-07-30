@@ -3,6 +3,7 @@
     import MatrixBracket from "./MatrixBracket.svelte";
 
     export let inputs;
+    export let formatter = val => val;
 
     export function getEvalMatrix() {
         return inputs.map(i => i.map(j => j.fnEval()));
@@ -19,9 +20,9 @@
     <MatrixBracket height="{inputs.length*32}" direction="l"/>
 
     <table class="matrix">
-        {#each inputs as row, i}
+        {#each inputs as row}
         <tr>
-            {#each row as element, j}
+            {#each row as element}
             <td>
                 <div class="d-flex align-items-center justify-content-center flex-nowrap">
                     {#if element.displayPrefix}
@@ -31,7 +32,7 @@
                     {#if element.editable}
                     <div class="field" bind:textContent={element.value} contenteditable on:focusout={changeCallback}></div>
                     {:else}
-                    <div class="field">{element.value}</div>
+                    <div class="field">{formatter(element.value)}</div>
                     {/if}
 
                     {#if element.displaySuffix}

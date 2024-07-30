@@ -44,3 +44,7 @@ export function asSin() {
 export function asNegSin() {
     return -Math.sin(parseFloat(this.value));
 }
+
+export function formatterFixed(val, i) {
+    return isFinite(val) ? val.toFixed(i) : val;
+}

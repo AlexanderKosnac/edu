@@ -41,7 +41,7 @@
     }
 
     function validMatrix(arr) {
-        return arr.flat(Infinity).every(i => !isNaN(i));
+        return arr.flat(Infinity).every(i => isFinite(i));
     }
 
     function clearCanvas() {
