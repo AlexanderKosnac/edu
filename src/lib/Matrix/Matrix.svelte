@@ -1,6 +1,6 @@
 <script>
-    import { createEventDispatcher } from 'svelte';
-    import MatrixBracket from './MatrixBracket.svelte';
+    import { createEventDispatcher } from "svelte";
+    import MatrixBracket from "./MatrixBracket.svelte";
 
     export let inputs;
 

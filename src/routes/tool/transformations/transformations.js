@@ -1,48 +1,12 @@
-const POINT_2D = [
-    [fieldStatic("x")],
-    [fieldStatic("y")],
-];
-
-const POINT_2D_AFFINE = [
-    [fieldStatic("x")],
-    [fieldStatic("y")],
-    [fieldStatic("1")],
-];
-
-function fieldStatic(value, fnEval) {
-    return {
-        value: value,
-        editable: false,
-        displayPrefix: undefined,
-        displaySuffix: undefined,
-        fnEval: fnEval,
-    }
-}
-function field(value, editable, displayPrefix, displaySuffix, fnEval) {
-    return {
-        value: value,
-        editable: editable,
-        displayPrefix: displayPrefix,
-        displaySuffix: displaySuffix,
-        fnEval: fnEval ?? val,
-    }
-}
-
-function val() {
-    return parseFloat(this.value);
-}
-
-function asCos() {
-    return Math.cos(parseFloat(this.value));
-}
-
-function asSin() {
-    return Math.sin(parseFloat(this.value));
-}
-
-function asNegSin() {
-    return -Math.sin(parseFloat(this.value));
-}
+import {
+    POINT_2D,
+    POINT_2D_AFFINE,
+    field,
+    fieldStatic,
+    asSin,
+    asNegSin,
+    asCos,
+} from "$lib/Matrix/matrix";
 
 export let transformations = [
     {

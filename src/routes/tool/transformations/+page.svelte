@@ -1,7 +1,7 @@
 <script>
 	import { onMount } from "svelte";
-    import Matrix from "./Matrix.svelte";
     import { matMult } from "$lib/math";
+    import Matrix from "$lib/Matrix/Matrix.svelte";
     import { transformations } from "./transformations";
 
     let canvas;
