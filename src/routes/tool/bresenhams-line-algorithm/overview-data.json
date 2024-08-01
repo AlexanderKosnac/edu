@@ -1,0 +1,10 @@
+{
+    "name": "Bresenham's Line Algorithm",
+    "url": "tool/bresenhams-line-algorithm",
+    "description": "Algorithm used in computer graphics to rasterize lines.",
+    "tags": [
+        "Computer Graphics",
+        "Computer Science",
+        "Calculator"
+    ]
+}
