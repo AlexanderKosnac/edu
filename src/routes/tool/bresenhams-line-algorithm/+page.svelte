@@ -1,14 +1,20 @@
 <script>
+    import { onMount } from "svelte";
     import InputPoint from "./InputPoint.svelte";
+
+    const N_PIXELS_WIDTH = 20;
+    const N_PIXELS_HEIGHT = 20;
 
     const PIXEL_WIDTH = 35;
     const PIXEL_HEIGHT = 35;
 
     let pA = { x: 100, y: 200 };
-    let pB = { x: 200, y: 500 };
+    let pB = { x: 500, y: 500 };
 
     $: labelA = formatXY(pixelCoord(pA));
     $: labelB = formatXY(pixelCoord(pB));
+
+    let pixels = Array(N_PIXELS_WIDTH).fill().map(()=>Array(N_PIXELS_HEIGHT).fill());
 
     function pixelCoord(point) {
         return {
@@ -18,13 +24,92 @@
     }
 
     function formatXY(xy) {
-        return `[${xy.x}; ${xy.y}]`
+        return `[${xy.x}; ${xy.y}]`;
+    }
+
+    function setPixel(x, y) {
+        console.log(pixels)
+        console.log(`${x} ${y}`)
+        pixels[x][y].style.fill = "orange";
+    }
+
+    function clear() {
+        pixels.forEach(row => row.forEach(e => e.style.fill = "transparent"));
+    }
+
+    function plotLineLow(x0, y0, x1, y1) {
+        let dx = x1 - x0;
+        let dy = y1 - y0;
+        let yi = 1;
+        if (dy < 0) {
+            yi = -1;
+            dy = -dy;
+        }
+        let D = (2*dy)-dx;
+        let y = y0;
+
+        for (let x=x0; x<=x1; x++) {
+            setPixel(x, y);
+            if (D > 0) {
+                y += yi;
+                D += 2*(dy-dx);
+            } else {
+                D += 2*dy;
+            }
+        }
+    }
+
+    function plotLineHigh(x0, y0, x1, y1) {
+        let dx = x1 - x0;
+        let dy = y1 - y0;
+        let xi = 1
+        if (dx < 0) {
+            xi = -1;
+            dx = -dx;
+        }
+        let D = (2*dx)-dy
+        let x = x0;
+
+        for (let y=y0; y<=y1; y++) {
+            setPixel(x, y);
+            if (D > 0) {
+                x += xi;
+                D += 2*(dx-dy);
+            } else {
+                D += 2*dx;
+            }
+        }
+    }
+
+    function plotLine(x0, y0, x1, y1) {
+        if (Math.abs(y1 - y0) < Math.abs(x1 - x0)) {
+            if (x0 > x1) {
+                plotLineLow(x1, y1, x0, y0);
+            } else {
+                plotLineLow(x0, y0, x1, y1);
+            }
+        } else {
+            if (y0 > y1) {
+                plotLineHigh(x1, y1, x0, y0);
+            } else {
+                plotLineHigh(x0, y0, x1, y1);
+            }
+        }
     }
 
     function onChange() {
         pA = pA;
         pB = pB;
+        let cA = pixelCoord(pA);
+        let cB = pixelCoord(pB);
+
+        clear();
+        plotLine(cA.x, cA.y, cB.x, cB.y);
     }
+
+    onMount(()=> {
+        onChange();
+    });
 </script>
 
 <svelte:head>
@@ -41,9 +126,10 @@
     <div class="col">
         <svg width="700" height="700" viewBox="0 0 700 700">
             <g>
-            {#each {length: 20} as _, i}
-                {#each {length: 20} as _, j}
-                <rect class="pixel" x="{i*PIXEL_WIDTH}" y="{j*PIXEL_HEIGHT}"></rect>
+            {#each {length: N_PIXELS_WIDTH} as _, i}
+                {#each {length: N_PIXELS_HEIGHT} as _, j}
+                <rect bind:this={pixels[i][j]} class="pixel" x="{i*PIXEL_WIDTH}" y="{j*PIXEL_HEIGHT}"></rect>
+                <text x="{i*PIXEL_WIDTH+3}" y="{j*PIXEL_HEIGHT+10}" stroke="white" fill="white" style="font-size: .5em">{i}, {j}</text>
                 {/each}
             {/each}
             </g>
