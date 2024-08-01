@@ -16,6 +16,8 @@
 
     let pixels = Array(N_PIXELS_WIDTH).fill().map(()=>Array(N_PIXELS_HEIGHT).fill());
 
+    let showPixelIndices = false;
+
     function pixelCoord(point) {
         return {
             x: Math.floor(point.x / PIXEL_WIDTH),
@@ -129,7 +131,9 @@
             {#each {length: N_PIXELS_WIDTH} as _, i}
                 {#each {length: N_PIXELS_HEIGHT} as _, j}
                 <rect bind:this={pixels[i][j]} class="pixel" x="{i*PIXEL_WIDTH}" y="{j*PIXEL_HEIGHT}"></rect>
-                <text x="{i*PIXEL_WIDTH+3}" y="{j*PIXEL_HEIGHT+10}" stroke="white" fill="white" style="font-size: .5em">{i}, {j}</text>
+                {#if showPixelIndices}
+                    <text x="{i*PIXEL_WIDTH+3}" y="{j*PIXEL_HEIGHT+10}" stroke="white" fill="white" style="font-size: .5em">{i}, {j}</text>
+                {/if}
                 {/each}
             {/each}
             </g>
@@ -138,8 +142,16 @@
             <InputPoint point={pB} label={labelB} on:change={onChange} fill="blue"/>
         </svg>
     </div>
+    <div class="col">
+        <h2>Settings</h2>
+        <div class="form-check">
+            <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" bind:checked={showPixelIndices}>
+                Show pixel indices
+            </label>
+        </div>
+    </div>
 </div>
-
 
 <div class="row">
     <div class="col">
