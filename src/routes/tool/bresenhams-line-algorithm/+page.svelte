@@ -17,6 +17,7 @@
     let pixels = Array(N_PIXELS_WIDTH).fill().map(()=>Array(N_PIXELS_HEIGHT).fill());
 
     let showPixelIndices = false;
+    let lineColor = "#ffaa00";
 
     function pixelCoord(point) {
         return {
@@ -32,7 +33,7 @@
     function setPixel(x, y) {
         console.log(pixels)
         console.log(`${x} ${y}`)
-        pixels[x][y].style.fill = "orange";
+        pixels[x][y].style.fill = lineColor;
     }
 
     function clear() {
@@ -149,6 +150,10 @@
                 <input class="form-check-input" type="checkbox" bind:checked={showPixelIndices}>
                 Show pixel indices
             </label>
+        </div>
+        <div class="form-color">
+            <label for="lineColor">Line color</label>
+            <input type="color" class="form-control form-control-color" id="lineColor" on:change={onChange} bind:value={lineColor}>
         </div>
     </div>
 </div>
