@@ -1,0 +1,9 @@
+{
+    "name": "Shunting yard algorithm",
+    "url": "tool/shunting-yard-algorithm",
+    "description": "Algorithm for parsing arithmetical or logical expresssions written in infix notation.",
+    "tags": [
+        "Computer Science",
+        "Calculator"
+    ]
+}
