@@ -11,16 +11,17 @@
 <h1><tt style="letter-spacing: .4rem">edu</tt></h1>
 
 <p>
-    EDU is a collection of tools, visualizations, and calculators with a focus on education and learning.
-    The name is derived from top-level domain <a href="https://en.wikipedia.org/wiki/.edu">.edu</a> which was created for organizations with a focus on education.
+  EDU is a collection of tools, visualizations, and calculators with a focus on education and learning.
+  The name is derived from top-level domain <a href="https://en.wikipedia.org/wiki/.edu">.edu</a> which was created for organizations with a focus on education.
 </p>
 
 <p>
-    This website is hosted on GitHub pages, automatically deployed from the <a href="https://github.com/AlexanderKosnac/edu">edu</a> repository.
+  This website is hosted on GitHub pages, automatically deployed from the <a href="https://github.com/AlexanderKosnac/edu">edu</a> repository.
 </p>
 
 <div class="d-flex flex-wrap gap-2">
   {#each sortedData as entry}
+  {#if entry.usable ?? true}
   <div class="card tool-card">
     <div class="card-body">
       <h5 class="card-title">
@@ -32,6 +33,7 @@
       <p class="card-text">{entry.description}</p>
     </div>
   </div>
+  {/if}
   {/each}
 </div>
 
