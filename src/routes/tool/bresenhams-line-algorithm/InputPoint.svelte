@@ -26,7 +26,8 @@
 
 <svelte:window on:mouseup={onMouseUp} on:mousemove={onMouseMove} />
 
-<circle class="point" class:active={moving} cx="{point.x}" cy="{point.y}" r="15" on:mousedown={onMouseDown} {...$$restProps}/>
+<circle class="point" class:active={moving} cx="{point.x}" cy="{point.y}" r="15" on:mousedown={onMouseDown} {...$$restProps}
+    role="button" tabindex="0" aria-grabbed="false" aria-label="Draggable point"/>
 <rect class="label-bg" x="{point.x-40}" y="{point.y+20}" width="80" height="30"/>
 <text class="label" x="{point.x}" y="{point.y+40}" text-anchor="middle">{label}</text>
 
