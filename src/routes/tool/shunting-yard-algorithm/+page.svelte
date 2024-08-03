@@ -1,23 +1,38 @@
 <script>
+    import { onMount } from "svelte";
     import { tokenize, shuntingYard, getAvailableOperators } from "./shunting-yard";
+    import Token from "./Token.svelte";
 
-    let inputString = "2 + 3";
+    let inputString = "3 + 4 * 2 / ( 1 - 5 ) ^ 2 ^ 3";
 
     $: tokens = tokenize(inputString);
 
     let history = [];
     let storeInHistory = (token, action, rpn, opStack) => {
         history = [...history, {
-            token: token,
+            token: structuredClone(token),
             action: action,
-            rpn: rpn,
-            opStack: opStack,
+            rpn: structuredClone(rpn),
+            opStack: structuredClone(opStack),
         }];
     }
 
+    let error;
+
     function run() {
-        shuntingYard(tokens, storeInHistory);
+        history = [];
+        try {
+            shuntingYard(tokenize(inputString), storeInHistory);
+            error = undefined;
+        } catch (e) {
+            console.log(e)
+            error = e;
+        }
     }
+
+    onMount(()=> {
+        run();
+    });
 </script>
 
 <svelte:head>
@@ -33,16 +48,16 @@
 <div class="row">
     <div class="col">
         <div class="form-floating">
-            <input type="text" class="form-control" id="input" placeholder="2 + 3" on:input={run} bind:value={inputString}>
+            <input type="text" class="form-control" class:error={error} id="input" placeholder=" " bind:value={inputString} on:input={run}>
             <label for="input">Input String</label>
             <div class="form-text">Available operators:
                 {#each getAvailableOperators() as op, i}
                 {#if i},{/if}
                 <tt>{op}</tt>
                 {/each}
+                <span class="text-danger" style="margin-left: 30px">{error ?? ""}</span>
             </div>
         </div>
-        <button on:click={run}>RUN</button>
     </div>
 </div>
 
@@ -51,10 +66,7 @@
         <h4>Tokenized Input:</h4>
         <div class="d-flex gap-1">
             {#each tokens as token}
-            <div class="token">
-                <div class="symbol">{token.symbol}</div>
-                <div class="type">{token.type.name}</div>
-            </div>
+            <Token data={token}/>
             {/each}
         </div>
     </div>
@@ -69,17 +81,29 @@
                     <tr>
                         <th class="text-center">Token</th>
                         <th class="text-center">Action</th>
-                        <th class="text-center">RPN</th>
+                        <th class="text-center">Reverse Polish Notation (RPN)</th>
                         <th class="text-center">Op. Stack</th>
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">
                 {#each history as entry}
                 <tr>
-                    <td class="text-center">{entry.token.symbol}</td>
-                    <td class="text-start">{entry.action}</td>
-                    <td class="text-start">{entry.rpn}</td>
-                    <td class="text-end">{entry.opStack}</td>
+                    <td class="text-center">{entry.token.symbol ?? ""}</td>
+                    <td>{entry.action}</td>
+                    <td>
+                        <div class="d-flex gap-1">
+                            {#each entry.rpn as token}
+                            <Token data={token} size="small"/>
+                            {/each}
+                        </div>
+                    </td>
+                    <td>
+                        <div class="d-flex gap-1">
+                            {#each entry.opStack as token}
+                            <Token data={token} size="small"/>
+                            {/each}
+                        </div>
+                    </td>
                 </tr>
                 {/each}
                 </tbody>
@@ -99,28 +123,8 @@
 </div>
 
 <style>
-    .token {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        align-items: center;
-
-        position: relative;
-
-        min-width: 40px;
-        height: 40px;
-        border: 1px solid var(--bs-body-color);
-        border-radius: 5px;
-    }
-    .token > .symbol {
-        padding: 0px 5px 15px;
-        font-size: 1.4em;
-        font-weight: 900;
-    }
-    .token > .type {
-        position: absolute;
-        top: 65%;
-        font-size: .5em;
-        font-weight: 900;
+    input.error {
+        border: 1px solid red;
+        font: red;
     }
 </style>

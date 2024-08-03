@@ -31,8 +31,6 @@
     }
 
     function setPixel(x, y) {
-        console.log(pixels)
-        console.log(`${x} ${y}`)
         pixels[x][y].style.fill = lineColor;
     }
 
