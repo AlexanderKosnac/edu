@@ -7,9 +7,12 @@
 
     $: tokens = tokenize(inputString);
 
-    let history = [];
-    let storeInHistory = (token, action, rpn, opStack) => {
-        history = [...history, {
+    let historyRpn = [];
+    let historySolve = [];
+    let result;
+
+    let storeInRpnHistory = (token, action, rpn, opStack) => {
+        historyRpn = [...historyRpn, {
             token: structuredClone(token),
             action: action,
             rpn: structuredClone(rpn),
@@ -17,15 +20,24 @@
         }];
     }
 
+    let storeInSolveHistory = (token, action, rpn, nums) => {
+        historySolve = [...historySolve, {
+            token: structuredClone(token),
+            action: action,
+            rpn: structuredClone(rpn),
+            nums: structuredClone(nums),
+        }];
+    }
+
     let error;
 
     function run() {
-        history = [];
+        historyRpn = [];
+        historySolve = [];
         try {
-            shuntingYard(tokenize(inputString), storeInHistory);
+            result = shuntingYard(tokenize(inputString), storeInRpnHistory, storeInSolveHistory);
             error = undefined;
         } catch (e) {
-            console.log(e)
             error = e;
         }
     }
@@ -45,7 +57,7 @@
     </div>
 </div>
 
-<div class="row">
+<div class="row mb-3">
     <div class="col">
         <div class="form-floating">
             <input type="text" class="form-control" class:error={error} id="input" placeholder=" " bind:value={inputString} on:input={run}>
@@ -61,7 +73,7 @@
     </div>
 </div>
 
-<div class="row">
+<div class="row mb-3">
     <div class="col">
         <h4>Tokenized Input:</h4>
         <div class="d-flex gap-1">
@@ -74,7 +86,7 @@
 
 <div class="row">
     <div class="col">
-        <h4>Shunting yard:</h4>
+        <h4>Compute Reverse Polish Notation (RPN):</h4>
         <div class="d-flex gap-1">
             <table class="table table-hover table-bordered">
                 <thead>
@@ -86,7 +98,7 @@
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">
-                {#each history as entry}
+                {#each historyRpn as entry}
                 <tr>
                     <td class="text-center">{entry.token.symbol ?? ""}</td>
                     <td>{entry.action}</td>
@@ -111,7 +123,42 @@
         </div>
     </div>
 </div>
-a
+
+<div class="row">
+    <div class="col">
+        <h4>Resolve RPN to Result:</h4>
+        <div class="d-flex gap-1">
+            <table class="table table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th class="text-center">Token</th>
+                        <th class="text-center">Action</th>
+                        <th class="text-center">Reverse Polish Notation (RPN)</th>
+                        <th class="text-center">Number Storage</th>
+                    </tr>
+                </thead>
+                <tbody class="table-group-divider">
+                {#each historySolve as entry}
+                <tr>
+                    <td class="text-center">{entry.token.symbol}</td>
+                    <td>{entry.action}</td>
+                    <td>
+                        <div class="d-flex gap-1">
+                            {#each entry.rpn as token}
+                            <Token data={token} size="small"/>
+                            {/each}
+                        </div>
+                    </td>
+                    <td>{JSON.stringify(entry.nums)}</td>
+                </tr>
+                {/each}
+                </tbody>
+            </table>
+        </div>
+        <div class="result-display">Result: {result}</div>
+    </div>
+</div>
+
 <div class="row">
     <div class="col">
         <h2>References:</h2>
@@ -126,5 +173,9 @@ a
     input.error {
         border: 1px solid red;
         font: red;
+    }
+    .result-display {
+        font-size: 1.5em;
+        font-weight: 900;
     }
 </style>
