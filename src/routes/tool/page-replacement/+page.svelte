@@ -150,7 +150,10 @@
 
 <div class="row">
     <div class="col">
-        <strong>Page faults:</strong> {pageFaults}
+        <div class="d-flex align-items-center gap-2 mb-1">
+            <span><strong>Page faults:</strong> {pageFaults}</span>
+            <button class="btn btn-sm btn-outline-secondary" type="button" on:click={setupHistory}>Clear History</button>
+        </div>
         <div class="d-flex overflow-auto">
             <div class="d-flex flex-column">
                 <div class="page slot">Request</div>
