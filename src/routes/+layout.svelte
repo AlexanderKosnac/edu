@@ -12,7 +12,7 @@ import data from "./tool/overview-data.json";
 
 let minisearch = new MiniSearch({
     fields: ["name", "description"],
-    storeFields: ["name", "url", "description"],
+    storeFields: ["name", "url", "description", "usable"],
 });
 
 let i = 0;
@@ -46,6 +46,7 @@ function clearSearch() {
 		<div class="col-lg-10">
 			<div class="d-flex flex-column gap-2">
 				{#each results as entry}
+				{#if entry.usable ?? true}
 				<div class="card tool-card">
 					<div class="card-body">
 						<h5 class="card-title">
@@ -57,6 +58,7 @@ function clearSearch() {
 						<p class="card-text">{entry.description}</p>
 					</div>
 				</div>
+				{/if}
 				{/each}
 			</div>
 		</div>
