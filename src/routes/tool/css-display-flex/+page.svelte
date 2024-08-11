@@ -3,6 +3,7 @@
 
     let data = {
         "flex-direction": "column",
+        "flex-wrap": "wrap",
     }
 </script>
 
@@ -32,6 +33,29 @@
             {#each ["row", "row-reverse", "column", "column-reverse"] as val}
             <label>
                 <input type="radio" name="scoops" value={val} bind:group={data["flex-direction"]}/>
+                <tt>{val}</tt>
+            </label>
+            {/each}    
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <h2><tt>flex-wrap</tt></h2>
+    <div class="col">
+        <div class="">
+            <div class="d-flex gap-1 resizable" style="flex-wrap: {data["flex-wrap"]}">
+                {#each COLORS as c}
+                <div class="element {c}"></div>
+                {/each}
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="d-flex flex-column">
+            {#each ["wrap", "wrap-reverse", "nowrap"] as val}
+            <label>
+                <input type="radio" name="scoops" value={val} bind:group={data["flex-wrap"]}/>
                 <tt>{val}</tt>
             </label>
             {/each}    
@@ -89,5 +113,11 @@
     .element.magenta {
         --light-stripe: #FFAAFF;
         --dark-stripe: #FF00FF;
+    }
+
+    .resizable {
+        border: 1px solid var(--bs-body-color);
+        resize: both;
+        overflow: auto;
     }
 </style>
