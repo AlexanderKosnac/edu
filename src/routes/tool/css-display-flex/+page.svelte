@@ -4,6 +4,7 @@
     let data = {
         "flex-direction": "column",
         "flex-wrap": "wrap",
+        "flex-grow": [0, 0, 0],
     }
 </script>
 
@@ -32,7 +33,7 @@
         <div class="d-flex flex-column">
             {#each ["row", "row-reverse", "column", "column-reverse"] as val}
             <label>
-                <input type="radio" name="scoops" value={val} bind:group={data["flex-direction"]}/>
+                <input type="radio" name="flex-direction" value={val} bind:group={data["flex-direction"]}/>
                 <tt>{val}</tt>
             </label>
             {/each}    
@@ -55,10 +56,37 @@
         <div class="d-flex flex-column">
             {#each ["wrap", "wrap-reverse", "nowrap"] as val}
             <label>
-                <input type="radio" name="scoops" value={val} bind:group={data["flex-wrap"]}/>
+                <input type="radio" name="flex-wrap" value={val} bind:group={data["flex-wrap"]}/>
                 <tt>{val}</tt>
             </label>
             {/each}    
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <h2><tt>flex-grow</tt></h2>
+    <div class="col">
+        <div class="">
+            <div class="d-flex gap-1">
+                <div class="element {COLORS[0]}" style="flex-grow: {data["flex-grow"][0]}"></div>
+                <div class="element {COLORS[1]}" style="flex-grow: {data["flex-grow"][1]}"></div>
+                <div class="element {COLORS[2]}" style="flex-grow: {data["flex-grow"][2]}"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="d-flex gap-5">
+            {#each [0, 1, 2] as i}
+            <div class="d-flex flex-column">
+                {#each [0, 1, 2, 3] as val}
+                <label>
+                    <input type="radio" name="flex-grow-{i}" value={val} bind:group={data["flex-grow"][i]}/>
+                    <tt>{val}</tt>
+                </label>
+                {/each}
+            </div>
+            {/each}
         </div>
     </div>
 </div>
