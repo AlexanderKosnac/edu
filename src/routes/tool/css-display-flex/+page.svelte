@@ -4,6 +4,7 @@
     let data = {
         "flex-direction": "column",
         "flex-wrap": "wrap",
+        "flex-shrink": 0,
         "flex-grow": [0, 0, 0],
     }
 </script>
@@ -86,6 +87,29 @@
                 </label>
                 {/each}
             </div>
+            {/each}
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <h2><tt>flex-shrink</tt></h2>
+    <div class="col">
+        <div class="">
+            <div class="d-flex gap-1">
+                <div class="element {COLORS[0]}" style="width: 50%"></div>
+                <div class="element {COLORS[1]}" style="width: 50%; flex-shrink: {data["flex-shrink"]}"></div>
+                <div class="element {COLORS[2]}" style="width: 50%"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="d-flex flex-column">
+            {#each [0, 1, 2, 3] as val}
+            <label>
+                <input type="radio" name="flex-shrink" value={val} bind:group={data["flex-shrink"]}/>
+                <tt>{val}</tt>
+            </label>
             {/each}
         </div>
     </div>
