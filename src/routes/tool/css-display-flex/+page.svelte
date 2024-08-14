@@ -4,8 +4,8 @@
     let data = {
         "flex-direction": "column",
         "flex-wrap": "wrap",
+        "flex-grow": { "red": 1, "yellow": 2, "green": 0 },
         "flex-shrink": 0,
-        "flex-grow": [0, 0, 0],
     }
 </script>
 
@@ -68,18 +68,17 @@
 <div class="row">
     <h2><tt>flex-grow</tt></h2>
     <div class="col">
-        <div class="">
-            <div class="d-flex gap-1">
-                <div class="element {COLORS[0]}" style="flex-grow: {data["flex-grow"][0]}"></div>
-                <div class="element {COLORS[1]}" style="flex-grow: {data["flex-grow"][1]}"></div>
-                <div class="element {COLORS[2]}" style="flex-grow: {data["flex-grow"][2]}"></div>
-            </div>
+        <div class="d-flex gap-1">
+            <div class="element {COLORS[0]}" style="flex-grow: {data["flex-grow"][COLORS[0]]}"></div>
+            <div class="element {COLORS[1]}" style="flex-grow: {data["flex-grow"][COLORS[1]]}"></div>
+            <div class="element {COLORS[2]}" style="flex-grow: {data["flex-grow"][COLORS[2]]}"></div>
         </div>
     </div>
     <div class="col">
-        <div class="d-flex gap-5">
-            {#each [0, 1, 2] as i}
-            <div class="d-flex flex-column">
+        <div class="d-flex flex-column">
+            {#each ["red", "yellow", "green"] as i}
+            <div class="d-flex gap-4">
+                <strong>{i[0].toUpperCase()}{i.substring(1)}:</strong>
                 {#each [0, 1, 2, 3] as val}
                 <label>
                     <input type="radio" name="flex-grow-{i}" value={val} bind:group={data["flex-grow"][i]}/>
@@ -95,16 +94,15 @@
 <div class="row">
     <h2><tt>flex-shrink</tt></h2>
     <div class="col">
-        <div class="">
-            <div class="d-flex gap-1">
-                <div class="element {COLORS[0]}" style="width: 50%"></div>
-                <div class="element {COLORS[1]}" style="width: 50%; flex-shrink: {data["flex-shrink"]}"></div>
-                <div class="element {COLORS[2]}" style="width: 50%"></div>
-            </div>
+        <div class="d-flex gap-1">
+            <div class="element {COLORS[0]}" style="width: 50%"></div>
+            <div class="element {COLORS[1]}" style="width: 50%; flex-shrink: {data["flex-shrink"]}"></div>
+            <div class="element {COLORS[2]}" style="width: 50%"></div>
         </div>
     </div>
     <div class="col">
-        <div class="d-flex flex-column">
+        <div class="d-flex flex-row gap-4">
+            <strong>Yellow:</strong>
             {#each [0, 1, 2, 3] as val}
             <label>
                 <input type="radio" name="flex-shrink" value={val} bind:group={data["flex-shrink"]}/>
