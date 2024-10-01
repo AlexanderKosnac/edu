@@ -1,0 +1,10 @@
+{
+    "name": "Rendering Pipeline",
+    "url": "tool/rendering-pipeline",
+    "description": "An outline of the computer graphics rendering pipeline and a CPU-based example implementation that transforms a set of vertices into an image.",
+    "tags": [
+        "Computer Science",
+        "Computer Graphics",
+        "Rendering"
+    ]
+}
