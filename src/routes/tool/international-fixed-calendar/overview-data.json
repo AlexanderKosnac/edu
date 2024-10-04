@@ -1,0 +1,10 @@
+{
+    "name": "International Fixed Calendar",
+    "url": "tool/international-fixed-calendar",
+    "description": "A calendar that divides a year into 13 months with 28 days each. Also known as Cotsworth calendar.",
+    "tags": [
+        "Calendar",
+        "Date",
+        "Time"
+    ]
+}
