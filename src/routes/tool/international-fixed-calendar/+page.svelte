@@ -1,29 +1,45 @@
 <script>
     const MONTHS_IFC = {
-         0: "January",
-         1: "February",
-         2: "March",
-         3: "April",
-         4: "May",
-         5: "June",
-         6: "Sol",
-         7: "July",
-         8: "August",
-         9: "September",
-        10: "October",
-        11: "November",
-        12: "December",
+         1: "January",
+         2: "February",
+         3: "March",
+         4: "April",
+         5: "May",
+         6: "June",
+         7: "Sol",
+         8: "July",
+         9: "August",
+        10: "September",
+        11: "October",
+        12: "November",
+        13: "December",
+    };
+
+    function isLeapYear(year) {
+        return (year % 4 === 0 && year % 100 !== 0) || (year % 400 === 0);
     }
 
-    const today = new Date();
-    const year = today.getFullYear();
-    const start = new Date(year, 0, 0);
-    const diff = today - start;
-    const oneDay = 1000 * 60 * 60 * 24;
-    const day = Math.floor(diff / oneDay);
+    function getDayOfYear(gregorianDate) {
+        const year = gregorianDate.getFullYear();
+        const start = new Date(year, 0, 0);
+        const diff = gregorianDate - start;
+        const oneDay = 1000 * 60 * 60 * 24;
+        return Math.floor(diff / oneDay);
+    }
 
-    const monthIfc = Math.floor(day/28);
-    const dayIfc = day%28;
+    function dayOfYearInIfc(dayOfYear, isLeapYear) {
+        return {
+            day: ((dayOfYear - 1) % 28) + 1,
+            month: Math.floor((dayOfYear - 1) / 28) + 1,
+            isYearDay: dayOfYear === 365,
+            isLeapDay: isLeapYear && dayOfYear === 366
+        }
+    }
+
+    let today = new Date();
+
+    let day = getDayOfYear(today);
+    let ifc = dayOfYearInIfc(day, isLeapYear(today.getFullYear()));
 </script>
 
 <svelte:head>
@@ -56,7 +72,7 @@
                 <tr>
                     {#each {length: 7} as _, j}
                         {@const itDay = i+j+1}
-                    <td class:today={itDay == dayIfc}>{itDay}</td>
+                    <td class:today={itDay == ifc.day}>{itDay}</td>
                     {/each}
                 </tr>
                 {/each}
@@ -66,13 +82,13 @@
     <div class="col">
         <h2>Today in Gregorian:</h2>
         <div class="pb-4">
-            {String(today.getDate()).padStart(2, "0")}.{String(today.getMonth()+1).padStart(2, "0")}.{year}
+            {String(today.getDate()).padStart(2, "0")}.{String(today.getMonth()+1).padStart(2, "0")}.{today.getFullYear()}
             (Day {day})
         </div>
 
         <h2>Today in IFC:</h2>
         <div>
-            {dayIfc} {MONTHS_IFC[monthIfc]}
+            {ifc.day} {MONTHS_IFC[ifc.month]}
         </div>
     </div>
 </div>
