@@ -20,6 +20,14 @@
 
 <div class="row">
     <div class="col">
+        <h1>Writeup</h1>
+        In this short writeup I outline the key steps and processes to achieve 3D graphics.
+        <h2>Define Vertices</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
         <h2>References:</h2>
         <ul>
             <li><a href="https://en.wikipedia.org/wiki/Graphics_pipeline" target="_blank">Graphics pipeline</a></li>
