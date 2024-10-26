@@ -6,6 +6,7 @@
         "flex-wrap": "wrap",
         "flex-grow": { "red": 1, "yellow": 2, "green": 0 },
         "flex-shrink": 0,
+        "justify-content": "center",
     }
 </script>
 
@@ -109,6 +110,38 @@
                 <tt>{val}</tt>
             </label>
             {/each}
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <h2><tt>justify-content</tt></h2>
+    <div class="col">
+        <div class="d-flex gap-1" style="justify-content: {data["justify-content"]}">
+            <div class="element {COLORS[0]}"></div>
+            <div class="element {COLORS[1]}"></div>
+            <div class="element {COLORS[2]}"></div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="d-flex flex-column">
+            <div class="d-flex flex-column">
+                {#each Object.entries({
+                    "Positional alignment": ["center", "start", "end", "flex-start", "flex-end", "left", "right"],
+                    "Normal alignment": ["normal"],
+                    "Distributed alignment": ["space-between", "space-around", "space-evenly", "stretch"],
+                    "Overflow alignment": ["safe center", "unsafe center"],
+                    "Global values": ["inherit", "initial", "revert", "revert-layer", "unset"],
+                }) as [group, values]}
+                    <strong>{group}:</strong>
+                    {#each values as val}
+                    <label>
+                        <input type="radio" name="justify-content" value={val} bind:group={data["justify-content"]}/>
+                        <tt>{val}</tt>
+                    </label>
+                    {/each}
+                {/each}
+            </div>
         </div>
     </div>
 </div>
