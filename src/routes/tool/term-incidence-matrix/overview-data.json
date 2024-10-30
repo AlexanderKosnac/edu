@@ -1,0 +1,9 @@
+{
+    "name": "Term Incidence Matrix",
+    "url": "tool/term-incidence-matrix",
+    "description": "Calculates a term incidence matrix based on multiple files.",
+    "tags": [
+        "Computer Science",
+        "Information Retrieval"
+    ]
+}
