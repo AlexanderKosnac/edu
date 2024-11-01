@@ -1,0 +1,9 @@
+{
+    "name": "TF-IDF",
+    "url": "tool/tf-idf",
+    "description": "Calculates the TF-IDF used in Information Retrieval over a set of documents.",
+    "tags": [
+        "Computer Science",
+        "Information Retrieval"
+    ]
+}
