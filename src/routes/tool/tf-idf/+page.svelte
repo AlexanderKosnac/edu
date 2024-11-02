@@ -1,4 +1,7 @@
 <script>
+    import katex from "katex";
+    import "katex/dist/katex.min.css";
+
     let fileInput;
 
     let bagOfWords = {};
@@ -50,30 +53,56 @@
         return token.toLowerCase();
     }
 
+    function latexRender(texMath) {
+        return katex.renderToString(texMath, {
+            throwOnError: false
+        });
+    }
+
     function rawTf(term, filename) {
         return bagOfWords[term][filename];
     }
 
     let tfVariants = {
-        "binary": (term, filename) => rawTf(term, filename) > 0 ? 1 : 0,
-        "raw count": (term, filename) => rawTf(term, filename),
-        "term frequency": (term, filename) => {
-            const nTokensInFile = files[filename].tokens.length;
-            return rawTf(term, filename)/nTokensInFile;
+        "binary": {
+            eval: (term, filename) => rawTf(term, filename) > 0 ? 1 : 0,
+            latex: "0, 1",
         },
-        "log normalization": (term, filename) => Math.log(1 + rawTf(term, filename)),
-        "double normalization 0.5": (term, filename) => {
-            let maxTf = 0.0;
-            for (const token of files[filename].tokens) {
-                let tokenTf = rawTf(token, filename);
-                if (tokenTf > maxTf) maxTf = tokenTf;
-            }
-            return 0.5 + 0.5 * (rawTf(term, filename)/maxTf);
+        "raw count": {
+            eval: (term, filename) => rawTf(term, filename),
+            latex: "f_{t,d}",
         },
-        //"double normalization K": (term, filename) => 0,
+        "term frequency": {
+            eval: (term, filename) => {
+                const nTokensInFile = files[filename].tokens.length;
+                return rawTf(term, filename)/nTokensInFile;
+            },
+            latex: "f_{t,d} / \\sum_{t' \\in d} f_{t',d}",
+        },
+        "log normalization": {
+            eval: (term, filename) => Math.log(1 + rawTf(term, filename)),
+            latex: "\\log(1 + f_{t,d})",
+        },
+        "double normalization 0.5": {
+            eval: (term, filename) => {
+                let maxTf = 0.0;
+                for (const token of files[filename].tokens) {
+                    let tokenTf = rawTf(token, filename);
+                    if (tokenTf > maxTf) maxTf = tokenTf;
+                }
+                return 0.5 + 0.5 * (rawTf(term, filename)/maxTf);
+            },
+            latex: "0.5 + 0.5 * \\frac{f_{t,d}}{\\max_{\{t' \\in d\}} f_{t', d}}",
+        },
+        /*
+        "double normalization K": {
+            f: (term, filename) => 0,
+            latex: "0",
+        }
+        */
     };
 
-    let tfFunction = tfVariants["term frequency"];
+    let tfVariant = tfVariants["term frequency"];
 
     function filesWithTerm(term) {
         return Object.keys(bagOfWords[term]).length;
@@ -84,21 +113,36 @@
     }
 
     let idfVariants = {
-        "unary": (_) => 1,
-        "idf": (term) => Math.log(corpusSize()/filesWithTerm(term)),
-        "idf smooth": (term) => Math.log(corpusSize()/(1 + filesWithTerm(term))) + 1,
-        "idf max": (term) => {
-            const tokens = files[filename].tokens;
-            const maxDF = tokens.reduce((max, obj) => (bagOfWords[obj].length > max ? obj : max), tokens[0]);
-            return Math.log(maxDF/(1 + filesWithTerm(term)));
+        "unary": {
+            eval: (_) => 1,
+            latex: "1",
         },
-        "probabilistic idf": (term) => Math.log((corpusSize() - filesWithTerm(term))/filesWithTerm(term)),
+        "idf": {
+            eval: (term) => Math.log(corpusSize()/filesWithTerm(term)),
+            latex: "\\log{\\frac{N}{n_t}}",
+        },
+        "idf smooth": {
+            eval: (term) => Math.log(corpusSize()/(1 + filesWithTerm(term))) + 1,
+            latex: "\\log({\\frac{N}{1+ n_t}}) + 1",
+        },
+        "idf max": {
+            eval: (term) => {
+                const tokens = files[filename].tokens;
+                const maxDF = tokens.reduce((max, obj) => (bagOfWords[obj].length > max ? obj : max), tokens[0]);
+                return Math.log(maxDF/(1 + filesWithTerm(term)));
+            },
+            latex: "\\log({\\frac{\\max_{\{t' \\in d\}} n_{t'}}{1+ n_t}})",
+        },
+        "probabilistic idf": {
+            eval: (term) => Math.log((corpusSize() - filesWithTerm(term))/filesWithTerm(term)),
+            latex: "\\log{\\frac{N - n_t}{n_t}}",
+        }
     };
 
-    let idfFunction = idfVariants["idf"];
+    let idfVariant = idfVariants["idf"];
 
     function tfidf(term, filename) {
-        return tfFunction(term, filename) * idfFunction(term);
+        return tfVariant.eval(term, filename) * idfVariant.eval(term);
     }
 
     let tfidfScoresPerFile = {};
@@ -147,12 +191,23 @@
         <h5>Term Frequency</h5>
         <div class="d-flex flex-row">
             <div class="d-flex flex-column">
-                {#each Object.entries(tfVariants) as [name, func]}
-                <label>
-                    <input type="radio" name="tfVariant" bind:group={tfFunction} value={func}>
-                    {name}
-                </label>
-                {/each}
+                <table class="table">
+                    <thead>
+                    </thead>
+                    <tbody>
+                        {#each Object.entries(tfVariants) as [name, data]}
+                        <tr>
+                            <td>
+                                <label>
+                                    <input type="radio" name="tfVariant" bind:group={tfVariant} value={data}>
+                                    {name}
+                                </label>
+                            </td>
+                            <td>{@html latexRender(data.latex)}</td>
+                        </tr>
+                        {/each}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -160,12 +215,23 @@
         <h5>Inverse Document Frequency</h5>
         <div class="d-flex flex-row">
             <div class="d-flex flex-column">
-                {#each Object.entries(idfVariants) as [name, func]}
-                <label>
-                    <input type="radio" name="idfVariant" bind:group={idfFunction} value={func}>
-                    {name}
-                </label>
-                {/each}
+                <table class="table">
+                    <thead>
+                    </thead>
+                    <tbody>
+                        {#each Object.entries(idfVariants) as [name, data]}
+                        <tr>
+                            <td>
+                                <label>
+                                    <input type="radio" name="idfVariant" bind:group={idfVariant} value={data}>
+                                    {name}
+                                </label>
+                            </td>
+                            <td>{@html latexRender(data.latex)}</td>
+                        </tr>
+                        {/each}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
