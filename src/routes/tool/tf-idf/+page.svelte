@@ -83,6 +83,10 @@
             eval: (term, filename) => Math.log(1 + rawTf(term, filename)),
             latex: "\\log(1 + f_{t,d})",
         },
+        "log normalization (2)": {
+            eval: (term, filename) => 1 + Math.log(rawTf(term, filename)),
+            latex: "1 + \\log{f_{t,d}}",
+        },
         "double normalization 0.5": {
             eval: (term, filename) => {
                 let maxTf = 0.0;
@@ -140,6 +144,17 @@
     };
 
     let idfVariant = idfVariants["idf"];
+
+    let tfIdfPresets = {
+        "count-idf": ["raw count", "idf"],
+        "double normalization-idf": ["double normalization 0.5", "idf"],
+        "log normalization-idf": ["log normalization (2)", "idf"],
+    }
+
+    function loadTfIdfPreset(presetKey) {
+        tfVariant = tfVariants[tfIdfPresets[presetKey][0]];
+        idfVariant = idfVariants[tfIdfPresets[presetKey][1]];
+    }
 
     function tfidf(term, filename) {
         return tfVariant.eval(term, filename) * idfVariant.eval(term);
@@ -228,6 +243,26 @@
                                 </label>
                             </td>
                             <td>{@html latexRender(data.latex)}</td>
+                        </tr>
+                        {/each}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col">
+        <h5>Common TF-IDF Presets</h5>
+        <div class="d-flex flex-row">
+            <div class="d-flex flex-column">
+                <table class="table">
+                    <thead>
+                    </thead>
+                    <tbody>
+                        {#each Object.entries(tfIdfPresets) as [name, data]}
+                        <tr>
+                            <td><button type="button" class="btn btn-secondary" on:click={() => loadTfIdfPreset(name)}>Load</button></td>
+                            <td>{name}</td>
+                            <td>{@html latexRender(`(${tfVariants[data[0]].latex}) * ${idfVariants[data[1]].latex}`)}</td>
                         </tr>
                         {/each}
                     </tbody>
