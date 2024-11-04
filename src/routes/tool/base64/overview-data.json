@@ -1,0 +1,9 @@
+{
+    "name": "Base64 Encoding",
+    "url": "tool/base64",
+    "description": "The common binary-to-text encoding that transforms a bit sequence into a string with 64 unique characters.",
+    "tags": [
+        "Computer Science",
+        "Encoding"
+    ]
+}
