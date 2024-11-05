@@ -23,24 +23,28 @@
 <div class="row">
     <div class="col-auto">
         <h2>Base 64 Alphabet</h2>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th>Index</th>
-                    <th>Binary</th>
-                    <th>Char</th>
-                </tr>
-            </thead>
-            <tbody>
-                {#each characters as character, idx}
-                <tr>
-                    <td>{idx}</td>
-                    <td>{idx.toString(2).padStart(6, "0")}</td>
-                    <td><kbd>{character}</kbd></td>
-                </tr>
-                {/each}
-            </tbody>
-        </table>
+        <div class="d-flex gap-2">
+            {#each {length: 4} as _, i}
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Index</th>
+                        <th>Binary</th>
+                        <th>Char</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {#each {length: 16} as _, j}
+                    <tr>
+                        <td>{i*16+j}</td>
+                        <td>{(i*16+j).toString(2).padStart(6, "0")}</td>
+                        <td><kbd>{characters[i*16+j]}</kbd></td>
+                    </tr>
+                    {/each}
+                </tbody>
+            </table>
+            {/each}
+        </div>
     </div>
 </div>
 
