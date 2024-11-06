@@ -1,5 +1,4 @@
 <script>
-
     const characters = [
         "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L",
         "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X",
@@ -8,6 +7,13 @@
         "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7",
         "8", "9", "+", "/"
     ]
+
+    let inputElement;
+    let outputElement;
+
+    function encodeData() {
+        // implement
+    }
 </script>
 
 <svelte:head>
@@ -17,6 +23,21 @@
 <div class="row">
     <div class="col">
         <h1>Base64</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        Unencoded Input String:
+        <div class="d-flex flex-row gap-1">
+            <input type="text" class="form-control font-monospace" bind:value="{inputElement}">
+            <button type="button" class="btn btn-primary" on:click={encodeData}>Encode</button>
+        </div>
+
+        <div class="form-group">
+            <label for="outputElement">Base64 Encoded Data:</label>
+            <textarea class="form-control font-monospace" id="outputElement" readonly rows="3" bind:this={outputElement}></textarea>
+        </div>
     </div>
 </div>
 
