@@ -7,6 +7,7 @@
         "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7",
         "8", "9", "+", "/"
     ]
+    const padchar = "=";
 
     let inputString = "Ma";
 
@@ -16,6 +17,7 @@
     let sextetsEnc = [];
     let charsEnc = [];
     let octetsEnc = [];
+    let padBlocks = 0;
 
     $: outputString = charsEnc.join("");
 
@@ -40,6 +42,12 @@
             charsEnc.push(c);
             octetsEnc.push(c.charCodeAt(0));
         }
+        padBlocks = (chars.length%3) ? 3-chars.length%3 : 0;
+
+        for (let i = 0; i < padBlocks; i++) {
+            charsEnc.push(padchar);
+            octetsEnc.push(padchar.charCodeAt(0));
+        }
     }
 </script>
 
@@ -61,9 +69,9 @@
             <button type="button" class="btn btn-primary" on:click={encodeData}>Encode</button>
         </div>
 
+        Base64 Encoded Data:
         <div class="form-group">
-            <label for="outputElement">Base64 Encoded Data:</label>
-            <textarea class="form-control font-monospace" id="outputElement" readonly rows="3" bind:value={outputString}></textarea>
+            <input type="text" class="form-control font-monospace" bind:value="{outputString}" readonly>
         </div>
     </div>
 </div>
@@ -80,7 +88,10 @@
                         <td colspan="8"><strong>{c}</strong></td>
                     {/each}
                     {#if (8*chars.length)%6}
-                        <td rowspan="2" colspan="{6-(8*chars.length)%6}">{6-(8*chars.length)%6}</td>
+                        <td rowspan="2" colspan="{6-(8*chars.length)%6}"></td>
+                    {/if}
+                    {#if padBlocks}
+                        <td rowspan="2" colspan="{padBlocks*6}"></td>
                     {/if}
                 </tr>
                 <tr>
@@ -94,12 +105,18 @@
                     {#each bits as b}
                         <td>{b}</td>
                     {/each}
+                    {#each {length: padBlocks*6} as _}
+                        <td></td>
+                    {/each}
                 </tr>
                 <tr>
                     <th rowspan="3">Base64<br>encoded</th>
                     <th>Sextets</th>
                     {#each sextetsEnc as se}
-                    <td colspan="6">{se}</td>
+                        <td colspan="6">{se}</td>
+                    {/each}
+                    {#each {length: padBlocks} as _}
+                        <td colspan="6"></td>
                     {/each}
                 </tr>
                 <tr>
