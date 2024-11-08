@@ -63,25 +63,34 @@
             <input type="file" class="form-control" id="img" name="img" accept="text/plain" multiple bind:this={fileInput}>
             <button type="button" class="btn btn-primary" on:click={loadFiles}>Load</button>
         </div>
+        {#if files.length > 0}
+        <ul>
+            {#each files as file, id}
+            <li>[ID: {id+1}] {file}</li>
+            {/each}
+        </ul>
+        {/if}
     </div>
 </div>
 
+{#if files.length > 0}
 <div class="row">
-    {#if files.length > 0}
     <div class="col-auto">
         <div class="m-2"></div>
         <div class="d-flex flex-column gap-1">
             <div class="d-flex flex-row gap-1 align-items-center">
                 <div class="entry"><strong>Token</strong></div>
+                <div class="entry">Doc. Freq.</div>
                 <div>&#8594;</div>
                 <div class="entry">File ID</div>
                 <div class="entry">File ID</div>
                 <div class="entry">...</div>
             </div>
     
-            {#each Object.entries(invertedIndex) as [token, filesWithToken]}
+            {#each Object.entries(invertedIndex).sort() as [token, filesWithToken]}
             <div class="d-flex flex-row gap-1 align-items-center">
                 <div class="entry"><strong>{token}</strong></div>
+                <div class="entry">{filesWithToken.length}</div>
                 <div>&#8594;</div>
                 {#each filesWithToken as file}
                     <div class="entry">{file}</div>
@@ -90,28 +99,8 @@
             {/each}
         </div>
     </div>
-
-    <div class="col-auto">
-        "{files}"
-        <table class="table">
-            <thead>
-                <tr>
-                    <th scope="col">ID</th>
-                    <th scope="col">File</th>
-                </tr>
-            </thead>
-            <tbody>
-                {#each files as file, id}
-                <tr>
-                    <td>{id+1}</td>
-                    <td>{file}</td>
-                </tr>
-                {/each}
-            </tbody>
-        </table>
-    </div>
-    {/if}
 </div>
+{/if}
 
 <div class="row">
     <div class="col">
