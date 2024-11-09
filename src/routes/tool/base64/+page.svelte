@@ -9,7 +9,7 @@
     ]
     const padchar = "=";
 
-    let inputString = "Ma";
+    let inputString = "Man";
 
     let chars = [];
     let octets = [];
@@ -79,60 +79,62 @@
 <div class="row">
     <div class="col">
         Detailed Output:
-        <table class="table table-bordered w-auto">
-            <tbody>
-                <tr>
-                    <th rowspan="2">Source<br>ASCII text</th>
-                    <th>Character</th>
-                    {#each chars as c}
-                        <td colspan="8"><strong>{c}</strong></td>
-                    {/each}
-                    {#if (8*chars.length)%6}
-                        <td rowspan="2" colspan="{6-(8*chars.length)%6}"></td>
-                    {/if}
-                    {#if padBlocks}
-                        <td rowspan="2" colspan="{padBlocks*6}"></td>
-                    {/if}
-                </tr>
-                <tr>
-                    <th>Octets</th>
-                    {#each octets as o}
-                        <td colspan="8">{o} (0x{o.toString(16)})</td>
-                    {/each}
-                </tr>
-                <tr>
-                    <th colspan="2">Bits</th>
-                    {#each bits as b}
-                        <td>{b}</td>
-                    {/each}
-                    {#each {length: padBlocks*6} as _}
-                        <td></td>
-                    {/each}
-                </tr>
-                <tr>
-                    <th rowspan="3">Base64<br>encoded</th>
-                    <th>Sextets</th>
-                    {#each sextetsEnc as se}
-                        <td colspan="6">{se}</td>
-                    {/each}
-                    {#each {length: padBlocks} as _}
-                        <td colspan="6"></td>
-                    {/each}
-                </tr>
-                <tr>
-                    <th>Character</th>
-                    {#each charsEnc as ce}
-                        <td colspan="6"><strong>{ce}</strong></td>
-                    {/each}
-                </tr>
-                <tr>
-                    <th>Octets</th>
-                    {#each octetsEnc as oe}
-                        <td colspan="6">{oe} (0x{oe.toString(16)})</td>
-                    {/each}
-                </tr>
-            </tbody>
-        </table>
+        <div class="mw-100 overflow-auto">
+            <table class="table table-bordered w-auto">
+                <tbody>
+                    <tr>
+                        <th rowspan="2" class="position-sticky">Source<br>ASCII text</th>
+                        <th>Character</th>
+                        {#each chars as c}
+                            <td colspan="8"><strong>{c}</strong></td>
+                        {/each}
+                        {#if (8*chars.length)%6}
+                            <td rowspan="2" colspan="{6-(8*chars.length)%6}"></td>
+                        {/if}
+                        {#if padBlocks}
+                            <td rowspan="2" colspan="{padBlocks*6}"></td>
+                        {/if}
+                    </tr>
+                    <tr>
+                        <th>Octets</th>
+                        {#each octets as o}
+                            <td colspan="8">{o} (0x{o.toString(16)})</td>
+                        {/each}
+                    </tr>
+                    <tr>
+                        <th colspan="2">Bits</th>
+                        {#each bits as b}
+                            <td>{b}</td>
+                        {/each}
+                        {#each {length: padBlocks*6} as _}
+                            <td></td>
+                        {/each}
+                    </tr>
+                    <tr>
+                        <th rowspan="3">Base64<br>encoded</th>
+                        <th>Sextets</th>
+                        {#each sextetsEnc as se}
+                            <td colspan="6">{se}</td>
+                        {/each}
+                        {#each {length: padBlocks} as _}
+                            <td colspan="6"></td>
+                        {/each}
+                    </tr>
+                    <tr>
+                        <th>Character</th>
+                        {#each charsEnc as ce}
+                            <td colspan="6"><strong>{ce}</strong></td>
+                        {/each}
+                    </tr>
+                    <tr>
+                        <th>Octets</th>
+                        {#each octetsEnc as oe}
+                            <td colspan="6">{oe} (0x{oe.toString(16)})</td>
+                        {/each}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
