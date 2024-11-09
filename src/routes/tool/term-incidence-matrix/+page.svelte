@@ -65,12 +65,18 @@
             <input type="file" class="form-control" id="img" name="img" accept="text/plain" multiple bind:this={fileInput}>
             <button type="button" class="btn btn-primary" on:click={loadFiles}>Load</button>
         </div>
+        <ul>
+            {#each Object.entries(matrix) as [filename, data]}
+                <li><strong>{filename}</strong> ({Object.keys(data).length} tokens): {Object.keys(data).join(", ")}</li>
+            {/each}
+        </ul>
     </div>
 </div>
 
+{#if tokens.length > 0}
 <div class="row">
     <div class="col">
-        <table class="table">
+        <table class="table w-auto">
             <thead>
                 <tr>
                     <th>Term</th>
@@ -92,6 +98,7 @@
         </table>
     </div>
 </div>
+{/if}
 
 <div class="row">
     <div class="col">
