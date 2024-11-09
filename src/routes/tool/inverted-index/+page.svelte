@@ -39,10 +39,14 @@
         let match;
 
         while ((match = regex.exec(input)) !== null) {
-            tokens.push(match[0]);
+            tokens.push(normalize(match[0]));
         }
 
         return tokens;
+    }
+
+    function normalize(token) {
+        return token.toLowerCase();
     }
 </script>
 
