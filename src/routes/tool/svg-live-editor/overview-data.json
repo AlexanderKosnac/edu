@@ -1,0 +1,9 @@
+{
+    "name": "SVG Live Editor",
+    "url": "tool/svg-base-editor",
+    "description": "A basic tool that allows editing SVG code with a live preview while editing.",
+    "tags": [
+        "SVG",
+        "Editor"
+    ]
+}
