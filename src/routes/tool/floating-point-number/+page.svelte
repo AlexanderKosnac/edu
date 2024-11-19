@@ -2,33 +2,36 @@
     import katex from "katex";
     import "katex/dist/katex.min.css";
 
-    let signBits = 1;
-    let exponentBits = 8;
-    let mantissaBits = 23;
+    let nSignBits = 1;
+    let nExponentBits = 8;
+    let nMantissaBits = 23;
 
     let bits = [];
     $: {
-        bits = Array(signBits + exponentBits + mantissaBits).fill(0);
+        bits = Array(nSignBits + nExponentBits + nMantissaBits).fill(0);
     }
 
     function flipBit(idx) {
         bits[idx] = bits[idx] ? 0 : 1;
     }
 
-    let parts, signValue, exponentValue, mantissaValue;
+    let parts, signBits, exponentBits, mantissaBits, signValue, exponentValue, mantissaValue;
     $: {
-        parts = [0, signBits, signBits + exponentBits, signBits + exponentBits + mantissaBits];
-        signValue = parseInt(bits.slice(parts[0], parts[1]).join(""), 2);
-        exponentValue = parseInt(bits.slice(parts[1], parts[2]).join(""), 2);
-        mantissaValue = parseInt(bits.slice(parts[2], parts[3]).join(""), 2);
+        parts = [0, nSignBits, nSignBits + nExponentBits, nSignBits + nExponentBits + nMantissaBits];
+        signBits = bits.slice(parts[0], parts[1]);
+        exponentBits = bits.slice(parts[1], parts[2]);
+        mantissaBits = bits.slice(parts[2], parts[3]);
+        signValue = parseBinary(signBits.join(""));
+        exponentValue = parseBinary(exponentBits.join(""));
+        mantissaValue = parseBinary(mantissaBits.join(""));
     }
 
     const base = 2;
     let sign, exponent, mantissa, result, katexHtml;
     $: {
         sign = signValue == 0 ? +1 : -1;
-        exponent = exponentValue;
-        mantissa = mantissaValue;
+        exponent = exponentValue - ((2**nExponentBits)/2)+1;
+        mantissa = parseBinary(`${exponentValue == 0 ? 0 : 1}.${bits.slice(parts[2], parts[3]).join("")}`);
         result = exponent * (base**exponent);
         katexHtml = katex.renderToString(`${exponent} * {${base}}^{${exponent}}`, {
             throwOnError: false
@@ -66,11 +69,11 @@
         <div class="d-flex gap-1">
             <div>
                 <span>Exponent (bits)</span>
-                <input type="number" class="form-control w-auto" step="1" bind:value={exponentBits} min="0">
+                <input type="number" class="form-control w-auto" step="1" bind:value={nExponentBits} min="0">
             </div>
             <div>
                 <span>Mantissa (bits)</span>
-                <input type="number" class="form-control w-auto" step="1" bind:value={mantissaBits} min="0">    
+                <input type="number" class="form-control w-auto" step="1" bind:value={nMantissaBits} min="0">    
             </div>
         </div>
     </div>
@@ -87,23 +90,25 @@
                     <button class="bit border" on:click={() => flipBit(parts[0])}>{bits[parts[0]]}</button>
                 </div>
             </div>
+
             <div class="d-flex flex-column gap-1 justify-content-center align-items-center bordered area exponent">
                 <strong>Exponent</strong>
                 <div>{exponent}</div>
                 <div>{exponentValue}</div>
                 <div class="d-flex flex-row gap-1">
-                    {#each {length: exponentBits} as _, idx}
+                    {#each {length: nExponentBits} as _, idx}
                         {@const idxOffset = idx + parts[1]}
                         <button class="bit border" on:click={() => flipBit(idxOffset)}>{bits[idxOffset]}</button>
                     {/each}
                 </div>
             </div>
+
             <div class="d-flex flex-column gap-1 justify-content-center align-items-center bordered area mantissa">
                 <strong>Mantissa</strong>
                 <div>{mantissa}</div>
                 <div>{mantissaValue}</div>
                 <div class="d-flex flex-row gap-1">
-                    {#each {length: mantissaBits} as _, idx}
+                    {#each {length: nMantissaBits} as _, idx}
                         {@const idxOffset = idx + parts[2]}
                         <button class="bit border" on:click={() => flipBit(idxOffset)}>{bits[idxOffset]}</button>
                     {/each}
@@ -127,6 +132,7 @@
         <h2>References:</h2>
         <ul>
             <li><a href="https://en.wikipedia.org/wiki/Floating-point_arithmetic" target="_blank">Floating-point arithmetic</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/IEEE_754" target="_blank">IEEE 754 Wikipedia</a></li>
             <li><a href="https://www.h-schmidt.net/FloatConverter/IEEE754.html" target="_blank">IEEE 754 Float Converter</a></li>
         </ul>
     </div>
