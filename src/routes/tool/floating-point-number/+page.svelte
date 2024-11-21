@@ -120,7 +120,29 @@
 </div>
 
 <div class="row">
-    <div class="col justify-content-center align-items-center">
+    <div class="col">
+        <table class="output-fields">
+            <tr>
+                <td>Decimal Representation</td>
+                <td><input type="text" class="form-control"></td>
+            </tr>
+            <tr>
+                <td>Value actually stored in float</td>
+                <td><input type="text" class="form-control"></td>
+            </tr>
+            <tr>
+                <td>Error due to conversion</td>
+                <td><input type="text" class="form-control"></td>
+            </tr>
+            <tr>
+                <td>Binary Representation</td>
+                <td><input type="text" class="form-control"></td>
+            </tr>
+            <tr>
+                <td>Hexadecimal Representation</td>
+                <td><input type="text" class="form-control"></td>
+            </tr>
+        </table>
         <div>
             {@html katexHtml}
         </div>
@@ -158,5 +180,17 @@
     .byte-separator {
         width: 2px;
         background-color: var(--bs-body-color);
+    }
+    .output-fields {
+        width: 100%;
+        table-layout: auto;
+        border-collapse: separate;
+    }
+    .output-fields > tr td:first-child {
+        white-space: nowrap;
+        padding-right: 5px;
+    }
+    .output-fields > tr td:last-child {
+        width: 100%;
     }
 </style>
