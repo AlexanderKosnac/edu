@@ -11,6 +11,11 @@
         bits = Array(nSignBits + nExponentBits + nMantissaBits).fill(0);
     }
 
+    $: binaryRepresentation = bits.join("");
+    $: decimalRepresentation = parseInt(binaryRepresentation, 2);
+    $: hexadecimalRepresentation = decimalRepresentation.toString(16).padStart(Math.ceil(bits.length/4), "0");
+    // floatRepresentation =
+
     function flipBit(idx) {
         bits[idx] = bits[idx] ? 0 : 1;
     }
@@ -124,23 +129,15 @@
         <table class="output-fields">
             <tr>
                 <td>Decimal Representation</td>
-                <td><input type="text" class="form-control"></td>
-            </tr>
-            <tr>
-                <td>Value actually stored in float</td>
-                <td><input type="text" class="form-control"></td>
-            </tr>
-            <tr>
-                <td>Error due to conversion</td>
-                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control" readonly bind:value={decimalRepresentation}></td>
             </tr>
             <tr>
                 <td>Binary Representation</td>
-                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control" readonly bind:value={binaryRepresentation}></td>
             </tr>
             <tr>
                 <td>Hexadecimal Representation</td>
-                <td><input type="text" class="form-control"></td>
+                <td><input type="text" class="form-control" readonly bind:value={hexadecimalRepresentation}></td>
             </tr>
         </table>
         <div>
