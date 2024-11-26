@@ -13,30 +13,47 @@
     }
 
     let chartCanvas;
+    let chart;
+
+    let x0 = -5;
+    let x1 = 5;
+
+    let func = x => x**2
+    $: funcInterpolated = getInterpolatedFxFunction(func, x0, x1);
 
     function onChange() {
-        plotInterpolation(x => x**2, -10, 10, 5);
+        updateData();
     }
 
-    function sampleData(f, lower, upper, points) {
+    function getInterpolatedFxFunction(fx, x0, x1) {
+        return x => fx(x0) + (fx(x1)-fx(x0))/(x1-x0) * (x-x0);
+    }
+
+    function sampleData(fx, lower, upper, points) {
         const data = [];
         const interval = (upper-lower)/points;
         for (let x = lower; x <= upper; x += interval) {
-            data.push({ x: x, y: f(x) });
+            data.push({ x: x, y: fx(x) });
         }
         return data;
     }
 
-    function plotInterpolation(fx, lower, upper, points) {
+    function createGraph() {
         const ctx = chartCanvas.getContext("2d");
-        new Chart(ctx, {
+        chart = new Chart(ctx, {
             type: "scatter",
             data: {
                 datasets: [{
-                    label: "Interpolation",
-                    data: sampleData(fx, lower, upper, points),
+                    label: "f(x)",
+                    data: [],
                     borderColor: "blue",
                     backgroundColor: "lightblue",
+                    showLine: true,
+                }, {
+                    label: "p_1(x)",
+                    data: [],
+                    borderColor: "red",
+                    backgroundColor: "coral",
                     showLine: true,
                 }]
             },
@@ -67,7 +84,17 @@
         });
     }
 
+    function updateData() {
+        let lower = -10;
+        let upper = 10;
+        let points = 10;
+        chart.data.datasets[0].data = sampleData(func, lower, upper, points);
+        chart.data.datasets[1].data = sampleData(funcInterpolated, lower, upper, points);
+        chart.update();
+    }
+
     onMount(()=> {
+        createGraph();
         onChange();
     });
 </script>
@@ -84,9 +111,22 @@
 
 <div class="row">
     <div class="col">
-        For points {@html asHtmlLatex("x_0")} and {@html asHtmlLatex("x_1")}, with {@html asHtmlLatex("x_0 \\ne x_1")}.
+        For given points {@html asHtmlLatex("x_0")} and {@html asHtmlLatex("x_1")}, with {@html asHtmlLatex("x_0 \\ne x_1")}
+        the linear interpolation is {@html asHtmlLatex("p_1(x) = f(x_0) + (\\frac{f(x_1)-f(x_0)}{x_1-x_0}) (x-x_0)")}.
+    </div>
+</div>
 
-        {@html asHtmlLatex("p_1(x) = f(x_0) + (\\frac{f(x_1)-f(x_0)}{x_1-x_0}) (x-x_0)")}
+<div class="row">
+    <div class="col">
+        <label>
+            {@html asHtmlLatex("x_0")}
+            <input type="number" class="form-control" placeholder="Starting number" bind:value={x0} on:change={onChange}>
+        </label>
+
+        <label>
+            {@html asHtmlLatex("x_1")}
+            <input type="number" class="form-control" placeholder="Starting number" bind:value={x1} on:change={onChange}>
+        </label>
     </div>
 </div>
 
