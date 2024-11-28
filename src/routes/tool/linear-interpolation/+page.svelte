@@ -38,12 +38,18 @@
         return data;
     }
 
-    function createGraph() {
+    function initGraph() {
         const ctx = chartCanvas.getContext("2d");
         chart = new Chart(ctx, {
             type: "scatter",
             data: {
                 datasets: [{
+                    label: "interpolation points",
+                    data: [],
+                    borderColor: "gray",
+                    backgroundColor: "lightgray",
+                    pointRadius: 6,
+                }, {
                     label: "f(x)",
                     data: [],
                     borderColor: "blue",
@@ -87,14 +93,18 @@
     function updateData() {
         let lower = -10;
         let upper = 10;
-        let points = 10;
-        chart.data.datasets[0].data = sampleData(func, lower, upper, points);
-        chart.data.datasets[1].data = sampleData(funcInterpolated, lower, upper, points);
+        let points = 40;
+        chart.data.datasets[0].data = [
+            { x: x0, y: funcInterpolated(x0) },
+            { x: x1, y: funcInterpolated(x1) },
+        ];
+        chart.data.datasets[1].data = sampleData(func, lower, upper, points);
+        chart.data.datasets[2].data = sampleData(funcInterpolated, lower, upper, points);
         chart.update();
     }
 
     onMount(()=> {
-        createGraph();
+        initGraph();
         onChange();
     });
 </script>
