@@ -18,7 +18,25 @@
     let x0 = -5;
     let x1 = 5;
 
-    let func = x => x**2
+    let functions = [
+        {
+            fx: x => 0.5 * x + 2,
+            tex: "\\frac{1}{2} x + 2",
+        }, {
+            fx: x => x**2,
+            tex: "x^2",
+        }, {
+            fx: x => 0.25 * (x**3 + 3*x**2 - 6*x - 8),
+            tex: "\\frac{1}{4} (x^3 + 3x^2 - 6x - 8)",
+        }, {
+            fx: x => 2 * x**4 - 3 * x**3 + 5 * x**2 - x + 7,
+            tex: "2x^4 - 3x^3 + 5x^2 - x + 7",
+        },
+    ];
+
+    let selectedFunc = functions[1];
+
+    $: func = selectedFunc.fx;
     $: funcInterpolated = getInterpolatedFxFunction(func, x0, x1);
 
     function onChange() {
@@ -93,13 +111,15 @@
     function updateData() {
         let lower = -10;
         let upper = 10;
-        let points = 40;
+        let points = 100;
         chart.data.datasets[0].data = [
             { x: x0, y: funcInterpolated(x0) },
             { x: x1, y: funcInterpolated(x1) },
         ];
         chart.data.datasets[1].data = sampleData(func, lower, upper, points);
         chart.data.datasets[2].data = sampleData(funcInterpolated, lower, upper, points);
+        chart.options.scales.y.min = 0;
+        chart.options.scales.y.max = 200;
         chart.update();
     }
 
@@ -128,6 +148,19 @@
 
 <div class="row">
     <div class="col">
+        <h4>Function</h4>
+        <div class="d-flex flex-row gap-4">
+            {#each functions as e, i}
+            <label>
+                <input type="radio" value={e} bind:group={selectedFunc} on:change={onChange}/>
+                {@html asHtmlLatex(`f(x)=${e.tex}`)}
+            </label>
+            {/each}
+        </div>
+
+        <div class="p-2"/>
+
+        <h4>Interpolation Points</h4>
         <label>
             {@html asHtmlLatex("x_0")}
             <input type="number" class="form-control" placeholder="Starting number" bind:value={x0} on:change={onChange}>
