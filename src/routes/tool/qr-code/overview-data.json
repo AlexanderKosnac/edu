@@ -1,0 +1,10 @@
+{
+    "name": "QR Code",
+    "url": "tool/qr-code",
+    "description": "Visualization of the creation of QR-codes",
+    "tags": [
+        "Computer Science",
+        "Visualization"
+    ],
+    "usable": false
+}
