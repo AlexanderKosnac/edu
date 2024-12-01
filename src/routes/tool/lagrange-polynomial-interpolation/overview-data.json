@@ -1,0 +1,9 @@
+{
+    "name": "Lagrange polynomial interpolation",
+    "url": "tool/lagrange-polynomial-interpolation",
+    "description": "Interpolation using Lagrange polynomials.",
+    "tags": [
+        "Mathematics",
+        "Visualization"
+    ]
+}
