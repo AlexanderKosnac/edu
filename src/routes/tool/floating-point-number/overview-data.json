@@ -4,5 +4,6 @@
     "description": "Decimal number representation via a variable length, floating point format.",
     "tags": [
         "Computer Science"
-    ]
+    ],
+    "usable": false
 }
