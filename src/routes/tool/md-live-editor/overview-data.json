@@ -1,0 +1,9 @@
+{
+    "name": "Markdown Live Editor",
+    "url": "tool/md-live-editor",
+    "description": "A basic tool that allows writing Markdown with a live preview.",
+    "tags": [
+        "Markdown",
+        "Editor"
+    ]
+}
