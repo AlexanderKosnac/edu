@@ -1,4 +1,8 @@
 <script>
+    import { onMount } from "svelte";
+
+    import Chart from "chart.js/auto";
+
     import katex from "katex";
     import "katex/dist/katex.min.css";
 
@@ -8,12 +12,26 @@
         });
     }
 
+    function getRandomInt(min, max) {
+        const minCeiled = Math.ceil(min);
+        const maxFloored = Math.floor(max);
+        return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
+    }
+
+    const randY = () => getRandomInt(-10, 10);
+
     let inputX, inputY;
-    let points = [];
+    let points = [
+        { x: -10, y: randY() },
+        { x:  -4, y: randY() },
+        { x:   0, y: randY() },
+        { x:   6, y: randY() },
+        { x:  10, y: randY() },
+    ];
 
     function addPoint() {
         if (inputX.length == 0 || inputY.length == 0) return;
-        points.push([inputX, inputY]);
+        points.push({ x: inputX, y: inputY });
         points = [...points];
     }
 
@@ -23,6 +41,105 @@
     }
 
     let chartCanvas;
+    let chart;
+
+    function onChange() {
+        updateData();
+    }
+
+    const xi = i => points[i].x;
+    const yi = i => points[i].y;
+    const minXi = () => Math.min(...points.map(p => p.x));
+    const maxXi = () => Math.max(...points.map(p => p.x));
+
+    function basisFunction(i, x) {
+        let n = points.length;
+        let prod = 1;
+        for (let j=0; j<n; j++) {
+            if (j == i) continue;
+            prod *= (x - xi(j))/(xi(i) - xi(j));
+        }
+        return prod;
+    }
+
+    function interpolationPolynomial(x) {
+        let n = points.length;
+        let sum = 0;
+        for (let i=0; i<n; i++) {
+            sum += yi(i)*basisFunction(i, x);
+        }
+        return sum;
+    }
+
+    function sampleData(fx, lower, upper, nPoints) {
+        const data = [];
+        const interval = (upper-lower)/nPoints;
+        for (let x = lower; x <= upper; x += interval) {
+            data.push({ x: x, y: fx(x) });
+        }
+        return data;
+    }
+
+    function initGraph() {
+        const ctx = chartCanvas.getContext("2d");
+        chart = new Chart(ctx, {
+            type: "scatter",
+            data: {
+                datasets: [{
+                    label: "interpolation points",
+                    data: [],
+                    borderColor: "gray",
+                    backgroundColor: "lightgray",
+                    pointRadius: 6,
+                }, {
+                    label: "f(x)",
+                    data: [],
+                    borderColor: "blue",
+                    backgroundColor: "lightblue",
+                    pointRadius: 0,
+                    showLine: true,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: {
+                        display: true,
+                    }
+                },
+                scales: {
+                    x: {
+                        type: "linear",
+                        position: "bottom",
+                        title: {
+                            display: true,
+                            text: "x"
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: "y"
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    function updateData() {
+        let lower = minXi();
+        let upper = maxXi();
+        let nSamplePoints = 10*upper-lower;
+        chart.data.datasets[0].data = points;
+        chart.data.datasets[1].data = sampleData(interpolationPolynomial, lower, upper, nSamplePoints);
+        chart.update();
+    }
+
+    onMount(()=> {
+        initGraph();
+        onChange();
+    });
 </script>
 
 <svelte:head>
@@ -41,6 +158,10 @@
         {@html asHtmlLatex("n+1")} interpolation points {@html asHtmlLatex("x_0, \\dots, x_n \\in \\R")} and
         associated values {@html asHtmlLatex("y_0, \\dots, y_n \\in \\R")} so that:
         {@html asHtmlLatex("p(x_i) = y_i \\quad{} \\text{for } i=0, \\dots , n")}.
+        For the constuction, Lagrange basis functions are used:
+        {@html asHtmlLatex("L^{(n)}_i(x) := \\prod_{\\substack{j=0, j \\neq i}}^n \\frac{x - x_j}{x_i - x_j} \\in P_n, i = 0, \\dots{} n")}.
+        With this the interpolation polynomial can be constructed:
+        {@html asHtmlLatex("p := \\sum^{n}_{i=0} y_i L^{(n)}_i \\in P_n")}.
     </div>
 </div>
 
@@ -63,8 +184,8 @@
             {#each points as _, i}
             <tr>
                 <td>{@html asHtmlLatex(`${i}`)}</td>
-                <td><input type="number" class="form-control point-input" placeholder="x" bind:value={points[i][0]}></td>
-                <td><input type="number" class="form-control point-input" placeholder="y" bind:value={points[i][1]}></td>
+                <td><input type="number" class="form-control point-input" placeholder="x" bind:value={points[i].x}></td>
+                <td><input type="number" class="form-control point-input" placeholder="y" bind:value={points[i].y}></td>
                 <td><button type="button" class="btn btn-secondary" on:click={() => removePoint(i)}>Remove</button></td>
             </tr>
             {/each}
@@ -76,6 +197,7 @@
             </tr>
         </tbody>
         </table>
+        <button type="button" class="btn btn-primary" on:click={updateData}>Refresh</button>
     </div>
 </div>
 
