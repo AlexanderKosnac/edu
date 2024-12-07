@@ -11,17 +11,16 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        An implementation of a basic computer graphics rendering pipeline can be found in the following repository.
-        <a href="https://github.com/AlexanderKosnac/renderer" target="_blank">github.com/AlexanderKosnac/renderer</a>
-    </div>
-</div>
+<div class="row flex-row justify-content-center">
+    <div class="col-lg-6">
+        <p>
+            An implementation of a basic computer graphics rendering pipeline can be found in the following repository:
+            <a href="https://github.com/AlexanderKosnac/renderer" target="_blank">github.com/AlexanderKosnac/renderer</a>
+        </p>
 
-<div class="row">
-    <div class="col">
-        <h1>Writeup</h1>
-        In this short writeup I outline the key steps and processes to achieve 3D graphics.
+        <p>
+            In this short writeup I outline the key steps and processes to achieve 3D graphics.
+        </p>
 
         <h2>Define Objects</h2>
         <p>
