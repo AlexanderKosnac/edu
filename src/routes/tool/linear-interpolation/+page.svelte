@@ -147,19 +147,11 @@
 </div>
 
 <div class="row">
-    <div class="col">
-        <h4>Function</h4>
-        <div class="d-flex flex-row gap-4">
-            {#each functions as e, i}
-            <label>
-                <input type="radio" value={e} bind:group={selectedFunc} on:change={onChange}/>
-                {@html asHtmlLatex(`f(x)=${e.tex}`)}
-            </label>
-            {/each}
-        </div>
+    <div class="col-8">
+        <canvas bind:this={chartCanvas}/>
+    </div>
 
-        <div class="p-2"/>
-
+    <div class="col-4">
         <h4>Interpolation Points</h4>
         <label>
             {@html asHtmlLatex("x_0")}
@@ -170,12 +162,18 @@
             {@html asHtmlLatex("x_1")}
             <input type="number" class="form-control" placeholder="Starting number" bind:value={x1} on:change={onChange}>
         </label>
-    </div>
-</div>
 
-<div class="row">
-    <div class="col">
-        <canvas bind:this={chartCanvas}/>
+        <div class="p-2"/>
+
+        <h4>Function</h4>
+        <div class="d-flex flex-column gap-4">
+            {#each functions as e, i}
+            <label>
+                <input type="radio" value={e} bind:group={selectedFunc} on:change={onChange}/>
+                {@html asHtmlLatex(`f(x)=${e.tex}`)}
+            </label>
+            {/each}
+        </div>
     </div>
 </div>
 
