@@ -47,9 +47,9 @@
         return x => fx(x0) + (fx(x1)-fx(x0))/(x1-x0) * (x-x0);
     }
 
-    function sampleData(fx, lower, upper, points) {
+    function sampleData(fx, lower, upper, nPoints) {
         const data = [];
-        const interval = (upper-lower)/points;
+        const interval = (upper-lower)/nPoints;
         for (let x = lower; x <= upper; x += interval) {
             data.push({ x: x, y: fx(x) });
         }
@@ -72,12 +72,14 @@
                     data: [],
                     borderColor: "blue",
                     backgroundColor: "lightblue",
+                    pointRadius: 0,
                     showLine: true,
                 }, {
                     label: "p_1(x)",
                     data: [],
                     borderColor: "red",
                     backgroundColor: "coral",
+                    pointRadius: 0,
                     showLine: true,
                 }]
             },
@@ -109,17 +111,15 @@
     }
 
     function updateData() {
-        let lower = -10;
-        let upper = 10;
-        let points = 100;
+        let lower = x0;
+        let upper = x1;
+        let nSamplePoints = 10*(upper-lower);
         chart.data.datasets[0].data = [
             { x: x0, y: funcInterpolated(x0) },
             { x: x1, y: funcInterpolated(x1) },
         ];
-        chart.data.datasets[1].data = sampleData(func, lower, upper, points);
-        chart.data.datasets[2].data = sampleData(funcInterpolated, lower, upper, points);
-        chart.options.scales.y.min = 0;
-        chart.options.scales.y.max = 200;
+        chart.data.datasets[1].data = sampleData(func, lower, upper, nSamplePoints);
+        chart.data.datasets[2].data = sampleData(funcInterpolated, lower, upper, nSamplePoints);
         chart.update();
     }
 

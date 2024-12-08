@@ -130,7 +130,7 @@
     function updateData() {
         let lower = minXi();
         let upper = maxXi();
-        let nSamplePoints = 10*upper-lower;
+        let nSamplePoints = 10*(upper-lower);
         chart.data.datasets[0].data = points;
         chart.data.datasets[1].data = sampleData(interpolationPolynomial, lower, upper, nSamplePoints);
         chart.update();
