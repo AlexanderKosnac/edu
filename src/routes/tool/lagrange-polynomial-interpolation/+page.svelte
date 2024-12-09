@@ -33,11 +33,13 @@
         if (inputX.length == 0 || inputY.length == 0) return;
         points.push({ x: inputX, y: inputY });
         points = [...points];
+        onChange();
     }
 
     function removePoint(i) {
         points.splice(i, 1);
         points = [...points];
+        onChange();
     }
 
     let chartCanvas;
@@ -184,8 +186,8 @@
             {#each points as _, i}
             <tr>
                 <td>{@html asHtmlLatex(`${i}`)}</td>
-                <td><input type="number" class="form-control point-input" placeholder="x" bind:value={points[i].x}></td>
-                <td><input type="number" class="form-control point-input" placeholder="y" bind:value={points[i].y}></td>
+                <td><input type="number" class="form-control point-input" placeholder="x" bind:value={points[i].x} on:change={onChange}></td>
+                <td><input type="number" class="form-control point-input" placeholder="y" bind:value={points[i].y} on:change={onChange}></td>
                 <td><button type="button" class="btn btn-secondary" on:click={() => removePoint(i)}>Remove</button></td>
             </tr>
             {/each}
