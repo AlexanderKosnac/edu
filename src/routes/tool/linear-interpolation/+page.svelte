@@ -163,11 +163,15 @@
             <input type="number" class="form-control" placeholder="Starting number" bind:value={x1} on:change={onChange}>
         </label>
 
+        {#if x0 == x1}
+        <div class="text-danger">{@html asHtmlLatex("x_0")} can not be equal to {@html asHtmlLatex("x_1")}.</div>
+        {/if}
+
         <div class="p-2"/>
 
         <h4>Function</h4>
-        <div class="d-flex flex-column gap-4">
-            {#each functions as e, i}
+        <div class="d-flex flex-column gap-3">
+            {#each functions as e}
             <label>
                 <input type="radio" value={e} bind:group={selectedFunc} on:change={onChange}/>
                 {@html asHtmlLatex(`f(x)=${e.tex}`)}

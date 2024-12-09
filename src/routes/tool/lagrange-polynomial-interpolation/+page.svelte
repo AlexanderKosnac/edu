@@ -18,6 +18,10 @@
         return Math.floor(Math.random() * (maxFloored - minCeiled) + minCeiled);
     }
 
+    function hasDuplicates(array) {
+        return new Set(array).size !== array.length;
+    }
+
     const randY = () => getRandomInt(-10, 10);
 
     let inputX, inputY;
@@ -199,6 +203,11 @@
             </tr>
         </tbody>
         </table>
+
+        {#if hasDuplicates(points.map(p => p.x))}
+        <div class="text-danger">{@html asHtmlLatex("x_0")} can not be equal to {@html asHtmlLatex("x_1")}.</div>
+        {/if}
+
         <button type="button" class="btn btn-primary" on:click={updateData}>Refresh</button>
     </div>
 </div>
