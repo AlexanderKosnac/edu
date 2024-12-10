@@ -113,6 +113,9 @@
                         display: true,
                     }
                 },
+                animation: {
+                    duration: 0
+                },
                 scales: {
                     x: {
                         type: "linear",
