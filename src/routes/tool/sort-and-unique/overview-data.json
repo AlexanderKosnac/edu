@@ -1,0 +1,9 @@
+{
+    "name": "Sort and Unique",
+    "url": "tool/sort-and-unique",
+    "description": "A basic tool that allows to sort and extract unique elements from a text.",
+    "tags": [
+        "Tool",
+        "Text Manipulation"
+    ]
+}
