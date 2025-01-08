@@ -1,11 +1,17 @@
 <script>
     let inputText = "Apples\nBananas\nApples\nPears";
     let outputText = "";
-    let splitCharacter = "\n";
+    let splitCharacter = "\\n";
+    let makeUnique = true;
 
     function run() {
         const c = splitCharacter.replace(/\\n/g, '\n').replace(/\\t/g, '\t');
-        outputText = [...new Set(inputText.split(c))].sort().join(c);
+        let elements = inputText.split(c);
+        if (makeUnique) {
+            elements = [...new Set(elements)];
+        }
+        elements = elements.sort();
+        outputText = elements.join(c);
     }
 </script>
 
@@ -30,6 +36,11 @@
                 Split on:
                 <input type="text" class="form-control font-monospace" bind:value="{splitCharacter}"/>
             </lable>
+
+            <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" bind:checked={makeUnique}/>
+                Only show unique elements
+            </label>
             
             <button type="button" class="btn btn-primary" on:click={run}>Extract</button>
         </div>
