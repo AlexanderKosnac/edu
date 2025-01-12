@@ -3,6 +3,8 @@
 
     const CELL_SIZE = 10;
 
+    let inputAscii = "edu";
+
     let qrcDim = 21;
     let cells = [];
     $: {
@@ -43,6 +45,10 @@
         ], "id");
     }
 
+    function charsAsBinaryDumpLines(input) {
+        const padding = `${input.length}`.length;
+        return input.split("").map((c, i) => `${i.toString().padStart(padding, " ")} ${c.charCodeAt(0).toString(2).padStart(8, "0")} ${c}`);
+    }
 
     onMount(()=> {
         setCell(5, 5, 1, "asd");
@@ -61,15 +67,24 @@
 </div>
 
 <div class="row">
-    <div class="col">
+    <div class="col-auto">
         <svg width="600" height="600" viewBox="0 0 {CELL_SIZE*qrcDim} {Math.ceil(cells.length/qrcDim)*CELL_SIZE}">
             {#each cells as cell, i}
-            <rect
-                class:white={cell.value == 0} class:black={cell.value == 1}
+            <rect class:white={cell.value == 0} class:black={cell.value == 1}
                 x="{(i%qrcDim)*CELL_SIZE}" y="{Math.floor(i/qrcDim)*CELL_SIZE}"
                 width="{CELL_SIZE}" height="{CELL_SIZE}"/>
             {/each}
         </svg>
+    </div>
+
+    <div class="col">
+        <label for="asciiInput">ASCII Input:</label>
+        <input type="text" id="asciiInput" class="form-control font-monospace" bind:value="{inputAscii}"/>
+        <br>
+        Input as Binary Data:<br>
+        {#each charsAsBinaryDumpLines(inputAscii) as bitsString}
+            <span class="font-monospace">{bitsString}</span><br>
+        {/each}
     </div>
 </div>
 
@@ -78,6 +93,7 @@
         <h2>References:</h2>
         <ul>
             <li><a href="https://en.wikipedia.org/wiki/QR_code" target="_blank">QR code</a></li>
+            <li><a href="https://www.youtube.com/watch?v=w5ebcowAJD8" target="_blank">Veritasium video on QR codes</a></li>
         </ul>
     </div>
 </div>
