@@ -8,17 +8,16 @@
     let qrcDim = 21;
     let cells = [];
     $: {
-        cells = Array.from({ length: qrcDim**2 }, () => ({
+        cells = Array.from({ length: qrcDim }, () => Array.from({ length: qrcDim }, () => ({
             value: 0,
             type: "data"
-        }));
+        })));
     }
 
     function setCell(x, y, value, type) {
-        const idx = y * qrcDim + x;
-        if (idx >= 0 && idx < cells.length) {
-            cells[idx].value = value;
-            cells[idx].type = type;
+        if (x >= 0 && y >= 0 && x < qrcDim && y < qrcDim) {
+            cells[x][y].value = value;
+            cells[x][y].type = type;
         }
     }
 
@@ -32,7 +31,7 @@
 
     // x and y define the position of the top left corner of the ID pattern
     function drawQrId(x, y) {
-        drawPattern(x-1, y-1, [
+        drawPattern(x-4, y-4, [
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 1, 1, 1, 1, 1, 1, 1, 0],
             [0, 1, 0, 0, 0, 0, 0, 1, 0],
@@ -51,8 +50,10 @@
     }
 
     onMount(()=> {
-        setCell(5, 5, 1, "asd");
-        drawQrId(0, 0);
+        setCell(4, 0, 1, "asd");
+        drawQrId(3, 3);
+        drawQrId(17, 3);
+        drawQrId(3, 17);
     });
 </script>
 
@@ -68,12 +69,14 @@
 
 <div class="row">
     <div class="col-auto">
-        <svg width="600" height="600" viewBox="0 0 {CELL_SIZE*qrcDim} {Math.ceil(cells.length/qrcDim)*CELL_SIZE}">
-            {#each cells as cell, i}
+        <svg width="600" height="600" viewBox="0 0 {qrcDim*CELL_SIZE} {qrcDim*CELL_SIZE}">
+        {#each cells as row, i}
+            {#each row as cell, j}
             <rect class:white={cell.value == 0} class:black={cell.value == 1}
-                x="{(i%qrcDim)*CELL_SIZE}" y="{Math.floor(i/qrcDim)*CELL_SIZE}"
+                x="{i*CELL_SIZE}" y="{j*CELL_SIZE}"
                 width="{CELL_SIZE}" height="{CELL_SIZE}"/>
             {/each}
+        {/each}
         </svg>
     </div>
 
