@@ -5,7 +5,7 @@
 
     let inputAscii = "edu";
 
-    let qrcDim = 21;
+    let qrcDim = 25;
     let cells = [];
     $: {
         cells = Array.from({ length: qrcDim }, () => Array.from({ length: qrcDim }, () => ({
@@ -35,12 +35,22 @@
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 1, 1, 1, 1, 1, 1, 1, 0],
             [0, 1, 0, 0, 0, 0, 0, 1, 0],
-            [0, 1, 0, 1, 1, 1, 0, 1, 0], 
+            [0, 1, 0, 1, 1, 1, 0, 1, 0],
             [0, 1, 0, 1, 1, 1, 0, 1, 0],
             [0, 1, 0, 1, 1, 1, 0, 1, 0],
             [0, 1, 0, 0, 0, 0, 0, 1, 0],
             [0, 1, 1, 1, 1, 1, 1, 1, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        ], "id");
+    }
+
+    function drawQrIdSmall(x, y) {
+        drawPattern(x-2, y-2, [
+            [1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 1],
+            [1, 0, 1, 0, 1],
+            [1, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1],
         ], "id");
     }
 
@@ -52,8 +62,9 @@
     onMount(()=> {
         setCell(4, 0, 1, "asd");
         drawQrId(3, 3);
-        drawQrId(17, 3);
-        drawQrId(3, 17);
+        drawQrId(21, 3);
+        drawQrId(3, 21);
+        drawQrIdSmall(18, 18);
     });
 </script>
 
