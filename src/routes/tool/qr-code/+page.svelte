@@ -30,7 +30,7 @@
     }
 
     // x and y define the position of the top left corner of the ID pattern
-    function drawQrId(x, y) {
+    function drawPositionSquare(x, y) {
         drawPattern(x-4, y-4, [
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 1, 1, 1, 1, 1, 1, 1, 0],
@@ -41,17 +41,17 @@
             [0, 1, 0, 0, 0, 0, 0, 1, 0],
             [0, 1, 1, 1, 1, 1, 1, 1, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        ], "id");
+        ], "position-square");
     }
 
-    function drawQrIdSmall(x, y) {
+    function drawAlignmentPattern(x, y) {
         drawPattern(x-2, y-2, [
             [1, 1, 1, 1, 1],
             [1, 0, 0, 0, 1],
             [1, 0, 1, 0, 1],
             [1, 0, 0, 0, 1],
             [1, 1, 1, 1, 1],
-        ], "id");
+        ], "alignment-pattern");
     }
 
     function charsAsBinaryDumpLines(input) {
@@ -61,10 +61,10 @@
 
     onMount(()=> {
         setCell(4, 0, 1, "asd");
-        drawQrId(3, 3);
-        drawQrId(21, 3);
-        drawQrId(3, 21);
-        drawQrIdSmall(18, 18);
+        drawPositionSquare(3, 3);
+        drawPositionSquare(21, 3);
+        drawPositionSquare(3, 21);
+        drawAlignmentPattern(18, 18);
     });
 </script>
 
