@@ -1,6 +1,18 @@
 <script>
     import { onMount } from "svelte";
 
+    const NONE = "none";
+    const UNUSED = "unused";
+    const POSITION_SQUARE = "position-square";
+    const ALIGNMENT_PATTERN = "alignment-pattern";
+    let parts = [
+        NONE,
+        UNUSED,
+        POSITION_SQUARE,
+        ALIGNMENT_PATTERN,
+    ];
+    let selectedPart = parts[0];
+
     const CELL_SIZE = 10;
 
     let inputAscii = "edu";
@@ -10,7 +22,7 @@
     $: {
         cells = Array.from({ length: qrcDim }, () => Array.from({ length: qrcDim }, () => ({
             value: 0,
-            type: "data"
+            type: UNUSED,
         })));
     }
 
@@ -41,7 +53,7 @@
             [0, 1, 0, 0, 0, 0, 0, 1, 0],
             [0, 1, 1, 1, 1, 1, 1, 1, 0],
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        ], "position-square");
+        ], POSITION_SQUARE);
     }
 
     function drawAlignmentPattern(x, y) {
@@ -51,12 +63,12 @@
             [1, 0, 1, 0, 1],
             [1, 0, 0, 0, 1],
             [1, 1, 1, 1, 1],
-        ], "alignment-pattern");
+        ], ALIGNMENT_PATTERN);
     }
 
     function charsAsBinaryDumpLines(input) {
         const padding = `${input.length}`.length;
-        return input.split("").map((c, i) => `${i.toString().padStart(padding, " ")} ${c.charCodeAt(0).toString(2).padStart(8, "0")} ${c}`);
+        return input.split("").map((c, i) => `${i.toString().padStart(padding, " ")}  ${c.charCodeAt(0).toString(2).padStart(8, "0")}  ${c}`);
     }
 
     onMount(()=> {
@@ -78,27 +90,41 @@
     </div>
 </div>
 
+<div class="row mb-1">
+    <div class="col">
+        <label for="asciiInput">ASCII Input:</label>
+        <input type="text" id="asciiInput" class="form-control font-monospace" bind:value="{inputAscii}"/>
+    </div>
+</div>
+
 <div class="row">
     <div class="col-auto">
         <svg width="600" height="600" viewBox="0 0 {qrcDim*CELL_SIZE} {qrcDim*CELL_SIZE}">
         {#each cells as row, i}
             {#each row as cell, j}
-            <rect class:white={cell.value == 0} class:black={cell.value == 1}
-                x="{i*CELL_SIZE}" y="{j*CELL_SIZE}"
-                width="{CELL_SIZE}" height="{CELL_SIZE}"/>
+            <rect class:highlighted={cell.type == selectedPart} class:white={cell.value == 0} class:black={cell.value == 1}
+                x="{i*CELL_SIZE}" y="{j*CELL_SIZE}" width="{CELL_SIZE}" height="{CELL_SIZE}"
+                part="{cell.type}"/>
             {/each}
         {/each}
         </svg>
     </div>
 
     <div class="col">
-        <label for="asciiInput">ASCII Input:</label>
-        <input type="text" id="asciiInput" class="form-control font-monospace" bind:value="{inputAscii}"/>
-        <br>
-        Input as Binary Data:<br>
-        {#each charsAsBinaryDumpLines(inputAscii) as bitsString}
-            <span class="font-monospace">{bitsString}</span><br>
-        {/each}
+        <h3>Parts:</h3>
+        <div class="d-flex flex-column gap-3">
+            {#each parts as p}
+            <label>
+                <input type="radio" value={p} bind:group={selectedPart}/>
+                {p}
+            </label>
+            {/each}
+        </div>
+    </div>
+
+    <div class="col">
+        <h3>Input as Binary Data:</h3>
+        <pre>{#each charsAsBinaryDumpLines(inputAscii) as bitsString}<span class="font-monospace">{bitsString}</span><br>{/each}</pre>
     </div>
 </div>
 
@@ -118,15 +144,19 @@
         border: 1px solid black;
     }
     rect {
-        stroke: #EEEEEE;
+        stroke: transparent;
         fill: white;
     }
     rect.white {
-        stroke: transparent;
         fill: white;
     }
     rect.black {
-        stroke: transparent;
         fill: black;
+    }
+    rect.white.highlighted {
+        fill: rgb(255, 128, 128);
+    }
+    rect.black.highlighted {
+        fill: rgb(128, 0, 0);
     }
 </style>
