@@ -5,11 +5,13 @@
     const UNUSED = "unused";
     const POSITION_SQUARE = "position-square";
     const ALIGNMENT_PATTERN = "alignment-pattern";
+    const TIMING_STRIP = "timing-strip";
     let parts = [
         NONE,
         UNUSED,
         POSITION_SQUARE,
         ALIGNMENT_PATTERN,
+        TIMING_STRIP,
     ];
     let selectedPart = parts[0];
 
@@ -66,6 +68,18 @@
         ], ALIGNMENT_PATTERN);
     }
 
+    function drawTimingStripHorizontal(x, y, d) {
+        for (let i = 0; i < d; i++) {
+            setCell(x+i, y, i % 2 ? 0 : 1, TIMING_STRIP);
+        }
+    }
+
+    function drawTimingStripVertical(x, y, d) {
+        for (let i = 0; i < d; i++) {
+            setCell(x, y+i, i % 2 ? 0 : 1, TIMING_STRIP);
+        }
+    }
+
     function charsAsBinaryDumpLines(input) {
         const padding = `${input.length}`.length;
         return input.split("").map((c, i) => `${i.toString().padStart(padding, " ")}  ${c.charCodeAt(0).toString(2).padStart(8, "0")}  ${c}`);
@@ -77,6 +91,9 @@
         drawPositionSquare(21, 3);
         drawPositionSquare(3, 21);
         drawAlignmentPattern(18, 18);
+
+        drawTimingStripHorizontal(8, 6, 9);
+        drawTimingStripVertical(6, 8, 9);
     });
 </script>
 
