@@ -6,12 +6,14 @@
     const POSITION_SQUARE = "position-square";
     const ALIGNMENT_PATTERN = "alignment-pattern";
     const TIMING_STRIP = "timing-strip";
+    const FIXED_BLACK = "fixed-black";
     let parts = [
         NONE,
         UNUSED,
         POSITION_SQUARE,
         ALIGNMENT_PATTERN,
         TIMING_STRIP,
+        FIXED_BLACK,
     ];
     let selectedPart = parts[0];
 
@@ -91,6 +93,8 @@
         drawPositionSquare(21, 3);
         drawPositionSquare(3, 21);
         drawAlignmentPattern(18, 18);
+
+        setCell(8, 17, 1, FIXED_BLACK);
 
         drawTimingStripHorizontal(8, 6, 9);
         drawTimingStripVertical(6, 8, 9);
