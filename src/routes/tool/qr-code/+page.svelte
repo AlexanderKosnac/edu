@@ -5,6 +5,7 @@
     const UNUSED = "unused";
     const POSITION_SQUARE = "position-square";
     const ALIGNMENT_PATTERN = "alignment-pattern";
+    const FORMAT_INFO = "format-info";
     const TIMING_STRIP = "timing-strip";
     const FIXED_BLACK = "fixed-black";
     let parts = [
@@ -12,6 +13,7 @@
         UNUSED,
         POSITION_SQUARE,
         ALIGNMENT_PATTERN,
+        FORMAT_INFO,
         TIMING_STRIP,
         FIXED_BLACK,
     ];
@@ -70,6 +72,18 @@
         ], ALIGNMENT_PATTERN);
     }
 
+    function drawFormatInfoHorizontal(x, y, d) {
+        for (let i = 0; i < d; i++) {
+            setCell(x+i, y, 1, FORMAT_INFO);
+        }
+    }
+
+    function drawFormatInfoVertical(x, y, d) {
+        for (let i = 0; i < d; i++) {
+            setCell(x, y+i, 1, FORMAT_INFO);
+        }
+    }
+
     function drawTimingStripHorizontal(x, y, d) {
         for (let i = 0; i < d; i++) {
             setCell(x+i, y, i % 2 ? 0 : 1, TIMING_STRIP);
@@ -95,6 +109,12 @@
         drawAlignmentPattern(18, 18);
 
         setCell(8, 17, 1, FIXED_BLACK);
+
+        drawFormatInfoHorizontal(0, 8, 9);
+        drawFormatInfoVertical(8, 0, 9);
+
+        drawFormatInfoHorizontal(17, 8, 8);
+        drawFormatInfoVertical(8, 18, 7);
 
         drawTimingStripHorizontal(8, 6, 9);
         drawTimingStripVertical(6, 8, 9);
