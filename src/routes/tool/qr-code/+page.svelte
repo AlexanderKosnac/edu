@@ -73,26 +73,29 @@
     }
 
     function drawFormatInfoHorizontal(x, y, d) {
-        for (let i = 0; i < d; i++) {
-            setCell(x+i, y, 1, FORMAT_INFO);
-        }
+        drawLinePattern(x, y, d, true, _ => 1, FORMAT_INFO);
     }
 
     function drawFormatInfoVertical(x, y, d) {
-        for (let i = 0; i < d; i++) {
-            setCell(x, y+i, 1, FORMAT_INFO);
-        }
+        drawLinePattern(x, y, d, false, _ => 1, FORMAT_INFO);
     }
 
     function drawTimingStripHorizontal(x, y, d) {
-        for (let i = 0; i < d; i++) {
-            setCell(x+i, y, i % 2 ? 0 : 1, TIMING_STRIP);
-        }
+        drawLinePattern(x, y, d, true, i => i % 2 ? 0 : 1, TIMING_STRIP);
     }
 
     function drawTimingStripVertical(x, y, d) {
+        drawLinePattern(x, y, d, false, i => i % 2 ? 0 : 1, TIMING_STRIP);
+    }
+
+    function drawLinePattern(x, y, d, isHorizontal, patternFn, cellType) {
         for (let i = 0; i < d; i++) {
-            setCell(x, y+i, i % 2 ? 0 : 1, TIMING_STRIP);
+            const value = patternFn(i);
+            if (isHorizontal) {
+                setCell(x + i, y, value, cellType);
+            } else {
+                setCell(x, y + i, value, cellType);
+            }
         }
     }
 
