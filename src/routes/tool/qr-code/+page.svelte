@@ -4,6 +4,7 @@
     const NONE = "none";
     const UNUSED = "unused";
     const POSITION_SQUARE = "position-square";
+    const SEPARATOR = "separator";
     const ALIGNMENT_PATTERN = "alignment-pattern";
     const FORMAT_INFO = "format-info";
     const TIMING_STRIP = "timing-strip";
@@ -12,6 +13,7 @@
         NONE,
         UNUSED,
         POSITION_SQUARE,
+        SEPARATOR,
         ALIGNMENT_PATTERN,
         FORMAT_INFO,
         TIMING_STRIP,
@@ -49,16 +51,14 @@
 
     // x and y define the position of the top left corner of the ID pattern
     function drawPositionSquare(x, y) {
-        drawPattern(x-4, y-4, [
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
-            [0, 1, 1, 1, 1, 1, 1, 1, 0],
-            [0, 1, 0, 0, 0, 0, 0, 1, 0],
-            [0, 1, 0, 1, 1, 1, 0, 1, 0],
-            [0, 1, 0, 1, 1, 1, 0, 1, 0],
-            [0, 1, 0, 1, 1, 1, 0, 1, 0],
-            [0, 1, 0, 0, 0, 0, 0, 1, 0],
-            [0, 1, 1, 1, 1, 1, 1, 1, 0],
-            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+        drawPattern(x, y, [
+            [1, 1, 1, 1, 1, 1, 1],
+            [1, 0, 0, 0, 0, 0, 1],
+            [1, 0, 1, 1, 1, 0, 1],
+            [1, 0, 1, 1, 1, 0, 1],
+            [1, 0, 1, 1, 1, 0, 1],
+            [1, 0, 0, 0, 0, 0, 1],
+            [1, 1, 1, 1, 1, 1, 1],
         ], POSITION_SQUARE);
     }
 
@@ -105,13 +105,21 @@
     }
 
     onMount(()=> {
-        setCell(4, 0, 1, "asd");
-        drawPositionSquare(3, 3);
-        drawPositionSquare(21, 3);
-        drawPositionSquare(3, 21);
+        drawPositionSquare(0, 0);
+        drawPositionSquare(qrcDim-7, 0);
+        drawPositionSquare(0, qrcDim-7);
         drawAlignmentPattern(18, 18);
 
         setCell(8, 17, 1, FIXED_BLACK);
+
+        drawLinePattern(0, 7, 8, true, i => 0, SEPARATOR);
+        drawLinePattern(7, 0, 8, false, i => 0, SEPARATOR);
+
+        drawLinePattern(qrcDim-8, 7, 8, true, i => 0, SEPARATOR);
+        drawLinePattern(qrcDim-8, 0, 8, false, i => 0, SEPARATOR);
+
+        drawLinePattern(0, qrcDim-8, 8, true, i => 0, SEPARATOR);
+        drawLinePattern(7, qrcDim-8, 8, false, i => 0, SEPARATOR);
 
         drawFormatInfoHorizontal(0, 8, 9);
         drawFormatInfoVertical(8, 0, 9);
