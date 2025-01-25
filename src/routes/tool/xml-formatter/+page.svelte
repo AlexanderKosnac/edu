@@ -1,6 +1,10 @@
 <script>
     import xmlFormat from 'xml-formatter';
 
+    let indentSpaces = 4;
+    let doWhiteSpaceAtEndOfSelfclosingTag = true;
+    let doForceSelfClosingEmptyTag = true;
+
     let xmlString = `\
 <Person>
     <Name>George Washington</Name>
@@ -21,10 +25,11 @@
     $: xmlPretty = (() => {
         try {
             return xmlFormat(xmlString, {
-                indentation: '  ', 
-                filter: (node) => node.type !== 'Comment', 
-                collapseContent: true, 
-                lineSeparator: '\n'
+                indentation: " ".repeat(indentSpaces),
+                collapseContent: true,
+                lineSeparator: "\n",
+                whiteSpaceAtEndOfSelfclosingTag: doWhiteSpaceAtEndOfSelfclosingTag,
+                forceSelfClosingEmptyTag: doForceSelfClosingEmptyTag,
             });
         } catch (err) {
             return `Invalid XML. ${err}`;
@@ -54,6 +59,23 @@
     <div class="col">
         <label for="outputText">XML Formatted:</label>
         <textarea class="form-control font-monospace" id="outputText" rows="20" bind:value="{xmlPretty}" readonly="true"></textarea>
+
+        <div class="d-flex flex-column gap-1">
+            <label>
+                Indent spaces:
+                <input type="number" class="form-control" min="0" bind:value={indentSpaces}/>
+            </label>
+    
+            <label>
+                White-space at end of self-closing tag:
+                <input class="form-check-input" type="checkbox" value="" bind:checked={doWhiteSpaceAtEndOfSelfclosingTag}/>
+            </label>
+    
+            <label>
+                Force self-closing empty tag:
+                <input class="form-check-input" type="checkbox" value="" bind:checked={doForceSelfClosingEmptyTag}/>
+            </label>
+        </div>
     </div>
 </div>
 
