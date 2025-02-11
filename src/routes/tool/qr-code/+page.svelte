@@ -2,6 +2,7 @@
     import { onMount } from "svelte";
 
     const NONE = "none";
+    const DATA = "data";
     const UNUSED = "unused";
     const POSITION_SQUARE = "position-square";
     const SEPARATOR = "separator";
@@ -11,6 +12,7 @@
     const FIXED_BLACK = "fixed-black";
     let parts = [
         NONE,
+        DATA,
         UNUSED,
         POSITION_SQUARE,
         SEPARATOR,
@@ -104,6 +106,45 @@
         return input.split("").map((c, i) => `${i.toString().padStart(padding, " ")}  ${c.charCodeAt(0).toString(2).padStart(8, "0")}  ${c}`);
     }
 
+    function charsAsBinaryList(input) {
+        return Array.from(input).flatMap(c => byteAsBinaryList(c.charCodeAt(0)));
+    }
+
+    function byteAsBinaryList(byte) {
+        return byte.toString(2).padStart(8, "0").split("").map(bit => Number(bit));
+    }
+
+    function drawData(dataBits, type) {
+        let x = qrcDim - 1;
+        let y = qrcDim - 1;
+        let bitIndex = 0;
+        let direction = -1;
+
+        while (x > 0) {
+            for (let step = 0; step < qrcDim; step++) {
+                for (let i = 0; i < 2; i++) {
+                    let dx = x - i;
+                    let dy = y;
+
+                    if (cells[dx][dy].type === UNUSED && bitIndex < dataBits.length) {
+                        setCell(dx, dy, dataBits[bitIndex], type);
+                        bitIndex++;
+                    }
+
+                    if (i === 1) {
+                        dy += direction;
+                        if (dy < 0 || dy >= qrcDim) {
+                            direction = -direction;
+                            x -= 2;
+                            break;
+                        }
+                        y = dy;
+                    }
+                }
+            }
+        }
+    }
+
     onMount(()=> {
         drawPositionSquare(0, 0);
         drawPositionSquare(qrcDim-7, 0);
@@ -129,6 +170,7 @@
 
         drawTimingStripHorizontal(8, 6, 9);
         drawTimingStripVertical(6, 8, 9);
+        drawData(charsAsBinaryList(inputAscii), DATA);
     });
 </script>
 
