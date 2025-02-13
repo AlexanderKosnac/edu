@@ -2,26 +2,28 @@
     import { onMount } from "svelte";
 
     const NONE = "none";
-    const DATA = "data";
     const UNUSED = "unused";
+    const ENCODING = "encoding";
+    const DATA_LENGTH = "data-length";
+    const DATA = "data";
     const POSITION_SQUARE = "position-square";
     const SEPARATOR = "separator";
     const ALIGNMENT_PATTERN = "alignment-pattern";
     const FORMAT_INFO = "format-info";
     const TIMING_STRIP = "timing-strip";
     const FIXED_BLACK = "fixed-black";
-    const DATA_LENGTH = "data-length";
     let parts = [
         NONE,
-        DATA,
         UNUSED,
+        ENCODING,
+        DATA_LENGTH,
+        DATA,
         POSITION_SQUARE,
         SEPARATOR,
         ALIGNMENT_PATTERN,
         FORMAT_INFO,
         TIMING_STRIP,
         FIXED_BLACK,
-        DATA_LENGTH,
     ];
     let selectedPart = parts[0];
 
@@ -172,6 +174,8 @@
 
         drawTimingStripHorizontal(8, 6, 9);
         drawTimingStripVertical(6, 8, 9);
+
+        drawData([0, 1, 0, 0], ENCODING);
         drawData(byteAsBinaryList(inputAscii.length * 8), DATA_LENGTH);
         drawData(charsAsBinaryList(inputAscii), DATA);
     });
