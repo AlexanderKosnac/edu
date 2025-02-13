@@ -33,18 +33,19 @@
 
     let qrcDim = 25;
     let cells = [];
-    $: {
-        cells = Array.from({ length: qrcDim }, () => Array.from({ length: qrcDim }, () => ({
-            value: 0,
-            type: UNUSED,
-        })));
-    }
 
     function setCell(x, y, value, type) {
         if (x >= 0 && y >= 0 && x < qrcDim && y < qrcDim) {
             cells[x][y].value = value;
             cells[x][y].type = type;
         }
+    }
+
+    function setupCells() {
+        cells = Array.from({ length: qrcDim }, () => Array.from({ length: qrcDim }, () => ({
+            value: 0,
+            type: UNUSED,
+        })));
     }
 
     function drawPattern(x, y, pattern, type) {
@@ -149,7 +150,9 @@
         }
     }
 
-    onMount(()=> {
+    function createQrCode() {
+        setupCells();
+
         drawPositionSquare(0, 0);
         drawPositionSquare(qrcDim-7, 0);
         drawPositionSquare(0, qrcDim-7);
@@ -178,6 +181,10 @@
         drawData([0, 1, 0, 0], ENCODING);
         drawData(byteAsBinaryList(inputAscii.length * 8), DATA_LENGTH);
         drawData(charsAsBinaryList(inputAscii), DATA);
+    }
+
+    onMount(()=> {
+        createQrCode();
     });
 </script>
 
@@ -194,7 +201,7 @@
 <div class="row mb-1">
     <div class="col">
         <label for="asciiInput">ASCII Input:</label>
-        <input type="text" id="asciiInput" class="form-control font-monospace" bind:value="{inputAscii}"/>
+        <input type="text" id="asciiInput" class="form-control font-monospace" bind:value="{inputAscii}" on:input={createQrCode}/>
     </div>
 </div>
 
