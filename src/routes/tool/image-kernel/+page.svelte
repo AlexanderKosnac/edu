@@ -124,7 +124,7 @@ onMount(() => {
             </div>
             <div class="form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" type="checkbox" value="" bind:checked={useGraylevel}>
+                    <input class="form-check-input" type="checkbox" value="" bind:checked={useGraylevel}/>
                     Use graylevel for processing
                 </label>
             </div>

@@ -19,7 +19,7 @@
         </p>
 
         <p>
-            In this short writeup I outline the key steps and processes to achieve 3D graphics.
+            In this short writeup I will outline the key steps and processes to achieve 3D graphics.
         </p>
 
         <h2>Define Objects</h2>
@@ -39,10 +39,10 @@
             Each face is defined by n vertices: f v1 v1 ... vn.
             Faces will be triangles for the purpose of this write-up.
             The vertices indices start from 1.
-            <pre>
+            <span>
                 v  0.5  0.5  0.5
                 f 1 2 3
-            </pre>
+            </span>
         </p>
 
     </div>
