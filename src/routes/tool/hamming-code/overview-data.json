@@ -1,0 +1,10 @@
+{
+    "name": "Hamming Code",
+    "url": "tool/hamming-code",
+    "description": "Hamming codes can detect one-bit and two-bit errors, or correct one-bit errors.",
+    "tags": [
+        "Computer Science",
+        "Error Correction"
+    ],
+    "usable": false
+}
