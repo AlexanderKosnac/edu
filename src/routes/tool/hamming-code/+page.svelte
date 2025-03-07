@@ -15,7 +15,6 @@
     }
 
     function onInputChanged() {
-        charsAsBinaryDumpLines()
     }
 </script>
 
@@ -40,10 +39,28 @@
     <div class="col">
 
     </div>
+</div>
 
+<div class="row">
     <div class="col">
-        <h3>Input as Binary Data:</h3>
-        <pre>{#each charsAsBinaryDumpLines(inputAscii) as bitsString}<span class="font-monospace">{bitsString}</span><br>{/each}</pre>
+        <div class="mw-100 overflow-auto">
+            <table class="table table-bordered w-auto">
+                <tbody>
+                    <tr>
+                        <th>Index</th>
+                        {#each charsAsBinaryList(inputAscii) as _, i}
+                            <td><strong>{i}</strong></td>
+                        {/each}
+                    </tr>
+                    <tr>
+                        <th>Value</th>
+                        {#each charsAsBinaryList(inputAscii) as bit}
+                            <td><span class="font-monospace">{bit}</span></td>
+                        {/each}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 </div>
 
