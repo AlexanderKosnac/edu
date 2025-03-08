@@ -1,5 +1,6 @@
 <script>
     let inputAscii = "Hamming";
+    let inputBlockSize = 11;
 
     function charsAsBinaryDumpLines(input) {
         const padding = `${input.length}`.length;
@@ -32,12 +33,22 @@
     <div class="col">
         <label for="asciiInput">ASCII Input:</label>
         <input type="text" id="asciiInput" class="form-control font-monospace" bind:value="{inputAscii}" on:input={onInputChanged}/>
+
+        <label for="blockSize">Block Size:</label>
+        <input type="number" id="blockSize" class="form-control" bind:value="{inputBlockSize}"/>
     </div>
 </div>
 
 <div class="row">
     <div class="col">
-
+        {#each charsAsBinaryDumpLines(inputAscii) as bits}
+            <span class="font-monospace">{bits}</span><br>
+        {/each}
+    </div>
+    <div class="col">
+        {#each charsAsBinaryList(inputAscii) as bit}
+            <span class="font-monospace">{bit} </span>
+        {/each}
     </div>
 </div>
 
