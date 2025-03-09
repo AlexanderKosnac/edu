@@ -2,6 +2,42 @@
     let inputAscii = "Hamming";
     let inputBlockSize = 11;
 
+    function isPowerOfTwo(n) {
+        return n > 0 && (n & (n - 1)) === 0;
+    }
+
+    function chunkArray(arr, size) {
+        return Array.from({ length: Math.ceil(arr.length / size) }, (_, i) =>
+            arr.slice(i * size, i * size + size)
+        );
+    }
+
+    function padArrayWithZeroes(arr, n) {
+        console.log(arr);
+        console.log(n);
+        return arr.concat(new Array(n).fill(0));
+    }
+
+    function padBitsToBlockSizeMultiple(dataBits, blockSize) {
+        console.log(blockSize);
+        const missingBits = (blockSize - (dataBits.length % blockSize)) % blockSize;
+        console.log(missingBits);
+        return padArrayWithZeroes(dataBits, missingBits);
+    }
+
+    function getNumberOfParityBitsNeeded(blockSize) {
+        return Math.ceil(Math.log2(blockSize + Math.ceil(Math.log2(blockSize)) + 1));
+    }
+
+    function encode(dataBits, blockSize) {
+        console.log(blockSize);
+        dataBits = padBitsToBlockSizeMultiple(dataBits, blockSize);
+        let parityBits = getNumberOfParityBitsNeeded(blockSize);
+        let encodedBits = padArrayWithZeroes(dataBits, parityBits);
+
+        return encodedBits;
+    }
+
     function charsAsBinaryDumpLines(input) {
         const padding = `${input.length}`.length;
         return input.split("").map((c, i) => `${i.toString().padStart(padding, " ")}  ${c.charCodeAt(0).toString(2).padStart(8, "0")}  ${c}`);
@@ -58,17 +94,19 @@
             <table class="table table-bordered w-auto">
                 <tbody>
                     <tr>
-                        <th>Index</th>
-                        {#each charsAsBinaryList(inputAscii) as _, i}
-                            <td><strong>{i}</strong></td>
+                        <th></th>
+                        {#each { length: inputBlockSize } as _, i}
+                            <th>{i+1}</th>
                         {/each}
                     </tr>
-                    <tr>
-                        <th>Value</th>
-                        {#each charsAsBinaryList(inputAscii) as bit}
-                            <td><span class="font-monospace">{bit}</span></td>
-                        {/each}
-                    </tr>
+                    {#each chunkArray(encode(charsAsBinaryList(inputAscii), inputBlockSize), inputBlockSize) as _, i}
+                        <tr>
+                            <th>{i}</th>
+                            {#each { length: inputBlockSize } as _, j}
+                                <td><span class:isParity={isPowerOfTwo(j+1)}>{j + (i * inputBlockSize)}</span></td>
+                            {/each}
+                        </tr>
+                    {/each}
                 </tbody>
             </table>
         </div>
@@ -85,4 +123,7 @@
 </div>
 
 <style>
+    .isParity {
+        color: red;
+    }
 </style>
