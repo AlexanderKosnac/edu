@@ -13,15 +13,11 @@
     }
 
     function padArrayWithZeroes(arr, n) {
-        console.log(arr);
-        console.log(n);
         return arr.concat(new Array(n).fill(0));
     }
 
     function padBitsToBlockSizeMultiple(dataBits, blockSize) {
-        console.log(blockSize);
         const missingBits = (blockSize - (dataBits.length % blockSize)) % blockSize;
-        console.log(missingBits);
         return padArrayWithZeroes(dataBits, missingBits);
     }
 
@@ -30,7 +26,6 @@
     }
 
     function encode(dataBits, blockSize) {
-        console.log(blockSize);
         dataBits = padBitsToBlockSizeMultiple(dataBits, blockSize);
         let parityBits = getNumberOfParityBitsNeeded(blockSize);
         let encodedBits = padArrayWithZeroes(dataBits, parityBits);
@@ -71,7 +66,7 @@
         <input type="text" id="asciiInput" class="form-control font-monospace" bind:value="{inputAscii}" on:input={onInputChanged}/>
 
         <label for="blockSize">Block Size:</label>
-        <input type="number" id="blockSize" class="form-control" bind:value="{inputBlockSize}"/>
+        <input type="number" id="blockSize" class="form-control" min="3" bind:value="{inputBlockSize}"/>
     </div>
 </div>
 
