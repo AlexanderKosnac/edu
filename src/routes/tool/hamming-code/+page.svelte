@@ -77,8 +77,11 @@
         {/each}
     </div>
     <div class="col">
-        {#each charsAsBinaryList(inputAscii) as bit}
-            <span class="font-monospace">{bit} </span>
+        {#each chunkArray(rawBits, inputBlockSize) as block}
+            {#each block as bit, i}
+            <span class="font-monospace" class:isParity={isPowerOfTwo(i+1)}>{bit}</span>
+            {/each}
+            <span> </span>
         {/each}
     </div>
 </div>
