@@ -1,6 +1,8 @@
 <script>
     let inputAscii = "Hamming";
-    let inputBlockSize = 11;
+    let nParityBits = 3;
+    $: nDataBits = 2**nParityBits - nParityBits - 1;
+    $: nTotalBits = 2**nParityBits - 1;
 
     function isPowerOfTwo(n) {
         return n > 0 && (n & (n - 1)) === 0;
@@ -48,6 +50,13 @@
 
     function onInputChanged() {
     }
+
+    let rawBits, encodedBits, encodedBitsChunked;
+    $: {
+        rawBits = charsAsBinaryList(inputAscii);
+        encodedBits = encode(rawBits, nTotalBits);
+        encodedBitsChunked = chunkArray(encodedBits, nTotalBits);
+    }
 </script>
 
 <svelte:head>
@@ -62,11 +71,25 @@
 
 <div class="row mb-1">
     <div class="col">
-        <label for="asciiInput">ASCII Input:</label>
-        <input type="text" id="asciiInput" class="form-control font-monospace" bind:value="{inputAscii}" on:input={onInputChanged}/>
-
-        <label for="blockSize">Block Size:</label>
-        <input type="number" id="blockSize" class="form-control" min="3" bind:value="{inputBlockSize}"/>
+        <div class="d-flex flex-column gap-1">
+            <div>
+                <label for="asciiInput">ASCII Input:</label>
+                <input type="text" id="asciiInput" class="form-control font-monospace" bind:value="{inputAscii}" on:input={onInputChanged}/>    
+            </div>
+    
+            <div class="d-flex flex-row align-items-center gap-2">
+                <label class="text-nowrap" for="parityBits">Parity Bits:</label>
+                <input type="number" id="parityBits" class="form-control bits-input" min="2" bind:value="{nParityBits}"/>
+        
+                <label class="text-nowrap" for="totalBits">Total Bits:</label>
+                <input type="number" id="totalBits" class="form-control bits-input" bind:value="{nTotalBits}" readonly/>
+        
+                <label class="text-nowrap" for="dataBits">Data Bits:</label>
+                <input type="number" id="dataBits" class="form-control bits-input" bind:value="{nDataBits}" readonly/>
+    
+                <span class="text-nowrap">Rate: {nDataBits}/{nTotalBits} = {(nDataBits/nTotalBits).toFixed(3)}</span>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -77,9 +100,9 @@
         {/each}
     </div>
     <div class="col">
-        {#each chunkArray(rawBits, inputBlockSize) as block}
+        {#each chunkArray(rawBits, nDataBits) as block}
             {#each block as bit, i}
-            <span class="font-monospace" class:isParity={isPowerOfTwo(i+1)}>{bit}</span>
+            <span class="font-monospace">{bit}</span>
             {/each}
             <span> </span>
         {/each}
@@ -93,15 +116,15 @@
                 <tbody>
                     <tr>
                         <th></th>
-                        {#each { length: inputBlockSize } as _, i}
+                        {#each { length: nTotalBits } as _, i}
                             <th>{i+1}</th>
                         {/each}
                     </tr>
-                    {#each chunkArray(encode(charsAsBinaryList(inputAscii), inputBlockSize), inputBlockSize) as _, i}
+                    {#each encodedBitsChunked as _, i}
                         <tr>
                             <th>{i}</th>
-                            {#each { length: inputBlockSize } as _, j}
-                                <td><span class:isParity={isPowerOfTwo(j+1)}>{j + (i * inputBlockSize)}</span></td>
+                            {#each { length: nTotalBits } as _, j}
+                                <td><span class:isParity={isPowerOfTwo(j+1)}>{encodedBitsChunked[i][j] ?? ""}</span></td>
                             {/each}
                         </tr>
                     {/each}
@@ -123,5 +146,8 @@
 <style>
     .isParity {
         color: red;
+    }
+    .bits-input {
+        max-width: 100px;
     }
 </style>
