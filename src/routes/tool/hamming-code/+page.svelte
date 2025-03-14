@@ -1,8 +1,8 @@
 <script>
-    let inputAscii = "Hamming";
+    let bitInput = "01010101";
     let nParityBits = 3;
-    $: nDataBits = 2**nParityBits - nParityBits - 1;
     $: nTotalBits = 2**nParityBits - 1;
+    $: nDataBits = 2**nParityBits - nParityBits - 1;
 
     function isPowerOfTwo(n) {
         return n > 0 && (n & (n - 1)) === 0;
@@ -23,7 +23,7 @@
         return padArrayWithZeroes(dataBits, missingBits);
     }
 
-    function getNumberOfParityBitsNeeded(blockSize) {
+    function getNumberOfParityBitsInBlockSize(blockSize) {
         return Math.ceil(Math.log2(blockSize + Math.ceil(Math.log2(blockSize)) + 1));
     }
 
@@ -35,17 +35,15 @@
         return encodedBits;
     }
 
-    function charsAsBinaryDumpLines(input) {
-        const padding = `${input.length}`.length;
-        return input.split("").map((c, i) => `${i.toString().padStart(padding, " ")}  ${c.charCodeAt(0).toString(2).padStart(8, "0")}  ${c}`);
+        return encodedBits;
     }
 
-    function charsAsBinaryList(input) {
-        return Array.from(input).flatMap(c => byteAsBinaryList(c.charCodeAt(0)));
+    function isBinaryString(str) {
+        return /^[01]+$/.test(str);
     }
 
-    function byteAsBinaryList(byte) {
-        return byte.toString(2).padStart(8, "0").split("").map(bit => Number(bit));
+    function bitStringAsBits(input) {
+        return isBinaryString(input) ? Array.from(input, Number) : [];
     }
 
     function onInputChanged() {
@@ -53,7 +51,7 @@
 
     let rawBits, encodedBits, encodedBitsChunked;
     $: {
-        rawBits = charsAsBinaryList(inputAscii);
+        rawBits = bitStringAsBits(bitInput);
         encodedBits = encode(rawBits, nTotalBits);
         encodedBitsChunked = chunkArray(encodedBits, nTotalBits);
     }
@@ -73,8 +71,8 @@
     <div class="col">
         <div class="d-flex flex-column gap-1">
             <div>
-                <label for="asciiInput">ASCII Input:</label>
-                <input type="text" id="asciiInput" class="form-control font-monospace" bind:value="{inputAscii}" on:input={onInputChanged}/>    
+                <label for="bitInput">Bit Input:</label>
+                <input type="text" id="bitInput" class="form-control font-monospace" pattern="[01]+" bind:value="{bitInput}" on:input={onInputChanged}/>    
             </div>
     
             <div class="d-flex flex-row align-items-center gap-2">
@@ -144,6 +142,9 @@
 </div>
 
 <style>
+    #bitInput:invalid {
+        color: red;
+    }
     .isParity {
         color: red;
     }
