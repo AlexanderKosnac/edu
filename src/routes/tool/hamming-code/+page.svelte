@@ -1,8 +1,13 @@
 <script>
-    let bitInput = "01010101";
+    let bitInput = "11111111";
+    $: rawBits = bitStringAsBits(bitInput);
+
     let nParityBits = 3;
     $: nTotalBits = 2**nParityBits - 1;
     $: nDataBits = 2**nParityBits - nParityBits - 1;
+
+    $: encodedBits = encode(rawBits, nDataBits);
+    $: encodedBitsChunked = chunkArray(encodedBits, nTotalBits);
 
     function isPowerOfTwo(n) {
         return n > 0 && (n & (n - 1)) === 0;
@@ -27,19 +32,33 @@
         return Math.ceil(Math.log2(blockSize + Math.ceil(Math.log2(blockSize)) + 1));
     }
 
-    function encode(dataBits, blockSize) {
-        dataBits = padBitsToBlockSizeMultiple(dataBits, blockSize);
-        let parityBits = getNumberOfParityBitsNeeded(blockSize);
-        let encodedBits = padArrayWithZeroes(dataBits, parityBits);
+    function encode(data, blockSize) {
+        data = padBitsToBlockSizeMultiple(data, blockSize);
+        let parityBits = getNumberOfParityBitsInBlockSize(blockSize);
 
-        return encodedBits;
-    }
+        let totalBlockSize = blockSize + parityBits;
+        let encodedBits = [];
+        
+        for (let i = 0; i < data.length; i += blockSize) {
+            let blockData = data.slice(i, i + blockSize);
+            let encodedBlock = new Array(totalBlockSize).fill(0);
+
+            let dataIndex = 0;
+            for (let j = 0; j < totalBlockSize; j++) {
+                if (isPowerOfTwo(j + 1)) {
+                    continue;
+                }
+                encodedBlock[j] = blockData[dataIndex++];
+            }
+
+            encodedBits.push(...encodedBlock);
+        }
 
         return encodedBits;
     }
 
     function isBinaryString(str) {
-        return /^[01]+$/.test(str);
+        return /^[01]*$/.test(str);
     }
 
     function bitStringAsBits(input) {
@@ -47,13 +66,6 @@
     }
 
     function onInputChanged() {
-    }
-
-    let rawBits, encodedBits, encodedBitsChunked;
-    $: {
-        rawBits = bitStringAsBits(bitInput);
-        encodedBits = encode(rawBits, nTotalBits);
-        encodedBitsChunked = chunkArray(encodedBits, nTotalBits);
     }
 </script>
 
@@ -93,12 +105,7 @@
 
 <div class="row">
     <div class="col">
-        {#each charsAsBinaryDumpLines(inputAscii) as bits}
-            <span class="font-monospace">{bits}</span><br>
-        {/each}
-    </div>
-    <div class="col">
-        {#each chunkArray(rawBits, nDataBits) as block}
+        {#each chunkArray(rawBits, nTotalBits) as block}
             {#each block as bit, i}
             <span class="font-monospace">{bit}</span>
             {/each}
