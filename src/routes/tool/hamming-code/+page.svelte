@@ -43,12 +43,25 @@
             let blockData = data.slice(i, i + blockSize);
             let encodedBlock = new Array(totalBlockSize).fill(0);
 
+            // Insert placeholders for parity bits.
             let dataIndex = 0;
             for (let j = 0; j < totalBlockSize; j++) {
                 if (isPowerOfTwo(j + 1)) {
                     continue;
                 }
                 encodedBlock[j] = blockData[dataIndex++];
+            }
+
+            // Fill parity bits.
+            for (let p = 0; p < parityBits; p++) {
+                let pos = 2 ** p;
+                let parity = 0;
+                for (let j = pos - 1; j < totalBlockSize; j += 2 * pos) {
+                    for (let k = 0; k < pos && j + k < totalBlockSize; k++) {
+                        parity ^= encodedBlock[j + k];
+                    }
+                }
+                encodedBlock[pos - 1] = parity;
             }
 
             encodedBits.push(...encodedBlock);
