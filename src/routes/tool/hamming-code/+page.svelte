@@ -53,11 +53,11 @@
             }
 
             // Fill parity bits.
-            for (let p = 0; p < parityBits; p++) {
+            for (let p = 0; p < parityBits; p++) { // Each parity bit
                 let pos = 2 ** p;
                 let parity = 0;
-                for (let j = pos - 1; j < totalBlockSize; j += 2 * pos) {
-                    for (let k = 0; k < pos && j + k < totalBlockSize; k++) {
+                for (let j = pos - 1; j < totalBlockSize; j += 2 * pos) { // Each binary block, e.g.: 00[11] 00[11]
+                    for (let k = 0; k < pos && j + k < totalBlockSize; k++) { // Each bit in a block, e.g.: 00[1][1] 0011
                         parity ^= encodedBlock[j + k];
                     }
                 }
