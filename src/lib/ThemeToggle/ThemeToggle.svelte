@@ -10,8 +10,12 @@
 </script>
 
 <div class="btn-group">
-    <button type="button" class="btn btn-outline-secondary light-button" on:click={() => setTheme("light")}><i class="bi bi-brightness-high"></i></button>
-    <button type="button" class="btn btn-outline-secondary dark-button" on:click={() => setTheme("dark")}><i class="bi bi-moon"></i></button>
+    <button type="button" class="btn btn-outline-secondary light-button" on:click={() => setTheme("light")} aria-label="Enable light mode">
+        <i class="bi bi-sun"></i>
+    </button>
+    <button type="button" class="btn btn-outline-secondary dark-button" on:click={() => setTheme("dark")} aria-label="Enable dark mode">
+        <i class="bi bi-moon"></i>
+    </button>
 </div>
 
 <style>
