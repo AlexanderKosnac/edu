@@ -1,0 +1,10 @@
+{
+    "name": "Mantissa-Exponent Representation",
+    "url": "tool/mantissa-exponent-representation",
+    "description": "Converts a number into an approximate representation using a mantissa, exponent and base.",
+    "tags": [
+        "Computer Science",
+        "Mathematics",
+        "Tool"
+    ]
+}
