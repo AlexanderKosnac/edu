@@ -34,8 +34,14 @@
 </script>
 
 <svelte:head>
-    <title>Mantissa-Exponent Representation</title>
+    <title>Scientific Notation</title>
 </svelte:head>
+
+<div class="row">
+    <div class="col">
+        <h1>Scientific Notation</h1>
+    </div>
+</div>
 
 <div class="row mt-1">
     <div class="col">
