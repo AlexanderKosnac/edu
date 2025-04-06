@@ -10,16 +10,22 @@
 
     let number = 4;
     let base = 2;
+    let useIntegerExponent = true;
+    let useIntegerMantissa = true;
 
     let exponent, mantissa, approximatedNumber, absoluteError, relativeError;
     let exponentKatex, mantissaKatex, approximatedNumberKatex, absoluteErrorKatex, relativeErrorKatex;
     $: {
         if (!isNaN(parseFloat(number)) && !isNaN(parseFloat(base))) {
-            exponent = Math.floor(Math.log(number) / Math.log(base));
+            exponent = Math.log(number) / Math.log(base);
+            if (useIntegerExponent)
+                exponent = Math.floor(exponent)
             exponentKatex = getKatexHtml(`E = log_{${base}}(${number}) = ${exponent}`);
 
-            mantissa = Math.floor(number / base**exponent);
-            mantissaKatex =  getKatexHtml(`M = \\frac{${number}}{${base}^${exponent}} = ${mantissa}`);
+            mantissa = number / base**exponent;
+            if (useIntegerMantissa)
+                mantissa = Math.floor(mantissa)
+            mantissaKatex =  getKatexHtml(`M = \\frac{${number}}{${base}^{${exponent}}} = ${mantissa}`);
 
             approximatedNumber = mantissa * base**exponent;
             approximatedNumberKatex = getKatexHtml(`${mantissa} * {${base}}^{${exponent}} = ${approximatedNumber}`);
@@ -45,12 +51,22 @@
 
 <div class="row mt-1">
     <div class="col">
-        <div class="d-flex flex-row align-items-center gap-2">
-            <label for="bitInput">Number:</label>
-            <input type="number" class="form-control font-monospace number-input" min="1" pattern="\d+" bind:value="{number}"/>
-
-            <label for="bitInput">Base:</label>
-            <input type="number" class="form-control font-monospace number-input" style="width: 80px" min="2" pattern="\d+" bind:value="{base}"/>
+        <div class="d-flex flex-column">
+            <div class="d-flex flex-row align-items-center gap-2">
+                <label for="bitInput">Number:</label>
+                <input type="number" class="form-control font-monospace number-input" min="1" step="0.1" bind:value="{number}"/>
+    
+                <label for="bitInput">Base:</label>
+                <input type="number" class="form-control font-monospace number-input" style="width: 80px" min="2" bind:value="{base}"/>
+            </div>
+            <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" value="" bind:checked={useIntegerExponent}/>
+                Use only integer exponent.
+            </label>
+            <label class="form-check-label">
+                <input class="form-check-input" type="checkbox" value="" bind:checked={useIntegerMantissa}/>
+                Use only integer mantissa.
+            </label>
         </div>
     </div>
 </div>
@@ -62,16 +78,16 @@
             </thead>
             <tbody>
                 <tr>
-                    <th scope="row">Approximation</th>
-                    <td>{@html approximatedNumberKatex}</td>
-                </tr>
-                <tr>
                     <th scope="row">Exponent</th>
                     <td>{@html exponentKatex}</td>
                 </tr>
                 <tr>
                     <th scope="row">Mantissa</th>
                     <td>{@html mantissaKatex}</td>
+                </tr>
+                <tr>
+                    <th scope="row">Approximation</th>
+                    <td>{@html approximatedNumberKatex}</td>
                 </tr>
                 <tr>
                     <th scope="row">Absolute Error</th>
