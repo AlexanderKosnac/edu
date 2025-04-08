@@ -65,7 +65,7 @@
     const xAll = () => [...points.map(p => p.x)];
     const yAll = () => [...points.map(p => p.y)];
     const minXi = () => Math.min(...xAll());
-    const maxXi = () => Math.max(...yAll());
+    const maxXi = () => Math.max(...xAll());
 
     let coefficients = [];
 
@@ -79,7 +79,7 @@
 
     function sampleData(fx, lower, upper, nPoints) {
         const data = [];
-        const interval = (upper-lower)/nPoints;
+        const interval = (upper - lower) / nPoints;
         for (let x = lower; x <= upper; x += interval) {
             data.push({ x: x, y: fx(x) });
         }
@@ -140,7 +140,7 @@
         updateCoefficients();
         let lower = minXi();
         let upper = maxXi();
-        let nSamplePoints = 10*(upper-lower);
+        let nSamplePoints = 10 * (upper - lower);
         chart.data.datasets[0].data = points;
         chart.data.datasets[1].data = sampleData(interpolationPolynomial, lower, upper, nSamplePoints);
         chart.update();
