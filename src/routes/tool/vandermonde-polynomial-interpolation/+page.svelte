@@ -73,6 +73,29 @@
         coefficients = multiply(inv(getVandermondeMatrix(xAll())), yAll()).toArray();
     }
 
+    function toLatexVector(vec) {
+        const arr = vec.toArray();
+        return `\\begin{bmatrix}${arr.map(x => `${x}`).join('\\\\')}\\end{bmatrix}`;
+    }
+
+    function toLatexMatrix(mat) {
+        const rows = mat.toArray();
+        const latexRows = rows.map(row => row.join(' & ')).join(' \\\\ ');
+        return `\\begin{bmatrix}${latexRows}\\end{bmatrix}`;
+    }
+
+    function interpolationLatex() {
+        const vandermonde = getVandermondeMatrix(xAll());
+        const yVec = matrix(yAll());
+        let resultVec = [];
+        try {
+            resultVec = multiply(inv(vandermonde), yVec);
+        } catch (error) {
+            return `\\text{${error}}`
+        }
+        return `${toLatexMatrix(vandermonde)}^{-1} \\cdot{} ${toLatexVector(yVec)} = ${toLatexVector(resultVec)}`;
+    }
+
     function interpolationPolynomial(x) {
         return coefficients.reduce((sum, c, i) => sum + c * Math.pow(x, i), 0);
     }
@@ -137,7 +160,11 @@
     }
 
     function updateData() {
-        updateCoefficients();
+        try {
+            updateCoefficients();
+        } catch (error) {
+            return;
+        }
         let lower = minXi();
         let upper = maxXi();
         let nSamplePoints = 10 * (upper - lower);
@@ -159,12 +186,6 @@
 <div class="row">
     <div class="col">
         <h1>Vandermonde Polynomial Interpolation</h1>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col">
-        {@html asHtmlLatex(`\\text{Display matrix here}`)}
     </div>
 </div>
 
@@ -206,6 +227,12 @@
         {/if}
 
         <button type="button" class="btn btn-primary" on:click={updateData}>Refresh</button>
+    </div>
+</div>
+
+<div class="row mb-5">
+    <div class="col text-center">
+        {@html asHtmlLatex(interpolationLatex())}
     </div>
 </div>
 

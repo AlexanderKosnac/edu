@@ -1,7 +1,7 @@
 {
-    "name": "Lagrange polynomial interpolation",
-    "url": "tool/lagrange-polynomial-interpolation",
-    "description": "Interpolation using Lagrange polynomials.",
+    "name": "Vandermonde polynomial interpolation",
+    "url": "tool/vandermonde-polynomial-interpolation",
+    "description": "Interpolation using a Vandermonde matrix to determine the coefficients of a polynomial.",
     "tags": [
         "Mathematics",
         "Visualization"
