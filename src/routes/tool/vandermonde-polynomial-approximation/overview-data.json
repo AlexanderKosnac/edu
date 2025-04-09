@@ -1,0 +1,9 @@
+{
+    "name": "Vandermonde polynomial approximation",
+    "url": "tool/vandermonde-polynomial-approximation",
+    "description": "A least-squares polynomial approximation using a Vandermonde matrix.",
+    "tags": [
+        "Mathematics",
+        "Visualization"
+    ]
+}
