@@ -2,7 +2,7 @@
     import { onMount } from "svelte";
 
     import Chart from "chart.js/auto";
-    import { matrix, multiply, inv } from "mathjs";
+    import { matrix, multiply, inv, transpose } from "mathjs";
 
     import katex from "katex";
     import "katex/dist/katex.min.css";
@@ -13,10 +13,10 @@
         });
     }
 
-    function getVandermondeMatrix(x) {
-        return matrix(x.map(xi => {
-            return Array.from({ length: x.length }, (_, j) => Math.pow(xi, j));
-        }));
+    function getVandermondeMatrix(x, degree) {
+        return matrix(
+            x.map(xi => Array.from({ length: degree + 1 }, (_, j) => Math.pow(xi, j)))
+        );
     }
 
     function getRandomInt(min, max) {
@@ -30,6 +30,8 @@
     }
 
     const randY = () => getRandomInt(-10, 10);
+
+    let approximationPolynomialDegree = 3;
 
     let inputX, inputY;
     let points = [
@@ -70,7 +72,11 @@
     let coefficients = [];
 
     function updateCoefficients() {
-        coefficients = multiply(inv(getVandermondeMatrix(xAll())), yAll()).toArray();
+        let v = getVandermondeMatrix(xAll(), approximationPolynomialDegree);
+        let vt = transpose(v);
+        let vtv = multiply(vt, v);
+        let vtvi = inv(vtv);
+        coefficients = multiply(multiply(vtvi, vt), yAll()).toArray();
     }
 
     function toLatexVector(vec) {
@@ -194,6 +200,13 @@
         <canvas bind:this={chartCanvas}></canvas>
     </div>
     <div class="col-auto" style="width: 400px">
+        <div>
+            <label>
+                Degree of approximation Polynomial:
+                <input type="number" class="form-control" min="1" bind:value={approximationPolynomialDegree} on:change={onChange}/>
+            </label>
+        </div>
+
         <h4>Approximation Points</h4>
         <table class="table w-auto">
         <thead>
