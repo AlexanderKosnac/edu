@@ -7,6 +7,8 @@
     import katex from "katex";
     import "katex/dist/katex.min.css";
 
+    import { sampleFunction, polynomial } from "$lib/math.js";
+
     function asHtmlLatex(latex) {
         return katex.renderToString(latex, {
             throwOnError: false
@@ -97,16 +99,7 @@
     }
 
     function interpolationPolynomial(x) {
-        return coefficients.reduce((sum, c, i) => sum + c * Math.pow(x, i), 0);
-    }
-
-    function sampleData(fx, lower, upper, nPoints) {
-        const data = [];
-        const interval = (upper - lower) / nPoints;
-        for (let x = lower; x <= upper; x += interval) {
-            data.push({ x: x, y: fx(x) });
-        }
-        return data;
+        return polynomial(x, coefficients);
     }
 
     function initGraph() {
@@ -169,7 +162,7 @@
         let upper = maxXi();
         let nSamplePoints = 10 * (upper - lower);
         chart.data.datasets[0].data = points;
-        chart.data.datasets[1].data = sampleData(interpolationPolynomial, lower, upper, nSamplePoints);
+        chart.data.datasets[1].data = sampleFunction(interpolationPolynomial, lower, upper, nSamplePoints);
         chart.update();
     }
 

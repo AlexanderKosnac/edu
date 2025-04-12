@@ -6,6 +6,8 @@
     import katex from "katex";
     import "katex/dist/katex.min.css";
 
+    import { sampleFunction } from "$lib/math.js";
+
     function asHtmlLatex(latex) {
         return katex.renderToString(latex, {
             throwOnError: false
@@ -77,15 +79,6 @@
         return sum;
     }
 
-    function sampleData(fx, lower, upper, nPoints) {
-        const data = [];
-        const interval = (upper-lower)/nPoints;
-        for (let x = lower; x <= upper; x += interval) {
-            data.push({ x: x, y: fx(x) });
-        }
-        return data;
-    }
-
     function initGraph() {
         const ctx = chartCanvas.getContext("2d");
         chart = new Chart(ctx, {
@@ -141,7 +134,7 @@
         let upper = maxXi();
         let nSamplePoints = 10*(upper-lower);
         chart.data.datasets[0].data = points;
-        chart.data.datasets[1].data = sampleData(interpolationPolynomial, lower, upper, nSamplePoints);
+        chart.data.datasets[1].data = sampleFunction(interpolationPolynomial, lower, upper, nSamplePoints);
         chart.update();
     }
 
