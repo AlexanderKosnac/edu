@@ -90,16 +90,20 @@
         return `\\begin{bmatrix}${latexRows}\\end{bmatrix}`;
     }
 
-    function interpolationLatex() {
-        const vandermonde = getVandermondeMatrix(xAll());
+    function calculationLatex() {
         const yVec = matrix(yAll());
-        let resultVec = [];
+        const v = getVandermondeMatrix(xAll(), approximationPolynomialDegree);
+        const vt = transpose(v);
+        const vtv = multiply(vt, v);
+        let vtvi;
         try {
-            resultVec = multiply(inv(vandermonde), yVec);
+            vtvi = inv(vtv);
         } catch (error) {
             return `\\text{${error}}`
-        }
-        return `${toLatexMatrix(vandermonde)}^{-1} \\cdot{} ${toLatexVector(yVec)} = ${toLatexVector(resultVec)}`;
+        }        
+        let coefficients = multiply(multiply(vtvi, vt), yAll());
+
+        return `\\left(${toLatexMatrix(vt)}^T${toLatexMatrix(v)}\\right)^{-1} ${toLatexMatrix(vt)}^T \\cdot{} ${toLatexVector(yVec)} = ${toLatexVector(coefficients)}`;
     }
 
     function interpolationPolynomial(x) {
@@ -245,7 +249,7 @@
 
 <div class="row mb-5">
     <div class="col text-center">
-        {@html asHtmlLatex(interpolationLatex())}
+        {@html asHtmlLatex(calculationLatex())}
     </div>
 </div>
 
