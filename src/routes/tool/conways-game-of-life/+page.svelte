@@ -120,18 +120,9 @@
     <title>Conway's Game of Life</title>
 </svelte:head>
 
-<div class="row">
+<div class="row mb-1 mt-1">
     <div class="col">
-        <div class="d-flex gap-1">
-            <div>
-                <span>Width:</span>
-                <input type="number" class="form-control w-auto" step="1" bind:value={canvasWidth} min="10"/>
-            </div>
-            <div>
-                <span>Height:</span>
-                <input type="number" class="form-control w-auto" step="1" bind:value={canvasHeight} min="10"/>
-            </div>
-            <button type="button" class="btn btn-sm btn-outline-primary" on:click={nextGeneration}>Update</button>
+        <div class="d-flex gap-1 align-items-center">
             <button type="button" class="btn btn-sm btn-primary" on:click={toggleRun}>
                 {isRunning ? "Stop" : "Start"}
             </button>
@@ -144,14 +135,26 @@
         <canvas width="{canvasWidth}" height="{canvasHeight}" bind:this={canvas}></canvas>
     </div>
     <div class="col">
-        Conway's Game of Life operates on a grid of cells that can either be alive, or dead.
-        In which state they are, is determined by the following four rules:
-        <ul>
-            <li>Any live cell with fewer than two live neighbours dies.</li>
-            <li>Any live cell with two or three live neighbours lives on.</li>
-            <li>Any live cell with more than three live neighbours dies.</li>
-            <li>Any dead cell with exactly three live neighbours becomes a live cell.</li>
-        </ul>
+        <div>
+            Conway's Game of Life operates on a grid of cells that can either be alive, or dead.
+            In which state they are, is determined by the following four rules:
+            <ul>
+                <li>Any live cell with fewer than two live neighbours dies.</li>
+                <li>Any live cell with two or three live neighbours lives on.</li>
+                <li>Any live cell with more than three live neighbours dies.</li>
+                <li>Any dead cell with exactly three live neighbours becomes a live cell.</li>
+            </ul>    
+        </div>
+        <hr/>
+        <div>
+            <h3>Settings:</h3>
+            <span>Grid Dimensions:</span>
+            <div class="input-group">
+                <input type="number" class="form-control" placeholder="Width" aria-label="Grid Width" step="1" bind:value={canvasWidth} min="1" />
+                <span class="input-group-text">x</span>
+                <input type="number" class="form-control" placeholder="Height" aria-label="Grid Height" step="1" bind:value={canvasHeight} min="1" />
+            </div>
+        </div>
     </div>
 </div>
 
