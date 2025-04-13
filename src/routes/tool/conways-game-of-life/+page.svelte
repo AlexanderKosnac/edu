@@ -5,6 +5,9 @@
     let canvasHeight = 50;
     let canvas;
 
+    let isRunning = false;
+    let runButtonText = "Start";
+
     let ctx;
     let imageData;
 
@@ -21,9 +24,9 @@
         for (let y = 0; y <= canvasHeight; y++) {
             for (let x = 0; x <= canvasWidth; x++) {
                 if (isAlive(x, y)) {
-                    setPixel(x, y, 255, 255, 255);
-                } else {
                     setPixel(x, y, 0, 0, 0);
+                } else {
+                    setPixel(x, y, 255, 255, 255);
                 }
             }
         }
@@ -79,8 +82,32 @@
         render();
     }
 
+    function delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function startRun() {
+        if (isRunning) return;
+        isRunning = true;
+
+        while (isRunning) {
+            nextGeneration();
+            await delay(100);
+        }
+    }
+
+    function stopRun() {
+        isRunning = false;
+    }
+
+    function toggleRun() {
+        isRunning ? stopRun() : startRun();
+    }
+
     onMount(()=> {
         ctx = canvas.getContext("2d");
+        ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
         setAlive(25+1, 25+0);
         setAlive(25+2, 25+1);
         setAlive(25+0, 25+2);
@@ -105,6 +132,9 @@
                 <input type="number" class="form-control w-auto" step="1" bind:value={canvasHeight} min="10"/>
             </div>
             <button type="button" class="btn btn-sm btn-outline-primary" on:click={nextGeneration}>Update</button>
+            <button type="button" class="btn btn-sm btn-primary" on:click={toggleRun}>
+                {isRunning ? "Stop" : "Start"}
+            </button>
         </div>
     </div>
 </div>
