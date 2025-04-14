@@ -1,4 +1,7 @@
 <script>
+    import katex from "katex";
+    import "katex/dist/katex.min.css";
+
     let ip = [192, 168, 0, 0];
     let cidrMask = 24;
     $: mask = binaryStringAsDecimal(cidrMaskAsByteString(cidrMask));
@@ -51,6 +54,9 @@
     $: broadcast = operationOnBitString(OR, ipBinaryString, maskInvBinaryString);
     $: host = operationOnBitString(AND, ipBinaryString, maskInvBinaryString);
     $: availableHosts = 2**(32-cidrMask) - 2;
+    $: availableHostsCalculation = katex.renderToString(`2^{32-${cidrMask}} - 2 = ${availableHosts}`, {
+        throwOnError: false
+    });
 </script>
 
 <svelte:head>
@@ -65,12 +71,16 @@
 
 <div class="row">
     <div class="col">
-        <div class="d-flex gap-1 fw-bold">
-            <input type="number" min="0" max="255" bind:value={ip[0]}/>.
-            <input type="number" min="0" max="255" bind:value={ip[1]}/>.
-            <input type="number" min="0" max="255" bind:value={ip[2]}/>.
-            <input type="number" min="0" max="255" bind:value={ip[3]}/>/
-            <input type="number" min="0" max="32" bind:value={cidrMask}/>
+        <div class="input-group mb-3">
+            <input type="number" class="form-control ip-input" min="0" max="255" bind:value={ip[0]}/>
+            <span class="input-group-text">.</span>
+            <input type="number" class="form-control ip-input" min="0" max="255" bind:value={ip[1]}/>
+            <span class="input-group-text">.</span>
+            <input type="number" class="form-control ip-input" min="0" max="255" bind:value={ip[2]}/>
+            <span class="input-group-text">.</span>
+            <input type="number" class="form-control ip-input" min="0" max="255" bind:value={ip[3]}/>
+            <span class="input-group-text">/</span>
+            <input type="number" class="form-control ip-input" min="0" max="32" bind:value={cidrMask}/>
         </div>
     </div>
 </div>
@@ -114,7 +124,12 @@
             </tbody>
         </table>
 
-        <div>Number of available host addresses: <tt>2^(32-{cidrMask})-2 = {availableHosts}</tt></div>
+        <div>
+            Number of available host addresses: {@html availableHostsCalculation}
+            {#if availableHosts < 0}
+            (Effectively 0)
+            {/if}
+        </div>
     </div>
 </div>
 
@@ -135,8 +150,10 @@
         width: auto;
         white-space: nowrap;
     }
-
     table.min {
         width: 1%;
+    }
+    .ip-input {
+        max-width: 80px;
     }
 </style>
