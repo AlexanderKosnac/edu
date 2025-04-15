@@ -1,6 +1,8 @@
 <script>
     import { onMount } from "svelte";
 
+    import { golPatterns } from "./patterns.js";
+
     let canvasWidth = 50;
     let canvasHeight = 50;
     let canvas;
@@ -104,15 +106,24 @@
         isRunning ? stopRun() : startRun();
     }
 
+    function clearGrid() {
+        cells = new Set();
+    }
+
+    function drawPattern(name, x, y) {
+        const lines = golPatterns[name].trim().split("\n");
+        for (let yi = 0; yi < lines.length; yi++) {
+            const line = lines[yi];
+            for (let xi = 0; xi < line.length; xi++) {
+                if (line[xi] === "#") setAlive(x + xi, y + yi);
+            }
+        }
+    }
+
     onMount(()=> {
         ctx = canvas.getContext("2d");
-        ctx.fillStyle = "white";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        setAlive(25+1, 25+0);
-        setAlive(25+2, 25+1);
-        setAlive(25+0, 25+2);
-        setAlive(25+1, 25+2);
-        setAlive(25+2, 25+2);
+        drawPattern("Gosper glider gun", 5, 10);
+        render();
     });
 </script>
 
