@@ -8,7 +8,7 @@
     let canvas;
 
     let isRunning = false;
-    let runButtonText = "Start";
+    let ticksPerSecond = 5;
 
     let ctx;
     let imageData;
@@ -22,6 +22,7 @@
     }
 
     function render() {
+        if (canvas.width === 0 || canvas.height === 0) return;
         imageData = ctx.createImageData(canvas.width, canvas.height);
         for (let y = 0; y <= canvasHeight; y++) {
             for (let x = 0; x <= canvasWidth; x++) {
@@ -94,7 +95,7 @@
 
         while (isRunning) {
             nextGeneration();
-            await delay(100);
+            await delay(1000/ticksPerSecond);
         }
     }
 
@@ -137,6 +138,7 @@
             <button type="button" class="btn btn-sm btn-primary" on:click={toggleRun}>
                 {isRunning ? "Stop" : "Start"}
             </button>
+            <button type="button" class="btn btn-sm btn-primary" on:click={clearGrid}>Clear</button>
         </div>
     </div>
 </div>
@@ -165,6 +167,11 @@
                 <span class="input-group-text">x</span>
                 <input type="number" class="form-control" placeholder="Height" aria-label="Grid Height" step="1" bind:value={canvasHeight} min="1" />
             </div>
+
+            <label>
+                Ticks per Second:
+                <input type="number" class="form-control" placeholder="Ticks per second" aria-label="Ticks per second" step="1" bind:value={ticksPerSecond} min="1" />
+            </label>
         </div>
     </div>
 </div>
