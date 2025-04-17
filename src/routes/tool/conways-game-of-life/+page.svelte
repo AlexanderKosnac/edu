@@ -111,6 +111,16 @@
         cells = new Set();
     }
 
+    function setCellOnClick(e) {
+        const rect = canvas.getBoundingClientRect();
+		const scaleX = canvas.width / rect.width;
+		const scaleY = canvas.height / rect.height;
+        const x = Math.floor((e.clientX - rect.left) * scaleX);
+        const y = Math.floor((e.clientY - rect.top) * scaleY);
+        setAlive(x, y);
+        render();
+    }
+
     function drawPattern(name, x, y) {
         const lines = golPatterns[name].trim().split("\n");
         for (let yi = 0; yi < lines.length; yi++) {
@@ -145,7 +155,7 @@
 
 <div class="row">
     <div class="col-auto">
-        <canvas width="{canvasWidth}" height="{canvasHeight}" bind:this={canvas}></canvas>
+        <canvas width="{canvasWidth}" height="{canvasHeight}" bind:this={canvas} on:click={setCellOnClick}></canvas>
     </div>
     <div class="col">
         <div>
@@ -157,6 +167,13 @@
                 <li>Any live cell with more than three live neighbours dies.</li>
                 <li>Any dead cell with exactly three live neighbours becomes a live cell.</li>
             </ul>    
+        </div>
+        <hr/>
+        <div>
+            <h3>Statistics:</h3>
+            <ul>
+                <li>Alive Cells: {cells.size}</li>
+            </ul>
         </div>
         <hr/>
         <div>
