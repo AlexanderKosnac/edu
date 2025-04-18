@@ -8,6 +8,7 @@
     import "katex/dist/katex.min.css";
 
     import { sampleFunction, polynomial } from "$lib/math.js";
+    import { toKatexVector, toKatexMatrix } from "$lib/katexUtility.js";
 
     function asHtmlLatex(latex) {
         return katex.renderToString(latex, {
@@ -75,17 +76,6 @@
         coefficients = multiply(inv(getVandermondeMatrix(xAll())), yAll()).toArray();
     }
 
-    function toLatexVector(vec) {
-        const arr = vec.toArray();
-        return `\\begin{bmatrix}${arr.map(x => `${x}`).join('\\\\')}\\end{bmatrix}`;
-    }
-
-    function toLatexMatrix(mat) {
-        const rows = mat.toArray();
-        const latexRows = rows.map(row => row.join(' & ')).join(' \\\\ ');
-        return `\\begin{bmatrix}${latexRows}\\end{bmatrix}`;
-    }
-
     function interpolationLatex() {
         const vandermonde = getVandermondeMatrix(xAll());
         const yVec = matrix(yAll());
@@ -95,7 +85,7 @@
         } catch (error) {
             return `\\text{${error}}`
         }
-        return `${toLatexMatrix(vandermonde)}^{-1} \\cdot{} ${toLatexVector(yVec)} = ${toLatexVector(resultVec)}`;
+        return `${toKatexMatrix(vandermonde)}^{-1} \\cdot{} ${toKatexVector(yVec)} = ${toKatexVector(resultVec)}`;
     }
 
     function interpolationPolynomial(x) {

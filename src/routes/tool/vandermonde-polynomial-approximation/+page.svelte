@@ -8,6 +8,7 @@
     import "katex/dist/katex.min.css";
 
     import { sampleFunction, polynomial } from "$lib/math.js";
+    import { toKatexVector, toKatexMatrix } from "$lib/katexUtility.js";
 
     function asHtmlLatex(latex) {
         return katex.renderToString(latex, {
@@ -16,9 +17,9 @@
     }
 
     function getVandermondeMatrix(x, degree) {
-        return matrix(
-            x.map(xi => Array.from({ length: degree + 1 }, (_, j) => Math.pow(xi, j)))
-        );
+        return matrix(x.map(xi =>
+            Array.from({ length: degree + 1 }, (_, j) => Math.pow(xi, j))
+        ));
     }
 
     function getRandomInt(min, max) {
@@ -81,17 +82,6 @@
         coefficients = multiply(multiply(vtvi, vt), yAll()).toArray();
     }
 
-    function toLatexVector(vec) {
-        const arr = vec.toArray();
-        return `\\begin{bmatrix}${arr.map(x => `${x}`).join('\\\\')}\\end{bmatrix}`;
-    }
-
-    function toLatexMatrix(mat) {
-        const rows = mat.toArray();
-        const latexRows = rows.map(row => row.join(' & ')).join(' \\\\ ');
-        return `\\begin{bmatrix}${latexRows}\\end{bmatrix}`;
-    }
-
     function calculationLatex() {
         const yVec = matrix(yAll());
         const v = getVandermondeMatrix(xAll(), approximationPolynomialDegree);
@@ -105,7 +95,7 @@
         }        
         let coefficients = multiply(multiply(vtvi, vt), yAll());
 
-        return `\\left(${toLatexMatrix(vt)}^T${toLatexMatrix(v)}\\right)^{-1} ${toLatexMatrix(vt)}^T \\cdot{} ${toLatexVector(yVec)} = ${toLatexVector(coefficients)}`;
+        return `\\left(${toKatexMatrix(vt)}^T${toKatexMatrix(v)}\\right)^{-1} ${toKatexMatrix(vt)}^T \\cdot{} ${toKatexVector(yVec)} = ${toKatexVector(coefficients)}`;
     }
 
     function interpolationPolynomial(x) {
