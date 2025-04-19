@@ -46,7 +46,7 @@ onMount(()=> {
 });
 </script>
 
-<canvas bind:this={canvas} height={400}/>
+<canvas bind:this={canvas} height={400}></canvas>
 
 <style>
 </style>

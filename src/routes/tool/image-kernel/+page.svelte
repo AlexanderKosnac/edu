@@ -140,8 +140,8 @@ onMount(() => {
     <div class="col">
         <div class="d-flex gap-1 justify-content-around">
             <img    class="image-display" bind:this={input} alt=" "/>
-            <canvas class="image-display hidden" bind:this={original}/>
-            <canvas class="image-display" bind:this={convoluted}/>
+            <canvas class="image-display hidden" bind:this={original}></canvas>
+            <canvas class="image-display" bind:this={convoluted}></canvas>
         </div>
     </div>
 </div>

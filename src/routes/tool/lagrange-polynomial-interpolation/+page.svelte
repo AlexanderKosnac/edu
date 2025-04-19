@@ -169,7 +169,7 @@
 
 <div class="row">
     <div class="col">
-        <canvas bind:this={chartCanvas}/>
+        <canvas bind:this={chartCanvas}></canvas>
     </div>
     <div class="col-auto" style="width: 400px">
         <h4>Interpolation Points</h4>

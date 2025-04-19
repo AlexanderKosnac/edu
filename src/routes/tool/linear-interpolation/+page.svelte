@@ -151,7 +151,7 @@
 
 <div class="row">
     <div class="col-8">
-        <canvas bind:this={chartCanvas}/>
+        <canvas bind:this={chartCanvas}></canvas>
     </div>
 
     <div class="col-4">
