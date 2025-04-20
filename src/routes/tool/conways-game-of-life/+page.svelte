@@ -7,6 +7,7 @@
     let canvasHeight = 50;
     let canvas;
 
+    let selectedPattern = null;
     let isRunning = false;
     let ticksPerSecond = 5;
 
@@ -109,6 +110,7 @@
 
     function clearGrid() {
         cells = new Set();
+        render();
     }
 
     function setCellOnClick(e) {
@@ -117,7 +119,11 @@
 		const scaleY = canvas.height / rect.height;
         const x = Math.floor((e.clientX - rect.left) * scaleX);
         const y = Math.floor((e.clientY - rect.top) * scaleY);
-        setAlive(x, y);
+        if (selectedPattern == null) {
+            setAlive(x, y);
+        } else {
+            drawPattern(selectedPattern, x, y);
+        }
         render();
     }
 
@@ -178,6 +184,18 @@
         <hr/>
         <div>
             <h3>Settings:</h3>
+            <div class="d-flex flex-column flex-wrap">
+                <label for="cars">
+                    Brush:
+                    <select class="form-select" bind:value={selectedPattern}>
+                        <option value={null}>Single Cell</option>
+                        {#each Object.entries(golPatterns) as [name, _]}
+                            <option value={name}>{name}</option>
+                        {/each}
+                    </select>
+                </label>
+            </div>
+
             <span>Grid Dimensions:</span>
             <div class="input-group">
                 <input type="number" class="form-control" placeholder="Width" aria-label="Grid Width" step="1" bind:value={canvasWidth} min="1" />
