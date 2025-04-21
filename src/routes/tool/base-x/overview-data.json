@@ -1,0 +1,9 @@
+{
+    "name": "Base X",
+    "url": "tool/base-x",
+    "description": "Represent an integer in different bases.",
+    "tags": [
+        "Computer Science",
+        "Mathematics"
+    ]
+}
