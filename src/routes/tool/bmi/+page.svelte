@@ -1,11 +1,27 @@
 <script>
     import { katexAsHtml } from "$lib/katexUtility.js";
 
+    let bmiBasicCategorization = [
+        { category: "Underweight (Severe thinness)", min: -Infinity, max: 16 },
+        { category: "Underweight (Moderate thinness)", min: 16, max: 17 },
+        { category: "Underweight (Mild thinness)", min: 17, max: 18 },
+        { category: "Normal range", min: 18, max: 25 },
+        { category: "Overweight (Pre-obese)", min: 25, max: 30 },
+        { category: "Obese (Class I)", min: 30, max: 35 },
+        { category: "Obese (Class II)", min: 35, max: 40 },
+        { category: "Obese (Class III)", min: 40, max: Infinity },
+    ];
+
+    function getBmiCategory(bmi) {
+        return bmiBasicCategorization.find(entry => bmi >= entry.min && bmi <= entry.max)?.category ?? "Unknown";
+    }
+
     let massKg = 80;
     let heightCm = 180;
     $: heightM = heightCm/100;
     $: bmiBasic = massKg/(heightM**2);
-    $: bmiCalculationKatex = katexAsHtml(`\\text{BMI} = \\frac{mass_{kg}}{height_{m}^2} = \\frac{${massKg}}{${heightM}^2} = ${bmiBasic.toFixed(2)} \\frac{kg}{m^2}`)
+    $: bmiCalculationKatex = katexAsHtml(`\\text{BMI} = \\frac{mass_{kg}}{height_{m}^2} = \\frac{${massKg}}{${heightM}^2} = ${bmiBasic.toFixed(2)} \\frac{kg}{m^2}`);
+    $: bmiBasicCategory = getBmiCategory(bmiBasic);
 </script>
 
 <svelte:head>
@@ -21,6 +37,7 @@
 <div class="row">
     <div class="col">
         {@html bmiCalculationKatex}
+        {bmiBasicCategory}
     </div>
 </div>
 
