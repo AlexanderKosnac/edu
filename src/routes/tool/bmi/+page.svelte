@@ -19,9 +19,24 @@
     let massKg = 80;
     let heightCm = 180;
     $: heightM = heightCm/100;
+
     $: bmiBasic = massKg/(heightM**2);
     $: bmiCalculationKatex = katexAsHtml(`\\text{BMI} = \\frac{mass_{kg}}{height_{m}^2} = \\frac{${massKg}}{${heightM}^2} = ${bmiBasic.toFixed(2)} \\frac{kg}{m^2}`);
     $: bmiBasicCategory = getBmiCategory(bmiBasic);
+
+    $: corpulenceIndex = massKg/(heightM**2);
+
+    $: bmiNew = 1.3 * massKg/(heightM**2.5);
+
+    let bmiPrimeReference = 25;
+    $: bmiPrime = bmiBasic/bmiPrimeReference
+
+    let bodySurfaceArea = 0;
+    let verticalTrunkCircumference = 0;
+    let waistCircumference = 0;
+    let height = 0;
+    $: surfaceBasedBodyShapeIndex = (height**(7/4) * waistCircumference**(5/6))/(bodySurfaceArea*verticalTrunkCircumference);
+    $: surfaceBasedBodyShapeIndexStar = (height**2 * waistCircumference)/(bodySurfaceArea*verticalTrunkCircumference);
 </script>
 
 <svelte:head>
