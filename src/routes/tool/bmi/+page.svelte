@@ -58,6 +58,21 @@
 
 <div class="row">
     <div class="col">            
+        <div class="d-flex gap-1">
+            <label>
+                Mass (kg):
+                <input type="number" class="form-control" bind:value={massKg} min="1"/>
+            </label>
+            <label>
+                Height (cm):
+                <input type="number" class="form-control" bind:value={heightCm} min="1"/>
+            </label>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">            
         <table class="table table-bordered w-auto mt-1">
             <thead>
                 <tr>
