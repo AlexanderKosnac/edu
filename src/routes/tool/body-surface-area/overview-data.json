@@ -1,0 +1,9 @@
+{
+    "name": "Body Surface Area",
+    "url": "tool/body-surface-area",
+    "description": "Formulas to approximate the surface area of a human body based on height and weight.",
+    "tags": [
+        "Tool",
+        "Fitness"
+    ]
+}
