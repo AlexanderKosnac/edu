@@ -7,6 +7,9 @@
 
     $: duBois = 0.007184 * heightCm**0.725 * massKg**0.425;
     $: duBoisCalculationKatex = katexAsHtml(`0.007184 * ${heightCm}^{0.725} * ${massKg}^{0.425} = ${duBois.toFixed(2)}`);
+
+    $: mosteller = ((heightCm * massKg)/3600)**0.5;
+    $: mostellerCalculationKatex = katexAsHtml(`\\sqrt{\\frac{${heightCm} * ${massKg}}{3600}} = ${mosteller.toFixed(2)}`);
 </script>
 
 <svelte:head>
@@ -49,6 +52,11 @@
                     <th>DuBois Formula</th>
                     <td>{@html katexAsHtml(`${duBois.toFixed(3)} \\text{ m}^2`)}</td>
                     <td>{@html duBoisCalculationKatex}</td>
+                </tr>
+                <tr>
+                    <th>Mosteller</th>
+                    <td>{@html katexAsHtml(`${mosteller.toFixed(3)} \\text{ m}^2`)}</td>
+                    <td>{@html mostellerCalculationKatex}</td>
                 </tr>
             </tbody>
         </table>
