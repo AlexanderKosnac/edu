@@ -21,29 +21,28 @@
     $: heightM = heightCm/100;
 
     $: bmiBasic = massKg/(heightM**2);
-    $: bmiBasicCalculationKatex = katexAsHtml(`\\frac{mass_{kg}}{height_{m}^2} = \\frac{${massKg}}{${heightM}^2} = ${bmiBasic.toFixed(2)} \\frac{kg}{m^2}`);
+    $: bmiBasicCalculationKatex = `\\frac{mass_{kg}}{height_{m}^2} = \\frac{${massKg}}{${heightM}^2} = ${bmiBasic.toFixed(2)} \\frac{kg}{m^2}`;
     $: bmiBasicCategory = getBmiCategory(bmiBasic);
 
     $: corpulenceIndex = massKg/(heightM**3);
-    $: corpulenceIndexCalculationKatex = katexAsHtml(`\\frac{mass_{kg}}{height_{m}^3} = \\frac{${massKg}}{${heightM}^3} = ${corpulenceIndex.toFixed(2)} \\frac{kg}{m^3}`);
+    $: corpulenceIndexCalculationKatex = `\\frac{mass_{kg}}{height_{m}^3} = \\frac{${massKg}}{${heightM}^3} = ${corpulenceIndex.toFixed(2)} \\frac{kg}{m^3}`;
 
     $: bmiNew = 1.3 * massKg/(heightM**2.5);
-    $: bmiNewCalculationKatex = katexAsHtml(`1.3 * \\frac{mass_{kg}}{height_{m}^{2.5}} = 1.3 * \\frac{${massKg}}{${heightM}^{2.5}} = ${bmiNew.toFixed(2)} \\frac{kg}{m^{2.5}}`);
+    $: bmiNewCalculationKatex = `1.3 * \\frac{mass_{kg}}{height_{m}^{2.5}} = 1.3 * \\frac{${massKg}}{${heightM}^{2.5}} = ${bmiNew.toFixed(2)} \\frac{kg}{m^{2.5}}`;
 
     let bmiPrimeReference = 25;
     $: bmiPrime = bmiBasic/bmiPrimeReference;
-    $: bmiPrimeCalculationKatex = katexAsHtml(`\\frac{\\text{BMI}}{${bmiPrimeReference}} = ${bmiPrime.toFixed(5)}`);
+    $: bmiPrimeCalculationKatex = `\\frac{\\text{BMI}}{${bmiPrimeReference}} = ${bmiPrime.toFixed(5)}`;
 
-    let bodySurfaceArea = 0;
-    let verticalTrunkCircumference = 0;
-    let waistCircumference = 0;
-    let height = 0;
+    let bodySurfaceAreaCm2 = 20_000;
+    let verticalTrunkCircumferenceCm = 160;
+    let waistCircumferenceCm = 89;
 
-    $: surfaceBasedBodyShapeIndex = (height**(7/4) * waistCircumference**(5/6))/(bodySurfaceArea*verticalTrunkCircumference);
-    $: surfaceBasedBodyShapeIndexCalculationKatex = katexAsHtml(`\\frac{\\text{H}^{7/4} * \\text{WC}^{5/6}}{\\text{BSA} * \\text{VTC}} = \\frac{${height}^{7/4} * ${waistCircumference}^{5/6}}{${bodySurfaceArea} * ${verticalTrunkCircumference}} = ${surfaceBasedBodyShapeIndex.toFixed(2)}`);
+    $: surfaceBasedBodyShapeIndex = ((heightCm**(7.0/4.0)) * (waistCircumferenceCm**(5.0/6.0))) / (bodySurfaceAreaCm2 * verticalTrunkCircumferenceCm);
+    $: surfaceBasedBodyShapeIndexCalculationKatex = `\\frac{\\text{H}^{7/4} * \\text{WC}^{5/6}}{\\text{BSA} * \\text{VTC}} = \\frac{${heightCm}^{7/4} * ${waistCircumferenceCm}^{5/6}}{${bodySurfaceAreaCm2} * ${verticalTrunkCircumferenceCm}} = ${surfaceBasedBodyShapeIndex.toFixed(2)}`;
 
-    $: surfaceBasedBodyShapeIndexStar = (height**2 * waistCircumference)/(bodySurfaceArea*verticalTrunkCircumference);
-    $: surfaceBasedBodyShapeIndexStarCalculationKatex = katexAsHtml(`\\frac{\\text{H}^2 * \\text{WC}}{\\text{BSA} * \\text{VTC}} = \\frac{${height}^2 * ${waistCircumference}}{${bodySurfaceArea} * ${verticalTrunkCircumference}} = ${surfaceBasedBodyShapeIndexStar.toFixed(2)}`);
+    $: surfaceBasedBodyShapeIndexStar = (heightCm**2 * waistCircumferenceCm) / (bodySurfaceAreaCm2 * verticalTrunkCircumferenceCm);
+    $: surfaceBasedBodyShapeIndexStarCalculationKatex = `\\frac{\\text{H}^2 * \\text{WC}}{\\text{BSA} * \\text{VTC}} = \\frac{${heightCm}^2 * ${waistCircumferenceCm}}{${bodySurfaceAreaCm2} * ${verticalTrunkCircumferenceCm}} = ${surfaceBasedBodyShapeIndexStar.toFixed(2)}`;
 </script>
 
 <svelte:head>
@@ -58,7 +57,7 @@
 
 <div class="row">
     <div class="col">            
-        <div class="d-flex gap-1">
+        <div class="mb-2">
             <label>
                 Mass (kg):
                 <input type="number" class="form-control" bind:value={massKg} min="1"/>
@@ -68,6 +67,22 @@
                 <input type="number" class="form-control" bind:value={heightCm} min="1"/>
             </label>
         </div>
+
+        <div class="">
+            <label>
+                Body Surface Area (kg):
+                <input type="number" class="form-control" bind:value={bodySurfaceAreaCm2} min="1"/>
+            </label>
+            <label>
+                Vertical Trunk Circumference (cm):
+                <input type="number" class="form-control" bind:value={verticalTrunkCircumferenceCm} min="1"/>
+            </label>
+            <label>
+                Waist Circumference (cm):
+                <input type="number" class="form-control" bind:value={waistCircumferenceCm} min="1"/>
+            </label>
+        </div>
+        <small class="form-text text-muted">Only required for SBSI and variants.</small>
     </div>
 </div>
 
@@ -86,37 +101,37 @@
                 <tr>
                     <th>BMI</th>
                     <td>{@html katexAsHtml(`${bmiBasic.toFixed(3)}`)}</td>
-                    <td>{@html bmiBasicCalculationKatex}</td>
+                    <td>{@html katexAsHtml(bmiBasicCalculationKatex)}</td>
                     <td>{bmiBasicCategory}</td>
                 </tr>
                 <tr>
                     <th>Corpulence Index</th>
                     <td>{@html katexAsHtml(`${corpulenceIndex.toFixed(3)}`)}</td>
-                    <td>{@html corpulenceIndexCalculationKatex}</td>
+                    <td>{@html katexAsHtml(corpulenceIndexCalculationKatex)}</td>
                     <td></td>
                 </tr>
                 <tr>
                     <th>New BMI</th>
                     <td>{@html katexAsHtml(`${bmiNew.toFixed(3)}`)}</td>
-                    <td>{@html bmiNewCalculationKatex}</td>
+                    <td>{@html katexAsHtml(bmiNewCalculationKatex)}</td>
                     <td></td>
                 </tr>
                 <tr>
                     <th>BMI prime</th>
                     <td>{@html katexAsHtml(`${bmiPrime.toFixed(3)}`)}</td>
-                    <td>{@html bmiPrimeCalculationKatex}</td>
+                    <td>{@html katexAsHtml(bmiPrimeCalculationKatex)}</td>
                     <td></td>
                 </tr>
                 <tr>
-                    <th>Surface-based body shape index (SSBI)</th>
+                    <th>Surface-based body shape index (SBSI)</th>
                     <td>{@html katexAsHtml(`${surfaceBasedBodyShapeIndex.toFixed(3)}`)}</td>
-                    <td>{@html surfaceBasedBodyShapeIndexCalculationKatex}</td>
+                    <td>{@html katexAsHtml(surfaceBasedBodyShapeIndexCalculationKatex)}</td>
                     <td></td>
                 </tr>
                 <tr>
-                    <th>Surface-based body shape index star (SSBI*)</th>
+                    <th>Surface-based body shape index star (SBSI*)</th>
                     <td>{@html katexAsHtml(`${surfaceBasedBodyShapeIndexStar.toFixed(3)}`)}</td>
-                    <td>{@html surfaceBasedBodyShapeIndexStarCalculationKatex}</td>
+                    <td>{@html katexAsHtml(surfaceBasedBodyShapeIndexStarCalculationKatex)}</td>
                     <td></td>
                 </tr>
             </tbody>
@@ -129,6 +144,7 @@
         <h2>References:</h2>
         <ul>
             <li><a href="https://en.wikipedia.org/wiki/Body_mass_index" target="_blank">Body mass index</a></li>
+            <li><a href="https://de.wikipedia.org/wiki/DuBois-Formel" target="_blank">DuBois-Formel</a></li>
         </ul>
     </div>
 </div>
