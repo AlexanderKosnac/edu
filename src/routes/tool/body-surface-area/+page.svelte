@@ -5,11 +5,22 @@
     let heightCm = 180;
     $: heightM = heightCm/100;
 
-    $: duBois = 0.007184 * heightCm**0.725 * massKg**0.425;
-    $: duBoisCalculationKatex = katexAsHtml(`0.007184 * ${heightCm}^{0.725} * ${massKg}^{0.425} = ${duBois.toFixed(2)}`);
+    function factorAndHeightAndWeightExponential(factor, heightExp, weightExp) {
+        const value = factor * heightCm**heightExp * massKg**weightExp;
+        return {
+            value: factor * heightCm**heightExp * massKg**weightExp,
+            katex: `${factor} * ${heightCm}^{${heightExp}} * ${massKg}^{${weightExp}} = ${value.toFixed(2)}`,
+        }
+    }
+
+    $: duBois = factorAndHeightAndWeightExponential(0.007184, 0.725, 0.425);
 
     $: mosteller = ((heightCm * massKg)/3600)**0.5;
     $: mostellerCalculationKatex = katexAsHtml(`\\sqrt{\\frac{${heightCm} * ${massKg}}{3600}} = ${mosteller.toFixed(2)}`);
+
+    $: haycock = factorAndHeightAndWeightExponential(0.024265, 0.3964, 0.5378);
+
+    $: gehanAndGeorge = factorAndHeightAndWeightExponential(0.0235, 0.42246, 0.51456);
 </script>
 
 <svelte:head>
@@ -50,13 +61,23 @@
             <tbody>
                 <tr>
                     <th>DuBois Formula</th>
-                    <td>{@html katexAsHtml(`${duBois.toFixed(3)} \\text{ m}^2`)}</td>
-                    <td>{@html duBoisCalculationKatex}</td>
+                    <td>{@html katexAsHtml(`${duBois.value.toFixed(3)} \\text{ m}^2`)}</td>
+                    <td>{@html katexAsHtml(duBois.katex)}</td>
                 </tr>
                 <tr>
                     <th>Mosteller</th>
                     <td>{@html katexAsHtml(`${mosteller.toFixed(3)} \\text{ m}^2`)}</td>
                     <td>{@html mostellerCalculationKatex}</td>
+                </tr>
+                <tr>
+                    <th>Haycock</th>
+                    <td>{@html katexAsHtml(`${haycock.value.toFixed(3)} \\text{ m}^2`)}</td>
+                    <td>{@html katexAsHtml(haycock.katex)}</td>
+                </tr>
+                <tr>
+                    <th>Gehan and George</th>
+                    <td>{@html katexAsHtml(`${gehanAndGeorge.value.toFixed(3)} \\text{ m}^2`)}</td>
+                    <td>{@html katexAsHtml(gehanAndGeorge.katex)}</td>
                 </tr>
             </tbody>
         </table>
