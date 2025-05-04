@@ -1,7 +1,7 @@
 {
     "name": "Roman Numerals",
     "url": "tool/roman-numerals",
-    "description": "",
+    "description": "The number representation originating in Rome.",
     "tags": [
         "Tool"
     ]
