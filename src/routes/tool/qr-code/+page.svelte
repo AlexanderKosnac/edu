@@ -12,6 +12,7 @@
     const FORMAT_INFO = "format-info";
     const TIMING_STRIP = "timing-strip";
     const FIXED_BLACK = "fixed-black";
+
     let parts = [
         NONE,
         UNUSED,
@@ -26,6 +27,14 @@
         FIXED_BLACK,
     ];
     let selectedPart = parts[0];
+
+    let errorCorrectionLevels = [
+        { name: "Low", short: "L", percentageRestoration:  7, pattern: [0, 1] },
+        { name: "Medium", short: "M", percentageRestoration: 15, pattern: [0, 0] },
+        { name: "Quartile", short: "Q", percentageRestoration: 25, pattern: [1, 1] },
+        { name: "High", short: "H", percentageRestoration: 30, pattern: [1, 0] },
+    ];
+    let selectedErrorCorrectionLevel = errorCorrectionLevels[0];
 
     const CELL_SIZE = 10;
 
@@ -85,6 +94,14 @@
 
     function drawFormatInfoVertical(x, y, d) {
         drawLinePattern(x, y, d, false, _ => 1, FORMAT_INFO);
+    }
+
+    function drawPatternStripHorizontal(x, y, pattern) {
+        drawLinePattern(x, y, pattern.length, true, i => pattern[i], FORMAT_INFO);
+    }
+
+    function drawPatternStripVertical(x, y, pattern) {
+        drawLinePattern(x, y, pattern.length, false, i => pattern[i], FORMAT_INFO);
     }
 
     function drawTimingStripHorizontal(x, y, d) {
@@ -175,6 +192,9 @@
         drawFormatInfoHorizontal(17, 8, 8);
         drawFormatInfoVertical(8, 18, 7);
 
+        drawPatternStripHorizontal(0, 8, selectedErrorCorrectionLevel.pattern);
+        drawPatternStripVertical(8, 23, selectedErrorCorrectionLevel.pattern.reverse());
+
         drawTimingStripHorizontal(8, 6, 9);
         drawTimingStripVertical(6, 8, 9);
 
@@ -202,6 +222,15 @@
     <div class="col">
         <label for="asciiInput">ASCII Input:</label>
         <input type="text" id="asciiInput" class="form-control font-monospace" bind:value="{inputAscii}" on:input={createQrCode}/>
+
+        <label>
+            Error Correction Level:
+            <select class="form-select" bind:value={selectedErrorCorrectionLevel} on:change={createQrCode}>
+                {#each errorCorrectionLevels as l}
+                    <option value={l}>{l.short} ({l.name}: ~{l.percentageRestoration}% restoration)</option>
+                {/each}
+            </select>
+        </label>
     </div>
 </div>
 
