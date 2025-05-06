@@ -145,20 +145,22 @@ Alignment&nbsp;:&nbsp;{alignment.seqR}<br>
     <div class="col">
         <div class="overflow-auto">
             <table>
-                <tr>
-                    <Cell type="header"/>
-                    {#each " "+sequence2 as s}
-                        <Cell type="header" value={s}/>
-                    {/each}
-                </tr>
-                {#each m as row, i}
+                <tbody>
                     <tr>
-                        <Cell type="header" value={(" "+sequence1).charAt(i)}/>
-                        {#each row as e}
-                            <Cell value={isNaN(e.value) ? "?" : e.value} direction={e.direction} active={e.active}/>
+                        <Cell type="header"/>
+                        {#each " "+sequence2 as s}
+                            <Cell type="header" value={s}/>
                         {/each}
                     </tr>
-                {/each}
+                    {#each m as row, i}
+                        <tr>
+                            <Cell type="header" value={(" "+sequence1).charAt(i)}/>
+                            {#each row as e}
+                                <Cell value={isNaN(e.value) ? "?" : e.value} direction={e.direction} active={e.active}/>
+                            {/each}
+                        </tr>
+                    {/each}
+                </tbody>
             </table>
         </div>
     </div>
