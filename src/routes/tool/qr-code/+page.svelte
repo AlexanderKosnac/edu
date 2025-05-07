@@ -248,20 +248,19 @@
     </div>
 
     <div class="col">
-        <h3>Parts:</h3>
-        <div class="d-flex flex-column gap-3">
-            {#each parts as p}
-            <label>
-                <input type="radio" value={p} bind:group={selectedPart}/>
-                {p}
-            </label>
-            {/each}
-        </div>
-    </div>
+        <label>
+            Part to highlight:
+            <select class="form-select" bind:value={selectedPart}>
+                {#each parts as p}
+                    <option value={p}>{p}</option>
+                {/each}
+            </select>
+        </label>
 
-    <div class="col">
-        <h3>Input as Binary Data:</h3>
-        <pre>{#each charsAsBinaryDumpLines(inputAscii) as bitsString}<span class="font-monospace">{bitsString}</span><br>{/each}</pre>
+        <div>
+            Input as Binary Data:
+            <pre>{#each charsAsBinaryDumpLines(inputAscii) as bitsString}<span class="font-monospace">{bitsString}</span><br>{/each}</pre>
+        </div>
     </div>
 </div>
 
