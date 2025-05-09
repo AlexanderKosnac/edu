@@ -1,0 +1,8 @@
+{
+    "name": "Calorie Calculator",
+    "url": "tool/calorie-calculator",
+    "description": "Approximate the daily caloric need of a person.",
+    "tags": [
+        "Tool"
+    ]
+}
