@@ -30,52 +30,58 @@
 
 <div class="row">
     <div class="col">
-        <div class="mb-2">
-            <label>
-                Mass (kg):
-                <input type="number" class="form-control" bind:value={massKg} min="1"/>
-            </label>
-            <label>
-                Height (cm):
-                <input type="number" class="form-control" bind:value={heightCm} min="1"/>
-            </label>
-            <label>
-                Age (Years):
-                <input type="number" class="form-control" bind:value={ageYears} min="1"/>
-            </label>
-            <label>
-                Body Fat (%):
-                <input type="number" class="form-control" bind:value={bodyFatPercentageDecimal} min="0"/>
-            </label>
-        </div>
+        <h2>Basal Metabolic Rate (BMR)</h2>
 
-        <div>
-            <h2>Basal Metabolic Rate (BMR)</h2>
+        The rate of energy expenditure per unit of time by a human at rest, typically measured in {@html katexAsHtmlInline(kcalPerDay)}.
+    </div>
+</div>
 
-            The rate of energy expenditure per unit of time by a human at rest, typically measured in {@html katexAsHtmlInline(kcalPerDay)}.
+<div class="row">
+    <div class="col-auto">
+        <table class="table table-bordered w-auto mt-1">
+            <tbody>
+                <tr>
+                    <th></th>
+                    <th>Mifflin-St Jeor</th>
+                    <th>Revised Harris-Benedict</th>
+                    <th>Katch-McArdle</th>
+                </tr>
+                <tr>
+                    <td class="align-middle">Men</td>
+                    <td>{@html katexAsHtml(`${mifflingResultMen.toFixed(1)}`)}</td>
+                    <td>{@html katexAsHtml(`${harrisResultMen.toFixed(1)}`)}</td>
+                    <td class="align-middle" rowspan="2">{@html katexAsHtml(`${katchResult.toFixed(1)}`)}</td>
+                </tr>
+                <tr>
+                    <td class="align-middle">Women</td>
+                    <td>{@html katexAsHtml(`${mifflingResultWomen.toFixed(1)}`)}</td>
+                    <td>{@html katexAsHtml(`${harrisResultWomen.toFixed(1)}`)}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 
-            <table class="table table-bordered w-auto mt-1">
-                <tbody>
-                    <tr>
-                        <th></th>
-                        <th>Mifflin-St Jeor</th>
-                        <th>Revised Harris-Benedict</th>
-                        <th>Katch-McArdle</th>
-                    </tr>
-                    <tr>
-                        <td class="align-middle">Men</td>
-                        <td>{@html katexAsHtml(`${mifflingResultMen.toFixed(3)}`)}</td>
-                        <td>{@html katexAsHtml(`${harrisResultMen.toFixed(3)}`)}</td>
-                        <td class="align-middle" rowspan="2">{@html katexAsHtml(`${katchResult.toFixed(3)}`)}</td>
-                    </tr>
-                    <tr>
-                        <td class="align-middle">Women</td>
-                        <td>{@html katexAsHtml(`${mifflingResultWomen.toFixed(3)}`)}</td>
-                        <td>{@html katexAsHtml(`${harrisResultWomen.toFixed(3)}`)}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <div class="col-auto">
+        <table class="calorie-inputs">
+            <tbody>
+                <tr>
+                    <td>Mass (kg):</td>
+                    <td><input type="number" id="mass" class="form-control" bind:value={massKg} min="1"/></td>
+                </tr>
+                <tr>
+                    <td>Height (cm):</td>
+                    <td><input type="number" id="" class="form-control" bind:value={heightCm} min="1"/></td>
+                </tr>
+                <tr>
+                    <td>Age (Years):</td>
+                    <td><input type="number" id="" class="form-control" bind:value={ageYears} min="1"/></td>
+                </tr>
+                <tr>
+                    <td>Body Fat (%):</td>
+                    <td><input type="number" id="" class="form-control" bind:value={bodyFatPercentageDecimal} min="0"/></td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 
@@ -90,4 +96,12 @@
 </div>
 
 <style>
+.calorie-inputs {
+    border-collapse: separate;
+    border-spacing: 10px 0;
+}
+
+.calorie-inputs input {
+    width: 6em;
+}
 </style>
