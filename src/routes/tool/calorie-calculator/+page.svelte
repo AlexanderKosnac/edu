@@ -15,6 +15,17 @@
 
     $: katchResult = 370 + 21.6 * (1 - bodyFatPercentageFractional) * massKg;
 
+    let baseCaloricIntakePerDay = 2_000;
+    const weightChangeCategories = {
+        "Extreme weight loss": -1000,
+        "Weight loss": -500,
+        "Mild weight loss": -250,
+        "Maintain weight": 0,
+        "Mild weight gain": 250,
+        "Weight gain": 500,
+        "Fast weight gain": 1000,
+    };
+
     const kcalPerDay = "\\frac{kcal}{day}";
 </script>
 
@@ -66,22 +77,49 @@
             <tbody>
                 <tr>
                     <td>Mass (kg):</td>
-                    <td><input type="number" id="mass" class="form-control" bind:value={massKg} min="1"/></td>
+                    <td><input type="number" class="form-control" bind:value={massKg} min="1"/></td>
                 </tr>
                 <tr>
                     <td>Height (cm):</td>
-                    <td><input type="number" id="" class="form-control" bind:value={heightCm} min="1"/></td>
+                    <td><input type="number" class="form-control" bind:value={heightCm} min="1"/></td>
                 </tr>
                 <tr>
                     <td>Age (Years):</td>
-                    <td><input type="number" id="" class="form-control" bind:value={ageYears} min="1"/></td>
+                    <td><input type="number" class="form-control" bind:value={ageYears} min="1"/></td>
                 </tr>
                 <tr>
                     <td>Body Fat (%):</td>
-                    <td><input type="number" id="" class="form-control" bind:value={bodyFatPercentageDecimal} min="0"/></td>
+                    <td><input type="number" class="form-control" bind:value={bodyFatPercentageDecimal} min="0"/></td>
                 </tr>
             </tbody>
         </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <h2>Weight loss and Gain Approximations</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-auto">
+        <table>
+            <tbody>
+                {#each Object.entries(weightChangeCategories) as [label, calDiff]}
+                    <tr class="border">
+                        <td>{label}</td>
+                        <td>{calDiff}</td>
+                        <td>{baseCaloricIntakePerDay-calDiff}</td>
+                        <td>{(100 * ((baseCaloricIntakePerDay+calDiff)/baseCaloricIntakePerDay)).toFixed(0)}%</td>
+                    </tr>
+                {/each}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-auto">
+        Base Caloric Intake (kcal/day):
+        <input type="number" class="form-control" bind:value={baseCaloricIntakePerDay} min="0"/>
     </div>
 </div>
 
