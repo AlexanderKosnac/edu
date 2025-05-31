@@ -1,15 +1,9 @@
 <script>
     import { onMount } from "svelte";
 
-    import { golPatterns } from "./patterns.js";
-
     let canvasWidth = 50;
     let canvasHeight = 50;
     let canvas;
-
-    let selectedPattern = null;
-    let isRunning = false;
-    let ticksPerSecond = 5;
 
     let ctx;
     let imageData;
@@ -90,24 +84,6 @@
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
-    async function startRun() {
-        if (isRunning) return;
-        isRunning = true;
-
-        while (isRunning) {
-            nextGeneration();
-            await delay(1000/ticksPerSecond);
-        }
-    }
-
-    function stopRun() {
-        isRunning = false;
-    }
-
-    function toggleRun() {
-        isRunning ? stopRun() : startRun();
-    }
-
     function clearGrid() {
         cells = new Set();
         render();
@@ -137,23 +113,31 @@
         }
     }
 
+    async function startRun() {
+        if (isRunning) return;
+        isRunning = true;
+
+        while (isRunning) {
+            nextGeneration();
+            await delay(1000/ticksPerSecond);
+        }
+    }
+
     onMount(()=> {
         ctx = canvas.getContext("2d");
         drawPattern("Gosper glider gun", 5, 10);
         render();
+        startRun();
     });
 </script>
 
 <svelte:head>
-    <title>Conway's Game of Life</title>
+    <title>Particle Simulation</title>
 </svelte:head>
 
 <div class="row mb-1 mt-1">
     <div class="col">
         <div class="d-flex gap-1 align-items-center">
-            <button type="button" class="btn btn-sm btn-primary" on:click={toggleRun}>
-                {isRunning ? "Stop" : "Start"}
-            </button>
             <button type="button" class="btn btn-sm btn-primary" on:click={clearGrid}>Clear</button>
         </div>
     </div>
@@ -165,48 +149,13 @@
     </div>
     <div class="col">
         <div>
-            Conway's Game of Life operates on a grid of cells that can either be alive, or dead.
-            In which state they are, is determined by the following four rules:
-            <ul>
-                <li>Any live cell with fewer than two live neighbours dies.</li>
-                <li>Any live cell with two or three live neighbours lives on.</li>
-                <li>Any live cell with more than three live neighbours dies.</li>
-                <li>Any dead cell with exactly three live neighbours becomes a live cell.</li>
-            </ul>    
-        </div>
-        <hr/>
-        <div>
-            <h3>Statistics:</h3>
-            <ul>
-                <li>Alive Cells: {cells.size}</li>
-            </ul>
-        </div>
-        <hr/>
-        <div>
             <h3>Settings:</h3>
-            <div class="d-flex flex-column flex-wrap">
-                <label>
-                    Brush:
-                    <select class="form-select" bind:value={selectedPattern}>
-                        <option value={null}>Single Cell</option>
-                        {#each Object.entries(golPatterns) as [name, _]}
-                            <option value={name}>{name}</option>
-                        {/each}
-                    </select>
-                </label>
-            </div>
-
             <span>Grid Dimensions:</span>
             <div class="input-group">
                 <input type="number" class="form-control" placeholder="Width" aria-label="Grid Width" step="1" bind:value={canvasWidth} min="1" />
                 <span class="input-group-text">x</span>
                 <input type="number" class="form-control" placeholder="Height" aria-label="Grid Height" step="1" bind:value={canvasHeight} min="1" />
             </div>
-
-            <label>
-                Ticks per Second:
-                <input type="number" class="form-control" placeholder="Ticks per second" aria-label="Ticks per second" step="1" bind:value={ticksPerSecond} min="1" />
-            </label>
         </div>
     </div>
 </div>
@@ -215,7 +164,7 @@
     <div class="col">
         <h2>References:</h2>
         <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Conway%27s_Game_of_Life" target="_blank">Conway's Game of Life (Wikipedia)</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Falling-sand_game" target="_blank">Falling-sand game</a></li>
         </ul>
     </div>
 </div>

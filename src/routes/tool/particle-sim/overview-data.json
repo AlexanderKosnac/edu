@@ -1,0 +1,8 @@
+{
+    "name": "Particle Simulation",
+    "url": "tool/particle-sim",
+    "description": "Particle simulation based on cellular automaton.",
+    "tags": [
+        "Computer Science"
+    ]
+}
