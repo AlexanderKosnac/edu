@@ -1,6 +1,8 @@
 <script>
     import { onMount } from "svelte";
 
+    import { Particle } from "./particles.js";
+
     let canvasWidth = 50;
     let canvasHeight = 50;
     let canvas;
@@ -21,58 +23,67 @@
         imageData = ctx.createImageData(canvas.width, canvas.height);
         for (let y = 0; y <= canvasHeight; y++) {
             for (let x = 0; x <= canvasWidth; x++) {
-                if (isAlive(x, y)) {
-                    setPixel(x, y, 0, 0, 0);
+                const p = getParticle(x, y);
+                if (p) {
+                    setPixel(x, y, p.color[0], p.color[1], p.color[2]);
                 } else {
-                    setPixel(x, y, 255, 255, 255);
+                    setPixel(x, y, 0, 0, 0);
                 }
             }
         }
         ctx.putImageData(imageData, 0, 0);
     }
 
-    let cells = new Set();
-
-    function setAlive(x, y) {
-        cells.add(`${x},${y}`);
+    function clamp(value, min, max) {
+        return Math.min(Math.max(value, min), max);
     }
 
-    function isAlive(x, y) {
-        return cells.has(`${x},${y}`);
+    let particles = new Map();
+
+    function key(x, y) {
+        return `${x},${y}`;
     }
 
-    function getNeighbors(x, y) {
-        const deltas = [-1, 0, 1];
-        const neighbors = [];
-        for (let dx of deltas) {
-            for (let dy of deltas) {
-                if (dx === 0 && dy === 0) continue;
-                neighbors.push([x + dx, y + dy]);
-            }
+    function xy(key) {
+        return key.split(',').map(Number);
+    }
+
+    function getParticle(x, y) {
+        return particles.get(key(x, y));
+    }
+
+    function setParticle(x, y, value) {
+        if (value) {
+            particles.set(key(x, y), value);
+        } else {
+            particles.delete(key(x, y));
         }
-        return neighbors;
     }
 
     function step() {
-        const neighborCounts = new Map();
+        const nextGen = new Map();
 
-        for (const cell of cells) {
-            const [x, y] = cell.split(',').map(Number);
-            for (const [nx, ny] of getNeighbors(x, y)) {
-                const key = `${nx},${ny}`;
-                neighborCounts.set(key, (neighborCounts.get(key) || 0) + 1);
+        for (const cell of particles) {
+            let p = new Particle(cell[1].color, cell[1].behavior);
+            let [x, y] = xy(cell[0]);
+
+            let xn = x, yn = y;
+            if (getParticle(x, y+1) == null) {
+                yn++;
             }
+            else if (getParticle(x+1, y+1) == null) {
+                xn++;
+                yn++;
+            }
+            else if (getParticle(x-1, y+1) == null) {
+                xn--;
+                yn++;
+            }
+
+            nextGen.set(key(clamp(xn, 0, canvasWidth-1), clamp(yn, 0, canvasHeight-1)), p);
         }
 
-        const nextGen = new Set();
-        for (const [cell, count] of neighborCounts.entries()) {
-            const alive = cells.has(cell);
-            if (count === 3 || (alive && count === 2)) {
-                nextGen.add(cell);
-            }
-        }
-
-        cells = nextGen;
+        particles = nextGen;
     }
 
     function nextGeneration() {
@@ -85,47 +96,39 @@
     }
 
     function clearGrid() {
-        cells = new Set();
+        particles = new Map();
         render();
     }
 
-    function setCellOnClick(e) {
+    function setParticleOnClick(e) {
         const rect = canvas.getBoundingClientRect();
 		const scaleX = canvas.width / rect.width;
 		const scaleY = canvas.height / rect.height;
         const x = Math.floor((e.clientX - rect.left) * scaleX);
         const y = Math.floor((e.clientY - rect.top) * scaleY);
-        if (selectedPattern == null) {
-            setAlive(x, y);
-        } else {
-            drawPattern(selectedPattern, x, y);
-        }
+        let p = new Particle([255, 0, 0], (particles, x, y) => {});
+        setParticle(x, y, p);
         render();
     }
 
-    function drawPattern(name, x, y) {
-        const lines = golPatterns[name].trim().split("\n");
-        for (let yi = 0; yi < lines.length; yi++) {
-            const line = lines[yi];
-            for (let xi = 0; xi < line.length; xi++) {
-                if (line[xi] === "#") setAlive(x + xi, y + yi);
-            }
-        }
-    }
-
     async function startRun() {
-        if (isRunning) return;
-        isRunning = true;
+        const FRAME_DURATION = 1000 / 60;
 
-        while (isRunning) {
+        while (true) {
+            const startTime = performance.now();
+
             nextGeneration();
-            await delay(1000/ticksPerSecond);
+
+            const endTime = performance.now();
+            const elapsed = endTime - startTime;
+            const delayTime = Math.max(0, FRAME_DURATION - elapsed);
+
+            await delay(delayTime);
         }
     }
 
     onMount(()=> {
         ctx = canvas.getContext("2d");
-        drawPattern("Gosper glider gun", 5, 10);
         render();
         startRun();
     });
@@ -145,7 +148,7 @@
 
 <div class="row">
     <div class="col-auto">
-        <canvas width="{canvasWidth}" height="{canvasHeight}" bind:this={canvas} on:click={setCellOnClick}></canvas>
+        <canvas width="{canvasWidth}" height="{canvasHeight}" bind:this={canvas} on:click={setParticleOnClick}></canvas>
     </div>
     <div class="col">
         <div>
