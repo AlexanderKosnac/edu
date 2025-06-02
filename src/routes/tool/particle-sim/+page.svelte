@@ -68,19 +68,19 @@
             let [x, y] = xy(cell[0]);
 
             let xn = x, yn = y;
-            if (getParticle(x, y+1) == null) {
+            if (getParticle(x, y + 1) == null && y + 1 < canvasHeight) {
                 yn++;
             }
-            else if (getParticle(x+1, y+1) == null) {
-                xn++;
-                yn++;
-            }
-            else if (getParticle(x-1, y+1) == null) {
+            else if (getParticle(x - 1, y + 1) == null && x - 1 >= 0 && y + 1 < canvasHeight) {
                 xn--;
                 yn++;
             }
+            else if (getParticle(x + 1, y + 1) == null && x + 1 < canvasWidth && y + 1 < canvasHeight) {
+                xn++;
+                yn++;
+            }
 
-            nextGen.set(key(clamp(xn, 0, canvasWidth-1), clamp(yn, 0, canvasHeight-1)), p);
+            nextGen.set(key(xn, yn), p);
         }
 
         particles = nextGen;
