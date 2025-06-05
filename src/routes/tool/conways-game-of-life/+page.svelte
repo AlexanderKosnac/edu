@@ -5,6 +5,12 @@
 
     let canvasWidth = 50;
     let canvasHeight = 50;
+    let keepOneToOne = true;
+
+    $: if (keepOneToOne) {
+        canvasHeight = canvasWidth;
+    }
+
     let canvas;
 
     let selectedPattern = null;
@@ -199,8 +205,16 @@
             <span>Grid Dimensions:</span>
             <div class="input-group">
                 <input type="number" class="form-control" placeholder="Width" aria-label="Grid Width" step="1" bind:value={canvasWidth} min="1" />
-                <span class="input-group-text">x</span>
-                <input type="number" class="form-control" placeholder="Height" aria-label="Grid Height" step="1" bind:value={canvasHeight} min="1" />
+                {#if !keepOneToOne}
+                    <span class="input-group-text">x</span>
+                    <input type="number" class="form-control" placeholder="Height" aria-label="Grid Height" step="1" bind:value={canvasHeight} min="1" />
+                {/if}
+                <div class="input-group-text">
+                    <label>
+                        <input type="checkbox" aria-label="Keep 1:1" bind:checked={keepOneToOne}/>
+                        Keep 1:1
+                    </label>
+                </div>
             </div>
 
             <label>
