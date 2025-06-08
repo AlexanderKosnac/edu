@@ -27,6 +27,16 @@
     };
 
     const kcalPerDay = "\\frac{kcal}{day}";
+
+    let caloriesToDistribute = 2_000;
+
+    const calorieDistributions = [
+        [60, 25, 15],
+        [60, 20, 20],
+        [40, 30, 30],
+        [40, 40, 20],
+        [50, 25, 25],
+    ];
 </script>
 
 <svelte:head>
@@ -104,10 +114,18 @@
 
 <div class="row">
     <div class="col-auto">
-        <table>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Category</th>
+                    <th scope="col">Diff. ({@html katexAsHtmlInline("kcal")})</th>
+                    <th scope="col">Daily Calories ({@html katexAsHtmlInline(kcalPerDay)})</th>
+                    <th scope="col">Diff. (%)</th>
+                </tr>
+            </thead>
             <tbody>
                 {#each Object.entries(weightChangeCategories) as [label, calDiff]}
-                    <tr class="border">
+                    <tr>
                         <td>{label}</td>
                         <td>{calDiff}</td>
                         <td>{baseCaloricIntakePerDay-calDiff}</td>
@@ -120,6 +138,56 @@
     <div class="col-auto">
         Base Caloric Intake (kcal/day):
         <input type="number" class="form-control" bind:value={baseCaloricIntakePerDay} min="0"/>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <h2>Macronutrient Distribution</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-auto">
+        <table class="table table-bordered text-center">
+            <thead>
+                <tr>
+                    <th scope="col" colspan="3">Distribution</th>
+                    <th scope="col" colspan="3">kcals</th>
+                    <th scope="col" colspan="3">g</th>
+                </tr>
+                <tr>
+                    <th scope="col">Carbs</th>
+                    <th scope="col">Protein</th>
+                    <th scope="col">Fat</th>
+                    <th scope="col">Carbs</th>
+                    <th scope="col">Protein</th>
+                    <th scope="col">Fat</th>
+                    <th scope="col">Carbs</th>
+                    <th scope="col">Protein</th>
+                    <th scope="col">Fat</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                {#each calorieDistributions as d}
+                <tr>
+                    <td>{d[0]}%</td>
+                    <td>{d[1]}%</td>
+                    <td>{d[2]}%</td>
+                    <td>{(caloriesToDistribute * d[0]/100).toFixed(0)}</td>
+                    <td>{(caloriesToDistribute * d[1]/100).toFixed(0)}</td>
+                    <td>{(caloriesToDistribute * d[2]/100).toFixed(0)}</td>
+                    <td>{(1/4 * caloriesToDistribute * d[0]/100).toFixed(0)}</td>
+                    <td>{(1/4 * caloriesToDistribute * d[1]/100).toFixed(0)}</td>
+                    <td>{(1/9 * caloriesToDistribute * d[2]/100).toFixed(0)}</td>
+                </tr>
+                {/each}
+            </tbody>
+        </table>
+    </div>
+    <div class="col-auto">
+        Calories to distribute:
+        <input type="number" class="form-control" bind:value={caloriesToDistribute} min="0"/>
     </div>
 </div>
 
