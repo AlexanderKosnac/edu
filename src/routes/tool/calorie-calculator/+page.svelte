@@ -114,13 +114,13 @@
 
 <div class="row">
     <div class="col-auto">
-        <table class="table">
+        <table class="table table-bordered">
             <thead>
                 <tr>
                     <th scope="col">Category</th>
-                    <th scope="col">Diff. ({@html katexAsHtmlInline("kcal")})</th>
-                    <th scope="col">Daily Calories ({@html katexAsHtmlInline(kcalPerDay)})</th>
-                    <th scope="col">Diff. (%)</th>
+                    <th scope="col">Calorie Change ({@html katexAsHtmlInline("kcal")})</th>
+                    <th scope="col">Target Daily Intake ({@html katexAsHtmlInline(kcalPerDay)})</th>
+                    <th scope="col">Percent of Maintenance (%)</th>
                 </tr>
             </thead>
             <tbody>
