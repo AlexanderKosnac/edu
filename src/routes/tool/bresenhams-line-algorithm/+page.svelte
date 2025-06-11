@@ -98,9 +98,8 @@
         }
     }
 
-    function onChange() {
-        pA = pA;
-        pB = pB;
+    function onDragPoint()
+    {
         let cA = pixelCoord(pA);
         let cB = pixelCoord(pB);
 
@@ -109,7 +108,7 @@
     }
 
     onMount(()=> {
-        onChange();
+        onDragPoint();
     });
 </script>
 
@@ -137,8 +136,8 @@
             {/each}
             </g>
             <path class="continuous-line" d="M {pA.x} {pA.y} L {pB.x} {pB.y}"/>
-            <InputPoint point={pA} label={labelA} on:change={onChange} fill="green"/>
-            <InputPoint point={pB} label={labelB} on:change={onChange} fill="blue"/>
+            <InputPoint bind:x={pA.x} bind:y={pA.y} bind:label={labelA} drag={onDragPoint} fill="green"/>
+            <InputPoint bind:x={pB.x} bind:y={pB.y} bind:label={labelB} drag={onDragPoint} fill="blue"/>
         </svg>
     </div>
     <div class="col">
@@ -151,7 +150,7 @@
         </div>
         <div class="form-color">
             <label for="lineColor">Line color</label>
-            <input type="color" class="form-control form-control-color" id="lineColor" on:change={onChange} bind:value={lineColor}>
+            <input type="color" class="form-control form-control-color" id="lineColor" on:change={onDragPoint} bind:value={lineColor}>
         </div>
     </div>
 </div>

@@ -1,35 +1,40 @@
 <script>
-    import { createEventDispatcher } from 'svelte'
+    let {
+        x = $bindable(),
+        y = $bindable(),
+        label = $bindable(),
+        drag,
+        ...others
+    } = $props();
+    let moving = $state(false);
 
-    export let point = { x: 0, y: 0 };
-    export let label = "";
+    function onMouseDown() {
+        moving = true;
+    }
 
-    let moving = false;
+    function onMouseMove(e) {
+        if (!moving) return;
 
-	function onMouseDown() {
-		moving = true;
-	}
-	
-	function onMouseMove(e) {
-		if (!moving) return;
-        point.x += e.movementX;
-        point.y += e.movementY;
-        dispatch("change");
-	}
-	
-	function onMouseUp() {
-		moving = false;
-	}
+        x = x + e.movementX;
+        y = y + e.movementY;
 
-    const dispatch = createEventDispatcher();
+        drag();
+    }
+
+    function onMouseUp() {
+        moving = false;
+    }
 </script>
 
 <svelte:window on:mouseup={onMouseUp} on:mousemove={onMouseMove} />
 
-<circle class="point" class:active={moving} cx="{point.x}" cy="{point.y}" r="15" on:mousedown={onMouseDown} {...$$restProps}
-    role="button" tabindex="0" aria-grabbed="false" aria-label="Draggable point"/>
-<rect class="label-bg" x="{point.x-40}" y="{point.y+20}" width="80" height="30"/>
-<text class="label" x="{point.x}" y="{point.y+40}" text-anchor="middle">{label}</text>
+<circle class="point" class:active={moving} cx={x} cy={y} r="15"
+    onmousedown={onMouseDown}
+    role="button" tabindex="0"
+    aria-grabbed="false" aria-label="Draggable point" {...others}/>
+
+<rect class="label-bg" x={x - 40} y={y + 20} width="80" height="30" />
+<text class="label" x={x} y={y + 40} text-anchor="middle">{label}</text>
 
 <style>
     .label {
