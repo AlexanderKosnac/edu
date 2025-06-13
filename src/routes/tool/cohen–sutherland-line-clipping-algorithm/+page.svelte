@@ -1,10 +1,29 @@
 <script>
+    import { onMount } from "svelte";
+    import InputPoint from "./InputPoint.svelte";
+
     let width = 700;
     let width3 = width / 3;
     let width32 = width3 / 2;
     let height = 700;
     let height3 = height / 3;
     let height32 = height3 / 2;
+
+    let pA = { x: 100, y: 200 };
+    let pB = { x: 500, y: 500 };
+
+    function onDragPoint()
+    {
+        let cA = pixelCoord(pA);
+        let cB = pixelCoord(pB);
+
+        clear();
+        plotLine(cA.x, cA.y, cB.x, cB.y);
+    }
+
+    onMount(()=> {
+        onDragPoint();
+    });
 </script>
 
 <svelte:head>
@@ -36,6 +55,10 @@
             <text class="region-label" x="{width32 + 0}"          y="{height32 + height3 * 2}">0101</text>
             <text class="region-label" x="{width32 + width3}"     y="{height32 + height3 * 2}">0100</text>
             <text class="region-label" x="{width32 + width3 * 2}" y="{height32 + height3 * 2}">0110</text>
+
+            <path class="continuous-line" d="M {pA.x} {pA.y} L {pB.x} {pB.y}"/>
+            <InputPoint bind:x={pA.x} bind:y={pA.y} drag={onDragPoint} fill="green"/>
+            <InputPoint bind:x={pB.x} bind:y={pB.y} drag={onDragPoint} fill="blue"/>
         </svg>
     </div>
 </div>
