@@ -9,6 +9,11 @@
     let height3 = height / 3;
     let height32 = height3 / 2;
 
+    let xmin = width3;
+    let xmax = width3 * 2;
+    let ymin = height3;
+    let ymax = height3 * 2;
+
     let pA = { x: 100, y: 200 };
     let pB = { x: 500, y: 500 };
 
@@ -39,12 +44,12 @@
 <div class="row">
     <div class="col">
         <svg {width} {height} viewBox="0 0 {width} {height}">
-            <line class="clipping-edge" x1="{width3}" y1="0" x2="{height3}" y2="{height}"/>
-            <line class="clipping-edge" x1="{width3 * 2}" y1="0" x2="{height3 * 2}" y2="{height}"/>
-            <line class="clipping-edge" x1="0" y1="{height3}" x2="{width}" y2="{height3}"/>
-            <line class="clipping-edge" x1="0" y1="{height3 * 2}" x2="{height}" y2="{height3 * 2}"/>
+            <line class="clipping-edge" x1="{xmin}" y1="0"      x2="{xmin}"  y2="{height}"/>
+            <line class="clipping-edge" x1="{xmax}" y1="0"      x2="{xmax}"  y2="{height}"/>
+            <line class="clipping-edge" x1="0"      y1="{ymin}" x2="{width}" y2="{ymin}"/>
+            <line class="clipping-edge" x1="0"      y1="{ymax}" x2="{width}" y2="{ymax}"/>
 
-            <rect class="screen" x="{width3}" y="{height3}" width="{height3}" height="{height3}"/>
+            <rect class="screen" x="{xmin}" y="{ymin}" width="{width3}" height="{height3}"/>
 
             <text class="region-label" x="{width32 + 0}"          y="{height32 + 0}">1001</text>
             <text class="region-label" x="{width32 + width3}"     y="{height32 + 0}">1000</text>
