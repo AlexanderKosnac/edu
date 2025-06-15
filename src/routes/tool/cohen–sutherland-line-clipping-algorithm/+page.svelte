@@ -1,6 +1,6 @@
 <script>
     import { onMount } from "svelte";
-    import InputPoint from "./InputPoint.svelte";
+    import SvgDraggablePoint from "$lib/SvgDraggablePoint/SvgDraggablePoint.svelte";
 
     const TOP = 0b1000;
     const BOTTOM = 0b0100;
@@ -142,8 +142,8 @@
                 <circle class="point" cx={clip.p2.x} cy={clip.p2.y} r="10" fill="grey"/>
             {/if}
         
-            <InputPoint bind:x={pA.x} bind:y={pA.y} drag={onDragPoint} fill="green"/>
-            <InputPoint bind:x={pB.x} bind:y={pB.y} drag={onDragPoint} fill="blue"/>
+            <SvgDraggablePoint bind:x={pA.x} bind:y={pA.y} drag={onDragPoint} fill="green"/>
+            <SvgDraggablePoint bind:x={pB.x} bind:y={pB.y} drag={onDragPoint} fill="blue"/>
         </svg>
     </div>
     <div class="col">
@@ -159,7 +159,6 @@
                 {pBOutcode.toString(2).padStart(4, "0")}
             </span>
         </div>
-        <pre>{JSON.stringify(clip, null, 2)}</pre>
     </div>
 </div>
 

@@ -1,6 +1,6 @@
 <script>
     import { onMount } from "svelte";
-    import InputPoint from "./InputPoint.svelte";
+    import SvgDraggablePoint from "$lib/SvgDraggablePoint/SvgDraggablePoint.svelte";
 
     const N_PIXELS_WIDTH = 20;
     const N_PIXELS_HEIGHT = 20;
@@ -123,7 +123,7 @@
 </div>
 
 <div class="row">
-    <div class="col">
+    <div class="col-auto">
         <svg width="700" height="700" viewBox="0 0 700 700">
             <g>
             {#each {length: N_PIXELS_WIDTH} as _, i}
@@ -136,8 +136,8 @@
             {/each}
             </g>
             <path class="continuous-line" d="M {pA.x} {pA.y} L {pB.x} {pB.y}"/>
-            <InputPoint bind:x={pA.x} bind:y={pA.y} bind:label={labelA} drag={onDragPoint} fill="green"/>
-            <InputPoint bind:x={pB.x} bind:y={pB.y} bind:label={labelB} drag={onDragPoint} fill="blue"/>
+            <SvgDraggablePoint bind:x={pA.x} bind:y={pA.y} bind:label={labelA} drag={onDragPoint} fill="green"/>
+            <SvgDraggablePoint bind:x={pB.x} bind:y={pB.y} bind:label={labelB} drag={onDragPoint} fill="blue"/>
         </svg>
     </div>
     <div class="col">
