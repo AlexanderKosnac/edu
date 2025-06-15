@@ -1,62 +1,60 @@
 <script>
-    import katex from "katex";
-    import "katex/dist/katex.min.css";
+    import { katexAsHtml } from "$lib/katexUtility.js";
+
+    const base = 2;
 
     let nSignBits = 1;
     let nExponentBits = 8;
     let nMantissaBits = 23;
 
     let bits = [];
-    $: {
-        bits = Array(nSignBits + nExponentBits + nMantissaBits).fill(0);
-    }
-
-    $: binaryRepresentation = bits.join("");
-    $: decimalRepresentation = parseInt(binaryRepresentation, 2);
-    $: hexadecimalRepresentation = decimalRepresentation.toString(16).padStart(Math.ceil(bits.length/4), "0");
-    // floatRepresentation =
 
     function flipBit(idx) {
         bits[idx] = bits[idx] ? 0 : 1;
     }
 
-    let parts, signBits, exponentBits, mantissaBits, signValue, exponentValue, mantissaValue;
-    $: {
-        parts = [0, nSignBits, nSignBits + nExponentBits, nSignBits + nExponentBits + nMantissaBits];
-        signBits = bits.slice(parts[0], parts[1]);
-        exponentBits = bits.slice(parts[1], parts[2]);
-        mantissaBits = bits.slice(parts[2], parts[3]);
-        signValue = parseBinary(signBits.join(""));
-        exponentValue = parseBinary(exponentBits.join(""));
-        mantissaValue = parseBinary(mantissaBits.join(""));
+    function evaluateExponentBits(bits) {
+        const raw = parseInt(bits.join(""), 2);
+
+        const bias = Math.pow(2, bits.length - 1) - 1;
+
+        const isAllZeros = raw === 0;
+        const isAllOnes = raw === Math.pow(2, bits.length) - 1;
+
+        if (isAllZeros) {
+            return 1 - bias;
+        } else if (isAllOnes) {
+            return null;
+        } else {
+            return raw - bias;
+        }
     }
 
-    const base = 2;
-    let sign, exponent, mantissa, result, katexHtml;
-    $: {
-        sign = signValue == 0 ? +1 : -1;
-        exponent = exponentValue - ((2**nExponentBits)/2)+1;
-        mantissa = parseBinary(`${exponentValue == 0 ? 0 : 1}.${bits.slice(parts[2], parts[3]).join("")}`);
-        result = exponent * (base**exponent);
-        katexHtml = katex.renderToString(`${exponent} * {${base}}^{${exponent}}`, {
-            throwOnError: false
-        });
-    }
+    function evaluateMantissaBits(bits, isNormalized) {
+        let value = isNormalized ? 1 : 0;
 
-    function parseBinary(string) {
-        const [integerPart, fractionalPart] = string.split(".");
-
-        let integerDecimal = parseInt(integerPart, 2);
-
-        let fractionalDecimal = 0;
-        if (fractionalPart) {
-            for (let i = 0; i < fractionalPart.length; i++) {
-                fractionalDecimal += parseInt(fractionalPart[i], 2) * Math.pow(2, -(i + 1));
-            }
+        for (let i = 0; i < bits.length; i++) {
+            const bit = bits[i];
+            value += bit * Math.pow(2, -(i + 1));
         }
 
-        return integerDecimal + fractionalDecimal;
+        return value;
     }
+
+    $: bits = Array(nSignBits + nExponentBits + nMantissaBits).fill(0);
+    $: indices = [0, nSignBits, nSignBits + nExponentBits, nSignBits + nExponentBits + nMantissaBits];
+
+    $: signBits = bits.slice(indices[0], indices[1]);
+    $: exponentBits = bits.slice(indices[1], indices[2]);
+    $: mantissaBits = bits.slice(indices[2], indices[3]);
+
+    $: sign = signBits[0];
+    $: exponent = evaluateExponentBits(exponentBits);
+    $: mantissa = evaluateMantissaBits(mantissaBits, parseInt(exponentBits.join(""), 2) !== 0);
+
+    $: result = (-1)**sign * mantissa * (base**exponent);
+
+    $: katex = `(-1)^${signBits[0]} * ${mantissa} * {${base}}^{${exponent}} = ${result}`;
 </script>
 
 <svelte:head>
@@ -68,17 +66,19 @@
         <h1>Floating Point Number</h1>
     </div>
 </div>
-
-<div class="row">
+{signBits}<br>
+{exponentBits}<br>
+{mantissaBits}<br>
+<div class="row mb-1">
     <div class="col">
         <div class="d-flex gap-1">
             <div>
                 <span>Exponent (bits)</span>
-                <input type="number" class="form-control w-auto" step="1" bind:value={nExponentBits} min="0">
+                <input type="number" class="form-control w-auto" step="1" bind:value={nExponentBits} min="1">
             </div>
             <div>
                 <span>Mantissa (bits)</span>
-                <input type="number" class="form-control w-auto" step="1" bind:value={nMantissaBits} min="0">    
+                <input type="number" class="form-control w-auto" step="1" bind:value={nMantissaBits} min="1">
             </div>
         </div>
     </div>
@@ -90,19 +90,20 @@
             <div class="d-flex flex-column gap-1 justify-content-center align-items-center bordered area sign">
                 <strong>Sign</strong>
                 <div>{sign}</div>
-                <div>{signValue}</div>
                 <div class="d-flex flex-row gap-1">
-                    <button class="bit border" on:click={() => flipBit(parts[0])}>{bits[parts[0]]}</button>
+                    {#each {length: nSignBits} as _, idx}
+                        {@const idxOffset = idx + indices[0]}
+                        <button class="bit border" on:click={() => flipBit(idxOffset)}>{bits[idxOffset]}</button>
+                    {/each}
                 </div>
             </div>
 
             <div class="d-flex flex-column gap-1 justify-content-center align-items-center bordered area exponent">
                 <strong>Exponent</strong>
                 <div>{exponent}</div>
-                <div>{exponentValue}</div>
                 <div class="d-flex flex-row gap-1">
                     {#each {length: nExponentBits} as _, idx}
-                        {@const idxOffset = idx + parts[1]}
+                        {@const idxOffset = idx + indices[1]}
                         <button class="bit border" on:click={() => flipBit(idxOffset)}>{bits[idxOffset]}</button>
                     {/each}
                 </div>
@@ -111,15 +112,13 @@
             <div class="d-flex flex-column gap-1 justify-content-center align-items-center bordered area mantissa">
                 <strong>Mantissa</strong>
                 <div>{mantissa}</div>
-                <div>{mantissaValue}</div>
                 <div class="d-flex flex-row gap-1">
                     {#each {length: nMantissaBits} as _, idx}
-                        {@const idxOffset = idx + parts[2]}
+                        {@const idxOffset = idx + indices[2]}
                         <button class="bit border" on:click={() => flipBit(idxOffset)}>{bits[idxOffset]}</button>
                     {/each}
                 </div>
             </div>
-            <div class="byte-separator"/>
         </div>
     </div>
 </div>
@@ -127,21 +126,32 @@
 <div class="row">
     <div class="col">
         <table class="output-fields">
-            <tr>
-                <td>Decimal Representation</td>
-                <td><input type="text" class="form-control" readonly bind:value={decimalRepresentation}></td>
-            </tr>
-            <tr>
-                <td>Binary Representation</td>
-                <td><input type="text" class="form-control" readonly bind:value={binaryRepresentation}></td>
-            </tr>
-            <tr>
-                <td>Hexadecimal Representation</td>
-                <td><input type="text" class="form-control" readonly bind:value={hexadecimalRepresentation}></td>
-            </tr>
+            <tbody>
+                <tr>
+                    <td>Binary Representation</td>
+                    <td>
+                        <input type="text" class="form-control font-monospace" readonly
+                            value={bits.join("")}>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Decimal Representation</td>
+                    <td>
+                        <input type="text" class="form-control font-monospace" readonly
+                            value={parseInt(bits.join(""), 2)}/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Hexadecimal Representation</td>
+                    <td>
+                        <input type="text" class="form-control font-monospace" readonly
+                            value={parseInt(bits.join(""), 2).toString(16).padStart(Math.ceil(bits.length/4), "0")}>
+                    </td>
+                </tr>
+            </tbody>
         </table>
         <div>
-            {@html katexHtml}
+            {@html katexAsHtml(katex)}
         </div>
     </div>
 </div>
@@ -159,8 +169,8 @@
 
 <style>
     .bit {
-        width: 40px;
-        height: 40px;
+        width: 35px;
+        height: 35px;
     }
     .area {
         padding: 5px;
@@ -174,20 +184,9 @@
     .area.mantissa {
         background-color: blue;
     }
-    .byte-separator {
-        width: 2px;
-        background-color: var(--bs-body-color);
-    }
     .output-fields {
         width: 100%;
         table-layout: auto;
         border-collapse: separate;
-    }
-    .output-fields > tr td:first-child {
-        white-space: nowrap;
-        padding-right: 5px;
-    }
-    .output-fields > tr td:last-child {
-        width: 100%;
     }
 </style>
