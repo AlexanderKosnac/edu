@@ -1,5 +1,5 @@
 <script>
-    import { katexAsHtml } from "$lib/katexUtility.js";
+    import { katexAsHtmlInline } from "$lib/katexUtility.js";
 
     const base = 2;
 
@@ -66,9 +66,7 @@
         <h1>Floating Point Number</h1>
     </div>
 </div>
-{signBits}<br>
-{exponentBits}<br>
-{mantissaBits}<br>
+
 <div class="row mb-1">
     <div class="col">
         <div class="d-flex gap-1">
@@ -124,35 +122,33 @@
 </div>
 
 <div class="row">
-    <div class="col">
+    <div class="col-auto">
         <table class="output-fields">
             <tbody>
                 <tr>
-                    <td>Binary Representation</td>
+                    <td>Binary Representation:</td>
                     <td>
-                        <input type="text" class="form-control font-monospace" readonly
-                            value={bits.join("")}>
+                        <span class="font-monospace">{bits.join("")}</span>
                     </td>
                 </tr>
                 <tr>
-                    <td>Decimal Representation</td>
+                    <td>Decimal Representation:</td>
                     <td>
-                        <input type="text" class="form-control font-monospace" readonly
-                            value={parseInt(bits.join(""), 2)}/>
+                        <span class="font-monospace">{parseInt(bits.join(""), 2)}</span>
                     </td>
                 </tr>
                 <tr>
-                    <td>Hexadecimal Representation</td>
+                    <td>Hexadecimal Representation:</td>
                     <td>
-                        <input type="text" class="form-control font-monospace" readonly
-                            value={parseInt(bits.join(""), 2).toString(16).padStart(Math.ceil(bits.length/4), "0")}>
+                        <span class="font-monospace">{parseInt(bits.join(""), 2).toString(16).padStart(Math.ceil(bits.length/4), "0")}</span>
                     </td>
+                </tr>
+                <tr>
+                    <td>Value:</td>
+                    <td>{@html katexAsHtmlInline(katex)}</td>
                 </tr>
             </tbody>
         </table>
-        <div>
-            {@html katexAsHtml(katex)}
-        </div>
     </div>
 </div>
 
