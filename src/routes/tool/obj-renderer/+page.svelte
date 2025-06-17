@@ -106,8 +106,35 @@ void main() {
             requestAnimationFrame(render);
         }
 
-        render(0);
+        render();
     }
+
+    let isRunning = false;
+
+    function delay(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function startAutoRotate() {
+        if (isRunning)
+            return;
+        isRunning = true;
+
+        while (isRunning) {
+            await delay(50);
+            angle = (angle + 1) % 360;
+            console.log(angle);
+        }
+    }
+
+    function stopAutoRotate() {
+        isRunning = false;
+    }
+
+    function toggleAutoRotate() {
+        isRunning ? stopAutoRotate() : startAutoRotate();
+    }
+
     onMount(() => {
         load();
     });
@@ -132,6 +159,9 @@ void main() {
         <div class="d-flex flex-row gap-1 align-items-center">
             <button type="button" class="btn btn-primary" on:click={load}>Load</button>
             <input type="range" class="form-range" bind:value="{angle}" min="0" max="360">
+            <button type="button" class="btn btn-sm btn-primary" on:click={toggleAutoRotate}>
+                {isRunning ? "Stop" : "Start"} Rotate
+            </button>
         </div>
     </div>
 </div>
