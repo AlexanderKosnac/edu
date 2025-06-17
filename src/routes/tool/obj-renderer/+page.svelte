@@ -2,6 +2,7 @@
     import { onMount } from "svelte";
 
     import { parseObjContent, cube } from "$lib/objUtility";
+    import { createShader } from "$lib/webglUtility";
 
     let angle = 0;
 
@@ -21,15 +22,18 @@
         return out;
     }
 
-    function mat4_rotateY(out, angle) {
+    function mat4_translateAndRotate(out, angle, translation = [0, 0, 0]) {
         const rad = angle * (Math.PI/180.0);
         const c = Math.cos(rad);
         const s = Math.sin(rad);
+
+        const t = translation;
+
         out.set([
-            c, 0, s, 0,
-            0, 1, 0, 0,
-            -s, 0, c, 0,
-            0, 0, -3, 1
+               c,    0,    s, 0,
+               0,    1,    0, 0,
+              -s,    0,    c, 0,
+            t[0], t[1], t[2], 1
         ]);
         return out;
     }
@@ -38,12 +42,14 @@
 attribute vec3 aPosition;
 uniform mat4 uProjection;
 uniform mat4 uModelView;
+
 void main() {
     gl_Position = uProjection * uModelView * vec4(aPosition, 1.0);
 }`;
 
         const fsSource = `
 precision mediump float;
+
 void main() {
     gl_FragColor = vec4(0.3, 0.8, 0.9, 1.0);
 }`;
@@ -56,18 +62,8 @@ void main() {
 
         const { positions, indices } = parseObjContent(objContent);
 
-        function createShader(type, src) {
-            const shader = gl.createShader(type);
-            gl.shaderSource(shader, src);
-            gl.compileShader(shader);
-            if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-                throw new Error(gl.getShaderInfoLog(shader));
-            }
-            return shader;
-        }
-
-        const vs = createShader(gl.VERTEX_SHADER, vsSource);
-        const fs = createShader(gl.FRAGMENT_SHADER, fsSource);
+        const vs = createShader(gl, gl.VERTEX_SHADER, vsSource);
+        const fs = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
 
         const program = gl.createProgram();
         gl.attachShader(program, vs);
@@ -97,7 +93,7 @@ void main() {
         gl.enable(gl.DEPTH_TEST);
 
         function render() {
-            mat4_rotateY(model, angle);
+            mat4_translateAndRotate(model, angle, [0, -0.5, -5]);
             gl.clearColor(0, 0, 0, 1);
             gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
             gl.uniformMatrix4fv(uProjection, false, proj);
