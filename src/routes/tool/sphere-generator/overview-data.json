@@ -1,0 +1,10 @@
+{
+    "name": "Sphere Generator",
+    "url": "tool/sphere-generator",
+    "description": "A tool to generate 3D models of spheres with different levels of detail.",
+    "tags": [
+        "Computer Science",
+        "Computer Graphics",
+        "Rendering"
+    ]
+}
