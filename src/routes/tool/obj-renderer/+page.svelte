@@ -38,7 +38,7 @@
         return out;
     }
 
-    const vsSource = `
+    const vsSource = `\
 attribute vec3 aPosition;
 uniform mat4 uProjection;
 uniform mat4 uModelView;
@@ -47,7 +47,7 @@ void main() {
     gl_Position = uProjection * uModelView * vec4(aPosition, 1.0);
 }`;
 
-        const fsSource = `
+        const fsSource = `\
 precision mediump float;
 
 void main() {
@@ -60,8 +60,6 @@ void main() {
         canvas.height = canvas.clientHeight;
         gl.viewport(0, 0, canvas.width, canvas.height);
 
-        const { positions, indices } = parseObjContent(objContent);
-
         const vs = createShader(gl, gl.VERTEX_SHADER, vsSource);
         const fs = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
 
@@ -71,9 +69,22 @@ void main() {
         gl.linkProgram(program);
         gl.useProgram(program);
 
-        const positionBuffer = gl.createBuffer();
-        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+        const {
+            vertices,
+            texcoords,
+            normals,
+            parameterSpaceVertices,
+            faces,
+            lines,
+            points,
+            metadata,
+        } = parseObjContent(objContent);
+
+        const verticesBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, verticesBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices.flatMap(i => i)), gl.STATIC_DRAW);
+
+        const indices = faces.flatMap(f => f.vertices.map(v => v.v));
 
         const indexBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
