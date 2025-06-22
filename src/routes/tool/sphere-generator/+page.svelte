@@ -83,7 +83,7 @@
         <button type="button" class="btn btn-sm btn-primary" on:click={generateSphereFromInputs}>Generate</button>
     </div>
     <div class="col">
-        <textarea class="form-control font-monospace mb-1" rows="20" bind:value="{objContent}"></textarea>
+        <textarea class="form-control font-monospace mb-1" rows="20" bind:value="{objContent}" readonly></textarea>
     </div>
 </div>
 
