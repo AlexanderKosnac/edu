@@ -1,6 +1,6 @@
 import { mat4 } from "gl-matrix";
 
-export function drawScene(gl, programInfo, buffers, texture, cubeRotation) {
+export function drawScene(gl, programInfo, objects, buffers, cubeRotation) {
     gl.clearColor(0, 0, 0, 1);
     gl.clearDepth(1.0);
 
@@ -17,35 +17,37 @@ export function drawScene(gl, programInfo, buffers, texture, cubeRotation) {
     const projectionMatrix = mat4.create();
     mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
 
-    const modelViewMatrix = mat4.create();
-    mat4.translate(modelViewMatrix, modelViewMatrix, [-0.0, 0.0, -6.0]);
-    mat4.rotate(modelViewMatrix, modelViewMatrix, cubeRotation * 1.0, [0, 0, 1]);
-    mat4.rotate(modelViewMatrix, modelViewMatrix, cubeRotation * 0.7, [0, 1, 0]);
-    mat4.rotate(modelViewMatrix, modelViewMatrix, cubeRotation * 0.3, [1, 0, 0]);
+    objects.forEach(function(object) {
+        const modelViewMatrix = mat4.create();
+        mat4.translate(modelViewMatrix, modelViewMatrix, [-0.0, 0.0, -6.0]);
+        mat4.rotate(modelViewMatrix, modelViewMatrix, cubeRotation * 1.0, [0, 0, 1]);
+        mat4.rotate(modelViewMatrix, modelViewMatrix, cubeRotation * 0.7, [0, 1, 0]);
+        mat4.rotate(modelViewMatrix, modelViewMatrix, cubeRotation * 0.3, [1, 0, 0]);
 
-    const normalMatrix = mat4.create();
-    mat4.invert(normalMatrix, modelViewMatrix);
-    mat4.transpose(normalMatrix, normalMatrix);
+        const normalMatrix = mat4.create();
+        mat4.invert(normalMatrix, modelViewMatrix);
+        mat4.transpose(normalMatrix, normalMatrix);
 
-    setPositionAttribute(gl, buffers, programInfo);
-    setTextureAttribute(gl, buffers, programInfo);
+        setPositionAttribute(gl, buffers, programInfo);
+        setTextureAttribute(gl, buffers, programInfo);
 
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
 
-    setNormalAttribute(gl, buffers, programInfo);
+        setNormalAttribute(gl, buffers, programInfo);
 
-    gl.useProgram(programInfo.program);
+        gl.useProgram(programInfo.program);
 
-    gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
-    gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
-    gl.uniformMatrix4fv(programInfo.uniformLocations.normalMatrix, false, normalMatrix);
+        gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
+        gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
+        gl.uniformMatrix4fv(programInfo.uniformLocations.normalMatrix, false, normalMatrix);
 
-    gl.activeTexture(gl.TEXTURE0);
-    gl.bindTexture(gl.TEXTURE_2D, texture);
-    gl.uniform1i(programInfo.uniformLocations.uSampler, 0);
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, object.texture);
+        gl.uniform1i(programInfo.uniformLocations.uSampler, 0);
 
-    const vertexCount = 36;
-    gl.drawElements(gl.TRIANGLES, vertexCount, gl.UNSIGNED_SHORT, 0);
+        const vertexCount = 36;
+        gl.drawElements(gl.TRIANGLES, vertexCount, gl.UNSIGNED_SHORT, 0);
+    });
 }
 
 function setPositionAttribute(gl, buffers, programInfo) {

@@ -1,7 +1,7 @@
 <script>
     import { onMount } from "svelte";
 
-    import { parseObjContent, cube } from "$lib/objUtility";
+    import { parseObjContent, cube, pyramid } from "$lib/objUtility";
     import { vsSource, fsSource, initShaderProgram, loadTexture } from "$lib/webglUtility";
 
     import { initBuffers } from "./BufferInit";
@@ -24,6 +24,13 @@
             alert("Unable to initialize WebGL. Your browser or machine may not support it.");
             return;
         }
+
+        const objects = [
+            {
+                mesh: parseObjContent(objContent),
+                texture: loadTexture(gl, textureUrl),
+            },
+        ];
 
         canvas.width = canvas.clientWidth;
         canvas.height = canvas.clientHeight;
@@ -49,8 +56,7 @@
             },
         };
 
-        const buffers = initBuffers(gl);
-        const texture = loadTexture(gl, textureUrl);
+        const buffers = initBuffers(gl, objects[0]);
 
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
@@ -61,29 +67,14 @@
             deltaTime = now - then;
             then = now;
 
-            drawScene(gl, programInfo, buffers, texture, cubeRotation);
+            drawScene(gl, programInfo, objects, buffers, cubeRotation);
+
             cubeRotation += deltaTime;
 
             requestAnimationFrame(render);
         }
 
         requestAnimationFrame(render);
-
-        // ------------------------
-
-        /*
-
-        const {
-            vertices,
-            texcoords,
-            normals,
-            parameterSpaceVertices,
-            faces,
-            lines,
-            points,
-            metadata,
-        } = parseObjContent(objContent);
-         */
     }
 
     let isRunning = false;
