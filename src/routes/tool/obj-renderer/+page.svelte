@@ -1,6 +1,8 @@
 <script>
     import { onMount } from "svelte";
 
+    import { mat4 } from "gl-matrix";
+
     import { parseObjContent, cube, pyramid } from "$lib/objUtility";
     import { vsSource, fsSource, initShaderProgram, loadTexture } from "$lib/webglUtility";
 
@@ -25,10 +27,33 @@
             return;
         }
 
+        const fieldOfView = (45 * Math.PI) / 180;
+        const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+        const zNear = 0.1;
+        const zFar = 100.0;
+
+        const projectionMatrix = mat4.create();
+        mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
+
         const objects = [
             {
                 mesh: parseObjContent(objContent),
                 texture: loadTexture(gl, textureUrl),
+                state: {
+                    rotation: 0,
+                    position: [0, 0, -6],
+                },
+                tick(deltaTime) {
+                    this.state.rotation += deltaTime;
+                },
+                getModelViewMatrix() {
+                    const m = mat4.create();
+                    mat4.translate(m, m, this.state.position);
+                    mat4.rotate(m, m, this.state.rotation * 1.0, [0, 0, 1]);
+                    mat4.rotate(m, m, this.state.rotation * 0.7, [0, 1, 0]);
+                    mat4.rotate(m, m, this.state.rotation * 0.3, [1, 0, 0]);
+                    return m;
+                },
             },
         ];
 
@@ -67,9 +92,11 @@
             deltaTime = now - then;
             then = now;
 
-            drawScene(gl, programInfo, objects, buffers, cubeRotation);
+            objects.forEach(function(obj) {
+                obj.tick(deltaTime);
+            });
 
-            cubeRotation += deltaTime;
+            drawScene(gl, programInfo, objects, buffers, projectionMatrix);
 
             requestAnimationFrame(render);
         }

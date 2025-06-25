@@ -1,6 +1,6 @@
 import { mat4 } from "gl-matrix";
 
-export function drawScene(gl, programInfo, objects, buffers, cubeRotation) {
+export function drawScene(gl, programInfo, objects, buffers, projectionMatrix) {
     gl.clearColor(0, 0, 0, 1);
     gl.clearDepth(1.0);
 
@@ -9,20 +9,8 @@ export function drawScene(gl, programInfo, objects, buffers, cubeRotation) {
 
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
-    const fieldOfView = (45 * Math.PI) / 180;
-    const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
-    const zNear = 0.1;
-    const zFar = 100.0;
-
-    const projectionMatrix = mat4.create();
-    mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
-
     objects.forEach(function(object) {
-        const modelViewMatrix = mat4.create();
-        mat4.translate(modelViewMatrix, modelViewMatrix, [-0.0, 0.0, -6.0]);
-        mat4.rotate(modelViewMatrix, modelViewMatrix, cubeRotation * 1.0, [0, 0, 1]);
-        mat4.rotate(modelViewMatrix, modelViewMatrix, cubeRotation * 0.7, [0, 1, 0]);
-        mat4.rotate(modelViewMatrix, modelViewMatrix, cubeRotation * 0.3, [1, 0, 0]);
+        const modelViewMatrix = object.getModelViewMatrix();
 
         const normalMatrix = mat4.create();
         mat4.invert(normalMatrix, modelViewMatrix);
