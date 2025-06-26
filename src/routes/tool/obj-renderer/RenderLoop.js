@@ -46,14 +46,6 @@ function setPositionAttribute(gl, buffers, programInfo) {
     gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
 }
 
-function setColorAttribute(gl, buffers, programInfo) {
-    const elements = 4;
-    const normalize = false;
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.color);
-    gl.vertexAttribPointer(programInfo.attribLocations.vertexColor, elements, gl.FLOAT, normalize, 0, 0);
-    gl.enableVertexAttribArray(programInfo.attribLocations.vertexColor);
-}
-
 function setTextureAttribute(gl, buffers, programInfo) {
     const elements = 2;
     const normalize = false;

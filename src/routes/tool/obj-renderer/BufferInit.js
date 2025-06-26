@@ -1,14 +1,10 @@
-export function initBuffers(gl) {
-    const positionBuffer = initPositionBuffer(gl);
-    const textureCoordBuffer = initTextureBuffer(gl);
-    const indexBuffer = initIndexBuffer(gl);
-    const normalBuffer = initNormalBuffer(gl);
-
+export function initBuffers(gl, object) {
+    console.log(object.mesh.faces.flatMap(f => f.vertices));
     return {
-        position: positionBuffer,
-        normal: normalBuffer,
-        textureCoord: textureCoordBuffer,
-        indices: indexBuffer,
+        position: initPositionBuffer(gl, object.mesh.vertices.flat()),
+        normal: initNormalBuffer(gl, object.mesh.normals.flat()),
+        textureCoord: initTextureBuffer(gl, object.mesh.texcoords.flat()),
+        indices: initIndexBuffer(gl, object.mesh.faces.flatMap(f => f.vertices.flatMap(v => v.v))),
     };
 }
 
@@ -26,32 +22,6 @@ function initPositionBuffer(gl) {
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
     return positionBuffer;
-}
-
-function initColorBuffer(gl) {
-    const faceColors = [
-        [1.0, 1.0, 1.0, 1.0], // Front face: white
-        [1.0, 0.0, 0.0, 1.0], // Back face: red
-        [0.0, 1.0, 0.0, 1.0], // Top face: green
-        [0.0, 0.0, 1.0, 1.0], // Bottom face: blue
-        [1.0, 1.0, 0.0, 1.0], // Right face: yellow
-        [1.0, 0.0, 1.0, 1.0], // Left face: purple
-    ];
-
-    // Convert the array of colors into a table for all the vertices.
-    var colors = [];
-
-    for (var j = 0; j < faceColors.length; ++j) {
-        const c = faceColors[j];
-        // Repeat each color four times for the four vertices of the face
-        colors = colors.concat(c, c, c, c);
-    }
-
-    const colorBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
-
-    return colorBuffer;
 }
 
 function initIndexBuffer(gl) {
