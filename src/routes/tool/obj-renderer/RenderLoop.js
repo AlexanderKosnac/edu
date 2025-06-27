@@ -1,6 +1,8 @@
 import { mat4 } from "gl-matrix";
 
-export function drawScene(gl, programInfo, objects, buffers, projectionMatrix) {
+import { initBuffers } from "./BufferInit";
+
+export function drawScene(gl, programInfo, objects, projectionMatrix) {
     gl.clearColor(0, 0, 0, 1);
     gl.clearDepth(1.0);
 
@@ -15,6 +17,8 @@ export function drawScene(gl, programInfo, objects, buffers, projectionMatrix) {
         const normalMatrix = mat4.create();
         mat4.invert(normalMatrix, modelViewMatrix);
         mat4.transpose(normalMatrix, normalMatrix);
+
+        const buffers = initBuffers(gl, object);
 
         setPositionAttribute(gl, buffers, programInfo);
         setTextureAttribute(gl, buffers, programInfo);
@@ -33,8 +37,7 @@ export function drawScene(gl, programInfo, objects, buffers, projectionMatrix) {
         gl.bindTexture(gl.TEXTURE_2D, object.texture);
         gl.uniform1i(programInfo.uniformLocations.uSampler, 0);
 
-        const vertexCount = 36;
-        gl.drawElements(gl.TRIANGLES, vertexCount, gl.UNSIGNED_SHORT, 0);
+        gl.drawElements(gl.TRIANGLES, object.mesh.faces.length * 3, gl.UNSIGNED_SHORT, 0);
     });
 }
 

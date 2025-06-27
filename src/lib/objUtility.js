@@ -7,24 +7,28 @@ v 0.0 0.0 1.0
 v 0.0 1.0 1.0
 v 1.0 1.0 1.0
 v 1.0 0.0 1.0
+vt 0.0 0.0
+vt 0.0 1.0
+vt 1.0 1.0
+vt 1.0 0.0
 vn 0.0 0.0 -1.0
 vn 0.0 0.0 1.0
 vn -1.0 0.0 0.0
 vn 1.0 0.0 0.0
 vn 0.0 1.0 0.0
 vn 0.0 -1.0 0.0
-f 3//1 7//1 8//1
-f 3//1 8//1 4//1
-f 1//2 5//2 6//2
-f 1//2 6//2 2//2
-f 7//5 3//5 2//5
-f 7//5 2//5 6//5
-f 4//6 8//6 5//6
-f 4//6 5//6 1//6
-f 8//4 7//4 6//4
-f 8//4 6//4 5//4
-f 3//3 4//3 1//3
-f 3//3 1//3 2//3`;
+f 1/1/1 2/2/1 3/3/1
+f 1/1/1 3/3/1 4/4/1
+f 8/1/2 7/2/2 6/3/2
+f 8/1/2 6/3/2 5/4/2
+f 5/1/3 6/2/3 2/3/3
+f 5/1/3 2/3/3 1/4/3
+f 4/1/4 3/2/4 7/3/4
+f 4/1/4 7/3/4 8/4/4
+f 2/1/5 6/2/5 7/3/5
+f 2/1/5 7/3/5 3/4/5
+f 5/1/6 1/2/6 4/3/6
+f 5/1/6 4/3/6 8/4/6`;
 
 export const pyramid = `\
 v  1.0  1.0  1.0
@@ -132,4 +136,69 @@ export function parseObjContent(text) {
             materials: objects.mtllibs || [],
         }
     };
+}
+
+export function flattenObjToBuffers(parsed) {
+    const {
+        vertices,
+        texcoords,
+        normals,
+        faces,
+    } = parsed;
+
+    const positionBuffer = [];
+    const normalBuffer = [];
+    const texcoordBuffer = [];
+    const indexBuffer = [];
+
+    const uniqueVertexMap = new Map();
+
+    let nextIndex = 0;
+    for (const face of faces) {
+        const vertexIndices = [];
+
+        for (const vert of face.vertices) {
+            const key = makeKey(vert.v, vert.vt, vert.vn);
+
+            if (uniqueVertexMap.has(key)) {
+                vertexIndices.push(uniqueVertexMap.get(key));
+            } else {
+                positionBuffer.push(...vertices[vert.v]);
+
+                if (vert.vt !== undefined && texcoords[vert.vt]) {
+                    texcoordBuffer.push(...texcoords[vert.vt].slice(0, 2));
+                } else {
+                    texcoordBuffer.push(0, 0);
+                }
+
+                if (vert.vn !== undefined && normals[vert.vn]) {
+                    normalBuffer.push(...normals[vert.vn]);
+                } else {
+                    normalBuffer.push(0, 0, 0);
+                }
+
+                uniqueVertexMap.set(key, nextIndex);
+                vertexIndices.push(nextIndex);
+                nextIndex++;
+            }
+        }
+
+        // Triangulation for quad or polygon faces
+        for (let i = 1; i < vertexIndices.length - 1; i++) {
+            indexBuffer.push(vertexIndices[0], vertexIndices[i], vertexIndices[i + 1]);
+        }
+    }
+
+    return {
+        positions: new Float32Array(positionBuffer),
+        normals: new Float32Array(normalBuffer),
+        texcoords: new Float32Array(texcoordBuffer),
+        indices: (nextIndex < 65536)
+            ? new Uint16Array(indexBuffer)
+            : new Uint32Array(indexBuffer),
+    };
+}
+
+function makeKey(v, vt, vn) {
+    return `${v}/${vt !== undefined ? vt : ''}/${vn !== undefined ? vn : ''}`;
 }

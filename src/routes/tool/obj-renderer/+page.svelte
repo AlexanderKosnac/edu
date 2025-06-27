@@ -6,7 +6,6 @@
     import { parseObjContent, cube, pyramid } from "$lib/objUtility";
     import { vsSource, fsSource, initShaderProgram, loadTexture } from "$lib/webglUtility";
 
-    import { initBuffers } from "./BufferInit";
     import { drawScene } from "./RenderLoop";
 
     let angle = 0;
@@ -80,8 +79,6 @@
             },
         };
 
-        const buffers = initBuffers(gl, objects[0]);
-
         gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
 
         let then = 0;
@@ -95,7 +92,7 @@
                 obj.tick(deltaTime);
             });
 
-            drawScene(gl, programInfo, objects, buffers, projectionMatrix);
+            drawScene(gl, programInfo, objects, projectionMatrix);
 
             requestAnimationFrame(render);
         }
@@ -117,7 +114,6 @@
         while (isRunning) {
             await delay(50);
             angle = (angle + 1) % 360;
-            console.log(angle);
         }
     }
 

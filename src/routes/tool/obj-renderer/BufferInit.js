@@ -1,73 +1,40 @@
+import { flattenObjToBuffers } from "$lib/objUtility";
+
 export function initBuffers(gl, object) {
-    console.log(object.mesh.faces.flatMap(f => f.vertices));
+    const { positions, normals, texcoords, indices } = flattenObjToBuffers(object.mesh);
     return {
-        position: initPositionBuffer(gl, object.mesh.vertices.flat()),
-        normal: initNormalBuffer(gl, object.mesh.normals.flat()),
-        textureCoord: initTextureBuffer(gl, object.mesh.texcoords.flat()),
-        indices: initIndexBuffer(gl, object.mesh.faces.flatMap(f => f.vertices.flatMap(v => v.v))),
+        position: initPositionBuffer(gl, positions),
+        normal: initNormalBuffer(gl, normals),
+        textureCoord: initTextureBuffer(gl, texcoords),
+        indices: initIndexBuffer(gl, indices),
     };
 }
 
-function initPositionBuffer(gl) {
-    const positions = [
-        -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, -1.0, 1.0, 1.0,      // Front face
-        -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0, -1.0,  // Back face
-        -1.0, 1.0, -1.0, -1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, -1.0,      // Top face
-        -1.0, -1.0, -1.0, 1.0, -1.0, -1.0, 1.0, -1.0, 1.0, -1.0, -1.0, 1.0,  // Bottom face
-        1.0, -1.0, -1.0, 1.0, 1.0, -1.0, 1.0, 1.0, 1.0, 1.0, -1.0, 1.0,      // Right face
-        -1.0, -1.0, -1.0, -1.0, -1.0, 1.0, -1.0, 1.0, 1.0, -1.0, 1.0, -1.0,  // Left face
-    ];
-
+function initPositionBuffer(gl, positions) {
     const positionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
     return positionBuffer;
 }
 
-function initIndexBuffer(gl) {
-    const indices = [
-        0, 1, 2, 0, 2, 3, // front
-        4, 5, 6, 4, 6, 7, // back
-        8, 9, 10, 8, 10, 11, // top
-        12, 13, 14, 12, 14, 15, // bottom
-        16, 17, 18, 16, 18, 19, // right
-        20, 21, 22, 20, 22, 23, // left
-    ];
-
-    const indexBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
-    return indexBuffer;
+function initNormalBuffer(gl, vertexNormals) {
+    const normalBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexNormals), gl.STATIC_DRAW);
+    return normalBuffer;
 }
 
-function initTextureBuffer(gl) {
-    const textureCoordinates = [
-        0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, // Front
-        0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, // Back
-        0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, // Top
-        0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, // Bottom
-        0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, // Right
-        0.0, 0.0, 1.0, 0.0, 1.0, 1.0, 0.0, 1.0, // Left
-    ];
-
+function initTextureBuffer(gl, textureCoordinates) {
     const textureCoordBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, textureCoordBuffer);
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(textureCoordinates), gl.STATIC_DRAW);
     return textureCoordBuffer;
 }
 
-function initNormalBuffer(gl) {
-    const vertexNormals = [
-        0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, // Front
-        0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, // Back
-        0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, // Top
-        0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, // Bottom
-        1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, // Right
-        -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, -1.0, 0.0, 0.0, // Left
-    ];
-
-    const normalBuffer = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
-    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertexNormals), gl.STATIC_DRAW);
-    return normalBuffer;
+function initIndexBuffer(gl, indices) {
+    const indexBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(indices), gl.STATIC_DRAW);
+    return indexBuffer;
 }
+
