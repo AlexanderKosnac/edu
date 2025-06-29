@@ -18,6 +18,11 @@
 
     let textureUrl = "brick.png";
 
+    let transformations = {
+        translation: [0, 0, -10],
+        rotation: [0, 0, 0],
+    };
+
     function load() {
         const gl = canvas.getContext("webgl");
         if (gl === null) {
@@ -38,18 +43,15 @@
                 mesh: parseObjContent(objContent),
                 texture: loadTexture(gl, textureUrl),
                 state: {
-                    rotation: 0,
-                    position: [0, 0, -6],
                 },
                 tick(deltaTime) {
-                    this.state.rotation += deltaTime;
                 },
                 getModelViewMatrix() {
                     const m = mat4.create();
-                    mat4.translate(m, m, this.state.position);
-                    mat4.rotate(m, m, this.state.rotation * 1.0, [0, 0, 1]);
-                    mat4.rotate(m, m, this.state.rotation * 0.7, [0, 1, 0]);
-                    mat4.rotate(m, m, this.state.rotation * 0.3, [1, 0, 0]);
+                    mat4.translate(m, m, transformations.translation);
+                    mat4.rotate(m, m, deg2rad(transformations.rotation[0]), [0, 0, 1]);
+                    mat4.rotate(m, m, deg2rad(transformations.rotation[1]), [0, 1, 0]);
+                    mat4.rotate(m, m, deg2rad(transformations.rotation[2]), [1, 0, 0]);
                     return m;
                 },
             },
@@ -100,29 +102,8 @@
         requestAnimationFrame(render);
     }
 
-    let isRunning = false;
-
-    function delay(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
-    async function startAutoRotate() {
-        if (isRunning)
-            return;
-        isRunning = true;
-
-        while (isRunning) {
-            await delay(50);
-            angle = (angle + 1) % 360;
-        }
-    }
-
-    function stopAutoRotate() {
-        isRunning = false;
-    }
-
-    function toggleAutoRotate() {
-        isRunning ? stopAutoRotate() : startAutoRotate();
+    function deg2rad(deg) {
+        return deg * (Math.PI/180);
     }
 
     onMount(() => {
@@ -146,12 +127,31 @@
     </div>
     <div class="col">
         <textarea class="form-control font-monospace mb-1" rows="20" bind:value="{objContent}"></textarea>
-        <div class="d-flex flex-row gap-1 align-items-center">
+        <div class="d-flex flex-column gap-1">
+            Rotation:
+            <div class="d-flex flex-row gap-1">
+                <div class="d-flex flex-row gap-1 align-items-center">
+                    <input type="range" class="form-range" bind:value="{transformations.rotation[0]}" min="0" max="360">
+                    {transformations.rotation[0]}°
+                </div>
+                <div class="d-flex flex-row gap-1 align-items-center">
+                    <input type="range" class="form-range" bind:value="{transformations.rotation[1]}" min="0" max="360">
+                    {transformations.rotation[1]}°
+                </div>
+                <div class="d-flex flex-row gap-1 align-items-center">
+                    <input type="range" class="form-range" bind:value="{transformations.rotation[2]}" min="0" max="360">
+                    {transformations.rotation[2]}°
+                </div>
+            </div>
+
+            Translation:
+            <div class="d-flex flex-row gap-1">
+                <input type="number" class="form-control" bind:value={transformations.translation[0]}>
+                <input type="number" class="form-control" bind:value={transformations.translation[1]}>
+                <input type="number" class="form-control" bind:value={transformations.translation[2]}>
+            </div>
+
             <button type="button" class="btn btn-primary" on:click={load}>Load</button>
-            <input type="range" class="form-range" bind:value="{angle}" min="0" max="360">
-            <button type="button" class="btn btn-sm btn-primary" on:click={toggleAutoRotate}>
-                {isRunning ? "Stop" : "Start"} Rotate
-            </button>
         </div>
     </div>
 </div>
