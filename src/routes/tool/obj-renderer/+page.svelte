@@ -6,7 +6,7 @@
     import { parseObjContent, cube, pyramid } from "$lib/objUtility";
     import { vsSource, fsSource, initShaderProgram, loadTexture } from "$lib/webglUtility";
 
-    import { drawScene } from "./RenderLoop";
+    import { drawScene } from "./Renderer";
 
     let angle = 0;
 
