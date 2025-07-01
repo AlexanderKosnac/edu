@@ -1,3 +1,7 @@
+export function degToRad(deg) {
+    return deg * (Math.PI/180);
+}
+
 export function clamp(value, lower, upper) {
     if (value < lower) return lower;
     if (value > upper) return upper;

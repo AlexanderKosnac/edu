@@ -9,6 +9,7 @@
     import { drawScene } from "./Renderer";
 
     let angle = 0;
+    import { degToRad } from "$lib/math";
 
     let canvas;
 
@@ -49,9 +50,9 @@
                 getModelViewMatrix() {
                     const m = mat4.create();
                     mat4.translate(m, m, transformations.translation);
-                    mat4.rotate(m, m, deg2rad(transformations.rotation[0]), [0, 0, 1]);
-                    mat4.rotate(m, m, deg2rad(transformations.rotation[1]), [0, 1, 0]);
-                    mat4.rotate(m, m, deg2rad(transformations.rotation[2]), [1, 0, 0]);
+                    mat4.rotate(m, m, degToRad(transformations.rotation[0]), [0, 0, 1]);
+                    mat4.rotate(m, m, degToRad(transformations.rotation[1]), [0, 1, 0]);
+                    mat4.rotate(m, m, degToRad(transformations.rotation[2]), [1, 0, 0]);
                     return m;
                 },
             },
@@ -100,10 +101,6 @@
         }
 
         requestAnimationFrame(render);
-    }
-
-    function deg2rad(deg) {
-        return deg * (Math.PI/180);
     }
 
     onMount(() => {
