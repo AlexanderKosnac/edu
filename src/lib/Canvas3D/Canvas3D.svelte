@@ -1,7 +1,7 @@
 <script>
     import { onMount } from "svelte";
 
-    import { initShaderProgram, loadTexture, vsSource, fsSource } from "$lib/webglUtility";
+    import { initShaderProgram, vsSource, fsSource } from "$lib/webglUtility";
     import { drawScene } from "./Renderer";
 
     let {

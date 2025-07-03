@@ -10,15 +10,15 @@
 
     import Canvas3D from "$lib/Canvas3D/Canvas3D.svelte";
 
-    let gl;
-    let objContent = cube;
-
     const textureUrls = {
         "brick": "brick.png",
     };
 
+    let gl;
+    let objContent = cube;
+
     let transformations = {
-        translation: [0, 0, -10],
+        translation: [0, 0, -10],   
         rotation: [0, 0, 0],
     };
 
@@ -41,6 +41,7 @@
             {
                 mesh: parseObjContent(objContent),
                 texture: "brick",
+                color: [1.0, 0.0, 1.0, 1.0],
                 state: {
                 },
                 tick(deltaTime) {
@@ -60,7 +61,7 @@
 
     function loadTextures() {
         objects.forEach(o => {
-            o.texture = loadTexture(gl, textureUrls[o.texture]);
+            o.texture = loadTexture(gl, textureUrls[o.texture], o.color);
         });
     }
 
