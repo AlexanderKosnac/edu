@@ -30,7 +30,7 @@ f 2/1/5 7/3/5 3/4/5
 f 5/1/6 1/2/6 4/3/6
 f 5/1/6 4/3/6 8/4/6`;
 
-export const pyramid = `\
+export const tetrahedron = `\
 v  1.0  1.0  1.0
 v -1.0 -1.0  1.0
 v -1.0  1.0 -1.0

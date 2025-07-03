@@ -4,7 +4,7 @@
 
     import { mat4 } from "gl-matrix";
 
-    import { parseObjContent, cube } from "$lib/objUtility";
+    import { parseObjContent, cube, tetrahedron } from "$lib/objUtility";
     import { loadTexture } from "$lib/webglUtility";
     import { degToRad } from "$lib/math";
 
@@ -30,29 +30,42 @@
     let projectionMatrix = mat4.create();
     mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
 
-    let objects = [
-        {
-            mesh: parseObjContent(objContent),
-            texture: "brick",
-            state: {
-            },
-            tick(deltaTime) {
-            },
-            getModelViewMatrix() {
-                const m = mat4.create();
-                mat4.translate(m, m, transformations.translation);
-                mat4.rotate(m, m, degToRad(transformations.rotation[0]), [0, 0, 1]);
-                mat4.rotate(m, m, degToRad(transformations.rotation[1]), [0, 1, 0]);
-                mat4.rotate(m, m, degToRad(transformations.rotation[2]), [1, 0, 0]);
-                return m;
-            },
-        },
-    ];
+    let objects = [];
 
-    onMount(() => {
+    function loadContent(text) {
+        objContent = text;
+    }
+
+    function refreshObjects() {
+        objects = [
+            {
+                mesh: parseObjContent(objContent),
+                texture: "brick",
+                state: {
+                },
+                tick(deltaTime) {
+                },
+                getModelViewMatrix() {
+                    const m = mat4.create();
+                    mat4.translate(m, m, transformations.translation);
+                    mat4.rotate(m, m, degToRad(transformations.rotation[0]), [0, 0, 1]);
+                    mat4.rotate(m, m, degToRad(transformations.rotation[1]), [0, 1, 0]);
+                    mat4.rotate(m, m, degToRad(transformations.rotation[2]), [1, 0, 0]);
+                    return m;
+                },
+            },
+        ];
+        loadTextures();
+    }
+
+    function loadTextures() {
         objects.forEach(o => {
             o.texture = loadTexture(gl, textureUrls[o.texture]);
         });
+    }
+
+    onMount(() => {
+        refreshObjects();
     });
 </script>
 
@@ -70,34 +83,38 @@
     <div class="col-auto">
         <Canvas3D bind:gl={gl} bind:objects={objects} bind:projectionMatrix={projectionMatrix} width={600} height={600} />
     </div>
-    <div class="col">
-        <textarea class="form-control font-monospace mb-1" rows="20" bind:value="{objContent}"></textarea>
-        <div class="d-flex flex-column gap-1">
-            Rotation:
-            <div class="d-flex flex-row gap-1">
-                <div class="d-flex flex-row gap-1 align-items-center">
-                    <input type="range" class="form-range" bind:value="{transformations.rotation[0]}" min="0" max="360">
-                    {transformations.rotation[0]}°
-                </div>
-                <div class="d-flex flex-row gap-1 align-items-center">
-                    <input type="range" class="form-range" bind:value="{transformations.rotation[1]}" min="0" max="360">
-                    {transformations.rotation[1]}°
-                </div>
-                <div class="d-flex flex-row gap-1 align-items-center">
-                    <input type="range" class="form-range" bind:value="{transformations.rotation[2]}" min="0" max="360">
-                    {transformations.rotation[2]}°
-                </div>
-            </div>
-
-            Translation:
-            <div class="d-flex flex-row gap-1">
-                <input type="number" class="form-control" bind:value={transformations.translation[0]}>
-                <input type="number" class="form-control" bind:value={transformations.translation[1]}>
-                <input type="number" class="form-control" bind:value={transformations.translation[2]}>
-            </div>
-
-            <button type="button" class="btn btn-primary" on:click={load}>Load</button>
+    <div class="col d-flex flex-column gap-1">
+        <div class="d-flex flex-row gap-1">
+            <button type="button" class="btn btn-primary" on:click={() => loadContent(cube)}>Cube</button>
+            <button type="button" class="btn btn-primary" on:click={() => loadContent(tetrahedron)}>Tetrahedron</button>
         </div>
+
+        <textarea class="form-control font-monospace mb-1" rows="20" bind:value="{objContent}"></textarea>
+
+        Rotation:
+        <div class="d-flex flex-row gap-1">
+            <div class="d-flex flex-row gap-1 align-items-center">
+                <input type="range" class="form-range" bind:value="{transformations.rotation[0]}" min="0" max="360">
+                {transformations.rotation[0]}°
+            </div>
+            <div class="d-flex flex-row gap-1 align-items-center">
+                <input type="range" class="form-range" bind:value="{transformations.rotation[1]}" min="0" max="360">
+                {transformations.rotation[1]}°
+            </div>
+            <div class="d-flex flex-row gap-1 align-items-center">
+                <input type="range" class="form-range" bind:value="{transformations.rotation[2]}" min="0" max="360">
+                {transformations.rotation[2]}°
+            </div>
+        </div>
+
+        Translation:
+        <div class="d-flex flex-row gap-1">
+            <input type="number" class="form-control" bind:value={transformations.translation[0]}>
+            <input type="number" class="form-control" bind:value={transformations.translation[1]}>
+            <input type="number" class="form-control" bind:value={transformations.translation[2]}>
+        </div>
+
+        <button type="button" class="btn btn-primary" on:click={refreshObjects}>Load</button>
     </div>
 </div>
 
