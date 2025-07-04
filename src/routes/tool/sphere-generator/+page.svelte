@@ -137,16 +137,21 @@
             Number of latitute segments:
             <input type="number" class="form-control" bind:value={inputLatitudeSegments}
                 on:change={generateSphereFromInputs}
-                step="1" min="2"
-                aria-label="Ticks per second"/>
+                step="1" min="3" aria-label="Ticks per second"/>
         </label>
         <label>
             Number of longitude segments:
             <input type="number" class="form-control" bind:value={inputLongitudeSegments}
                 on:change={generateSphereFromInputs}
-                step="1" min="2"
-                aria-label="Ticks per second"/>
+                step="1" min="3" aria-label="Ticks per second"/>
         </label>
+
+        <div class="d-flex flex-column">
+            {#if objects[0]}
+            <span>Vertices: {objects[0].mesh.vertices.length}</span>
+            <span>Faces: {objects[0].mesh.faces.length}</span>
+            {/if}
+        </div>
     </div>
     <div class="col">
         <textarea class="form-control font-monospace mb-1" rows="20" bind:value="{objContent}" readonly></textarea>
