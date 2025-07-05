@@ -42,6 +42,9 @@
     const svgHeight = 10;
 
     let gl;
+    $: if (gl) {
+        objects.forEach(o => o.texture = loadTexture(gl, null, o.color));
+    }
 
     let baseYOffset = -1;
 
@@ -62,104 +65,92 @@
     let viewMatrix = mat4.create();
     mat4.lookAt(viewMatrix, cameraPosition, target, up);
 
-    let objects = [];
-
     let orbiterRotation = 0;
 
-    function refreshObjects() {
-        objects = [
-            {
-                mesh: cubeMesh,
-                texture: null,
-                color: [255, 0, 255, 255],
-                state: {
-                    translation: [0, baseYOffset, -4],
-                    rotation: orbiterRotation,
-                },
-                tick(deltaTime) {
-                    this.state.rotation += deltaTime * 100;
-                    this.state.rotation %= 360;
-                    orbiterRotation = this.state.rotation;
-                },
-                getModelMatrix() {
-                    const m = mat4.create();
-                    mat4.rotate(m, m, degToRad(this.state.rotation), [0, 1, 0]);
-                    mat4.translate(m, m, this.state.translation);
-                    return m;
-                },
+    let objects = [
+        {
+            mesh: cubeMesh,
+            texture: null,
+            color: [255, 0, 255, 255],
+            state: {
+                translation: [0, baseYOffset, -4],
+                rotation: orbiterRotation,
             },
-            {
-                mesh: cubeMesh,
-                texture: null,
-                color: [255, 0, 0, 255],
-                state: {
-                    translation: [2, baseYOffset, 0],
-                },
-                tick(deltaTime) {
-                },
-                getModelMatrix() {
-                    const m = mat4.create();
-                    mat4.translate(m, m, this.state.translation);
-                    return m;
-                },
+            tick(deltaTime) {
+                this.state.rotation += deltaTime * 100;
+                this.state.rotation %= 360;
+                orbiterRotation = this.state.rotation;
             },
-            {
-                mesh: cubeMesh,
-                texture: null,
-                color: [0, 255, 0, 255],
-                state: {
-                    translation: [0, baseYOffset, -2],
-                },
-                tick(deltaTime) {
-                },
-                getModelMatrix() {
-                    const m = mat4.create();
-                    mat4.translate(m, m, this.state.translation);
-                    return m;
-                },
+            getModelMatrix() {
+                const m = mat4.create();
+                mat4.rotate(m, m, degToRad(this.state.rotation), [0, 1, 0]);
+                mat4.translate(m, m, this.state.translation);
+                return m;
             },
-            {
-                mesh: cubeMesh,
-                texture: null,
-                color: [0, 0, 255, 255],
-                state: {
-                    translation: [-2, baseYOffset, 0],
-                },
-                tick(deltaTime) {
-                },
-                getModelMatrix() {
-                    const m = mat4.create();
-                    mat4.translate(m, m, this.state.translation);
-                    return m;
-                },
+        },
+        {
+            mesh: cubeMesh,
+            texture: null,
+            color: [255, 0, 0, 255],
+            state: {
+                translation: [2, baseYOffset, 0],
             },
-            {
-                mesh: cubeMesh,
-                texture: null,
-                color: [255, 255, 255, 255],
-                state: {
-                    translation: [0, baseYOffset, 0],
-                },
-                tick(deltaTime) {
-                },
-                getModelMatrix() {
-                    const m = mat4.create();
-                    mat4.translate(m, m, this.state.translation);
-                    return m;
-                },
+            tick(deltaTime) {
             },
-        ];
-        loadTextures();
-    }
-
-    function loadTextures() {
-        objects.forEach(o => {
-            o.texture = loadTexture(gl, null, o.color);
-        });
-    }
+            getModelMatrix() {
+                const m = mat4.create();
+                mat4.translate(m, m, this.state.translation);
+                return m;
+            },
+        },
+        {
+            mesh: cubeMesh,
+            texture: null,
+            color: [0, 255, 0, 255],
+            state: {
+                translation: [0, baseYOffset, -2],
+            },
+            tick(deltaTime) {
+            },
+            getModelMatrix() {
+                const m = mat4.create();
+                mat4.translate(m, m, this.state.translation);
+                return m;
+            },
+        },
+        {
+            mesh: cubeMesh,
+            texture: null,
+            color: [0, 0, 255, 255],
+            state: {
+                translation: [-2, baseYOffset, 0],
+            },
+            tick(deltaTime) {
+            },
+            getModelMatrix() {
+                const m = mat4.create();
+                mat4.translate(m, m, this.state.translation);
+                return m;
+            },
+        },
+        {
+            mesh: cubeMesh,
+            texture: null,
+            color: [255, 255, 255, 255],
+            state: {
+                translation: [0, baseYOffset, 0],
+            },
+            tick(deltaTime) {
+            },
+            getModelMatrix() {
+                const m = mat4.create();
+                mat4.translate(m, m, this.state.translation);
+                return m;
+            },
+        },
+    ];
 
     onMount(() => {
-        refreshObjects();
     });
 </script>
 

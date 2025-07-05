@@ -14,6 +14,10 @@
     let inputLongitudeSegments = 8;
 
     let gl;
+    $: if (gl) {
+        objects.forEach(o => o.texture = loadTexture(gl, null, o.color));
+    }
+
     let objContent = "";
 
     const fieldOfView = (45 * Math.PI) / 180;
@@ -33,7 +37,8 @@
 
     let objects = [];
 
-    function refreshObjects() {
+    function generateSphereFromInputs() {
+        objContent = generateSphere(inputLatitudeSegments, inputLongitudeSegments, inputRadius);
         objects = [
             {
                 mesh: parseObjContent(objContent),
@@ -53,20 +58,8 @@
                     mat4.rotate(m, m, degToRad(this.state.rotation * 4), [0, 0, 1]);
                     return m;
                 },
-            },
+            }
         ];
-        loadTextures();
-    }
-
-    function loadTextures() {
-        objects.forEach(o => {
-            o.texture = loadTexture(gl, null, o.color);
-        });
-    }
-
-    function generateSphereFromInputs() {
-        objContent = generateSphere(inputLatitudeSegments, inputLongitudeSegments, inputRadius);
-        refreshObjects();
     }
 
     function generateSphere(latSegments, lonSegments, radius = 1) {
@@ -111,7 +104,6 @@
     }
 
     onMount(() => {
-        refreshObjects();
         generateSphereFromInputs();
     });
 </script>
@@ -149,7 +141,7 @@
         </label>
 
         <div class="d-flex flex-column">
-            {#if objects[0]}
+            {#if objects?.[0]}
             <span>Vertices: {objects[0].mesh.vertices.length}</span>
             <span>Faces: {objects[0].mesh.faces.length}</span>
             {/if}
