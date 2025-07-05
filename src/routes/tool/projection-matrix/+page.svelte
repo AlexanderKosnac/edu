@@ -36,6 +36,11 @@
 
     import Canvas3D from "$lib/Canvas3D/Canvas3D.svelte";
 
+    const width = 600;
+    const height = 600;
+    const svgWidth = 10;
+    const svgHeight = 10;
+
     let gl;
 
     let baseYOffset = -1;
@@ -52,24 +57,7 @@
 
     let objects = [];
 
-    const transformations = {
-        objA: {
-            translation: [0, baseYOffset, -5],
-        },
-        objB: {
-            translation: [0, baseYOffset, -6],
-        },
-        objC: {
-            translation: [0, baseYOffset, -7],
-        },
-        objD: {
-            translation: [0, baseYOffset, -8],
-        },
-        orbiter: {
-            translation: [0, baseYOffset, -8],
-            rotation: 0,
-        }
-    };
+    let orbiterRotation = 0;
 
     function refreshObjects() {
         objects = [
@@ -78,15 +66,18 @@
                 texture: null,
                 color: [255, 0, 255, 255],
                 state: {
+                    translation: [0, baseYOffset, -4],
+                    rotation: orbiterRotation,
                 },
                 tick(deltaTime) {
-                    transformations.orbiter.rotation += deltaTime * 100;
-                    transformations.orbiter.rotation %= 360;
+                    this.state.rotation += deltaTime * 100;
+                    this.state.rotation %= 360;
+                    orbiterRotation = this.state.rotation;
                 },
                 getModelViewMatrix() {
                     const m = mat4.create();
-                    mat4.rotate(m, m, degToRad(transformations.orbiter.rotation), [0, 1, 0]);
-                    mat4.translate(m, m, [0, baseYOffset, -10]);
+                    mat4.rotate(m, m, degToRad(this.state.rotation), [0, 1, 0]);
+                    mat4.translate(m, m, this.state.translation);
                     return m;
                 },
             },
@@ -95,12 +86,13 @@
                 texture: null,
                 color: [255, 0, 0, 255],
                 state: {
+                    translation: [2, baseYOffset, 0],
                 },
                 tick(deltaTime) {
                 },
                 getModelViewMatrix() {
                     const m = mat4.create();
-                    mat4.translate(m, m, transformations.objA.translation);
+                    mat4.translate(m, m, this.state.translation);
                     return m;
                 },
             },
@@ -109,12 +101,13 @@
                 texture: null,
                 color: [0, 255, 0, 255],
                 state: {
+                    translation: [0, baseYOffset, -2],
                 },
                 tick(deltaTime) {
                 },
                 getModelViewMatrix() {
                     const m = mat4.create();
-                    mat4.translate(m, m, transformations.objB.translation);
+                    mat4.translate(m, m, this.state.translation);
                     return m;
                 },
             },
@@ -123,26 +116,28 @@
                 texture: null,
                 color: [0, 0, 255, 255],
                 state: {
+                    translation: [-2, baseYOffset, 0],
                 },
                 tick(deltaTime) {
                 },
                 getModelViewMatrix() {
                     const m = mat4.create();
-                    mat4.translate(m, m, transformations.objC.translation);
+                    mat4.translate(m, m, this.state.translation);
                     return m;
                 },
             },
             {
                 mesh: cubeMesh,
                 texture: null,
-                color: [0, 255, 255, 255],
+                color: [255, 255, 255, 255],
                 state: {
+                    translation: [0, baseYOffset, 0],
                 },
                 tick(deltaTime) {
                 },
                 getModelViewMatrix() {
                     const m = mat4.create();
-                    mat4.translate(m, m, transformations.objD.translation);
+                    mat4.translate(m, m, this.state.translation);
                     return m;
                 },
             },
@@ -173,7 +168,23 @@
 
 <div class="row">
     <div class="col">
-        <Canvas3D bind:gl={gl} bind:objects={objects} bind:projectionMatrix={projectionMatrix} width={600} height={600} />
+        <Canvas3D bind:gl={gl} bind:objects={objects} bind:projectionMatrix={projectionMatrix} {width} {height} />
+    </div>
+    <div class="col">
+        <svg id="canvas2d" {width} {height} viewBox="-{svgWidth/2} -{svgHeight/2} {svgWidth} {svgHeight}" transform="scale(-1,1)">
+            <line class="axis" x1="0" y1="0" x2="0"           y2="{svgHeight}"  stroke="black" />
+            <line class="axis" x1="0" y1="0" x2="{svgWidth}"  y2="0"            stroke="black" />
+            <line class="axis" x1="0" y1="0" x2="-{svgWidth}" y2="0"            stroke="black" />
+            <line class="axis" x1="0" y1="0" x2="0"           y2="-{svgHeight}" stroke="black" />
+
+            {#each Object.entries(objects) as [_, obj]}
+            <rect x="-0.5" y="-0.5" width="1" height="1" fill="rgb({obj.color})"
+                transform="rotate({obj.state?.rotation === undefined ? 0 : orbiterRotation} 0 0)translate({obj.state.translation[0]} {obj.state.translation[2]})">
+            </rect>
+            {/each}
+        </svg>
+    </div>
+    <div class="col">
     </div>
 </div>
 
@@ -188,4 +199,12 @@
 </div>
 
 <style>
+    #canvas2d {
+        border: 1px solid var(--bs-body-color);
+        background-color: black;
+    }
+    .axis {
+        stroke: var(--bs-body-color);
+        stroke-width: 0.05;
+    }
 </style>
