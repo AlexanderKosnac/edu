@@ -55,6 +55,13 @@
     let projectionMatrix = mat4.create();
     mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
 
+    const cameraPosition = [0, 0, 5];
+    const target = [0, 0, 0];
+    const up = [0, 1, 0];
+
+    let viewMatrix = mat4.create();
+    mat4.lookAt(viewMatrix, cameraPosition, target, up);
+
     let objects = [];
 
     let orbiterRotation = 0;
@@ -74,7 +81,7 @@
                     this.state.rotation %= 360;
                     orbiterRotation = this.state.rotation;
                 },
-                getModelViewMatrix() {
+                getModelMatrix() {
                     const m = mat4.create();
                     mat4.rotate(m, m, degToRad(this.state.rotation), [0, 1, 0]);
                     mat4.translate(m, m, this.state.translation);
@@ -90,7 +97,7 @@
                 },
                 tick(deltaTime) {
                 },
-                getModelViewMatrix() {
+                getModelMatrix() {
                     const m = mat4.create();
                     mat4.translate(m, m, this.state.translation);
                     return m;
@@ -105,7 +112,7 @@
                 },
                 tick(deltaTime) {
                 },
-                getModelViewMatrix() {
+                getModelMatrix() {
                     const m = mat4.create();
                     mat4.translate(m, m, this.state.translation);
                     return m;
@@ -120,7 +127,7 @@
                 },
                 tick(deltaTime) {
                 },
-                getModelViewMatrix() {
+                getModelMatrix() {
                     const m = mat4.create();
                     mat4.translate(m, m, this.state.translation);
                     return m;
@@ -135,7 +142,7 @@
                 },
                 tick(deltaTime) {
                 },
-                getModelViewMatrix() {
+                getModelMatrix() {
                     const m = mat4.create();
                     mat4.translate(m, m, this.state.translation);
                     return m;
@@ -168,7 +175,7 @@
 
 <div class="row">
     <div class="col">
-        <Canvas3D bind:gl={gl} bind:objects={objects} bind:projectionMatrix={projectionMatrix} {width} {height} />
+        <Canvas3D bind:gl={gl} bind:objects={objects} bind:projectionMatrix={projectionMatrix} bind:viewMatrix={viewMatrix} {width} {height} />
     </div>
     <div class="col">
         <svg id="canvas2d" {width} {height} viewBox="-{svgWidth/2} -{svgHeight/2} {svgWidth} {svgHeight}" transform="scale(-1,1)">

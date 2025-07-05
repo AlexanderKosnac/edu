@@ -2,7 +2,7 @@ import { mat4 } from "gl-matrix";
 
 import { flattenObjToBuffers } from "$lib/objUtility";
 
-export function drawScene(gl, programInfo, objects, projectionMatrix) {
+export function drawScene(gl, programInfo, objects, projectionMatrix, viewMatrix) {
     gl.clearColor(0, 0, 0, 1);
     gl.clearDepth(1.0);
 
@@ -12,7 +12,8 @@ export function drawScene(gl, programInfo, objects, projectionMatrix) {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
     objects.forEach(function(object) {
-        const modelViewMatrix = object.getModelViewMatrix();
+        let modelViewMatrix = mat4.create();
+        mat4.multiply(modelViewMatrix, viewMatrix, object.getModelMatrix());
 
         const normalMatrix = mat4.create();
         mat4.invert(normalMatrix, modelViewMatrix);

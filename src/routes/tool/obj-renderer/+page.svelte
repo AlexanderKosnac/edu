@@ -30,6 +30,13 @@
     let projectionMatrix = mat4.create();
     mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
 
+    const cameraPosition = [0, 0, 0];
+    const target = [0, 0, -1];
+    const up = [0, 1, 0];
+
+    let viewMatrix = mat4.create();
+    mat4.lookAt(viewMatrix, cameraPosition, target, up);
+
     let objects = [];
 
     function loadContent(text) {
@@ -46,7 +53,7 @@
                 },
                 tick(deltaTime) {
                 },
-                getModelViewMatrix() {
+                getModelMatrix() {
                     const m = mat4.create();
                     mat4.translate(m, m, transformations.translation);
                     mat4.rotate(m, m, degToRad(transformations.rotation[0]), [0, 0, 1]);
@@ -82,7 +89,7 @@
 
 <div class="row">
     <div class="col-auto">
-        <Canvas3D bind:gl={gl} bind:objects={objects} bind:projectionMatrix={projectionMatrix} width={600} height={600} />
+        <Canvas3D bind:gl={gl} bind:objects={objects} bind:projectionMatrix={projectionMatrix} bind:viewMatrix={viewMatrix} width={600} height={600} />
     </div>
     <div class="col d-flex flex-column gap-1">
         <div class="d-flex flex-row gap-1">

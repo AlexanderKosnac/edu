@@ -16,11 +16,6 @@
     let gl;
     let objContent = "";
 
-    let transformations = {
-        translation: [0, 0, -5],
-        rotation: 0,
-    };
-
     const fieldOfView = (45 * Math.PI) / 180;
     const aspect = 1;
     const zNear = 0.1;
@@ -28,6 +23,13 @@
 
     let projectionMatrix = mat4.create();
     mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
+
+    const cameraPosition = [0, 0, 5];
+    const target = [0, 0, 0];
+    const up = [0, 1, 0];
+
+    let viewMatrix = mat4.create();
+    mat4.lookAt(viewMatrix, cameraPosition, target, up);
 
     let objects = [];
 
@@ -38,17 +40,17 @@
                 texture: null,
                 color: [255, 0, 255, 255],
                 state: {
+                    rotation: 0,
                 },
                 tick(deltaTime) {
-                    transformations.rotation += deltaTime * 10;
-                    transformations.rotation %= 360;
+                    this.state.rotation += deltaTime * 10;
+                    this.state.rotation %= 360;
                 },
-                getModelViewMatrix() {
+                getModelMatrix() {
                     const m = mat4.create();
-                    mat4.translate(m, m, transformations.translation);
-                    mat4.rotate(m, m, degToRad(transformations.rotation * 2), [1, 0, 0]);
-                    mat4.rotate(m, m, degToRad(transformations.rotation * 3), [0, 1, 0]);
-                    mat4.rotate(m, m, degToRad(transformations.rotation * 4), [0, 0, 1]);
+                    mat4.rotate(m, m, degToRad(this.state.rotation * 2), [1, 0, 0]);
+                    mat4.rotate(m, m, degToRad(this.state.rotation * 3), [0, 1, 0]);
+                    mat4.rotate(m, m, degToRad(this.state.rotation * 4), [0, 0, 1]);
                     return m;
                 },
             },
@@ -157,7 +159,7 @@
         <textarea class="form-control font-monospace mb-1" rows="20" bind:value="{objContent}" readonly></textarea>
     </div>
     <div class="col-auto">
-        <Canvas3D bind:gl={gl} bind:objects={objects} bind:projectionMatrix={projectionMatrix} width={600} height={600} />
+        <Canvas3D bind:gl={gl} bind:objects={objects} bind:projectionMatrix={projectionMatrix} bind:viewMatrix={viewMatrix} width={600} height={600} />
     </div>
 </div>
 

@@ -8,6 +8,7 @@
         gl = $bindable(),
         objects = $bindable(),
         projectionMatrix = $bindable(),
+        viewMatrix = $bindable(),
         width = 600,
         height = 600,
         ...others
@@ -60,7 +61,7 @@
                 if (obj.tick) obj.tick(deltaTime);
             }
 
-            drawScene(gl, programInfo, objects, projectionMatrix);
+            drawScene(gl, programInfo, objects, projectionMatrix, viewMatrix);
             requestAnimationFrame(render);
         }
 
