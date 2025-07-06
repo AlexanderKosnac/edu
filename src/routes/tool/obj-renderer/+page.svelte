@@ -41,31 +41,36 @@
     let viewMatrix = mat4.create();
     mat4.lookAt(viewMatrix, cameraPosition, target, up);
 
-    let objects = [
-        {
-            mesh: parseObjContent(objContent),
-            texture: "brick",
-            color: [1.0, 0.0, 1.0, 1.0],
-            state: {
-            },
-            tick(deltaTime) {
-            },
-            getModelMatrix() {
-                const m = mat4.create();
-                mat4.translate(m, m, transformations.translation);
-                mat4.rotate(m, m, degToRad(transformations.rotation[0]), [0, 0, 1]);
-                mat4.rotate(m, m, degToRad(transformations.rotation[1]), [0, 1, 0]);
-                mat4.rotate(m, m, degToRad(transformations.rotation[2]), [1, 0, 0]);
-                return m;
-            },
-        },
-    ];
+    let objects = [];
 
     function loadContent(text) {
         objContent = text;
     }
 
+    function renderContent() {
+        objects = [
+            {
+                mesh: parseObjContent(objContent),
+                texture: "brick",
+                color: [1.0, 0.0, 1.0, 1.0],
+                state: {
+                },
+                tick(deltaTime) {
+                },
+                getModelMatrix() {
+                    const m = mat4.create();
+                    mat4.translate(m, m, transformations.translation);
+                    mat4.rotate(m, m, degToRad(transformations.rotation[0]), [0, 0, 1]);
+                    mat4.rotate(m, m, degToRad(transformations.rotation[1]), [0, 1, 0]);
+                    mat4.rotate(m, m, degToRad(transformations.rotation[2]), [1, 0, 0]);
+                    return m;
+                },
+            },
+        ];
+    }
+
     onMount(() => {
+        renderContent();
     });
 </script>
 
@@ -114,7 +119,7 @@
             <input type="number" class="form-control" bind:value={transformations.translation[2]}>
         </div>
 
-        <button type="button" class="btn btn-primary" on:click={refreshObjects}>Load</button>
+        <button type="button" class="btn btn-primary" on:click={renderContent}>Load</button>
     </div>
 </div>
 
