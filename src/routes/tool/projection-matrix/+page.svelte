@@ -1,31 +1,4 @@
 <script>
-    /*
-    function mat4_perspective(out, fovy, aspect, near, far) {
-        const f = 1.0 / Math.tan(fovy / 2);
-        const nf = 1 / (near - far);
-        out.set([
-            f / aspect, 0, 0, 0,
-            0, f, 0, 0,
-            0, 0, (far + near) * nf, -1,
-            0, 0, (2 * far * near) * nf, 0
-        ]);
-        return out;
-    }
-
-    function mat4_rotateY(out, angle) {
-        const rad = angle * (Math.PI/180.0);
-        const c = Math.cos(rad);
-        const s = Math.sin(rad);
-        out.set([
-            c, 0, s, 0,
-            0, 1, 0, 0,
-            -s, 0, c, 0,
-            0, 0, -3, 1
-        ]);
-        return out;
-    }
-    */
-
     import { onMount } from "svelte";
 
     import { mat4 } from "gl-matrix";
@@ -38,8 +11,8 @@
 
     const width = 600;
     const height = 600;
-    const svgWidth = 10;
-    const svgHeight = 10;
+    const svgWidth = 14;
+    const svgHeight = 14;
 
     let gl;
     $: if (gl) {
@@ -165,21 +138,24 @@
 </div>
 
 <div class="row">
-    <div class="col">
+    <div class="col-auto">
         <Canvas3D bind:gl={gl} bind:objects={objects} bind:projectionMatrix={projectionMatrix} bind:viewMatrix={viewMatrix} {width} {height} />
     </div>
-    <div class="col">
+    <div class="col-auto">
         <svg id="canvas2d" {width} {height} viewBox="-{svgWidth/2} -{svgHeight/2} {svgWidth} {svgHeight}" transform="scale(-1,1)">
-            <line class="axis" x1="0" y1="0" x2="0"           y2="{svgHeight}"  stroke="black" />
-            <line class="axis" x1="0" y1="0" x2="{svgWidth}"  y2="0"            stroke="black" />
-            <line class="axis" x1="0" y1="0" x2="-{svgWidth}" y2="0"            stroke="black" />
-            <line class="axis" x1="0" y1="0" x2="0"           y2="-{svgHeight}" stroke="black" />
+            <line class="axis" x1="0" y1="0" x2="0"           y2="{svgHeight}"/>
+            <line class="axis" x1="0" y1="0" x2="{svgWidth}"  y2="0"/>
+            <line class="axis" x1="0" y1="0" x2="-{svgWidth}" y2="0"/>
+            <line class="axis" x1="0" y1="0" x2="0"           y2="-{svgHeight}"/>
 
             {#each Object.entries(objects) as [_, obj]}
             <rect x="-0.5" y="-0.5" width="1" height="1" fill="rgb({obj.color})"
                 transform="rotate({obj.state?.rotation === undefined ? 0 : orbiterRotation} 0 0)translate({obj.state.translation[0]} {obj.state.translation[2]})">
             </rect>
             {/each}
+
+            <path class="camera" d="M -2 -2 h 4 v 3 h -1 l 1 1 h -4 l 1 -1 h -1 v -3"
+                transform="translate({cameraPosition[0]}, {cameraPosition[2]})scale(.2)rotate(180)"/>
         </svg>
     </div>
     <div class="col">
@@ -200,6 +176,11 @@
     #canvas2d {
         border: 1px solid var(--bs-body-color);
         background-color: black;
+    }
+    .camera {
+        stroke: var(--bs-body-color);
+        stroke-width: 0.05;
+        fill: var(--bs-body-color);
     }
     .axis {
         stroke: var(--bs-body-color);
