@@ -14,6 +14,8 @@
     const svgWidth = 14;
     const svgHeight = 14;
 
+    let fovInput = 45;
+
     let gl;
     $: if (gl) {
         objects.forEach(o => o.texture = loadTexture(gl, null, o.color));
@@ -23,13 +25,7 @@
 
     const cubeMesh = parseObjContent(unitCubeCentered);
 
-    const fieldOfView = (45 * Math.PI) / 180;
-    const aspect = 1;
-    const zNear = 0.1;
-    const zFar = 100.0;
-
     let projectionMatrix = mat4.create();
-    mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
 
     const cameraPosition = [0, 0, 5];
     const target = [0, 0, 0];
@@ -123,7 +119,18 @@
         },
     ];
 
+    function constructProjectionMatrixFromInputs() {
+        projectionMatrix = mat4.create();
+
+        const fieldOfView = (fovInput * Math.PI) / 180;
+        const aspect = 1;
+        const zNear = 0.1;
+        const zFar = 100.0;
+        mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
+    }
+
     onMount(() => {
+        constructProjectionMatrixFromInputs();
     });
 </script>
 
@@ -159,6 +166,10 @@
         </svg>
     </div>
     <div class="col">
+        <label>
+            Field of View (°):
+            <input type="number" class="form-control" bind:value={fovInput} min="0" max="360" on:change={constructProjectionMatrixFromInputs}/>
+        </label>
     </div>
 </div>
 
@@ -168,6 +179,7 @@
         <ul>
             <li><a href="https://www.songho.ca/opengl/gl_projectionmatrix.html" target="_blank">Article on OpenGL Projectionmatrices</a></li>
             <li><a href="http://learnwebgl.brown37.net/08_projections/projections_perspective.html" target="_blank">Article on perspective projection</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Orthographic_projection" target="_blank">Orthographic projection</a></li>
         </ul>
     </div>
 </div>
