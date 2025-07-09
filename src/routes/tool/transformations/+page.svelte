@@ -92,23 +92,21 @@
 <div class="row">
     <div class="col">
         <h2>Basic 2D</h2>
-        <div class="d-flex gap-3 mb-3">
-            {#each transformations as transformation}
-            <label class="form-check-label">
-                <input type="radio" class="form-check-input" name="transformation" autocomplete="off"
-                    bind:group={activeTransformation} value={transformation} on:change={onMatrixChange}>
-                {transformation.name}
-            </label>
-            {/each}
-        </div>
+        <div class="d-flex flex-column gap-1">
+            <label for="transformationSelection">Transformation:</label>
+            <select class="form-select" id="transformationSelection" bind:value={activeTransformation} on:change={onMatrixChange}>
+                {#each transformations as transformation}
+                    <option value={transformation}>{transformation.name}</option>
+                {/each}
+            </select>
 
-        <h3>{activeTransformation.name}</h3>
-        <div class="d-flex align-items-center gap-2">
-            <Matrix bind:this={inputMatrix} inputs={activeTransformation.inputs} on:change={onMatrixChange}/>
-            <span class="symbol">*</span>
-            <Matrix inputs={activeTransformation.point}/>
-            <span class="symbol">=</span>
-            <Matrix inputs={activeTransformation.getResult()}/>
+            <div class="d-flex align-items-center gap-2">
+                <Matrix bind:this={inputMatrix} inputs={activeTransformation.inputs} on:change={onMatrixChange}/>
+                <span class="symbol">*</span>
+                <Matrix inputs={activeTransformation.point}/>
+                <span class="symbol">=</span>
+                <Matrix inputs={activeTransformation.getResult()}/>
+            </div>
         </div>
     </div>
     <div class="col">
