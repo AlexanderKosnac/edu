@@ -85,7 +85,7 @@
         } catch (error) {
             return `\\text{${error}}`
         }
-        return `${toKatexMatrix(vandermonde)}^{-1} \\cdot{} ${toKatexVector(yVec)} = ${toKatexVector(resultVec)}`;
+        return `${toKatexMatrix(vandermonde.toArray())}^{-1} \\cdot{} ${toKatexVector(yVec.toArray())} = ${toKatexVector(resultVec.toArray())}`;
     }
 
     function interpolationPolynomial(x) {

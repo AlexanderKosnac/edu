@@ -95,7 +95,7 @@
         }        
         let coefficients = multiply(multiply(vtvi, vt), yAll());
 
-        return `\\left(${toKatexMatrix(vt)}^T${toKatexMatrix(v)}\\right)^{-1} ${toKatexMatrix(vt)}^T \\cdot{} ${toKatexVector(yVec)} = ${toKatexVector(coefficients)}`;
+        return `\\left(${toKatexMatrix(vt.toArray())}^T${toKatexMatrix(v.toArray())}\\right)^{-1} ${toKatexMatrix(vt.toArray())}^T \\cdot{} ${toKatexVector(yVec.toArray())} = ${toKatexVector(coefficients.toArray())}`;
     }
 
     function interpolationPolynomial(x) {
