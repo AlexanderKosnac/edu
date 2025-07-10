@@ -1,17 +1,18 @@
 <script>
 	import { onMount } from "svelte";
     import { matMult } from "$lib/math";
-    import Matrix from "$lib/Matrix/Matrix.svelte";
+
+    import { katexAsHtml, toKatexVector, toKatexMatrix } from "$lib/katexUtility.js";
+
     import { transformations } from "./transformations";
 
     let canvas;
-
-    let inputMatrix;
     let canvas_dimensions = [600, 600];
 
     let ctx;
 
-    let activeTransformation = transformations[0];
+    let selectedIdx = 1;
+    $: activeTransformation = transformations[selectedIdx];
 
     let shape = [
         [[80], [80]],
@@ -25,10 +26,13 @@
         [[160], [ 40]],
     ]
 
-    function getTransformedShape(isAffine) {
-        const m = inputMatrix.getEvalMatrix();
-        if (!validMatrix(m)) return shape;
-        return shape.map(p => isAffine ? [...p, [1]] : p).map(p => matMult(m, p));
+    function getTransformedShape(transformation) {
+        const m = transformation.getMatrix();
+        if (!validMatrix(m))
+            return shape;
+        return shape
+            .map(p => transformation.isAffine ? [...p, [1]] : p)
+            .map(p => matMult(m, p));
     }
 
     function drawShape(points, color) {
@@ -52,7 +56,7 @@
         clearCanvas();
 
         drawShape(shape, [0, 0, 255, 1.0]);
-        drawShape(getTransformedShape(activeTransformation.isAffine), [255, 0, 0, 0.5]);
+        drawShape(getTransformedShape(activeTransformation), [255, 0, 0, 0.5]);
 
         ctx.lineWidth = 1;
         ctx.strokeStyle = `rgba(128, 128, 128, 1.0)`;
@@ -71,7 +75,6 @@
 
     function onMatrixChange() {
         render();
-        activeTransformation = activeTransformation;
     }
 
     onMount(() => {
@@ -94,19 +97,39 @@
     <div class="col">
         <h2>Basic 2D</h2>
         <div class="d-flex flex-column gap-1">
-            <label for="transformationSelection">Transformation:</label>
-            <select class="form-select" id="transformationSelection" bind:value={activeTransformation} on:change={onMatrixChange}>
-                {#each transformations as transformation}
-                    <option value={transformation}>{transformation.name}</option>
-                {/each}
-            </select>
+            <div class="d-flex gap-1 align-items-center">
+                <label for="transformationSelection">Transformation:</label>
+                <select class="form-select" id="transformationSelection" bind:value={selectedIdx} on:change={onMatrixChange}>
+                    {#each transformations as transformation, i}
+                        <option value={i}>{transformation.name}</option>
+                    {/each}
+                </select>
+            </div>
+
+            <div class="d-flex gap-1 align-items-center">
+                <div class="d-flex gap-1 align-items-center">
+                    {#each Object.entries(transformations[selectedIdx].inputs) as [key, _]}
+                        <label>                            
+                            {key}:
+                            <input type="number" class="form-control matrix-input"
+                                step="0.1"
+                                bind:value={transformations[selectedIdx].inputs[key]}
+                                on:change={onMatrixChange}/>
+                        </label>
+                    {/each}
+                </div>
+            </div>
 
             <div class="d-flex align-items-center gap-2">
-                <Matrix bind:this={inputMatrix} inputs={activeTransformation.inputs} on:change={onMatrixChange}/>
-                <span class="symbol">*</span>
-                <Matrix inputs={activeTransformation.point}/>
-                <span class="symbol">=</span>
-                <Matrix inputs={activeTransformation.getResult()}/>
+                {@html katexAsHtml(
+                    toKatexMatrix(activeTransformation.base) +
+                    toKatexVector([["x"], ["y"]]) +
+                    "=" +
+                    toKatexMatrix(activeTransformation.getMatrix()) +
+                    toKatexVector([["x"], ["y"]]) +
+                    "=" +
+                    toKatexVector(activeTransformation.getResult())
+                )}
             </div>
         </div>
     </div>
@@ -125,9 +148,8 @@
 </div>
 
 <style>
-    .symbol {
-        font-weight: 600;
-        font-size: 1.5em;
+    .matrix-input {
+        width: 8em;
     }
     .visualization {
         height: 600px;
