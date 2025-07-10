@@ -5,24 +5,24 @@
     import { transformations } from "./transformations";
 
     let canvas;
-    let canvas_dimensions = [1000, 1000];
 
     let inputMatrix;
+    let canvas_dimensions = [600, 600];
 
     let ctx;
 
     let activeTransformation = transformations[0];
 
     let shape = [
-        [[160], [160]],
-        [[320], [240]],
-        [[240], [320]],
-        [[ 80], [320]],
-        [[  0], [240]],
-        [[  0], [ 80]],
-        [[ 80], [  0]],
-        [[240], [  0]],
-        [[320], [ 80]],
+        [[80], [80]],
+        [[160], [120]],
+        [[120], [160]],
+        [[ 40], [160]],
+        [[  0], [120]],
+        [[  0], [ 40]],
+        [[ 40], [  0]],
+        [[120], [  0]],
+        [[160], [ 40]],
     ]
 
     function getTransformedShape(isAffine) {
@@ -50,10 +50,11 @@
 
     function render() {
         clearCanvas();
+
         drawShape(shape, [0, 0, 255, 1.0]);
         drawShape(getTransformedShape(activeTransformation.isAffine), [255, 0, 0, 0.5]);
 
-        ctx.lineWidth = 5;
+        ctx.lineWidth = 1;
         ctx.strokeStyle = `rgba(128, 128, 128, 1.0)`;
 
         // Axes
@@ -73,7 +74,7 @@
         activeTransformation = activeTransformation;
     }
 
-    onMount(async () => {
+    onMount(() => {
         ctx = canvas.getContext("2d");
         onMatrixChange();
 	});
@@ -129,9 +130,7 @@
         font-size: 1.5em;
     }
     .visualization {
-        image-rendering: -webkit-optimize-contrast; /* webkit */
-        image-rendering: -moz-crisp-edges; /* Firefox */
-        height: 500px;
-        width: 500px;
+        height: 600px;
+        width: 600px;
     }
 </style>
