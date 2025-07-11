@@ -8,7 +8,7 @@ import MiniSearch from 'minisearch';
 import { base } from '$app/paths';
 import ThemeToggle from '$lib/ThemeToggle/ThemeToggle.svelte';
 
-import data from "./tool/overview-data.json";
+import data from "./aggregate-overview-data.json";
 
 let minisearch = new MiniSearch({
     fields: ["name", "description"],

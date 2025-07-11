@@ -1,5 +1,5 @@
 <script>
-  import data from "./tool/overview-data.json";
+  import data from "./aggregate-overview-data.json";
 
   import { base } from '$app/paths';
 
