@@ -11,11 +11,11 @@
 
     let ctx;
 
-    let selectedIdx = 1;
+    let selectedIdx = 0;
     $: activeTransformation = transformations[selectedIdx];
 
     let shape = [
-        [[80], [80]],
+        [[ 80], [ 80]],
         [[160], [120]],
         [[120], [160]],
         [[ 40], [160]],
@@ -24,7 +24,10 @@
         [[ 40], [  0]],
         [[120], [  0]],
         [[160], [ 40]],
-    ]
+    ];
+
+    const xy = [["x"], ["y"]];
+    const xy1 = [["x"], ["y"], [1]];
 
     function getTransformedShape(transformation) {
         const m = transformation.getMatrix();
@@ -56,7 +59,7 @@
         clearCanvas();
 
         drawShape(shape, [0, 0, 255, 1.0]);
-        drawShape(getTransformedShape(activeTransformation), [255, 0, 0, 0.5]);
+        drawShape(getTransformedShape(transformations[selectedIdx]), [255, 0, 0, 0.5]);
 
         ctx.lineWidth = 1;
         ctx.strokeStyle = `rgba(128, 128, 128, 1.0)`;
@@ -123,10 +126,10 @@
             <div class="d-flex align-items-center gap-2">
                 {@html katexAsHtml(
                     toKatexMatrix(activeTransformation.base) +
-                    toKatexVector([["x"], ["y"]]) +
+                    toKatexVector(activeTransformation.isAffine ? xy1 : xy) +
                     "=" +
                     toKatexMatrix(activeTransformation.getMatrix()) +
-                    toKatexVector([["x"], ["y"]]) +
+                    toKatexVector(activeTransformation.isAffine ? xy1 : xy) +
                     "=" +
                     toKatexVector(activeTransformation.getResult())
                 )}
