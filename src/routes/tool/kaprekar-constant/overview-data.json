@@ -1,6 +1,5 @@
 {
     "name": "Kaprekar constant",
-    "url": "tool/kaprekar-constant",
     "description": "Using Kaprekar's routine, any 4-digit number will converge to 6174 within seven iterations.",
     "tags": [
         "Mathematics",

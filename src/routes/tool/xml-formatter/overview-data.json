@@ -1,6 +1,5 @@
 {
     "name": "XML Formatter",
-    "url": "tool/xml-formatter",
     "description": "Formats and pretty-prints XML to improve readability.",
     "tags": [
         "Tool",

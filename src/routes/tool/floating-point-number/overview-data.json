@@ -1,6 +1,5 @@
 {
     "name": "Floating Point Number",
-    "url": "tool/floating-point-number",
     "description": "Decimal number representation via a variable length, floating point format.",
     "tags": [
         "Computer Science"

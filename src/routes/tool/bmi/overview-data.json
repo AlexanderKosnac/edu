@@ -1,6 +1,5 @@
 {
     "name": "Body mass index (BMI)",
-    "url": "tool/bmi",
     "description": "BMI and similar metrics used as approximations of fitness based on height and weight.",
     "tags": [
         "Tool"

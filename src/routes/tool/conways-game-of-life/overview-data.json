@@ -1,6 +1,5 @@
 {
     "name": "Conway's Game Of Life",
-    "url": "tool/conways-game-of-life",
     "description": "A cellular automaton by John Horton Conway.",
     "tags": [
         "Computer Science"

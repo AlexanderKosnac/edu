@@ -1,6 +1,5 @@
 {
     "name": "JSON Formatter",
-    "url": "tool/json-formatter",
     "description": "Formats and pretty-prints JSON to improve readability.",
     "tags": [
         "Tool",

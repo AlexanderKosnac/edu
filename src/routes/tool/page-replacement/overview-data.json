@@ -1,6 +1,5 @@
 {
     "name": "Page Replacement",
-    "url": "tool/page-replacement",
     "description": "Algorithms used in operating systems to manage paging for virtual memory management.",
     "tags": [
         "Computer Science",

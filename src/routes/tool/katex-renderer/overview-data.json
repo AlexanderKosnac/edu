@@ -1,6 +1,5 @@
 {
     "name": "KaTeX Renderer",
-    "url": "tool/katex-renderer",
     "description": "Uses the KaTeX library to render equations into HTML.",
     "tags": [
         "KaTeX",

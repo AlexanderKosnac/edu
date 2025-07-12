@@ -1,6 +1,5 @@
 {
     "name": "Linear interpolation",
-    "url": "tool/linear-interpolation",
     "description": "Linear interpolation between two points.",
     "tags": [
         "Mathematics",

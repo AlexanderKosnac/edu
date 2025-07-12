@@ -1,6 +1,5 @@
 {
     "name": "Inverted Index",
-    "url": "tool/inverted-index",
     "description": "Calculates the inverted index used in Information Retrieval over a set of documents.",
     "tags": [
         "Computer Science",

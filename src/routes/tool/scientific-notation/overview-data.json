@@ -1,6 +1,5 @@
 {
     "name": "Scientific Notation",
-    "url": "tool/scientific-notation",
     "description": "Represents a number using a mantissa, exponent and base.",
     "tags": [
         "Computer Science",

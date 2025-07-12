@@ -1,6 +1,5 @@
 {
     "name": "Cohen–Sutherland Line Clipping Algorithm",
-    "url": "tool/cohen–sutherland-line-clipping-algorithm",
     "description": "Algorithm used in computer graphics to clip lines along a rectangle.",
     "tags": [
         "Computer Graphics",
