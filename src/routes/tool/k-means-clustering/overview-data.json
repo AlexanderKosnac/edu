@@ -1,0 +1,9 @@
+{
+    "name": "k-means Clustering",
+    "description": "A method of vector quantization, to partition n observations into k clusters.",
+    "tags": [
+        "Computer Science",
+        "Mathematics",
+        "Visualization"
+    ]
+}
