@@ -1,8 +1,14 @@
 <script>
+    import SvgDraggablePoint from "$lib/SvgDraggablePoint/SvgDraggablePoint.svelte";
+
     const width = 600;
     const height = 600;
     const svgWidth = width;
     const svgHeight = height;
+
+    let centroids = [
+        { x: 250, y: 150 },
+    ];
 
     let points = [
         { x: 100, y: 200 },
@@ -53,6 +59,12 @@
 
 <div class="row">
     <div class="col">
+        Centroids:
+        <ul>
+            {#each centroids as centroid}
+                <li>({centroid.x}, {centroid.y})</li>
+            {/each}
+        </ul>
         Points:
         <ul>
             {#each points as point}
@@ -62,11 +74,14 @@
     </div>
     <div class="col">
         <svg id="canvas2d" {width} {height} viewBox="0 0 {svgWidth} {svgHeight}">
-            <line class="axis" x1="0" y1="0" x2="20" y2="60"/>
-
             {#each points as point}
                 <circle class="point" cx="{point.x}" cy="{point.y}" r="10"></circle>
             {/each}
+
+            {#each centroids as centroid}
+                <circle class="point centroid" cx="{centroid.x}" cy="{centroid.y}" r="10"></circle>
+            {/each}
+
         </svg>
     </div>
 </div>
@@ -88,5 +103,8 @@
         stroke: var(--bs-body-color);
         stroke-width: 3px;
         fill: grey;
+    }
+    .point.centroid{
+        fill: red;
     }
 </style>
