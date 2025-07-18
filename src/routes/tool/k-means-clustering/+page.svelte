@@ -1,6 +1,4 @@
 <script>
-    import SvgDraggablePoint from "$lib/SvgDraggablePoint/SvgDraggablePoint.svelte";
-
     const width = 600;
     const height = 600;
     const svgWidth = width;
@@ -13,6 +11,29 @@
     let points = [
         { x: 100, y: 200 },
     ];
+
+    let kCentroids = 3;
+
+    let selectedCentroidPicker = "Random Positions";
+
+    const centroidPickers = {
+        "Random Positions": (k) => {
+            const min = 0;
+            const maxX = width;
+            const maxY = height;
+            const points = [];
+            for (let i = 0; i < k; i++) {
+                const x = Math.round(Math.random() * (maxX - min) + min);
+                const y = Math.round(Math.random() * (maxY - min) + min);
+                points.push({ x, y });
+            }
+            return points;
+        },
+    };
+
+    function kMeansClustering() {
+        centroids = centroidPickers[selectedCentroidPicker](kCentroids);
+    }
 
     /*
     def k_means_cluster(k, points):
@@ -59,12 +80,31 @@
 
 <div class="row">
     <div class="col">
+        <div class="d-flex flex-column gap-1">
+            <label>
+                k (Number of Centroid):
+                <input type="number" class="form-control" bind:value={kCentroids} min="1"/>
+            </label>
+
+            <label>
+                Method to pick starting centroids:
+                <select class="form-select" bind:value={selectedCentroidPicker}>
+                    {#each Object.entries(centroidPickers) as [name, _]}
+                        <option value={name}>{name}</option>
+                    {/each}
+                </select>
+            </label>
+
+            <button type="button" class="btn btn-sm btn-primary" on:click={kMeansClustering}>Cluster!</button>
+        </div>
+
         Centroids:
         <ul>
             {#each centroids as centroid}
                 <li>({centroid.x}, {centroid.y})</li>
             {/each}
         </ul>
+
         Points:
         <ul>
             {#each points as point}
@@ -81,7 +121,6 @@
             {#each centroids as centroid}
                 <circle class="point centroid" cx="{centroid.x}" cy="{centroid.y}" r="10"></circle>
             {/each}
-
         </svg>
     </div>
 </div>
