@@ -18,21 +18,31 @@
 
     const centroidPickers = {
         "Random Positions": (k) => {
-            const min = 0;
-            const maxX = width;
-            const maxY = height;
-            const points = [];
+            return getRandomPoints(k, 0, width, 0, height);
+        },
+        "Random Point in Dataset": (k) => {
+            const ps = [];
             for (let i = 0; i < k; i++) {
-                const x = Math.round(Math.random() * (maxX - min) + min);
-                const y = Math.round(Math.random() * (maxY - min) + min);
-                points.push({ x, y });
+                const idx = Math.floor(Math.random() * points.length);
+                const point = points[idx];
+                ps.push({ x: point.x, y: point.y });
             }
-            return points;
+            return ps;
         },
     };
 
     function kMeansClustering() {
         centroids = centroidPickers[selectedCentroidPicker](kCentroids);
+    }
+
+    function getRandomPoints(k, minX, maxX, minY, maxY) {
+        const points = [];
+        for (let i = 0; i < k; i++) {
+            const x = Math.round(Math.random() * (maxX - minX) + minX);
+            const y = Math.round(Math.random() * (maxY - minY) + minY);
+            points.push({ x, y });
+        }
+        return points;
     }
 
     /*
