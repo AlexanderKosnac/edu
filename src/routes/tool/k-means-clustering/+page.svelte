@@ -1,20 +1,26 @@
 <script>
+    import { onMount } from "svelte";
+
     const width = 600;
     const height = 600;
     const svgWidth = width;
     const svgHeight = height;
 
-    let centroids = [
-        { x: 250, y: 150 },
-    ];
-
-    let points = [
-        { x: 100, y: 200 },
-    ];
-
     let kCentroids = 3;
+    let nPoints = 500;
 
     let selectedCentroidPicker = "Random Positions";
+    let selectedDistanceMeasure = "Euclidean Distance";
+
+    let centroids = [];
+
+    let points = [];
+    $: points = getRandomPoints(nPoints, 0, width, 0, height);
+
+    let clusters = [];
+
+    let clusterColors = [];
+    $: clusterColors = generateDistinctColors(kCentroids);
 
     const centroidPickers = {
         "Random Positions": (k) => {
@@ -31,8 +37,47 @@
         },
     };
 
+    const distanceMeasures = {
+        "Euclidean Distance": (p1, p2) => {
+            const dx = p1.x - p2.x;
+            const dy = p1.y - p2.y;
+            return Math.sqrt(dx * dx + dy * dy);
+        },
+    };
+
     function kMeansClustering() {
         centroids = centroidPickers[selectedCentroidPicker](kCentroids);
+
+        clusters = Array.from({ length: kCentroids }, () => []);
+
+        let converged = false;
+
+        while (!converged) {
+            clusters = Array.from({ length: kCentroids }, () => []);
+
+            for (let p of points) {
+                const distances = centroids.map(c => distanceMeasures[selectedDistanceMeasure](p, c));
+                const clusterAssignment = distances.indexOf(Math.min(...distances));
+                clusters[clusterAssignment].push(p);
+            }
+
+            const newCentroids = clusters.map(cluster => calculateCentroid(cluster));
+            converged = newCentroids.every((newC, i) => distanceMeasures[selectedDistanceMeasure](newC, centroids[i]) < 0.0001);
+            centroids = newCentroids;
+        }
+    }
+
+    function calculateCentroid(cluster) {
+        if (cluster.length === 0)
+            return null;
+
+        let sum = { x: 0, y: 0 };
+        for (const point of cluster) {
+            sum.x += point.x;
+            sum.y += point.y;
+        }
+
+        return { x: sum.x / cluster.length, y: sum.y / cluster.length };
     }
 
     function getRandomPoints(k, minX, maxX, minY, maxY) {
@@ -45,37 +90,18 @@
         return points;
     }
 
-    /*
-    def k_means_cluster(k, points):
-        # Initialization: choose k centroids (Forgy, Random Partition, etc.)
-        centroids = [c1, c2, ..., ck]
-        
-        # Initialize clusters list
-        clusters = [[] for _ in range(k)]
-        
-        # Loop until convergence
-        converged = false
-        while not converged:
-            # Clear previous clusters
-            clusters = [[] for _ in range(k)]
-        
-            # Assign each point to the "closest" centroid 
-            for point in points:
-                distances_to_each_centroid = [distance(point, centroid) for centroid in centroids]
-                cluster_assignment = argmin(distances_to_each_centroid)
-                clusters[cluster_assignment].append(point)
-            
-            # Calculate new centroids
-            #   (the standard implementation uses the mean of all points in a
-            #     cluster to determine the new centroid)
-            new_centroids = [calculate_centroid(cluster) for cluster in clusters]
-            
-            converged = (new_centroids == centroids)
-            centroids = new_centroids
-            
-            if converged:
-                return clusters
-    */
+    function generateDistinctColors(n) {
+        const colors = [];
+        for (let i = 0; i < n; i++) {
+            const hue = i * (360 / n);
+            colors.push(`hsl(${hue}, 100%, 50%)`);
+        }
+        return colors;
+    }
+
+    onMount(()=> {
+        kMeansClustering();
+    });
 </script>
 
 <svelte:head>
@@ -91,10 +117,16 @@
 <div class="row">
     <div class="col">
         <div class="d-flex flex-column gap-1">
-            <label>
-                k (Number of Centroid):
-                <input type="number" class="form-control" bind:value={kCentroids} min="1"/>
-            </label>
+            <div class="d-flex gap-1">
+                <label>
+                    k (Number of Centroids):
+                    <input type="number" class="form-control" bind:value={kCentroids} min="1" on:change={kMeansClustering}/>
+                </label>
+                <label>
+                    n (Number of Points):
+                    <input type="number" class="form-control" bind:value={nPoints} min="1" on:change={kMeansClustering}/>
+                </label>
+            </div>
 
             <label>
                 Method to pick starting centroids:
@@ -107,29 +139,18 @@
 
             <button type="button" class="btn btn-sm btn-primary" on:click={kMeansClustering}>Cluster!</button>
         </div>
-
-        Centroids:
-        <ul>
-            {#each centroids as centroid}
-                <li>({centroid.x}, {centroid.y})</li>
-            {/each}
-        </ul>
-
-        Points:
-        <ul>
-            {#each points as point}
-                <li>({point.x}, {point.y})</li>
-            {/each}
-        </ul>
     </div>
     <div class="col">
         <svg id="canvas2d" {width} {height} viewBox="0 0 {svgWidth} {svgHeight}">
-            {#each points as point}
-                <circle class="point" cx="{point.x}" cy="{point.y}" r="10"></circle>
+            {#each clusters as cluster, i}
+                {#each cluster as point}
+                    <line class="themed-stroke" x1="{centroids[i].x}" y1="{centroids[i].y}" x2="{point.x}" y2="{point.y}" />
+                    <circle class="themed-stroke point" cx="{point.x}" cy="{point.y}" r="5" fill="{clusterColors[i]}"></circle>
+                {/each}
             {/each}
 
-            {#each centroids as centroid}
-                <circle class="point centroid" cx="{centroid.x}" cy="{centroid.y}" r="10"></circle>
+            {#each centroids as centroid, i}
+                <circle class="themed-stroke point" cx="{centroid.x}" cy="{centroid.y}" r="8" fill="{clusterColors[i]}"></circle>
             {/each}
         </svg>
     </div>
@@ -148,12 +169,10 @@
     #canvas2d {
         border: 1px solid var(--bs-body-color);
     }
-    .point {
+    .themed-stroke {
         stroke: var(--bs-body-color);
-        stroke-width: 3px;
-        fill: grey;
     }
-    .point.centroid{
-        fill: red;
+    .point {
+        stroke-width: 2px;
     }
 </style>
