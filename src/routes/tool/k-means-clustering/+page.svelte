@@ -11,6 +11,8 @@
 
     let selectedCentroidPicker = "Random Positions";
     let selectedDistanceMeasure = "Euclidean Distance";
+    let selectedNextCentroidCalculator = "Mean Point";
+    let selectedEmptyClusterHandler = "Random Position";
 
     let centroids = [];
 
@@ -45,6 +47,25 @@
         },
     };
 
+    const nextCentroidCalculator = {
+        "Mean Point": (cluster) => {
+            let sum = { x: 0, y: 0 };
+            for (const point of cluster) {
+                sum.x += point.x;
+                sum.y += point.y;
+            }
+            return { x: sum.x / cluster.length, y: sum.y / cluster.length };
+        },
+    };
+
+    const emptyClusterHandler = {
+        "Random Position": () => {
+            let pp = getRandomPoints(1, 0, width, 0, height)[0];
+            console.log(pp);
+            return pp;
+        },
+    };
+
     function kMeansClustering() {
         centroids = centroidPickers[selectedCentroidPicker](kCentroids);
 
@@ -52,7 +73,11 @@
 
         let converged = false;
 
-        while (!converged) {
+        let sanityThreshold = 1000;
+
+        while (!converged && sanityThreshold) {
+            sanityThreshold--;
+
             clusters = Array.from({ length: kCentroids }, () => []);
 
             for (let p of points) {
@@ -61,23 +86,22 @@
                 clusters[clusterAssignment].push(p);
             }
 
-            const newCentroids = clusters.map(cluster => calculateCentroid(cluster));
+            const newCentroids = clusters.map(cluster => {
+                if (cluster.length > 0) {
+                    return nextCentroidCalculator[selectedNextCentroidCalculator](cluster);
+                } else {
+                    return emptyClusterHandler[selectedEmptyClusterHandler]();
+                }
+            });
+
             converged = newCentroids.every((newC, i) => distanceMeasures[selectedDistanceMeasure](newC, centroids[i]) < 0.0001);
             centroids = newCentroids;
+
+            if (sanityThreshold <= 0) {
+                console.error("Broke off k-means clustering because it is likely an infinite loop.");
+                break;
+            }
         }
-    }
-
-    function calculateCentroid(cluster) {
-        if (cluster.length === 0)
-            return null;
-
-        let sum = { x: 0, y: 0 };
-        for (const point of cluster) {
-            sum.x += point.x;
-            sum.y += point.y;
-        }
-
-        return { x: sum.x / cluster.length, y: sum.y / cluster.length };
     }
 
     function getRandomPoints(k, minX, maxX, minY, maxY) {
