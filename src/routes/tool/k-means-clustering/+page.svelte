@@ -161,9 +161,37 @@
                 </select>
             </label>
 
+            <label>
+                Distance Measure:
+                <select class="form-select" bind:value={selectedDistanceMeasure}>
+                    {#each Object.entries(distanceMeasures) as [name, _]}
+                        <option value={name}>{name}</option>
+                    {/each}
+                </select>
+            </label>
+
+            <label>
+                Method to determine centroids for next iteration:
+                <select class="form-select" bind:value={selectedNextCentroidCalculator}>
+                    {#each Object.entries(nextCentroidCalculator) as [name, _]}
+                        <option value={name}>{name}</option>
+                    {/each}
+                </select>
+            </label>
+
+            <label>
+                Method to handle empty clusters:
+                <select class="form-select" bind:value={selectedEmptyClusterHandler}>
+                    {#each Object.entries(emptyClusterHandler) as [name, _]}
+                        <option value={name}>{name}</option>
+                    {/each}
+                </select>
+            </label>
+
             <button type="button" class="btn btn-sm btn-primary" on:click={kMeansClustering}>Cluster!</button>
         </div>
     </div>
+
     <div class="col">
         <svg id="canvas2d" {width} {height} viewBox="0 0 {svgWidth} {svgHeight}">
             {#each clusters as cluster, i}
