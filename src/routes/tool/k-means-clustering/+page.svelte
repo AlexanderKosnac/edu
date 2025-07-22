@@ -10,7 +10,7 @@
     let nPoints = 500;
 
     let selectedCentroidPicker = "Random Positions";
-    let selectedDistanceMeasure = "Euclidean Distance";
+    let selectedDistanceMeasure = "Euclidean Distance (L2-Norm)";
     let selectedNextCentroidCalculator = "Mean Point";
     let selectedEmptyClusterHandler = "Random Position";
 
@@ -40,10 +40,23 @@
     };
 
     const distanceMeasures = {
-        "Euclidean Distance": (p1, p2) => {
+        "Euclidean Distance (L2-Norm)": (p1, p2) => {
             const dx = p1.x - p2.x;
             const dy = p1.y - p2.y;
             return Math.sqrt(dx * dx + dy * dy);
+        },
+        "L1-Norm": (p1, p2) => {
+            const dx = Math.abs(p1.x - p2.x);
+            const dy = Math.abs(p1.y - p2.y);
+            return dx + dy;
+        },
+        "Cosine Distance (with L2)": (p1, p2) => {
+            const dot = p1.x * p2.x + p1.y * p2.y;
+            const norm1 = Math.sqrt(p1.x * p1.x + p1.y * p1.y);
+            const norm2 = Math.sqrt(p2.x * p2.x + p2.y * p2.y);
+            if (norm1 === 0 || norm2 === 0)
+                return 1;
+            return 1 - (dot / (norm1 * norm2));
         },
     };
 
