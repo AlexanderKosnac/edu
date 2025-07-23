@@ -10,20 +10,27 @@
     let points = [];
     let hull = [];
 
-    let n = 5;
+    let history = [];
+    let historyIdx = 0;
+    $: pathData = pointsToSvgPath(history[historyIdx] ?? [], historyIdx == history.length - 1);
 
-    function pointsToSvgPath(points) {
+    let n = 10;
+
+    function pointsToSvgPath(points, closePath) {
         if (points.length === 0)
             return "";
 
         const start = points[0];
         const path = [`M ${start.x} ${start.y}`];
 
-        for (let i = 1; i < hull.length; i++) {
-            path.push(`L ${hull[i].x} ${hull[i].y}`);
+        for (let i = 1; i < points.length; i++) {
+            path.push(`L ${points[i].x} ${points[i].y}`);
         }
 
-        path.push('Z');
+        if (closePath) {
+            path.push('Z');
+        }
+
         return path.join(' ');
     }
 
@@ -49,7 +56,7 @@
         doGrahamScan();
     }
 
-    function grahamScan() {
+    function grahamScan(onStep, onStepBack) {
         if (points.length < 3)
             return [];
 
@@ -81,18 +88,23 @@
 
         // Build convex hull
         const hull = [];
-        for (const pt of sorted) {
-            while (hull.length >= 2 && cross(hull[hull.length - 2], hull[hull.length - 1], pt) <= 0) {
+        for (const p of sorted) {
+            while (hull.length >= 2 && cross(hull[hull.length - 2], hull[hull.length - 1], p) <= 0) {
                 hull.pop(); // Non-left turn
+                onStepBack(structuredClone(hull));
             }
-            hull.push(pt);
+            hull.push(p);
+            onStep(structuredClone(hull));
         }
 
         return hull;
     }
 
     function doGrahamScan() {
-        hull = grahamScan();
+        history = [];
+        const addToHistory = (hull) => history.push(hull);
+        hull = grahamScan(addToHistory, () => {});
+        historyIdx = history.length - 1;
     }
 
     onMount(()=> {
@@ -113,7 +125,7 @@
 <div class="row">
     <div class="col-auto">
         <svg id="canvas2d" {width} {height} viewBox="0 0 {svgWidth} {svgHeight}">
-            <path class="hull" d="{pointsToSvgPath(hull)}"/>
+            <path class="hull" d="{pathData}"/>
 
             {#each points as point}
                 <SvgDraggablePoint bind:x={point.x} bind:y={point.y} drag={doGrahamScan} fill="blue"/>
@@ -129,6 +141,11 @@
             </label>
 
             <button type="button" class="btn btn-sm btn-primary" on:click={generateRandomPoints}>Random Points</button>
+
+            <label class="form-label">
+                History:
+                <input type="range" class="form-range" min="0" max={history.length - 1} bind:value={historyIdx}>
+            </label>
         </div>
     </div>
 </div>
