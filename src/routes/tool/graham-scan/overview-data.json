@@ -1,8 +1,0 @@
-{
-    "name": "Graham Scan",
-    "description": "An algorithm to determine the convex hull of a finite set of points in a plane.",
-    "tags": [
-        "Computer Science",
-        "Visualization"
-    ]
-}

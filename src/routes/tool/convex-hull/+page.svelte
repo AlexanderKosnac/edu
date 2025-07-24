@@ -154,6 +154,7 @@
     <div class="col">
         <h2>References:</h2>
         <ul>
+            <li><a href="https://en.wikipedia.org/wiki/Convex_hull_algorithms" target="_blank">Convex hull algorithms</a></li>
             <li><a href="https://de.wikipedia.org/wiki/Graham_Scan" target="_blank">Graham Scan</a></li>
         </ul>
     </div>
