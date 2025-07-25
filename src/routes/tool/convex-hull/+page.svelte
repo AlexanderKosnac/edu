@@ -124,7 +124,7 @@
 
 <div class="row">
     <div class="col-auto">
-        <svg id="canvas2d" {width} {height} viewBox="0 0 {svgWidth} {svgHeight}">
+        <svg id="canvas2d" {width} {height} viewBox="0 0 {svgWidth} {svgHeight}" transform="scale(1,-1)">
             <path class="hull" d="{pathData}"/>
 
             {#each points as point}
