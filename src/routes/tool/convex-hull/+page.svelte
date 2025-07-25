@@ -16,6 +16,12 @@
 
     let n = 10;
 
+    let selectedAlgorithm = "Graham Scan";
+
+    let algorithms = {
+        "Graham Scan": grahamScan,
+    };
+
     function pointsToSvgPath(points, closePath) {
         if (points.length === 0)
             return "";
@@ -53,7 +59,7 @@
             height * padding,
             height * (1 - padding)
         );
-        doGrahamScan();
+        doConvexHull();
     }
 
     function grahamScan(onStep, onStepBack) {
@@ -100,10 +106,10 @@
         return hull;
     }
 
-    function doGrahamScan() {
+    function doConvexHull() {
         history = [];
         const addToHistory = (hull) => history.push(hull);
-        hull = grahamScan(addToHistory, () => {});
+        hull = algorithms[selectedAlgorithm](addToHistory, () => {});
         historyIdx = history.length - 1;
     }
 
@@ -128,7 +134,7 @@
             <path class="hull" d="{pathData}"/>
 
             {#each points as point}
-                <SvgDraggablePoint bind:x={point.x} bind:y={point.y} drag={doGrahamScan} fill="blue"/>
+                <SvgDraggablePoint bind:x={point.x} bind:y={point.y} drag={doConvexHull} fill="blue"/>
             {/each}
         </svg>
     </div>
@@ -140,11 +146,20 @@
                 <input type="number" class="form-control" bind:value={n} min="3" on:change={generateRandomPoints}/>
             </label>
 
-            <button type="button" class="btn btn-sm btn-primary" on:click={generateRandomPoints}>Random Points</button>
+            <button type="button" class="btn btn-sm btn-primary" on:click={generateRandomPoints}>Randomize</button>
 
             <label class="form-label">
                 History:
                 <input type="range" class="form-range" min="0" max={history.length - 1} bind:value={historyIdx}>
+            </label>
+
+            <label class="form-label">
+                Algorithm:
+                <select class="form-select" bind:value={selectedAlgorithm}>
+                    {#each Object.entries(algorithms) as [name, _]}
+                        <option value={name}>{name}</option>
+                    {/each}
+                </select>
             </label>
         </div>
     </div>
