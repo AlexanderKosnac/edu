@@ -16,10 +16,11 @@
 
     let n = 10;
 
-    let selectedAlgorithm = "Graham Scan";
+    let selectedAlgorithm = "Gift Wrapping";
 
     let algorithms = {
         "Graham Scan": grahamScan,
+        "Gift Wrapping": giftWrapping,
     };
 
     function pointsToSvgPath(points, closePath) {
@@ -62,6 +63,11 @@
         doConvexHull();
     }
 
+    // Clockwise: -1, collinear: 0, Counterclockwise: 1
+    function orientation(p, q, r) {
+        return Math.sign((q.y - p.y) * (r.x - q.x) - (q.x - p.x) * (r.y - q.y));
+    }
+
     function grahamScan(onStep, onStepBack) {
         if (points.length < 3)
             return [];
@@ -97,18 +103,50 @@
         for (const p of sorted) {
             while (hull.length >= 2 && cross(hull[hull.length - 2], hull[hull.length - 1], p) <= 0) {
                 hull.pop(); // Non-left turn
-                onStepBack(structuredClone(hull));
+                onStepBack(hull);
             }
             hull.push(p);
-            onStep(structuredClone(hull));
+            onStep(hull);
         }
+
+        return hull;
+    }
+
+    function giftWrapping(onStep, onStepBack) {
+        if (points.length < 3)
+            return [];
+
+        // Find the left-most point
+        let leftMost = 0;
+        for (let i = 1; i < points.length; i++) {
+            if (points[i].x < points[leftMost].x) {
+                leftMost = i;
+            }
+        }
+
+        const hull = [];
+
+        let p = leftMost;
+        do {
+            hull.push(points[p]);
+            onStep(hull);
+            let q = (p + 1) % points.length;
+
+            for (let r = 0; r < points.length; r++) {
+                if (orientation(points[p], points[r], points[q]) === -1) {
+                    q = r;
+                }
+            }
+
+            p = q;
+        } while (p !== leftMost);
 
         return hull;
     }
 
     function doConvexHull() {
         history = [];
-        const addToHistory = (hull) => history.push(hull);
+        const addToHistory = (hull) => history.push(structuredClone(hull));
         hull = algorithms[selectedAlgorithm](addToHistory, () => {});
         historyIdx = history.length - 1;
     }
@@ -130,7 +168,7 @@
 
 <div class="row">
     <div class="col-auto">
-        <svg id="canvas2d" {width} {height} viewBox="0 0 {svgWidth} {svgHeight}" transform="scale(1,-1)">
+        <svg id="canvas2d" {width} {height} viewBox="0 0 {svgWidth} {svgHeight}">
             <path class="hull" d="{pathData}"/>
 
             {#each points as point}
