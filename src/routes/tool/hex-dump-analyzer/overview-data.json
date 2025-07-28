@@ -1,0 +1,8 @@
+{
+    "name": "Hex dump analyzer",
+    "description": "A tool to analyze and interpret a sequence of bytes.",
+    "tags": [
+        "Computer Science",
+        "Tool"
+    ]
+}
