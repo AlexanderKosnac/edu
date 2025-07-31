@@ -1,4 +1,6 @@
 <script>
+    import { hexStringToByteArray } from "$lib/hexUtility";
+
     let explicitMapping = {
          0: "NUL",  1: "SOH",  2: "STX",  3: "ETX",  4: "EOT",  5: "ENQ",  6: "ACK",  7: "BEL",
          8: "BS",   9: "HT",  10: "LF",  11: "VT",  12: "FF",  13: "CR",  14: "SO",  15: "SI",
@@ -28,19 +30,6 @@
             hexArray.push(sanitized.charCodeAt(i).toString(16).padStart(2, "0"));
         }
         hexInput = hexArray.join("");
-    }
-
-    function hexStringToByteArray(hexString) {
-        if (hexString.length % 2 !== 0) {
-            throw new Error("Invalid hex string: length must be even.");
-        }
-
-        const byteArray = new Uint8Array(hexString.length / 2);
-        for (let i = 0; i < hexString.length; i += 2) {
-            byteArray[i / 2] = parseInt(hexString.substr(i, 2), 16);
-        }
-
-        return byteArray;
     }
 </script>
 
