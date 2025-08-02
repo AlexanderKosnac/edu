@@ -1,4 +1,7 @@
 <script>
+    import CistercianNumber from "$lib/CistercianNumber/CistercianNumber.svelte";
+
+    let number = 1234;
 </script>
 
 <svelte:head>
@@ -12,7 +15,14 @@
 </div>
 
 <div class="row">
+    <div class="col-auto">
+        <CistercianNumber bind:number={number} size="256"/>
+    </div>
     <div class="col">
+        <label>
+            Number:
+            <input type="number" class="form-control" bind:value={number} min="1" max="9999"/>
+        </label>
     </div>
 </div>
 
