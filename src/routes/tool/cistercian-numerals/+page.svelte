@@ -16,9 +16,9 @@
 
 <div class="row">
     <div class="col-auto">
-        <CistercianNumber bind:number={number} size="256"/>
+        <CistercianNumber bind:number={number} size="256" borderWidth={4}/>
     </div>
-    <div class="col">
+    <div class="col-auto">
         <label>
             Number:
             <input type="number" class="form-control" bind:value={number} min="1" max="9999"/>

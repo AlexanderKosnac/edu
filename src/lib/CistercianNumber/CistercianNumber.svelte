@@ -1,13 +1,20 @@
 <script>
     let {
         number = $bindable(),
-        size,
+        size = 256,
+        strokeWidth = 4,
+        borderWidth = 0,
         ...others
     } = $props();
     let pathData = $state();
 
+    const paddingFraction = 0.2;
+    const paddedSize = size * (1 - paddingFraction);
+
     const size2 = size / 2;
-    const u = 0.25 * size;
+    const paddedSize2 = paddedSize / 2;
+
+    const u = 0.3 * paddedSize;
 
     // Strokes are used as 'M{0},{1} L{2},{3}'
     const strokes = {
@@ -44,13 +51,13 @@
         };
 
         const quadrantOffset = {
-            units: -size2,
-            tens: -size2,
-            hundreds: size2,
-            thousands: size2,
+            units: -paddedSize2,
+            tens: -paddedSize2,
+            hundreds: paddedSize2,
+            thousands: paddedSize2,
         };
 
-        let d = `M0,${-size2} l0,${size}`;
+        let d = `M0,${-paddedSize2} l0,${paddedSize}`;
         for (const [place, digit] of Object.entries(digits)) {
             if (digit === 0) continue;
 
@@ -64,10 +71,13 @@
 </script>
 
 <svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="{-size2} {-size2} {size} {size}" stroke="currentColor">
+    {#if borderWidth > 0}
+        <rect x="{-size2}" y="{-size2}" width={size} height={size} stroke="currentColor" stroke-width="{borderWidth}" fill="none"/>
+    {/if}
     {#if number < 1 || number > 9999}
         <!-- error -->
     {:else}
-        <path d={pathData} stroke="currentColor" stroke-width="1" fill="none" />
+        <path d={pathData} stroke="currentColor" stroke-width="{strokeWidth}" stroke-linecap="round" fill="none"/>
     {/if}
 </svg>
 
