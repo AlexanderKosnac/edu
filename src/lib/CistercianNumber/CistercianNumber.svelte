@@ -74,11 +74,7 @@
     {#if borderWidth > 0}
         <rect x="{-size2}" y="{-size2}" width={size} height={size} stroke="currentColor" stroke-width="{borderWidth}" fill="none"/>
     {/if}
-    {#if number < 1 || number > 9999}
-        <!-- error -->
-    {:else}
-        <path d={pathData} stroke="currentColor" stroke-width="{strokeWidth}" stroke-linecap="round" fill="none"/>
-    {/if}
+    <path d={pathData} stroke={(number < 1 || number > 9999) ? "red" : "currentColor"} stroke-width="{strokeWidth}" stroke-linecap="round" fill="none"/>
 </svg>
 
 <style>

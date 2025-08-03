@@ -21,8 +21,14 @@
     <div class="col-auto">
         <label>
             Number:
-            <input type="number" class="form-control" bind:value={number} min="1" max="9999"/>
+            <input type="number" class="form-control" bind:value={number} min="0" max="9999"/>
         </label>
+    </div>
+</div>
+
+<div class="row mt-1">
+    <div class="col">
+        <CistercianNumber number={1} size="256"/>
     </div>
 </div>
 
