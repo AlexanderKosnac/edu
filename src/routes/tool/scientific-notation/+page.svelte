@@ -1,41 +1,24 @@
 <script>
-    import katex from "katex";
-    import "katex/dist/katex.min.css";
-
-    function getKatexHtml(katexString) {
-        return katex.renderToString(katexString, {
-            throwOnError: false
-        });
-    }
+    import { katexAsHtml, katexAsHtmlInline } from "$lib/katexUtility.js";
 
     let number = 4;
     let base = 2;
     let useIntegerExponent = true;
-    let useIntegerMantissa = true;
+    let useIntegerMantissa = false;
 
     let exponent, mantissa, approximatedNumber, absoluteError, relativeError;
-    let exponentKatex, mantissaKatex, approximatedNumberKatex, absoluteErrorKatex, relativeErrorKatex;
     $: {
-        if (!isNaN(parseFloat(number)) && !isNaN(parseFloat(base))) {
-            exponent = Math.log(number) / Math.log(base);
-            if (useIntegerExponent)
-                exponent = Math.floor(exponent)
-            exponentKatex = getKatexHtml(`E = log_{${base}}(${number}) = ${exponent}`);
+        exponent = Math.log(number) / Math.log(base);
+        if (useIntegerExponent)
+            exponent = Math.floor(exponent)
 
-            mantissa = number / base**exponent;
-            if (useIntegerMantissa)
-                mantissa = Math.floor(mantissa)
-            mantissaKatex =  getKatexHtml(`M = \\frac{${number}}{${base}^{${exponent}}} = ${mantissa}`);
+        mantissa = number / base**exponent;
+        if (useIntegerMantissa)
+            mantissa = Math.floor(mantissa)
 
-            approximatedNumber = mantissa * base**exponent;
-            approximatedNumberKatex = getKatexHtml(`${mantissa} * {${base}}^{${exponent}} = ${approximatedNumber}`);
-
-            absoluteError = number - approximatedNumber;
-            absoluteErrorKatex = getKatexHtml(`${absoluteError}`);
-
-            relativeError = 100 * ((number - approximatedNumber) / number);
-            relativeErrorKatex = getKatexHtml(`${relativeError}\\%`);
-        }
+        approximatedNumber = mantissa * base**exponent;
+        absoluteError = number - approximatedNumber;
+        relativeError = 100 * ((number - approximatedNumber) / number);
     }
 </script>
 
@@ -51,13 +34,13 @@
 
 <div class="row mt-1">
     <div class="col">
-        <div class="d-flex flex-column">
-            <div class="d-flex flex-row align-items-center gap-2">
-                <label for="bitInput">Number:</label>
-                <input type="number" class="form-control font-monospace number-input" min="1" step="0.1" bind:value="{number}"/>
+        <div class="d-flex flex-column align-items-start">
+            <div class="d-flex flex-row align-items-center gap-1">
+                <label for="numberInput">Number:</label>
+                <input type="number" id="numberInput" class="form-control font-monospace number-input" min="0" step="0.1" bind:value="{number}"/>
     
-                <label for="bitInput">Base:</label>
-                <input type="number" class="form-control font-monospace number-input" style="width: 80px" min="2" bind:value="{base}"/>
+                <label for="baseInput">Base:</label>
+                <input type="number" id="baseInput" class="form-control font-monospace number-input" style="width: 80px" min="2" bind:value="{base}"/>
             </div>
             <label class="form-check-label">
                 <input class="form-check-input" type="checkbox" value="" bind:checked={useIntegerExponent}/>
@@ -79,23 +62,23 @@
             <tbody>
                 <tr>
                     <th scope="row">Exponent</th>
-                    <td>{@html exponentKatex}</td>
+                    <td>{@html katexAsHtmlInline(`E = log_{${base}}(${number}) = ${exponent}`)}</td>
                 </tr>
                 <tr>
                     <th scope="row">Mantissa</th>
-                    <td>{@html mantissaKatex}</td>
+                    <td>{@html katexAsHtmlInline(`M = \\frac{${number}}{${base}^{${exponent}}} = ${mantissa}`)}</td>
                 </tr>
                 <tr>
                     <th scope="row">Approximation</th>
-                    <td>{@html approximatedNumberKatex}</td>
+                    <td>{@html katexAsHtmlInline(`${mantissa} * {${base}}^{${exponent}} = ${approximatedNumber}`)}</td>
                 </tr>
                 <tr>
                     <th scope="row">Absolute Error</th>
-                    <td>{@html absoluteErrorKatex}</td>
+                    <td>{@html katexAsHtmlInline(`${absoluteError}`)}</td>
                 </tr>
                 <tr>
                     <th scope="row">Relative Error</th>
-                    <td>{@html relativeErrorKatex}</td>
+                    <td>{@html katexAsHtmlInline(`${relativeError}\\%`)}</td>
                 </tr>
             </tbody>
         </table>
