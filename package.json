@@ -10,9 +10,9 @@
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^3.0.1",
 		"@sveltejs/kit": "^2.0.0",
-		"@sveltejs/vite-plugin-svelte": "^5.0.3",
+		"@sveltejs/vite-plugin-svelte": "^6.1.0",
 		"svelte": "^5.23.2",
-		"vite": "^6.2.2"
+		"vite": "^7.0.6"
 	},
 	"type": "module",
 	"dependencies": {
@@ -21,7 +21,7 @@
 		"chart.js": "^4.4.2",
 		"gl-matrix": "^3.4.3",
 		"katex": "^0.16.11",
-		"marked": "^15.0.3",
+		"marked": "^16.1.2",
 		"mathjs": "^14.4.0",
 		"minisearch": "^7.1.0",
 		"xml-formatter": "^3.6.4"
