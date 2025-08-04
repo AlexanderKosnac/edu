@@ -1,4 +1,6 @@
 <script>
+    let flowtext;
+
     let min = -5;
     let minInclusive;
     let max = 10;
@@ -31,7 +33,7 @@
     </div>
 </div>
 
-<div class="row">
+<div class="row mb-1">
     <div class="col-auto">
         <div class="d-flex flex-column gap-1 align-items-start">
             <label>
@@ -64,13 +66,16 @@
     </div>
 </div>
 
-<div class="row">
+<!--
+<div class="row mb-1">
     <div class="col">
-        <h2>References:</h2>
-        <ul>
-        </ul>
+        <textarea class="form-control font-monospace" id="inputText" rows="20" bind:value="{flowtext}"></textarea>
+    </div>
+    <div class="col">
+        <textarea class="form-control font-monospace" id="inputText" rows="20" bind:value="{flowtext}"></textarea>
     </div>
 </div>
+-->
 
 <style>
 </style>
