@@ -2,6 +2,14 @@
     import CistercianNumber from "$lib/CistercianNumber/CistercianNumber.svelte";
 
     let number = 1234;
+
+    const overviewValues = [
+        [1, 2, 3, 4, 5, 6, 7, 8, 9],
+        [10, 20, 30, 40, 50, 60, 70, 80, 90],
+        [100, 200, 300, 400, 500, 600, 700, 800, 900],
+        [1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000],
+        [0, 9999, 22]
+    ];
 </script>
 
 <svelte:head>
@@ -28,7 +36,19 @@
 
 <div class="row mt-1">
     <div class="col">
-        <CistercianNumber number={1} size="256"/>
+        <h2>Overview</h2>
+        <div>
+            {#each overviewValues as rowEntries}
+                <div class="d-flex flex-row gap-3">
+                    {#each rowEntries as entry}
+                        <div class="d-felx gap-1">
+                            <div class="text-center">{entry}</div>
+                            <div><CistercianNumber number={entry} size="64" strokeWidth="2" borderWidth="2"/></div>
+                        </div>
+                    {/each}
+                </div>
+            {/each}
+        </div>
     </div>
 </div>
 
