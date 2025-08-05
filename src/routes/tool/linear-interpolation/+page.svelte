@@ -3,14 +3,7 @@
 
     import Chart from "chart.js/auto";
 
-    import katex from "katex";
-    import "katex/dist/katex.min.css";
-
-    function asHtmlLatex(latex) {
-        return katex.renderToString(latex, {
-            throwOnError: false
-        });
-    }
+    import { katexAsHtml } from "$lib/katexUtility.js";
 
     let chartCanvas;
     let chart;
@@ -144,8 +137,8 @@
 
 <div class="row">
     <div class="col">
-        For given points {@html asHtmlLatex("x_0")} and {@html asHtmlLatex("x_1")}, with {@html asHtmlLatex("x_0 \\ne x_1")}
-        the linear interpolation is {@html asHtmlLatex("p_1(x) = f(x_0) + (\\frac{f(x_1)-f(x_0)}{x_1-x_0}) (x-x_0)")}.
+        For given points {@html katexAsHtml("x_0")} and {@html katexAsHtml("x_1")}, with {@html katexAsHtml("x_0 \\ne x_1")}
+        the linear interpolation is {@html katexAsHtml("p_1(x) = f(x_0) + (\\frac{f(x_1)-f(x_0)}{x_1-x_0}) (x-x_0)")}.
     </div>
 </div>
 
@@ -157,27 +150,27 @@
     <div class="col-4">
         <h4>Interpolation Points</h4>
         <label>
-            {@html asHtmlLatex("x_0")}
+            {@html katexAsHtml("x_0")}
             <input type="number" class="form-control" placeholder="Starting number" bind:value={x0} on:change={onChange}>
         </label>
 
         <label>
-            {@html asHtmlLatex("x_1")}
+            {@html katexAsHtml("x_1")}
             <input type="number" class="form-control" placeholder="Starting number" bind:value={x1} on:change={onChange}>
         </label>
 
         {#if x0 == x1}
-        <div class="text-danger">{@html asHtmlLatex("x_0")} can not be equal to {@html asHtmlLatex("x_1")}.</div>
+        <div class="text-danger">{@html katexAsHtml("x_0")} can not be equal to {@html katexAsHtml("x_1")}.</div>
         {/if}
 
-        <div class="p-2"/>
+        <div class="p-2"></div>
 
         <h4>Function</h4>
         <div class="d-flex flex-column gap-3">
             {#each functions as e}
             <label>
                 <input type="radio" value={e} bind:group={selectedFunc} on:change={onChange}/>
-                {@html asHtmlLatex(`f(x)=${e.tex}`)}
+                {@html katexAsHtml(`f(x)=${e.tex}`)}
             </label>
             {/each}
         </div>

@@ -3,16 +3,8 @@
 
     import Chart from "chart.js/auto";
 
-    import katex from "katex";
-    import "katex/dist/katex.min.css";
-
+    import { katexAsHtml } from "$lib/katexUtility.js";
     import { sampleFunction } from "$lib/math.js";
-
-    function asHtmlLatex(latex) {
-        return katex.renderToString(latex, {
-            throwOnError: false
-        });
-    }
 
     function getRandomInt(min, max) {
         const minCeiled = Math.ceil(min);
@@ -156,14 +148,14 @@
 
 <div class="row">
     <div class="col">
-        The goal of Lagrange interpolation is to find the polynomial {@html asHtmlLatex("p \\in P_n")} for
-        {@html asHtmlLatex("n+1")} interpolation points {@html asHtmlLatex("x_0, \\dots, x_n \\in \\R")} and
-        associated values {@html asHtmlLatex("y_0, \\dots, y_n \\in \\R")} so that:
-        {@html asHtmlLatex("p(x_i) = y_i \\quad{} \\text{for } i=0, \\dots , n")}.
+        The goal of Lagrange interpolation is to find the polynomial {@html katexAsHtml("p \\in P_n")} for
+        {@html katexAsHtml("n+1")} interpolation points {@html katexAsHtml("x_0, \\dots, x_n \\in \\R")} and
+        associated values {@html katexAsHtml("y_0, \\dots, y_n \\in \\R")} so that:
+        {@html katexAsHtml("p(x_i) = y_i \\quad{} \\text{for } i=0, \\dots , n")}.
         For the constuction, Lagrange basis functions are used:
-        {@html asHtmlLatex("L^{(n)}_i(x) := \\prod_{\\substack{j=0, j \\neq i}}^n \\frac{x - x_j}{x_i - x_j} \\in P_n, i = 0, \\dots{} n")}.
+        {@html katexAsHtml("L^{(n)}_i(x) := \\prod_{\\substack{j=0, j \\neq i}}^n \\frac{x - x_j}{x_i - x_j} \\in P_n, i = 0, \\dots{} n")}.
         With this the interpolation polynomial can be constructed:
-        {@html asHtmlLatex("p := \\sum^{n}_{i=0} y_i L^{(n)}_i \\in P_n")}.
+        {@html katexAsHtml("p := \\sum^{n}_{i=0} y_i L^{(n)}_i \\in P_n")}.
     </div>
 </div>
 
@@ -176,23 +168,23 @@
         <table class="table w-auto">
         <thead>
             <tr>
-                <th scope="col">{@html asHtmlLatex("i")}</th>
-                <th scope="col">{@html asHtmlLatex("x_i")}</th>
-                <th scope="col">{@html asHtmlLatex("y_i")}</th>
+                <th scope="col">{@html katexAsHtml("i")}</th>
+                <th scope="col">{@html katexAsHtml("x_i")}</th>
+                <th scope="col">{@html katexAsHtml("y_i")}</th>
                 <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
             {#each points as _, i}
             <tr>
-                <td>{@html asHtmlLatex(`${i}`)}</td>
+                <td>{@html katexAsHtml(`${i}`)}</td>
                 <td><input type="number" class="form-control point-input" placeholder="x" bind:value={points[i].x} on:change={onChange}></td>
                 <td><input type="number" class="form-control point-input" placeholder="y" bind:value={points[i].y} on:change={onChange}></td>
                 <td><button type="button" class="btn btn-secondary" on:click={() => removePoint(i)}>Remove</button></td>
             </tr>
             {/each}
             <tr>
-                <td>{@html asHtmlLatex("i")}</td>
+                <td>{@html katexAsHtml("i")}</td>
                 <td><input type="number" class="form-control point-input" placeholder="x" bind:value={inputX}></td>
                 <td><input type="number" class="form-control point-input" placeholder="y" bind:value={inputY}></td>
                 <td><button type="button" class="btn btn-primary" on:click={addPoint}>Add</button></td>
@@ -201,7 +193,7 @@
         </table>
 
         {#if hasDuplicates(points.map(p => p.x))}
-        <div class="text-danger">{@html asHtmlLatex("x_0")} can not be equal to {@html asHtmlLatex("x_1")}.</div>
+        <div class="text-danger">{@html katexAsHtml("x_0")} can not be equal to {@html katexAsHtml("x_1")}.</div>
         {/if}
 
         <button type="button" class="btn btn-primary" on:click={updateData}>Refresh</button>
