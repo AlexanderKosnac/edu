@@ -20,6 +20,22 @@
             results = Array.from({ length: 36 - 2 + 1 }, (_, i) => i + 2).map(x => num.toString(x).toUpperCase());
         }
     }
+
+    function changeBase() {
+        input = parseInt(input, base).toString(base);
+    }
+
+    function increment() {
+        let num = parseInt(input, base);
+        num++;
+        input = num.toString(base);
+    }
+
+    function decrement() {
+        let num = parseInt(input, base);
+        num--;
+        input = num.toString(base);
+    }
 </script>
 
 <svelte:head>
@@ -34,15 +50,21 @@
 
 <div class="row">
     <div class="col-auto">
-        <div class="d-flex gap-1">
-            <label>
-                Number:
-                <input type="text" class="form-control" bind:value={input}/>
-            </label>
-            <label>
-                Base:
-                <input type="number" class="form-control" bind:value={base} min="2" max="36"/>
-            </label>
+        <div class="d-flex flex-column gap-1">
+            <div class="d-flex gap-1">
+                <label>
+                    Number:
+                    <input type="text" class="form-control" bind:value={input}/>
+                </label>
+                <label>
+                    Base:
+                    <input type="number" class="form-control" bind:value={base} min="2" max="36" on:change={changeBase}/>
+                </label>
+            </div>
+            <div class="d-flex flex-row gap-1">
+                <button type="button" class="btn btn-primary" on:click={decrement}>-</button>
+                <button type="button" class="btn btn-primary" on:click={increment}>+</button>
+            </div>
         </div>
     </div>
 
