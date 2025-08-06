@@ -5,7 +5,7 @@
     import { matrix, multiply, inv } from "mathjs";
 
     import { sampleFunction, polynomial } from "$lib/math.js";
-    import { katexAsHtml, toKatexVector, toKatexMatrix } from "$lib/katexUtility.js";
+    import { katexAsHtml, katexAsHtmlInline, toKatexVector, toKatexMatrix } from "$lib/katexUtility.js";
 
     function getVandermondeMatrix(x) {
         return matrix(x.map(xi => {
@@ -172,23 +172,23 @@
         <table class="table w-auto">
         <thead>
             <tr>
-                <th scope="col">{@html katexAsHtml("i")}</th>
-                <th scope="col">{@html katexAsHtml("x_i")}</th>
-                <th scope="col">{@html katexAsHtml("y_i")}</th>
+                <th scope="col">{@html katexAsHtmlInline("i")}</th>
+                <th scope="col">{@html katexAsHtmlInline("x_i")}</th>
+                <th scope="col">{@html katexAsHtmlInline("y_i")}</th>
                 <th scope="col"></th>
             </tr>
         </thead>
         <tbody>
             {#each points as _, i}
             <tr>
-                <td>{@html katexAsHtml(`${i}`)}</td>
+                <td>{@html katexAsHtmlInline(`${i}`)}</td>
                 <td><input type="number" class="form-control point-input" placeholder="x" bind:value={points[i].x} on:change={onChange}></td>
                 <td><input type="number" class="form-control point-input" placeholder="y" bind:value={points[i].y} on:change={onChange}></td>
                 <td><button type="button" class="btn btn-secondary" on:click={() => removePoint(i)}>Remove</button></td>
             </tr>
             {/each}
             <tr>
-                <td>{@html katexAsHtml("i")}</td>
+                <td>{@html katexAsHtmlInline("i")}</td>
                 <td><input type="number" class="form-control point-input" placeholder="x" bind:value={inputX}></td>
                 <td><input type="number" class="form-control point-input" placeholder="y" bind:value={inputY}></td>
                 <td><button type="button" class="btn btn-primary" on:click={addPoint}>Add</button></td>
@@ -197,7 +197,7 @@
         </table>
 
         {#if hasDuplicates(points.map(p => p.x))}
-        <div class="text-danger">{@html katexAsHtml("x_0")} can not be equal to {@html katexAsHtml("x_1")}.</div>
+        <div class="text-danger">{@html katexAsHtmlInline("x_0")} can not be equal to {@html katexAsHtmlInline("x_1")}.</div>
         {/if}
 
         <button type="button" class="btn btn-primary" on:click={updateData}>Refresh</button>
@@ -206,7 +206,7 @@
 
 <div class="row mb-5">
     <div class="col text-center">
-        {@html katexAsHtml(interpolationLatex())}
+        {@html katexAsHtmlInline(interpolationLatex())}
     </div>
 </div>
 
