@@ -95,8 +95,7 @@
         };
     }
 
-    function onDragPoint()
-    {
+    function onDragPoint() {
         clip = clipLine(pA.x, pA.y, pB.x, pB.y);
     }
 
@@ -116,7 +115,7 @@
 </div>
 
 <div class="row">
-    <div class="col">
+    <div class="col-auto">
         <svg {width} {height} viewBox="0 0 {width} {height}">
             <line class="clipping-edge" x1="{xmin}" y1="0"      x2="{xmin}"  y2="{height}"/>
             <line class="clipping-edge" x1="{xmax}" y1="0"      x2="{xmax}"  y2="{height}"/>
