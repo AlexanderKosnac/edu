@@ -13,48 +13,34 @@
     }
 
     function formatHexDump(bytes, bytesPerLine = 16, startOffset = 0) {
-        let result = "";
+        let dump = "";
 
         const padBytes = startOffset % bytesPerLine;
         let index = 0;
 
         while (index < bytes.length) {
-            const lineOffset = startOffset + index - padBytes; // start of the line in address space
+            const padCount = index === 0 ? padBytes : 0;
+            const lineOffset = startOffset + index - padCount;
 
-            const offsetStr = lineOffset.toString(16).padStart(8, '0');
+            const address = lineOffset.toString(16).padStart(8, '0');
 
-            let slice, hexBytes, ascii;
+            const lineBytes = bytes.slice(index, index + bytesPerLine - padCount);
 
-            if (index === 0 && padBytes > 0) {
-                const lineBytes = bytes.slice(0, bytesPerLine - padBytes);
-                hexBytes =
-                    "   ".repeat(padBytes) +
-                    Array.from(lineBytes, b => b.toString(16).padStart(2, '0')).join(' ');
-                hexBytes = hexBytes.padEnd(bytesPerLine * 3 - 1, ' ');
+            let hex = "   ".repeat(padCount) +
+                Array.from(lineBytes, b => b.toString(16).padStart(2, '0')).join(' ');
+            hex = hex.padEnd(bytesPerLine * 3 - 1, ' ');
 
-                ascii = " ".repeat(padBytes) +
-                    Array.from(lineBytes, b => {
-                        const char = String.fromCharCode(b);
-                        return b >= 0x20 && b <= 0x7E ? char : '.';
-                    }).join('');
+            let ascii = " ".repeat(padCount) +
+                Array.from(lineBytes, b => b >= 0x20 && b <= 0x7E ? String.fromCharCode(b) : '.').join('');
 
-                index += lineBytes.length;
-            } else {
-                slice = bytes.slice(index, index + bytesPerLine);
-                hexBytes = Array.from(slice, b => b.toString(16).padStart(2, '0')).join(' ');
-                hexBytes = hexBytes.padEnd(bytesPerLine * 3 - 1, ' ');
+            ascii = ascii.padEnd(bytesPerLine, ' ');
 
-                ascii = Array.from(slice, b => {
-                    const char = String.fromCharCode(b);
-                    return b >= 0x20 && b <= 0x7E ? char : '.';
-                }).join('').padEnd(16, " ");
+            dump += `${address}  ${hex}  |${ascii}|\n`;
 
-                index += slice.length;
-            }
-
-            result += `${offsetStr}  ${hexBytes}  |${ascii}|\n`;
+            index += lineBytes.length;
         }
-        return result;
+
+        return dump;
     }
 </script>
 
