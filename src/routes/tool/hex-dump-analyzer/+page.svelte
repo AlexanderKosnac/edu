@@ -1,7 +1,10 @@
 <script>
-    import { hexStringToByteArray } from "$lib/hexUtility";
+    import { onMount } from "svelte";
 
-    let hexInput = "48656c6c6f";
+    import { hexStringToByteArray } from "$lib/hexUtility";
+    import { hexHttpRequest } from "./data.js";
+
+    let hexInput = hexHttpRequest;
     let startAddress = 0;
 
     let sanitizedHexInput, hexDumpString;
@@ -42,6 +45,10 @@
 
         return dump;
     }
+
+    onMount(() => {
+        onDataChange();
+    });
 </script>
 
 <svelte:head>
