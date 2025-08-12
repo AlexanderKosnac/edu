@@ -9,6 +9,11 @@
 
     let sanitizedHexInput, hexDumpString;
 
+    let highlights = [
+        { start: 0x10, size: 0x04, color: "#ed333b", type: "int" },
+        { start: 0x16, size: 0x03, color: "#57e389", type: "float" },
+    ];
+
     function onDataChange() {
         sanitizedHexInput = hexInput.replace(/[^0-9a-fA-F]/g, '');
         const bytes = hexStringToByteArray(sanitizedHexInput);
@@ -76,13 +81,44 @@
             <input type="text" id="sanitizedHexInput" class="form-control" bind:value={sanitizedHexInput} readonly/>
         </div>
     </div>
-    <div>
+</div>
+
+<div class="row">
+    <div class="col-auto">
         <pre>{hexDumpString}</pre>
     </div>
-<pre>
-00000000: 48 65 6c 6c <span class="highlight">6f</span> 20 77 6f 72 6c 64 21 20 54 68 69
-00000010: 73 20 69 73 20 61 <span class="highlight-red">20</span>74 65 73 74 2e 0a
-</pre>
+    <div class="col">
+        <table class="table w-auto highlight-input-table">
+        <thead>
+            <tr>
+                <th scope="col">Offset</th>
+                <th scope="col">Size</th>
+                <th scope="col">Color</th>
+                <th scope="col">Type</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {#each highlights as _, i}
+            <tr>
+                <td><input type="number" class="form-control offset-input" bind:value={highlights[i].start}/></td>
+                <td><input type="number" class="form-control offset-input" bind:value={highlights[i].size}/></td>
+                <td><input type="color" class="form-control form-control-color" bind:value={highlights[i].color}></td>
+                <td>
+                    <select class="form-select" bind:value={highlights[i].type}>
+                        <option value="int">int</option>
+                        <option value="float">float</option>
+                    </select>
+                </td>
+                <td><button type="button" class="btn btn-secondary">&#x1F5D1;</button></td>
+            </tr>
+            {/each}
+            <tr>
+                <td rowspan="5"><button type="button" class="btn btn-primary">New</button></td>
+            </tr>
+        </tbody>
+        </table>
+    </div>
 </div>
 
 <div class="row">
@@ -95,8 +131,7 @@
 </div>
 
 <style>
-    .highlight {
-        background-color: yellow; /* textmarker style */
-        color: black;
+    .offset-input {
+        width: 6em;
     }
 </style>
