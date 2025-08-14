@@ -24,17 +24,33 @@
         highlights = highlights;
     }
 
+    function getContrastingColor(bgColor) {
+        let r = parseInt(bgColor.substr(1, 2), 16) / 255;
+        let g = parseInt(bgColor.substr(3, 2), 16) / 255;
+        let b = parseInt(bgColor.substr(5, 2), 16) / 255;
+
+        [r, g, b] = [r, g, b].map(c => c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4));
+
+        let lb = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+        return (lb > 0.179) ? "#000000" : "#FFFFFF";
+    }
+
     function onDataChange() {
         sanitizedHexInput = hexInput.replace(/[^0-9a-fA-F]/g, '');
         const bytes = hexStringToByteArray(sanitizedHexInput);
-        hexDumpString = formatHexDump(bytes, 16, startAddress);
+        hexDumpString = formatHexDump(bytes, 16, startAddress, highlights);
     }
 
-    function formatHexDump(bytes, bytesPerLine = 16, startOffset = 0) {
+    function formatHexDump(bytes, bytesPerLine = 16, startOffset = 0, highlights = []) {
         let dump = "";
 
         const padBytes = startOffset % bytesPerLine;
         let index = 0;
+
+        function getHighlightForOffset(offset) {
+            return highlights.find(h => offset >= h.start && offset < h.start + h.size);
+        }
 
         while (index < bytes.length) {
             const padCount = index === 0 ? padBytes : 0;
@@ -44,14 +60,33 @@
 
             const lineBytes = bytes.slice(index, index + bytesPerLine - padCount);
 
-            let hex = "   ".repeat(padCount) +
-                Array.from(lineBytes, b => b.toString(16).padStart(2, '0')).join(' ');
-            hex = hex.padEnd(bytesPerLine * 3 - 1, ' ');
+            let hexParts = [];
+            let asciiParts = [];
 
-            let ascii = " ".repeat(padCount) +
-                Array.from(lineBytes, b => b >= 0x20 && b <= 0x7E ? String.fromCharCode(b) : '.').join('');
+            for (let i = 0; i < padCount; i++) {
+                hexParts.push("  ");
+                asciiParts.push(" ");
+            }
 
-            ascii = ascii.padEnd(bytesPerLine, ' ');
+            for (let i = 0; i < lineBytes.length; i++) {
+                const offset = lineOffset + i;
+                const highlight = getHighlightForOffset(offset);
+
+                let hexByte = lineBytes[i].toString(16).padStart(2, '0');
+                let asciiChar = (lineBytes[i] >= 0x20 && lineBytes[i] <= 0x7E) ? String.fromCharCode(lineBytes[i]) : '.';
+
+                if (highlight) {
+                    const fontColor = getContrastingColor(highlight.color);
+                    hexByte = `<span style="color: ${fontColor}; background-color: ${highlight.color}">${hexByte}</span>`;
+                    asciiChar = `<span style="color: ${fontColor}; background-color: ${highlight.color}">${asciiChar}</span>`;
+                }
+
+                hexParts.push(hexByte);
+                asciiParts.push(asciiChar);
+            }
+
+            let hex = hexParts.join(' ').padEnd(bytesPerLine * 3 - 1, ' ');
+            let ascii = asciiParts.join('').padEnd(bytesPerLine, ' ');
 
             dump += `${address}  ${hex}  |${ascii}|\n`;
 
@@ -60,6 +95,7 @@
 
         return dump;
     }
+
 
     onMount(() => {
         onDataChange();
@@ -95,7 +131,7 @@
 
 <div class="row">
     <div class="col-auto">
-        <pre>{hexDumpString}</pre>
+        <pre>{@html hexDumpString}</pre>
     </div>
     <div class="col">
         <table class="table w-auto highlight-input-table">
