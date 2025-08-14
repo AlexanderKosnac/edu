@@ -14,6 +14,16 @@
         { start: 0x16, size: 0x03, color: "#57e389", type: "float" },
     ];
 
+    function addHighlight() {
+        highlights.push({ start: 0x00, size: 0x04, color: "#ed333b", type: "int" });
+        highlights = highlights;
+    }
+
+    function removeHighlight(i) {
+        highlights.splice(i, 1);
+        highlights = highlights;
+    }
+
     function onDataChange() {
         sanitizedHexInput = hexInput.replace(/[^0-9a-fA-F]/g, '');
         const bytes = hexStringToByteArray(sanitizedHexInput);
@@ -110,11 +120,11 @@
                         <option value="float">float</option>
                     </select>
                 </td>
-                <td><button type="button" class="btn btn-secondary">&#x1F5D1;</button></td>
+                <td><button type="button" class="btn btn-outline-secondary" on:click={() => removeHighlight(i)}>&#x1F5D1;</button></td>
             </tr>
             {/each}
             <tr>
-                <td rowspan="5"><button type="button" class="btn btn-primary">New</button></td>
+                <td rowspan="5"><button type="button" class="btn btn-primary" on:click={addHighlight}>New</button></td>
             </tr>
         </tbody>
         </table>
