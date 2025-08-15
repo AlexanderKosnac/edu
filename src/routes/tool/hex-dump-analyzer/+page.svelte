@@ -7,15 +7,34 @@
     let hexInput = hexHttpRequest;
     let startAddress = 0;
 
-    let sanitizedHexInput, hexDumpString;
+    let sanitizedHexInput, byteData, hexDumpString;
+
+    const ByteType = Object.freeze({
+        INT8: "int8",
+        UINT8: "uint8",
+        INT16_LE: "int16",
+        INT16_BE: "int16 (big-endian)",
+        UINT16_LE: "uint16",
+        UINT16_BE: "uint16 (big-endian)",
+        INT32_LE: "int32",
+        INT32_BE: "int32 (big-endian)",
+        UINT32_LE: "uint32",
+        UINT32_BE: "uint32 (big-endian)",
+        FLOAT32_LE: "float32",
+        FLOAT32_BE: "float32 (big-endian)",
+        FLOAT64_LE: "float64",
+        FLOAT64_BE: "float64 (big-endian)",
+        BIG_INT64: "bigInt64",
+        BIG_UINT64: "bigUint64",
+    });
 
     let highlights = [
-        { start: 0x10, size: 0x04, color: "#ed333b", type: "int" },
-        { start: 0x16, size: 0x03, color: "#57e389", type: "float" },
+        { start: 0x10, size: 0x04, color: "#ed333b", type: ByteType.UINT32_BE },
+        { start: 0x16, size: 0x03, color: "#57e389", type: ByteType.FLOAT32_BE },
     ];
 
     function addHighlight() {
-        highlights.push({ start: 0x00, size: 0x04, color: "#ed333b", type: "int" });
+        highlights.push({ start: 0x00, size: 0x04, color: "#ed333b", type: ByteType.UINT32_BE });
         highlights = highlights;
     }
 
@@ -38,8 +57,50 @@
 
     function onDataChange() {
         sanitizedHexInput = hexInput.replace(/[^0-9a-fA-F]/g, '');
-        const bytes = hexStringToByteArray(sanitizedHexInput);
-        hexDumpString = formatHexDump(bytes, 16, startAddress, highlights);
+        byteData = hexStringToByteArray(sanitizedHexInput);
+        hexDumpString = formatHexDump(byteData, 16, startAddress, highlights);
+    }
+
+    function interpretBytes(offset, length, type) {
+        const slice = byteData.slice(offset, offset + length);
+        const view = new DataView(slice.buffer, slice.byteOffset, slice.byteLength);
+        const invalid = "Invalid";
+        switch (type) {
+            case ByteType.INT8:
+                return length == 1 ? view.getInt8(0) : invalid;
+            case ByteType.UINT8:
+                return length == 1 ? view.getUint8(0) : invalid;
+            case ByteType.INT16_LE:
+                return length == 2 ? view.getInt16(0, true) : invalid;
+            case ByteType.INT16_BE:
+                return length == 2 ? view.getInt16(0, false) : invalid;
+            case ByteType.UINT16_LE:
+                return length == 2 ? view.getUint16(0, true) : invalid;
+            case ByteType.UINT16_BE:
+                return length == 2 ? view.getUint16(0, false) : invalid;
+            case ByteType.INT32_LE:
+                return length == 4 ? view.getInt32(0, true) : invalid;
+            case ByteType.INT32_BE:
+                return length == 4 ? view.getInt32(0, false) : invalid;
+            case ByteType.UINT32_LE:
+                return length == 4 ? view.getUint32(0, true) : invalid;
+            case ByteType.UINT32_BE:
+                return length == 4 ? view.getUint32(0, false) : invalid;
+            case ByteType.FLOAT32_BE:
+                return length == 4 ? view.getFloat32(0, true) : invalid;
+            case ByteType.FLOAT32_BE:
+                return length == 4 ? view.getFloat32(0, false) : invalid;
+            case ByteType.FLOAT64_LE:
+                return length == 8 ? view.getFloat64(0, true) : invalid;
+            case ByteType.FLOAT64_BE:
+                return length == 8 ? view.getFloat64(0, false) : invalid;
+            case ByteType.BIG_INT64:
+                return length == 8 ? view.getBigInt64(0, true) : invalid;
+            case ByteType.BIG_UINT64:
+                return length == 8 ? view.getBigUint64(0, true) : invalid;
+            default:
+                return "Unhandled";
+        }
     }
 
     function formatHexDump(bytes, bytesPerLine = 16, startOffset = 0, highlights = []) {
@@ -96,7 +157,6 @@
         return dump;
     }
 
-
     onMount(() => {
         onDataChange();
     });
@@ -137,6 +197,7 @@
         <table class="table w-auto highlight-input-table">
         <thead>
             <tr>
+                <th scope="col">Value</th>
                 <th scope="col">Offset</th>
                 <th scope="col">Size</th>
                 <th scope="col">Color</th>
@@ -147,13 +208,19 @@
         <tbody>
             {#each highlights as _, i}
             <tr>
-                <td><input type="number" class="form-control offset-input" bind:value={highlights[i].start}/></td>
-                <td><input type="number" class="form-control offset-input" bind:value={highlights[i].size}/></td>
+                <td>
+                    {#if byteData?.length >= highlights[i].start + highlights[i].size}
+                        {interpretBytes(highlights[i].start, highlights[i].size, highlights[i].type)}
+                    {/if}
+                </td>
+                <td><input type="number" class="form-control offset-input" min="0" bind:value={highlights[i].start}/></td>
+                <td><input type="number" class="form-control offset-input" min="0" bind:value={highlights[i].size}/></td>
                 <td><input type="color" class="form-control form-control-color" bind:value={highlights[i].color}></td>
                 <td>
                     <select class="form-select" bind:value={highlights[i].type}>
-                        <option value="int">int</option>
-                        <option value="float">float</option>
+                        {#each Object.values(ByteType) as value}
+                            <option value={value}>{value}</option>
+                        {/each}
                     </select>
                 </td>
                 <td><button type="button" class="btn btn-outline-secondary" on:click={() => removeHighlight(i)}>&#x1F5D1;</button></td>
