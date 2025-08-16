@@ -1,6 +1,6 @@
 export function hexStringToByteArray(hexString) {
     if (hexString.length % 2 !== 0) {
-        throw new Error("Invalid hex string: length must be even.");
+        hexString += "0";
     }
 
     const byteArray = new Uint8Array(hexString.length / 2);

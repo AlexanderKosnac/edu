@@ -1,13 +1,9 @@
 <script>
-    import { onMount } from "svelte";
-
     import { hexStringToByteArray } from "$lib/hexUtility";
     import { hexHttpRequest } from "./data.js";
 
     let hexInput = hexHttpRequest;
     let startAddress = 0;
-
-    let sanitizedHexInput, byteData, hexDumpString;
 
     const ByteType = Object.freeze({
         INT8: "int8",
@@ -55,11 +51,9 @@
         return (lb > 0.179) ? "#000000" : "#FFFFFF";
     }
 
-    function onDataChange() {
-        sanitizedHexInput = hexInput.replace(/[^0-9a-fA-F]/g, '');
-        byteData = hexStringToByteArray(sanitizedHexInput);
-        hexDumpString = formatHexDump(byteData, 16, startAddress, highlights);
-    }
+    $: sanitizedHexInput = hexInput.replace(/[^0-9a-fA-F]/g, '');
+    $: byteData = hexStringToByteArray(sanitizedHexInput);
+    $: hexDumpString = formatHexDump(byteData ?? [], 16, startAddress, highlights);
 
     function interpretBytes(offset, length, type) {
         const slice = byteData.slice(offset, offset + length);
@@ -156,10 +150,6 @@
 
         return dump;
     }
-
-    onMount(() => {
-        onDataChange();
-    });
 </script>
 
 <svelte:head>
@@ -176,15 +166,15 @@
     <div class="col">
         <div class="form-group">
             <label for="hexInput">Hex String:</label>
-            <input type="text" id="hexInput" class="form-control" bind:value={hexInput} on:input={onDataChange}/>
+            <input type="text" id="hexInput" class="form-control" bind:value={hexInput}/>
         </div>
         <div class="form-group">
             <label for="startAddressInput">Start Address:</label>
-            <input type="number" id="startAddressInput" class="form-control" min="0" bind:value={startAddress} on:input={onDataChange}/>
+            <input type="number" id="startAddressInput" class="form-control" min="0" bind:value={startAddress}/>
         </div>
         <div class="form-group">
             <label for="sanitizedHexInput">Sanitized Hex String:</label>
-            <input type="text" id="sanitizedHexInput" class="form-control" bind:value={sanitizedHexInput} readonly/>
+            <input type="text" id="sanitizedHexInput" class="form-control" value={sanitizedHexInput} readonly/>
         </div>
     </div>
 </div>
