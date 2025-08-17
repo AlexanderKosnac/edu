@@ -20,8 +20,9 @@
         FLOAT32_BE: "float32 (big-endian)",
         FLOAT64_LE: "float64",
         FLOAT64_BE: "float64 (big-endian)",
-        BIG_INT64: "bigInt64",
-        BIG_UINT64: "bigUint64",
+        BIG_INT64: "int64",
+        BIG_UINT64: "uint64",
+        ASCII: "ASCII",
     });
 
     let highlights = [
@@ -92,6 +93,8 @@
                 return length == 8 ? view.getBigInt64(0, true) : invalid;
             case ByteType.BIG_UINT64:
                 return length == 8 ? view.getBigUint64(0, true) : invalid;
+            case ByteType.ASCII:
+                return length > 0 ? new TextDecoder("ascii").decode(slice) : invalid;
             default:
                 return "Unhandled";
         }
