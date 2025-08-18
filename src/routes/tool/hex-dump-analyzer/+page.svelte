@@ -35,6 +35,18 @@
         highlights = highlights;
     }
 
+    function exportHighlights() {
+        prompt("Save the highlight export below:", JSON.stringify(highlights));
+    }
+
+    function importHighlights() {
+        try {
+            highlights = JSON.parse(prompt("Input the highlight json to load:"));
+        } catch (error) {
+            alert(`Failed to import highlights: ${error}`);
+        }
+    }
+
     function removeHighlight(i) {
         highlights.splice(i, 1);
         highlights = highlights;
@@ -220,7 +232,16 @@
             </tr>
             {/each}
             <tr>
-                <td rowspan="5"><button type="button" class="btn btn-primary" on:click={addHighlight}>New</button></td>
+                <td colspan="6">
+                    <div class="d-flex justify-content-between">
+                      <button type="button" class="btn btn-primary" on:click={addHighlight}>New</button>
+
+                      <div>
+                          <button type="button" class="btn btn-primary" on:click={exportHighlights}>Export</button>
+                          <button type="button" class="btn btn-primary" on:click={importHighlights}>Import</button>
+                      </div>
+                    </div>
+                </td>
             </tr>
         </tbody>
         </table>
