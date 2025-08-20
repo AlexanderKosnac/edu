@@ -29,3 +29,13 @@ export function matMult(a, b) {
     var result = new Array(a.length).fill(0).map(_ => new Array(b[0].length).fill(0));
     return result.map((row, i) => row.map((_, j) => a[i].reduce((sum, elm, k) => sum + (elm*b[k][j]), 0)));
 }
+
+export function factorial(n) {
+    if (n < 0)
+        return undefined;
+    let result = 1;
+    for (let i = 2; i <= n; i++) {
+        result *= i;
+    }
+    return result;
+}
