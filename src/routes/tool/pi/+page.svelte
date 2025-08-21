@@ -1,23 +1,50 @@
 <script>
     import { katexAsHtml } from "$lib/katexUtility.js";
 
+    import Decimal from 'decimal.js';
+    Decimal.set({ precision: 500 });
+
+    let fNextTerm = nextTermNilakanthaSeries;
+
+    // Nilakantha series
     let piEstimate = 3;
     let n = 1;
     let running = false;
 
-    function nextTerm() {
+    function nextTermNilakanthaSeries() {
         let term = 4 / ((2*n) * (2*n+1) * (2*n+2));
         if (n % 2 === 1) piEstimate += term;
         else piEstimate -= term;
         n++;
     }
 
+    // Chudnovsky algorithm
+    let k = 0;
+    let sum = new Decimal(0);
+
+    // Factorial function using decimal library for large numbers.
+    function factorialDecimal(n) {
+        let f = new Decimal(1);
+        for (let i = 2; i <= n; i++)
+            f = f.times(i);
+        return f;
+    }
+
+    function nextTermChudnovsky() {
+        const numerator = factorialDecimal(6*k).times(545140134*k + 13591409).times(k % 2 === 0 ? 1 : -1);
+        const denominator = factorialDecimal(3*k).times(factorialDecimal(k).pow(3)).times(Decimal.pow(640320, 3*k + 1.5));
+        const term = new Decimal(12).times(numerator).div(denominator);
+
+        sum = sum.plus(term);
+        k++;
+        piEstimate = new Decimal(1).div(sum);
+    }
     function start() {
         running = true;
         function step() {
             if (!running)
                 return;
-            nextTerm();
+            fNextTerm();
             requestAnimationFrame(step);
         }
         requestAnimationFrame(step);
@@ -45,13 +72,17 @@
 
 <div class="row">
     <h2>Nilakantha series</h2>
+    <div class="col-auto">
+        <div class="d-flex">
+            <span class="text-break">Terms computed: {n-1}</span>
+            <button on:click={start}>Start</button>
+            <button on:click={stop}>Stop</button>
+            <button on:click={fNextTerm}>Next Term</button>
+            <button on:click={reset}>Reset</button>
+        </div>
+    </div>
     <div class="col">
-        <p>{piEstimate}</p>
-        <p>Terms computed: {n-1}</p>
-        <button on:click={start}>Start</button>
-        <button on:click={stop}>Stop</button>
-        <button on:click={nextTerm}>Next Term</button>
-        <button on:click={reset}>Reset</button>
+        <span class="text-break">{piEstimate}</span>
     </div>
 </div>
 
