@@ -39,6 +39,28 @@
         k++;
         piEstimate = new Decimal(1).div(sum);
     }
+
+    // Gauss–Legendre algorithm
+    let a = new Decimal(1);
+    let b = Decimal.sqrt(new Decimal(0.5));
+    let t = new Decimal(0.25);
+    let p = new Decimal(1);
+
+    function nextTermGaussLegendre() {
+        const aNext = a.plus(b).div(2);
+        const bNext = Decimal.sqrt(a.times(b));
+        const tNext = t.minus(p.times(a.minus(aNext).pow(2)));
+        const pNext = p.times(2);
+
+        a = aNext;
+        b = bNext;
+        t = tNext;
+        p = pNext;
+
+        piEstimate = a.plus(b).pow(2).div(t.times(4));
+    }
+
+    // Controls
     function start() {
         running = true;
         function step() {
