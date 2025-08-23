@@ -2,9 +2,17 @@
     import { katexAsHtml } from "$lib/katexUtility.js";
 
     import Decimal from 'decimal.js';
-    Decimal.set({ precision: 500 });
+    Decimal.set({ precision: 5000 });
 
-    let fNextTerm = nextTermNilakanthaSeries;
+    let activeMethod = "Nilakantha Series";
+    const methods = {
+        "Nilakantha Series": nextTermNilakanthaSeries,
+        "Chudnovsky": nextTermChudnovsky,
+        "Gauss-Legendre": nextTermGaussLegendre,
+    };
+
+    $: fNextTerm = methods[activeMethod];
+
 
     // Nilakantha series
     let piEstimate = 3;
@@ -93,18 +101,26 @@
 </div>
 
 <div class="row">
-    <h2>Nilakantha series</h2>
     <div class="col-auto">
-        <div class="d-flex">
-            <span class="text-break">Terms computed: {n-1}</span>
-            <button on:click={start}>Start</button>
-            <button on:click={stop}>Stop</button>
-            <button on:click={fNextTerm}>Next Term</button>
-            <button on:click={reset}>Reset</button>
+        <div class="d-flex flex-column gap-1">
+            <label class="form-label">
+                Method:
+                <select class="form-select" bind:value={activeMethod}>
+                    {#each Object.entries(methods) as [name, _]}
+                        <option value={name}>{name}</option>
+                    {/each}
+                </select>
+            </label>
+
+            <button type="button" class="btn btn-primary" on:click={start}>Start</button>
+            <button type="button" class="btn btn-primary" on:click={stop}>Stop</button>
+            <button type="button" class="btn btn-primary" on:click={fNextTerm}>Next Term</button>
+            <button type="button" class="btn btn-primary" on:click={reset}>Reset</button>
         </div>
     </div>
     <div class="col">
-        <span class="text-break">{piEstimate}</span>
+        <span class="text-break">Terms computed: {n-1}</span><br>
+        <span class="text-break">Pi = {piEstimate}</span>
     </div>
 </div>
 
