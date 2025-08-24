@@ -1,6 +1,4 @@
 <script>
-    import { katexAsHtml } from "$lib/katexUtility.js";
-
     import Decimal from 'decimal.js';
     Decimal.set({ precision: 5000 });
 
@@ -13,16 +11,19 @@
 
     $: fNextTerm = methods[activeMethod];
 
+    let piEstimate = new Decimal(3);
 
     // Nilakantha series
-    let piEstimate = 3;
     let n = 1;
     let running = false;
 
     function nextTermNilakanthaSeries() {
-        let term = 4 / ((2*n) * (2*n+1) * (2*n+2));
-        if (n % 2 === 1) piEstimate += term;
-        else piEstimate -= term;
+        let denominator = new Decimal(2*n).times(2*n+1).times(2*n+2);
+        let term = new Decimal(4).div(denominator);
+        if (n % 2 === 1)
+            piEstimate = piEstimate.plus(term);
+        else
+            piEstimate = piEstimate.minus(term);
         n++;
     }
 
@@ -85,7 +86,7 @@
     }
 
     function reset() {
-        piEstimate = 3;
+        piEstimate = new Decimal(3);
         n = 1;
     }
 </script>
@@ -116,11 +117,12 @@
             <button type="button" class="btn btn-primary" on:click={stop}>Stop</button>
             <button type="button" class="btn btn-primary" on:click={fNextTerm}>Next Term</button>
             <button type="button" class="btn btn-primary" on:click={reset}>Reset</button>
+
+            <span class="text-break">Terms computed: {n-1}</span><br>
         </div>
     </div>
     <div class="col">
-        <span class="text-break">Terms computed: {n-1}</span><br>
-        <span class="text-break">Pi = {piEstimate}</span>
+        <span class="text-break pi-output">{piEstimate}</span>
     </div>
 </div>
 
@@ -135,4 +137,7 @@
 </div>
 
 <style>
+    .pi-output {
+        font-size: .8em;
+    }
 </style>
