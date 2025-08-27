@@ -1,0 +1,7 @@
+{
+    "name": "Edit distance",
+    "description": "A metric to measure the similarity between strings.",
+    "tags": [
+        "Computer Science"
+    ]
+}
