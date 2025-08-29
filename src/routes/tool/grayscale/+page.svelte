@@ -3,7 +3,6 @@ import { onMount } from "svelte";
 
 let fileInput;
 
-// Image and canvas elements
 let input;
 let original;
 let convoluted;
@@ -129,7 +128,7 @@ onMount(() => {
 </div>
 
 <div class="row">
-    <div class="col-lg-4">
+    <div class="col-xl">
         <div class="d-flex flex-column gap-1 mb-1">
             <div class="input-group">
                 <input type="file" class="form-control" id="img" name="img" accept="image/*" bind:this={fileInput} on:change={loadImage}>
@@ -159,11 +158,11 @@ onMount(() => {
                 <ul>
                     {#each presets as preset, idx}
                     <li>
-                        <div class="d-flex gap-2">
+                        <div class="d-flex gap-2 align-items-center">
                             <button type="button" class="btn btn-link" on:click={() => loadPreset(idx)}>{preset.name}</button>
                             <tt>[{preset.coefficients.map(i => i.toFixed(3)).join(", ")}]</tt>
                             {#if preset.ref}
-                            <a href="{preset.ref}" target="_blank"><i class="bi bi-box-arrow-up-right"></i></a>
+                                <a href="{preset.ref}" target="_blank"><i class="bi bi-box-arrow-up-right"></i></a>
                             {/if}
                         </div>
                     </li>
@@ -174,8 +173,8 @@ onMount(() => {
     </div>
     <div class="col">
         <div class="d-flex gap-1 justify-content-around">
-            <img    class="image-display" bind:this={input} alt=" "/>
-            <canvas class="image-display hidden" bind:this={original}></canvas>
+            <img    class="image-display hidden" bind:this={input} alt=" "/>
+            <canvas class="image-display" bind:this={original}></canvas>
             <canvas class="image-display" bind:this={convoluted}></canvas>
         </div>
     </div>
@@ -197,5 +196,9 @@ onMount(() => {
     }
     .hidden {
         display: none;
+    }
+    canvas {
+        image-rendering: pixelated;
+        image-rendering: crisp-edges;
     }
 </style>
