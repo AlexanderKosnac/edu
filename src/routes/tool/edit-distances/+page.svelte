@@ -1,17 +1,15 @@
 <script>
-    import { jaroDistance } from "$lib/editDistance";
+    import { jaroDistance, levenshteinDistance } from "$lib/editDistance";
 
     let string1 = "Something";
     let string2 = "Somehting";
 
-    let currentDistanceMeasure = "Jaro similarity";
+    let currentDistanceMeasure = "Levenshtein distance";
 
     $: distance = distanceMeasures[currentDistanceMeasure](string1, string2);
 
     const distanceMeasures = {
-        "Levenshtein distance": (s1, s2) => {
-            return 1;
-        },
+        "Levenshtein distance": (s1, s2) => levenshteinDistance(s1, s2),
         "Jaro similarity": (s1, s2) => jaroDistance(s1, s2),
     };
 </script>
