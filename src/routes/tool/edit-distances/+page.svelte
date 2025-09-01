@@ -27,6 +27,14 @@
 <div class="row">
     <div class="col">
         <div class="d-flex flex-column">
+                <label>
+                    Measure:
+                    <select class="form-select" bind:value={currentDistanceMeasure}>
+                        {#each Object.entries(distanceMeasures) as [name, _]}
+                            <option value={name}>{name}</option>
+                        {/each}
+                    </select>
+                </label>
             <label>
                 Text 1:
                 <input type="text" class="form-control font-monospace" bind:value={string1} />
