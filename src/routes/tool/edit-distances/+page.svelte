@@ -1,5 +1,5 @@
 <script>
-    import { jaroDistance, levenshteinDistance } from "$lib/editDistance";
+    import { jaroDistance, levenshteinDistance, hammingDistance } from "$lib/editDistance";
 
     let string1 = "Something";
     let string2 = "Somehting";
@@ -11,6 +11,7 @@
     const distanceMeasures = {
         "Levenshtein distance": (s1, s2) => levenshteinDistance(s1, s2),
         "Jaro similarity": (s1, s2) => jaroDistance(s1, s2),
+        "Hamming distance": (s1, s2) => hammingDistance(s1, s2),
     };
 </script>
 
