@@ -3,6 +3,7 @@
 
     import { mat4 } from "gl-matrix";
 
+    import { katexAsHtml, toKatexMatrix, toKatexVector } from "$lib/katexUtility.js";
     import { parseObjContent, unitCubeCentered } from "$lib/objUtility";
     import { loadTexture } from "$lib/webglUtility";
     import { degToRad } from "$lib/math";
@@ -119,6 +120,16 @@
         },
     ];
 
+    function chunkArray(array, n) {
+        if (n <= 0)
+            throw new Error("n must be greater than 0");
+        const result = [];
+        for (let i = 0; i < array.length; i += n) {
+            result.push(array.slice(i, i + n));
+        }
+        return result;
+    }
+
     function constructProjectionMatrixFromInputs() {
         projectionMatrix = mat4.create();
 
@@ -170,6 +181,10 @@
             Field of View (°):
             <input type="number" class="form-control" bind:value={fovInput} min="0" max="360" on:change={constructProjectionMatrixFromInputs}/>
         </label>
+        Projection:
+        {@html katexAsHtml(toKatexMatrix(chunkArray(projectionMatrix, 4)))}
+        View:
+        {@html katexAsHtml(toKatexMatrix(chunkArray(viewMatrix, 4)))}
     </div>
 </div>
 
