@@ -16,6 +16,8 @@
     const svgHeight = 14;
 
     let fovInput = 45;
+    let zNearInput = 0.1;
+    let zFarInput = 100.0;
 
     let gl;
     $: if (gl) {
@@ -135,9 +137,7 @@
 
         const fieldOfView = (fovInput * Math.PI) / 180;
         const aspect = 1;
-        const zNear = 0.1;
-        const zFar = 100.0;
-        mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
+        mat4.perspective(projectionMatrix, fieldOfView, aspect, zNearInput, zFarInput);
     }
 
     onMount(() => {
@@ -161,10 +161,13 @@
     </div>
     <div class="col-auto">
         <svg id="canvas2d" {width} {height} viewBox="-{svgWidth/2} -{svgHeight/2} {svgWidth} {svgHeight}" transform="scale(-1,1)">
-            <line class="axis" x1="0" y1="0" x2="0"           y2="{svgHeight}"/>
-            <line class="axis" x1="0" y1="0" x2="{svgWidth}"  y2="0"/>
+            <line class="axis" x1="0" y1="0" x2="0" y2="{svgHeight}"/>
+            <line class="axis" x1="0" y1="0" x2="{svgWidth}" y2="0"/>
             <line class="axis" x1="0" y1="0" x2="-{svgWidth}" y2="0"/>
-            <line class="axis" x1="0" y1="0" x2="0"           y2="-{svgHeight}"/>
+            <line class="axis" x1="0" y1="0" x2="0" y2="-{svgHeight}"/>
+
+            <line class="axis" x1={cameraPosition[0] - svgWidth} y1={cameraPosition[2] - zNearInput} x2={svgWidth} y2={cameraPosition[2] - zNearInput}/>
+            <line class="axis" x1={cameraPosition[0] - svgWidth} y1={cameraPosition[2] - zFarInput} x2={svgWidth} y2={cameraPosition[2] - zFarInput}/>
 
             {#each Object.entries(objects) as [_, obj]}
             <rect x="-0.5" y="-0.5" width="1" height="1" fill="rgb({obj.color})"
@@ -177,10 +180,20 @@
         </svg>
     </div>
     <div class="col">
-        <label>
-            Field of View (°):
-            <input type="number" class="form-control" bind:value={fovInput} min="0" max="360" on:change={constructProjectionMatrixFromInputs}/>
-        </label>
+        <div class="d-flex flex-column">
+            <label>
+                Field of View (°):
+                <input type="number" class="form-control" bind:value={fovInput} min="0" max="360" on:change={constructProjectionMatrixFromInputs}/>
+            </label>
+            <label>
+                Z Near:
+                <input type="number" class="form-control" bind:value={zNearInput} step="0.1" on:change={constructProjectionMatrixFromInputs}/>
+            </label>
+            <label>
+                Z Far:
+                <input type="number" class="form-control" bind:value={zFarInput} step="0.1" on:change={constructProjectionMatrixFromInputs}/>
+            </label>
+        </div>
         Projection:
         {@html katexAsHtml(toKatexMatrix(chunkArray(projectionMatrix, 4)))}
         View:
