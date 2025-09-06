@@ -1,7 +1,7 @@
 <script>
     import { onMount } from "svelte";
 
-    import { mat4 } from "gl-matrix";
+    import { mat4, vec4 } from "gl-matrix";
 
     import { katexAsHtml, toKatexMatrix, toKatexVector } from "$lib/katexUtility.js";
     import { parseObjContent, unitCubeCentered } from "$lib/objUtility";
@@ -17,7 +17,7 @@
 
     let fovInput = 45;
     let zNearInput = 0.1;
-    let zFarInput = 100.0;
+    let zFarInput = 10.0;
 
     let gl;
     $: if (gl) {
@@ -37,7 +37,20 @@
     let viewMatrix = mat4.create();
     mat4.lookAt(viewMatrix, cameraPosition, target, up);
 
+    let frustumCorners = [];
+
     let orbiterRotation = 0;
+
+    const ndcCorners = [
+        [-1, -1, -1, 1],
+        [-1, -1,  1, 1],
+        [ 1, -1,  1, 1],
+        [ 1, -1, -1, 1],
+        [-1,  1, -1, 1],
+        [-1,  1,  1, 1],
+        [ 1,  1,  1, 1],
+        [ 1,  1, -1, 1],
+    ];
 
     let objects = [
         {
@@ -138,6 +151,20 @@
         const fieldOfView = (fovInput * Math.PI) / 180;
         const aspect = 1;
         mat4.perspective(projectionMatrix, fieldOfView, aspect, zNearInput, zFarInput);
+
+        const pvMatrix = mat4.create();
+        mat4.multiply(pvMatrix, projectionMatrix, viewMatrix);
+
+        const invPV = mat4.create();
+        mat4.invert(invPV, pvMatrix);
+
+        const worldCorners = ndcCorners.map(c => {
+            const v = vec4.fromValues(c[0], c[1], c[2], c[3]);
+            vec4.transformMat4(v, v, invPV);
+            return [v[0] / v[3], v[1] / v[3], v[2] / v[3]];
+        });
+
+        frustumCorners = worldCorners.map(([x, _, z]) => [x - cameraPosition[0], z - cameraPosition[2]]);
     }
 
     onMount(() => {
@@ -160,26 +187,28 @@
         <Canvas3D bind:gl={gl} bind:objects={objects} bind:projectionMatrix={projectionMatrix} bind:viewMatrix={viewMatrix} {width} {height} />
     </div>
     <div class="col-auto">
-        <svg id="canvas2d" {width} {height} viewBox="-{svgWidth/2} -{svgHeight/2} {svgWidth} {svgHeight}" transform="scale(-1,1)">
+        <svg id="canvas2d" {width} {height} viewBox="-{svgWidth/2} -{svgHeight/2} {svgWidth} {svgHeight}">
             <line class="axis" x1="0" y1="0" x2="0" y2="{svgHeight}"/>
             <line class="axis" x1="0" y1="0" x2="{svgWidth}" y2="0"/>
             <line class="axis" x1="0" y1="0" x2="-{svgWidth}" y2="0"/>
             <line class="axis" x1="0" y1="0" x2="0" y2="-{svgHeight}"/>
 
-            <line class="axis" x1={cameraPosition[0] - svgWidth} y1={cameraPosition[2] - zNearInput} x2={svgWidth} y2={cameraPosition[2] - zNearInput}/>
-            <line class="axis" x1={cameraPosition[0] - svgWidth} y1={cameraPosition[2] - zFarInput} x2={svgWidth} y2={cameraPosition[2] - zFarInput}/>
-
             {#each Object.entries(objects) as [_, obj]}
             <rect x="-0.5" y="-0.5" width="1" height="1" fill="rgb({obj.color})"
-                transform="rotate({obj.state?.rotation === undefined ? 0 : orbiterRotation} 0 0)translate({obj.state.translation[0]} {obj.state.translation[2]})">
+                transform="rotate({obj.state?.rotation === undefined ? 0 : -orbiterRotation} 0 0)translate({obj.state.translation[0]} {obj.state.translation[2]})">
             </rect>
             {/each}
 
-            <path class="camera" d="M -2 -2 h 4 v 3 h -1 l 1 1 h -4 l 1 -1 h -1 v -3"
-                transform="translate({cameraPosition[0]}, {cameraPosition[2]})scale(.2)rotate(180)"/>
+            <path class="camera"
+                  d="M -2 -2 h 4 v 3 h -1 l 1 1 h -4 l 1 -1 h -1 v -3"
+                  transform="translate({cameraPosition[0]}, {cameraPosition[2]})scale(.12)rotate(180)"/>
+
+            <path class="frustum"
+                  d="M {frustumCorners.map(p => `${p[0]} ${p[1]}`).join(" L ")} Z"
+                  transform="translate({cameraPosition[0]}, {cameraPosition[2]})"/>
         </svg>
     </div>
-    <div class="col">
+    <div class="col-auto">
         <div class="d-flex flex-column">
             <label>
                 Field of View (°):
@@ -225,5 +254,12 @@
     .axis {
         stroke: var(--bs-body-color);
         stroke-width: 0.05;
+        fill: transparent;
+    }
+    .frustum {
+        stroke: var(--bs-body-color);
+        stroke-width: 0.05;
+        stroke-dasharray: .1,.1;
+        fill: transparent;
     }
 </style>
