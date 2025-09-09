@@ -20,7 +20,7 @@
     <div class="col">
         <h2>References:</h2>
         <ul>
-            <li><a href="en.wikipedia.org/wiki/Lunar_phase" target="_blank">Lunar phase</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Lunar_phase" target="_blank">Lunar phase</a></li>
         </ul>
     </div>
 </div>

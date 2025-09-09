@@ -30,6 +30,7 @@
         <h2>References:</h2>
         <ul>
             <li><a href="https://en.wikipedia.org/wiki/Diff" target="_blank">Diff</a></li>
+            <li><a href="http://www.xmailserver.org/diff2.pdf" target="_blank">"An O(ND) Difference Algorithm and Its Variations" by Eugene W. Myers</a></li>
         </ul>
     </div>
 </div>
