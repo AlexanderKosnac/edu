@@ -138,12 +138,14 @@
                 asciiParts.push(" ");
             }
 
-            for (let i = 0; i < lineBytes.length; i++) {
+            for (let i = 0; i < bytesPerLine; i++) {
                 const offset = lineOffset + i;
                 const highlight = getHighlightForOffset(offset);
 
-                let hexByte = lineBytes[i].toString(16).padStart(2, '0');
-                let asciiChar = (lineBytes[i] >= 0x20 && lineBytes[i] <= 0x7E) ? String.fromCharCode(lineBytes[i]) : '.';
+                let outOfBounds = i >= lineBytes.length;
+
+                let hexByte = outOfBounds ? "  " : lineBytes[i].toString(16).padStart(2, '0');
+                let asciiChar = outOfBounds ? " " : (lineBytes[i] >= 0x20 && lineBytes[i] <= 0x7E) ? String.fromCharCode(lineBytes[i]) : '.';
 
                 if (highlight) {
                     const fontColor = getContrastingColor(highlight.color);
