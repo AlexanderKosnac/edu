@@ -162,7 +162,7 @@ onMount(() => {
                             <button type="button" class="btn btn-link" on:click={() => loadPreset(idx)}>{preset.name}</button>
                             <tt>[{preset.coefficients.map(i => i.toFixed(3)).join(", ")}]</tt>
                             {#if preset.ref}
-                                <a href="{preset.ref}" target="_blank"><i class="bi bi-box-arrow-up-right"></i></a>
+                                <a href="{preset.ref}" target="_blank" aria-label="Open details on {preset.ref}"><i class="bi bi-box-arrow-up-right"></i></a>
                             {/if}
                         </div>
                     </li>

@@ -139,7 +139,7 @@
                 <label class="form-label" for="pageRequest">Request Page</label>
                 <div class="d-flex align-items-center gap-1" id="pageRequest">
                     {#each {length: 9} as _, i}
-                    <button type="button" class="btn btn-outline-primary page-request-button" on:click={onRequestPage} value="{i+1}"/>
+                    <button type="button" class="btn btn-outline-primary" on:click={onRequestPage} value="{i+1}">{i+1}</button>
                     {/each}
                 </div>
                 <div class="form-text">Or request page via number keys on your keyboard.</div>
@@ -188,10 +188,6 @@
 </div>
 
 <style>
-.page-request-button::after {
-    content: attr(value);
-}
-
 .page {
     display: flex;
     flex-direction: column;
