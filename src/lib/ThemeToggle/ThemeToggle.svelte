@@ -2,10 +2,16 @@
     import { browser } from "$app/environment";
     import { onMount } from "svelte";
 
+    let {
+        width = 24,
+        height = 24,
+        ...others
+    } = $props();
+
     const light = "light";
     const dark = "dark";
 
-    let theme;
+    let theme = $state();
 
     function toggleTheme() {
         if (browser) {
@@ -24,9 +30,10 @@
 </script>
 
 {#if theme}
+<div>
     <!-- svelte-ignore a11y_click_events_have_key_events -->
     <!-- svelte-ignore a11y_no_static_element_interactions -->
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+    <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 24 24"
         fill="currentColor" on:click={toggleTheme} aria-label="Toggle theme">
         <g id="moon" class="theme-toggle" class:invisible={theme === dark}>
             <path d="M21 12a9 9 0 1 1-9-9c0 0 0 0 0 0a7 7 0 1 0 9 9z"/>
@@ -40,9 +47,14 @@
             </g>
         </g>
     </svg>
+</div>
 {/if}
 
 <style>
+    div {
+        display: flex;
+        align-items: center;
+    }
     .theme-toggle {
         transition: opacity 0.5s ease;
     }

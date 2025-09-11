@@ -7,6 +7,7 @@ import MiniSearch from 'minisearch';
 
 import { base } from '$app/paths';
 import ThemeToggle from '$lib/ThemeToggle/ThemeToggle.svelte';
+import GitHubReference from '$lib/GitHubReference/GitHubReference.svelte';
 
 import data from "./aggregate-overview-data.json";
 
@@ -36,7 +37,10 @@ function clearSearch() {
 			<img src="{base}/favicon.svg" alt="Logo" width="30" height="30" class="d-inline-block align-text-top" draggable="false">
 		</a>
 		<input class="form-control search-bar mr-1rem" type="search" placeholder="Search..." aria-label="Search" bind:value={search}>
-		<div class="nav-item"><ThemeToggle/></div>
+		<div class="nav-item d-flex flex-row gap-3 justify-content-center">
+			<GitHubReference root="https://github.com/AlexanderKosnac/edu" routeRoot="tree/master/src/routes" width="24" height="24"/>
+			<ThemeToggle width="24" height="24"/>
+		</div>
 	</div>
 </nav>
 
