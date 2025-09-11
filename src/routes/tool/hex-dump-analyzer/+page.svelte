@@ -16,12 +16,14 @@
         INT32_BE: "int32 (big-endian)",
         UINT32_LE: "uint32",
         UINT32_BE: "uint32 (big-endian)",
+        INT64_LE: "int64",
+        INT64_BE: "int64 (big-endian)",
+        UINT64_LE: "uint64",
+        UINT64_BE: "uint64 (big-endian)",
         FLOAT32_LE: "float32",
         FLOAT32_BE: "float32 (big-endian)",
         FLOAT64_LE: "float64",
         FLOAT64_BE: "float64 (big-endian)",
-        BIG_INT64: "int64",
-        BIG_UINT64: "uint64",
         ASCII: "ASCII",
     });
 
@@ -93,7 +95,15 @@
                 return length == 4 ? view.getUint32(0, true) : invalid;
             case ByteType.UINT32_BE:
                 return length == 4 ? view.getUint32(0, false) : invalid;
-            case ByteType.FLOAT32_BE:
+            case ByteType.INT64_LE:
+                return length == 8 ? view.getBigInt64(0, true) : invalid;
+            case ByteType.INT64_BE:
+                return length == 8 ? view.getBigInt64(0, false) : invalid;
+            case ByteType.UINT64_LE:
+                return length == 8 ? view.getBigUint64(0, true) : invalid;
+            case ByteType.UINT64_BE:
+                return length == 8 ? view.getBigUint64(0, false) : invalid;
+            case ByteType.FLOAT32_LE:
                 return length == 4 ? view.getFloat32(0, true) : invalid;
             case ByteType.FLOAT32_BE:
                 return length == 4 ? view.getFloat32(0, false) : invalid;
@@ -101,10 +111,6 @@
                 return length == 8 ? view.getFloat64(0, true) : invalid;
             case ByteType.FLOAT64_BE:
                 return length == 8 ? view.getFloat64(0, false) : invalid;
-            case ByteType.BIG_INT64:
-                return length == 8 ? view.getBigInt64(0, true) : invalid;
-            case ByteType.BIG_UINT64:
-                return length == 8 ? view.getBigUint64(0, true) : invalid;
             case ByteType.ASCII:
                 return length > 0 ? new TextDecoder("ascii").decode(slice) : invalid;
             default:
