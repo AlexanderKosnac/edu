@@ -150,7 +150,7 @@
         </div>
         <div class="form-color">
             <label for="lineColor">Line color</label>
-            <input type="color" class="form-control form-control-color" id="lineColor" on:change={onDragPoint} bind:value={lineColor}>
+            <input type="color" class="form-control form-control-color" id="lineColor" onchange={onDragPoint} bind:value={lineColor}>
         </div>
     </div>
 </div>

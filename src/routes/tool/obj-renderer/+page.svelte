@@ -90,8 +90,8 @@
     </div>
     <div class="col d-flex flex-column gap-1">
         <div class="d-flex flex-row gap-1">
-            <button type="button" class="btn btn-primary" on:click={() => loadContent(cube)}>Cube</button>
-            <button type="button" class="btn btn-primary" on:click={() => loadContent(tetrahedron)}>Tetrahedron</button>
+            <button type="button" class="btn btn-primary" onclick={() => loadContent(cube)}>Cube</button>
+            <button type="button" class="btn btn-primary" onclick={() => loadContent(tetrahedron)}>Tetrahedron</button>
         </div>
 
         <textarea class="form-control font-monospace mb-1" rows="20" bind:value="{objContent}"></textarea>
@@ -119,7 +119,7 @@
             <input type="number" class="form-control" bind:value={transformations.translation[2]}>
         </div>
 
-        <button type="button" class="btn btn-primary" on:click={renderContent}>Load</button>
+        <button type="button" class="btn btn-primary" onclick={renderContent}>Load</button>
     </div>
 </div>
 

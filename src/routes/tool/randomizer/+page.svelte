@@ -58,7 +58,7 @@
                 <input type="checkbox" class="form-check-input" bind:checked={asInteger}/>
                 Integer Result
             </label>
-            <button type="button" class="btn btn-primary" on:click={generateRandomNumber}>Generate</button>
+            <button type="button" class="btn btn-primary" onclick={generateRandomNumber}>Generate</button>
         </div>
     </div>
     <div class="col">

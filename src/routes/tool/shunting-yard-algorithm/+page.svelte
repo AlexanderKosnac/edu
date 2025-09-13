@@ -60,7 +60,7 @@
 <div class="row mb-3">
     <div class="col">
         <div class="form-floating">
-            <input type="text" class="form-control" class:error={error} id="input" placeholder=" " bind:value={inputString} on:input={run}>
+            <input type="text" class="form-control" class:error={error} id="input" placeholder=" " bind:value={inputString} oninput={run}>
             <label for="input">Input String</label>
             <div class="form-text">Available operators:
                 {#each getAvailableOperators() as op, i}

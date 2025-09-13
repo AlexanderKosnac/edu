@@ -32,8 +32,8 @@ $: {
 
     <div class="input-group">
         <span class="input-group-text input-group-text-label">Dimension</span>
-        <input type="number" class="form-control" min="1" on:change={changeDimension} bind:value={$activeKernel.dimension[0]}/>
-        <input type="number" class="form-control" min="1" on:change={changeDimension} bind:value={$activeKernel.dimension[1]}/>
+        <input type="number" class="form-control" min="1" onchange={changeDimension} bind:value={$activeKernel.dimension[0]}/>
+        <input type="number" class="form-control" min="1" onchange={changeDimension} bind:value={$activeKernel.dimension[1]}/>
     </div>
 
     <div class="input-group">

@@ -41,17 +41,17 @@
 <div class="d-flex flex-column">
     <label class="form-label">
         <span class="fw-bold">Hue:</span> {hue}°
-        <input type="range" class="form-range" min="0" max="360" step="1" bind:value={hue} on:change={handleInput}>
+        <input type="range" class="form-range" min="0" max="360" step="1" bind:value={hue} onchange={handleInput}>
     </label>
 
     <label class="form-label">
         <span class="fw-bold">Saturation:</span> {saturation.toFixed(2)}
-        <input type="range" class="form-range" min="0" max="1" step="0.01" bind:value={saturation} on:change={handleInput}>
+        <input type="range" class="form-range" min="0" max="1" step="0.01" bind:value={saturation} onchange={handleInput}>
     </label>
 
     <label class="form-label">
         <span class="fw-bold">Lightness:</span> {lightness.toFixed(2)}
-        <input type="range" class="form-range" min="0" max="1" step="0.01" bind:value={lightness} on:change={handleInput}>
+        <input type="range" class="form-range" min="0" max="1" step="0.01" bind:value={lightness} onchange={handleInput}>
     </label>
 </div>
 

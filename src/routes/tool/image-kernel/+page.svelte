@@ -120,7 +120,7 @@ onMount(() => {
     <div class="col-lg-4">
         <div class="d-flex flex-column gap-1 mb-1">
             <div class="input-group">
-                <input type="file" class="form-control" id="img" name="img" accept="image/*" bind:this={fileInput} on:change={loadImage}>
+                <input type="file" class="form-control" id="img" name="img" accept="image/*" bind:this={fileInput} onchange={loadImage}>
             </div>
             <div class="form-check">
                 <label class="form-check-label">
@@ -130,7 +130,7 @@ onMount(() => {
             </div>
             <ConvolutionMask bind:this={kernelInput}/>
             <div class="d-flex align-items-center gap-2">
-                <button type="button" class="btn btn-primary" on:click={run}>Do convolution</button>
+                <button type="button" class="btn btn-primary" onclick={run}>Do convolution</button>
                 {#if input?.src === ""}
                 <span class="text-danger">No image loaded.</span>
                 {/if}
@@ -155,7 +155,7 @@ onMount(() => {
         <div class="d-flex flex-row gap-3 align-items-start overflow-scroll overflow-x">
         {#each $presets as preset}
             <div class="d-flex flex-column gap-1 justify-content-center align-items-center border border-2 rounded-2 p-1">
-                <button type="button" class="btn btn-dark fw-bold text-nowrap" on:click={() => loadPreset(preset)}>{preset.label}</button>
+                <button type="button" class="btn btn-dark fw-bold text-nowrap" onclick={() => loadPreset(preset)}>{preset.label}</button>
                 <div class="d-flex flex-row align-items-center gap-1">
                     {#if preset.factorDisplay || preset.factor}
                         <span>{preset.factorDisplay ?? preset.factor}</span>

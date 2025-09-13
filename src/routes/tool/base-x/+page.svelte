@@ -58,12 +58,12 @@
                 </label>
                 <label>
                     Base:
-                    <input type="number" class="form-control" bind:value={base} min="2" max="36" on:change={changeBase}/>
+                    <input type="number" class="form-control" bind:value={base} min="2" max="36" onchange={changeBase}/>
                 </label>
             </div>
             <div class="d-flex flex-row gap-1">
-                <button type="button" class="btn btn-primary" on:click={decrement}>-</button>
-                <button type="button" class="btn btn-primary" on:click={increment}>+</button>
+                <button type="button" class="btn btn-primary" onclick={decrement}>-</button>
+                <button type="button" class="btn btn-primary" onclick={increment}>+</button>
             </div>
         </div>
     </div>

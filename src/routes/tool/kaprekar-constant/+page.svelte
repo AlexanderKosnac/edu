@@ -62,7 +62,7 @@
 <div class="row">
     <div class="col">
         <div class="input-group mb-2">
-            <button type="button" class="btn btn-primary" disabled="{!number}" on:click={runRoutine}>Run</button>
+            <button type="button" class="btn btn-primary" disabled="{!number}" onclick={runRoutine}>Run</button>
             <input type="number" class="form-control" min="1" bind:value={number} placeholder="Number to evaluate">
         </div>
     </div>

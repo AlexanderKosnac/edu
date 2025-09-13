@@ -40,17 +40,17 @@
 <div class="d-flex flex-column">
     <label class="form-label">
         <span class="fw-bold">Red:</span> {red}
-        <input type="range" class="form-range" min="0" max="255" step="1" bind:value={red} on:change={handleInput}>
+        <input type="range" class="form-range" min="0" max="255" step="1" bind:value={red} onchange={handleInput}>
     </label>
 
     <label class="form-label">
         <span class="fw-bold">Green:</span> {green}
-        <input type="range" class="form-range" min="0" max="255" step="1" bind:value={green} on:change={handleInput}>
+        <input type="range" class="form-range" min="0" max="255" step="1" bind:value={green} onchange={handleInput}>
     </label>
 
     <label class="form-label">
         <span class="fw-bold">Blue:</span> {blue}
-        <input type="range" class="form-range" min="0" max="255" step="1" bind:value={blue} on:change={handleInput}>
+        <input type="range" class="form-range" min="0" max="255" step="1" bind:value={blue} onchange={handleInput}>
     </label>
 </div>
 

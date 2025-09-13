@@ -157,11 +157,11 @@
             <div class="d-flex gap-1">
                 <label>
                     k (Number of Centroids):
-                    <input type="number" class="form-control" bind:value={kCentroids} min="1" on:change={kMeansClustering}/>
+                    <input type="number" class="form-control" bind:value={kCentroids} min="1" onchange={kMeansClustering}/>
                 </label>
                 <label>
                     n (Number of Points):
-                    <input type="number" class="form-control" bind:value={nPoints} min="1" on:change={kMeansClustering}/>
+                    <input type="number" class="form-control" bind:value={nPoints} min="1" onchange={kMeansClustering}/>
                 </label>
             </div>
 
@@ -201,7 +201,7 @@
                 </select>
             </label>
 
-            <button type="button" class="btn btn-sm btn-primary" on:click={kMeansClustering}>Cluster!</button>
+            <button type="button" class="btn btn-sm btn-primary" onclick={kMeansClustering}>Cluster!</button>
         </div>
     </div>
 

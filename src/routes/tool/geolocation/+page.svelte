@@ -36,7 +36,7 @@
 
 <div class="row">
     <div class="col-auto">
-        <button type="button" class="btn btn-sm btn-primary" on:click={updateLocation}>Fetch</button>
+        <button type="button" class="btn btn-sm btn-primary" onclick={updateLocation}>Fetch</button>
     </div>
     <div class="col">
         {#await locationPromise}

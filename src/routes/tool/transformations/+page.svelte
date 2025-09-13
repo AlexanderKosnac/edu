@@ -102,7 +102,7 @@
         <div class="d-flex flex-column gap-1">
             <div class="d-flex gap-1 align-items-center">
                 <label for="transformationSelection">Transformation:</label>
-                <select class="form-select" id="transformationSelection" bind:value={selectedIdx} on:change={onMatrixChange}>
+                <select class="form-select" id="transformationSelection" bind:value={selectedIdx} onchange={onMatrixChange}>
                     {#each transformations as transformation, i}
                         <option value={i}>{transformation.name}</option>
                     {/each}
@@ -117,7 +117,7 @@
                             <input type="number" class="form-control matrix-input"
                                 step="0.1"
                                 bind:value={transformations[selectedIdx].inputs[key]}
-                                on:change={onMatrixChange}/>
+                                onchange={onMatrixChange}/>
                         </label>
                     {/each}
                 </div>

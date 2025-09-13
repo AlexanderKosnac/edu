@@ -91,7 +91,7 @@
                 <div class="d-flex flex-row gap-1">
                     {#each {length: nSignBits} as _, idx}
                         {@const idxOffset = idx + indices[0]}
-                        <button class="bit border" on:click={() => flipBit(idxOffset)}>{bits[idxOffset]}</button>
+                        <button class="bit border" onclick={() => flipBit(idxOffset)}>{bits[idxOffset]}</button>
                     {/each}
                 </div>
             </div>
@@ -102,7 +102,7 @@
                 <div class="d-flex flex-row gap-1">
                     {#each {length: nExponentBits} as _, idx}
                         {@const idxOffset = idx + indices[1]}
-                        <button class="bit border" on:click={() => flipBit(idxOffset)}>{bits[idxOffset]}</button>
+                        <button class="bit border" onclick={() => flipBit(idxOffset)}>{bits[idxOffset]}</button>
                     {/each}
                 </div>
             </div>
@@ -113,7 +113,7 @@
                 <div class="d-flex flex-row gap-1">
                     {#each {length: nMantissaBits} as _, idx}
                         {@const idxOffset = idx + indices[2]}
-                        <button class="bit border" on:click={() => flipBit(idxOffset)}>{bits[idxOffset]}</button>
+                        <button class="bit border" onclick={() => flipBit(idxOffset)}>{bits[idxOffset]}</button>
                     {/each}
                 </div>
             </div>

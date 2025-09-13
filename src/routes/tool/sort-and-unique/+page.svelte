@@ -33,7 +33,7 @@
         <h2>Input</h2>
         <div class="d-flex flex-column gap-1 mb-1">
             <lable>
-                Split on:
+                Split on
                 <input type="text" class="form-control font-monospace" bind:value="{splitCharacter}"/>
             </lable>
 
@@ -42,7 +42,7 @@
                 Only show unique elements
             </label>
             
-            <button type="button" class="btn btn-primary" on:click={run}>Extract</button>
+            <button type="button" class="btn btn-primary" onclick={run}>Extract</button>
         </div>
         <textarea class="form-control" rows="20" bind:value="{inputText}"></textarea>
     </div>

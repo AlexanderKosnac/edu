@@ -187,7 +187,7 @@
         You can select multiple plaintext files:
         <div class="d-flex flex-row gap-1">
             <input type="file" class="form-control" id="img" name="img" accept="text/plain" multiple bind:this={fileInput}>
-            <button type="button" class="btn btn-primary" on:click={loadFiles}>Load</button>
+            <button type="button" class="btn btn-primary" onclick={loadFiles}>Load</button>
         </div>
         {#if Object.keys(files).length > 0}
         Files loaded:
@@ -260,7 +260,7 @@
                     <tbody>
                         {#each Object.entries(tfIdfPresets) as [name, data]}
                         <tr>
-                            <td><button type="button" class="btn btn-secondary" on:click={() => loadTfIdfPreset(name)}>Load</button></td>
+                            <td><button type="button" class="btn btn-secondary" onclick={() => loadTfIdfPreset(name)}>Load</button></td>
                             <td>{name}</td>
                             <td>{@html latexRender(`(${tfVariants[data[0]].latex}) * ${idfVariants[data[1]].latex}`)}</td>
                         </tr>
@@ -275,7 +275,7 @@
 {#if Object.keys(files).length > 0}
 <div class="row">
     <div class="col">
-        <button type="button" class="btn btn-primary" on:click={calculateTfidfResults}>Calculate TF-IDF</button>
+        <button type="button" class="btn btn-primary" onclick={calculateTfidfResults}>Calculate TF-IDF</button>
         {#each Object.entries(tfidfScoresPerFile) as [file, tokenScores]}
         <h3>{file}</h3>
         <ul>

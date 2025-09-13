@@ -157,17 +157,17 @@
 <div class="row mb-1 mt-1">
     <div class="col">
         <div class="d-flex gap-1 align-items-center">
-            <button type="button" class="btn btn-sm btn-primary" on:click={toggleRun}>
+            <button type="button" class="btn btn-sm btn-primary" onclick={toggleRun}>
                 {isRunning ? "Stop" : "Start"}
             </button>
-            <button type="button" class="btn btn-sm btn-primary" on:click={clearGrid}>Clear</button>
+            <button type="button" class="btn btn-sm btn-primary" onclick={clearGrid}>Clear</button>
         </div>
     </div>
 </div>
 
 <div class="row">
     <div class="col-auto">
-        <canvas width="{canvasWidth}" height="{canvasHeight}" bind:this={canvas} on:click={setCellOnClick}></canvas>
+        <canvas width="{canvasWidth}" height="{canvasHeight}" bind:this={canvas} onclick={setCellOnClick}></canvas>
     </div>
     <div class="col">
         <div>

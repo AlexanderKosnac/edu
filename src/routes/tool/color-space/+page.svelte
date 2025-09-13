@@ -68,13 +68,13 @@
             {#each values as value}
             <div class="form-check form-check-inline">
                 <label class="form-check-label">
-                    <input class="form-check-input" type="radio" bind:group={selected} on:change={onChange} value={value}>
+                    <input class="form-check-input" type="radio" bind:group={selected} onchange={onChange} value={value}>
                     {value.label}
                 </label>
             </div>
             {/each}
         </div>
-        <svelte:component this={selected.component} bind:this={colorInput} bind:cssColor={cssColor} on:input={onChange}></svelte:component>
+        <svelte:component this={selected.component} bind:this={colorInput} bind:cssColor={cssColor} oninput={onChange}></svelte:component>
     </div>
     <div class="col-sm d-flex justify-content-center">
         <svg class="border" width="200" height="200">

@@ -94,13 +94,13 @@
     <div class="col">
         <label class="w-100">
             Decimal:
-            <input type="number" class="form-control w-100" bind:value={decimal} on:input={handleDecimalInput} min="1" max="3999" />
+            <input type="number" class="form-control w-100" bind:value={decimal} oninput={handleDecimalInput} min="1" max="3999" />
         </label>
     </div>
     <div class="col">
         <label class="w-100">
             Roman:
-            <input type="text" class="form-control w-100" bind:value={roman} on:input={handleRomanInput} />
+            <input type="text" class="form-control w-100" bind:value={roman} oninput={handleRomanInput} />
         </label>
     </div>
 </div>

@@ -181,7 +181,7 @@
         <div>
             <label>
                 Degree of approximation Polynomial:
-                <input type="number" class="form-control" min="1" bind:value={approximationPolynomialDegree} on:change={onChange}/>
+                <input type="number" class="form-control" min="1" bind:value={approximationPolynomialDegree} onchange={onChange}/>
             </label>
         </div>
 
@@ -199,16 +199,16 @@
             {#each points as _, i}
             <tr>
                 <td>{@html katexAsHtmlInline(`${i}`)}</td>
-                <td><input type="number" class="form-control point-input" placeholder="x" bind:value={points[i].x} on:change={onChange}></td>
-                <td><input type="number" class="form-control point-input" placeholder="y" bind:value={points[i].y} on:change={onChange}></td>
-                <td><button type="button" class="btn btn-secondary" on:click={() => removePoint(i)}>Remove</button></td>
+                <td><input type="number" class="form-control point-input" placeholder="x" bind:value={points[i].x} onchange={onChange}></td>
+                <td><input type="number" class="form-control point-input" placeholder="y" bind:value={points[i].y} onchange={onChange}></td>
+                <td><button type="button" class="btn btn-secondary" onclick={() => removePoint(i)}>Remove</button></td>
             </tr>
             {/each}
             <tr>
                 <td>{@html katexAsHtmlInline("i")}</td>
                 <td><input type="number" class="form-control point-input" placeholder="x" bind:value={inputX}></td>
                 <td><input type="number" class="form-control point-input" placeholder="y" bind:value={inputY}></td>
-                <td><button type="button" class="btn btn-primary" on:click={addPoint}>Add</button></td>
+                <td><button type="button" class="btn btn-primary" onclick={addPoint}>Add</button></td>
             </tr>
         </tbody>
         </table>
@@ -217,7 +217,7 @@
         <div class="text-danger">{@html katexAsHtmlInline("x_0")} can not be equal to {@html katexAsHtmlInline("x_1")}.</div>
         {/if}
 
-        <button type="button" class="btn btn-primary" on:click={updateData}>Refresh</button>
+        <button type="button" class="btn btn-primary" onclick={updateData}>Refresh</button>
     </div>
 </div>
 

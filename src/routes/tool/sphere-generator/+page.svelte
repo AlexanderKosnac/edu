@@ -123,20 +123,20 @@
         <label>
             Radius:
             <input type="number" class="form-control" bind:value={inputRadius}
-                on:change={generateSphereFromInputs}
+                onchange={generateSphereFromInputs}
                 step="0.01" min="0.01"
                 aria-label="Sphere radius input"/>
         </label>
         <label>
             Number of latitute segments:
             <input type="number" class="form-control" bind:value={inputLatitudeSegments}
-                on:change={generateSphereFromInputs}
+                onchange={generateSphereFromInputs}
                 step="1" min="3" aria-label="Ticks per second"/>
         </label>
         <label>
             Number of longitude segments:
             <input type="number" class="form-control" bind:value={inputLongitudeSegments}
-                on:change={generateSphereFromInputs}
+                onchange={generateSphereFromInputs}
                 step="1" min="3" aria-label="Ticks per second"/>
         </label>
 

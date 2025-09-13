@@ -26,7 +26,7 @@
     }
 </script>
 
-<svelte:window on:mouseup={onMouseUp} on:mousemove={onMouseMove} />
+<svelte:window onmouseup={onMouseUp} onmousemove={onMouseMove} />
 
 <circle class="point" class:active={moving} cx={x} cy={y} r="15"
     onmousedown={onMouseDown}

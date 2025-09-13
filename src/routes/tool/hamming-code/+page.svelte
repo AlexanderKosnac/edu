@@ -97,7 +97,7 @@
         <div class="d-flex flex-column gap-1">
             <div>
                 <label for="bitInput">Bit Input:</label>
-                <input type="text" id="bitInput" class="form-control font-monospace" pattern="[01]+" bind:value="{bitInput}" on:input={onInputChanged}/>    
+                <input type="text" id="bitInput" class="form-control font-monospace" pattern="[01]+" bind:value="{bitInput}" oninput={onInputChanged}/>    
             </div>
     
             <div class="d-flex flex-row align-items-center gap-2">

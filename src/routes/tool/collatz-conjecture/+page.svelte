@@ -77,16 +77,16 @@ function massCollatzRun() {
 <div class="row">
     <div class="col">
         <div class="input-group mb-2">
-            <button type="button" class="btn btn-primary" on:click={singleCollatzRun}>Run</button>
+            <button type="button" class="btn btn-primary" onclick={singleCollatzRun}>Run</button>
             <input bind:this={startInput} type="number" class="form-control" placeholder="Starting number" value="1024">
         </div>
 
         <div class="d-flex align-items-center gap-1 mb-2">
             <div>Interesting starting points:</div>
-            <button type="button" class="btn btn-sm btn-outline-primary" on:click={sampleRunCollatz}>15</button>
-            <button type="button" class="btn btn-sm btn-outline-primary" on:click={sampleRunCollatz}>27</button>
-            <button type="button" class="btn btn-sm btn-outline-primary" on:click={sampleRunCollatz}>1024</button>
-            <button type="button" class="btn btn-sm btn-outline-primary" on:click={sampleRunCollatz}>9663</button>
+            <button type="button" class="btn btn-sm btn-outline-primary" onclick={sampleRunCollatz}>15</button>
+            <button type="button" class="btn btn-sm btn-outline-primary" onclick={sampleRunCollatz}>27</button>
+            <button type="button" class="btn btn-sm btn-outline-primary" onclick={sampleRunCollatz}>1024</button>
+            <button type="button" class="btn btn-sm btn-outline-primary" onclick={sampleRunCollatz}>9663</button>
         </div>
 
         <table class="table table-bordered">
@@ -124,7 +124,7 @@ function massCollatzRun() {
                 <span class="input-group-text">End</span>
                 <input bind:this={rangeEndInput} type="number" class="form-control" value="99">
             </div>
-            <button type="button" class="btn btn-primary" on:click={massCollatzRun}>Run</button>
+            <button type="button" class="btn btn-primary" onclick={massCollatzRun}>Run</button>
         </div>
     </div>
 </div>

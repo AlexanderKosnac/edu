@@ -113,10 +113,10 @@
                 </select>
             </label>
 
-            <button type="button" class="btn btn-primary" on:click={start}>Start</button>
-            <button type="button" class="btn btn-primary" on:click={stop}>Stop</button>
-            <button type="button" class="btn btn-primary" on:click={fNextTerm}>Next Term</button>
-            <button type="button" class="btn btn-primary" on:click={reset}>Reset</button>
+            <button type="button" class="btn btn-primary" onclick={start}>Start</button>
+            <button type="button" class="btn btn-primary" onclick={stop}>Stop</button>
+            <button type="button" class="btn btn-primary" onclick={fNextTerm}>Next Term</button>
+            <button type="button" class="btn btn-primary" onclick={reset}>Reset</button>
 
             <span class="text-break">Terms computed: {n-1}</span><br>
         </div>

@@ -64,7 +64,7 @@
     <div class="col-auto">
         <label>
             Date:
-            <input type="date" class="form-control" bind:value={selectedDateString} on:input={updateLunarPhase}/>
+            <input type="date" class="form-control" bind:value={selectedDateString} oninput={updateLunarPhase}/>
         </label>
     </div>
     <div class="col">

@@ -65,7 +65,7 @@
         You can select multiple plaintext files:
         <div class="d-flex flex-row gap-1">
             <input type="file" class="form-control" id="img" name="img" accept="text/plain" multiple bind:this={fileInput}>
-            <button type="button" class="btn btn-primary" on:click={loadFiles}>Load</button>
+            <button type="button" class="btn btn-primary" onclick={loadFiles}>Load</button>
         </div>
         {#if files.length > 0}
         <ul>

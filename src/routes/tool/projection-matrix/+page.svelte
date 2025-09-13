@@ -212,15 +212,15 @@
         <div class="d-flex flex-column">
             <label>
                 Field of View (°):
-                <input type="number" class="form-control" bind:value={fovInput} min="0" max="360" on:change={constructProjectionMatrixFromInputs}/>
+                <input type="number" class="form-control" bind:value={fovInput} min="0" max="360" onchange={constructProjectionMatrixFromInputs}/>
             </label>
             <label>
                 Z Near:
-                <input type="number" class="form-control" bind:value={zNearInput} step="0.1" on:change={constructProjectionMatrixFromInputs}/>
+                <input type="number" class="form-control" bind:value={zNearInput} step="0.1" onchange={constructProjectionMatrixFromInputs}/>
             </label>
             <label>
                 Z Far:
-                <input type="number" class="form-control" bind:value={zFarInput} step="0.1" on:change={constructProjectionMatrixFromInputs}/>
+                <input type="number" class="form-control" bind:value={zFarInput} step="0.1" onchange={constructProjectionMatrixFromInputs}/>
             </label>
         </div>
         Projection:

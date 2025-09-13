@@ -44,22 +44,22 @@
 <div class="d-flex flex-column">
     <label class="form-label">
         <span class="fw-bold">Cyan:</span> {cyan.toFixed(2)}
-        <input type="range" class="form-range" min="0" max="1" step="0.01" bind:value={cyan} on:change={handleInput}>
+        <input type="range" class="form-range" min="0" max="1" step="0.01" bind:value={cyan} onchange={handleInput}>
     </label>
 
     <label class="form-label">
         <span class="fw-bold">Magenta:</span> {magenta.toFixed(2)}
-        <input type="range" class="form-range" min="0" max="1" step="0.01" bind:value={magenta} on:change={handleInput}>
+        <input type="range" class="form-range" min="0" max="1" step="0.01" bind:value={magenta} onchange={handleInput}>
     </label>
 
     <label class="form-label">
         <span class="fw-bold">Yellow:</span> {yellow.toFixed(2)}
-        <input type="range" class="form-range" min="0" max="1" step="0.01" bind:value={yellow} on:change={handleInput}>
+        <input type="range" class="form-range" min="0" max="1" step="0.01" bind:value={yellow} onchange={handleInput}>
     </label>
 
     <label class="form-label">
         <span class="fw-bold">Black:</span> {black.toFixed(2)}
-        <input type="range" class="form-range" min="0" max="1" step="0.01" bind:value={black} on:change={handleInput}>
+        <input type="range" class="form-range" min="0" max="1" step="0.01" bind:value={black} onchange={handleInput}>
     </label>
 </div>
 

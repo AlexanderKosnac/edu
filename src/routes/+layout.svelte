@@ -33,7 +33,7 @@ function clearSearch() {
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary flex-nowrap">
 	<div class="container-fluid">
-		<a class="navbar-brand" href="{base}/" draggable="false" on:click={clearSearch}>
+		<a class="navbar-brand" href="{base}/" draggable="false" onclick={clearSearch}>
 			<img src="{base}/favicon.svg" alt="Logo" width="30" height="30" class="d-inline-block align-text-top" draggable="false">
 		</a>
 		<input class="form-control search-bar mr-1rem" type="search" placeholder="Search..." aria-label="Search" bind:value={search}>
@@ -54,7 +54,7 @@ function clearSearch() {
 				<div class="card tool-card">
 					<div class="card-body">
 						<h5 class="card-title">
-							<a class="icon-link icon-link-hover" href="{base}/{entry.url}" on:click={clearSearch}>
+							<a class="icon-link icon-link-hover" href="{base}/{entry.url}" onclick={clearSearch}>
 								{entry.name}
 								<i class="bi bi-arrow-right-short"></i>
 							</a>

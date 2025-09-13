@@ -181,10 +181,10 @@
         <div class="d-flex flex-column align-items-start gap-1">
             <label>
                 Number of Points:
-                <input type="number" class="form-control" bind:value={n} min="3" on:change={generateRandomPoints}/>
+                <input type="number" class="form-control" bind:value={n} min="3" onchange={generateRandomPoints}/>
             </label>
 
-            <button type="button" class="btn btn-sm btn-primary" on:click={generateRandomPoints}>Randomize</button>
+            <button type="button" class="btn btn-sm btn-primary" onclick={generateRandomPoints}>Randomize</button>
 
             <label class="form-label">
                 History:

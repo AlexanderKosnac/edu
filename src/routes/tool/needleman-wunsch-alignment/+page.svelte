@@ -117,18 +117,18 @@
         <div class="d-flex flex-column gap-1">
             <div class="input-group flex-nowrap">
                 <span class="input-group-text font-monospace" id="sequence1">Sequence 1</span>
-                <input type="text" class="form-control font-monospace" bind:value="{sequence1}" on:change={align}>
+                <input type="text" class="form-control font-monospace" bind:value="{sequence1}" onchange={align}>
                 <span class="input-group-text">{sequence1.length}</span>
             </div>
 
             <div class="input-group flex-nowrap">
                 <span class="input-group-text font-monospace" id="sequence1">Sequence 2</span>
-                <input type="text" class="form-control font-monospace" bind:value="{sequence2}" on:change={align}>
+                <input type="text" class="form-control font-monospace" bind:value="{sequence2}" onchange={align}>
                 <span class="input-group-text">{sequence2.length}</span>
             </div>
 
             <div>
-                <button type="button" class="btn btn-primary" on:click={align}>Align!</button>
+                <button type="button" class="btn btn-primary" onclick={align}>Align!</button>
             </div>
         </div>
     </div>

@@ -236,17 +236,17 @@
                         {/each}
                     </select>
                 </td>
-                <td><button type="button" class="btn btn-outline-secondary" on:click={() => removeHighlight(i)}>&#x1F5D1;</button></td>
+                <td><button type="button" class="btn btn-outline-secondary" onclick={() => removeHighlight(i)}>&#x1F5D1;</button></td>
             </tr>
             {/each}
             <tr>
                 <td colspan="6">
                     <div class="d-flex justify-content-between">
-                      <button type="button" class="btn btn-primary" on:click={addHighlight}>New</button>
+                      <button type="button" class="btn btn-primary" onclick={addHighlight}>New</button>
 
                       <div>
-                          <button type="button" class="btn btn-primary" on:click={exportHighlights}>Export</button>
-                          <button type="button" class="btn btn-primary" on:click={importHighlights}>Import</button>
+                          <button type="button" class="btn btn-primary" onclick={exportHighlights}>Export</button>
+                          <button type="button" class="btn btn-primary" onclick={importHighlights}>Import</button>
                       </div>
                     </div>
                 </td>

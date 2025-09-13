@@ -221,11 +221,11 @@
 <div class="row mb-1">
     <div class="col">
         <label for="asciiInput">ASCII Input:</label>
-        <input type="text" id="asciiInput" class="form-control font-monospace" bind:value="{inputAscii}" on:input={createQrCode}/>
+        <input type="text" id="asciiInput" class="form-control font-monospace" bind:value="{inputAscii}" oninput={createQrCode}/>
 
         <label>
             Error Correction Level:
-            <select class="form-select" bind:value={selectedErrorCorrectionLevel} on:change={createQrCode}>
+            <select class="form-select" bind:value={selectedErrorCorrectionLevel} onchange={createQrCode}>
                 {#each errorCorrectionLevels as l}
                     <option value={l}>{l.short} ({l.name}: ~{l.percentageRestoration}% restoration)</option>
                 {/each}

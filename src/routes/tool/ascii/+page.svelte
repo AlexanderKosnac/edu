@@ -48,11 +48,11 @@
     <div class="col">
         <div class="form-group">
             <label for="hexInput">Hex String:</label>
-            <input type="text" id="hexInput" class="form-control" bind:value={hexInput} on:input={onHexChanged}/>
+            <input type="text" id="hexInput" class="form-control" bind:value={hexInput} oninput={onHexChanged}/>
         </div>
         <div class="form-group">
             <label for="asciiIndex">ASCII String:</label>
-            <input type="text" id="asciiIndex" class="form-control" bind:value={asciiInput} on:input={onAsciiChanged}/>
+            <input type="text" id="asciiIndex" class="form-control" bind:value={asciiInput} oninput={onAsciiChanged}/>
         </div>
     </div>
 </div>

@@ -65,8 +65,8 @@
     <div class="col">
         Unencoded Input String:
         <div class="d-flex flex-row gap-1">
-            <input type="text" class="form-control font-monospace" bind:value="{inputString}" on:input={encodeData}>
-            <button type="button" class="btn btn-primary" on:click={encodeData}>Encode</button>
+            <input type="text" class="form-control font-monospace" bind:value="{inputString}" oninput={encodeData}>
+            <button type="button" class="btn btn-primary" onclick={encodeData}>Encode</button>
         </div>
 
         Base64 Encoded Data:

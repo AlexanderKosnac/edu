@@ -131,7 +131,7 @@ onMount(() => {
     <div class="col-xl">
         <div class="d-flex flex-column gap-1 mb-1">
             <div class="input-group">
-                <input type="file" class="form-control" id="img" name="img" accept="image/*" bind:this={fileInput} on:change={loadImage}>
+                <input type="file" class="form-control" id="img" name="img" accept="image/*" bind:this={fileInput} onchange={loadImage}>
             </div>
             <div class="d-flex align-items-center">
                 <div class="input-group">
@@ -148,7 +148,7 @@ onMount(() => {
                 </div>
             </div>
             <div class="d-flex align-items-center gap-2">
-                <button type="button" class="btn btn-primary" on:click={run}>Cast to Graylevel</button>
+                <button type="button" class="btn btn-primary" onclick={run}>Cast to Graylevel</button>
                 {#if input?.src === ""}
                 <span class="text-danger">No image loaded.</span>
                 {/if}
@@ -159,7 +159,7 @@ onMount(() => {
                     {#each presets as preset, idx}
                     <li>
                         <div class="d-flex gap-2 align-items-center">
-                            <button type="button" class="btn btn-link" on:click={() => loadPreset(idx)}>{preset.name}</button>
+                            <button type="button" class="btn btn-link" onclick={() => loadPreset(idx)}>{preset.name}</button>
                             <tt>[{preset.coefficients.map(i => i.toFixed(3)).join(", ")}]</tt>
                             {#if preset.ref}
                                 <a href="{preset.ref}" target="_blank" aria-label="Open details on {preset.ref}"><i class="bi bi-box-arrow-up-right"></i></a>

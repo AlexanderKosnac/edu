@@ -34,7 +34,7 @@
     <!-- svelte-ignore a11y_click_events_have_key_events -->
     <!-- svelte-ignore a11y_no_static_element_interactions -->
     <svg xmlns="http://www.w3.org/2000/svg" width={width} height={height} viewBox="0 0 24 24"
-        fill="currentColor" on:click={toggleTheme} aria-label="Toggle theme">
+        fill="currentColor" onclick={toggleTheme} aria-label="Toggle theme">
         <g id="moon" class="theme-toggle" class:invisible={theme === dark}>
             <path d="M21 12a9 9 0 1 1-9-9c0 0 0 0 0 0a7 7 0 1 0 9 9z"/>
         </g>

@@ -151,12 +151,12 @@
         <h4>Interpolation Points</h4>
         <label>
             {@html katexAsHtmlInline("x_0")}
-            <input type="number" class="form-control" placeholder="Starting number" bind:value={x0} on:change={onChange}>
+            <input type="number" class="form-control" placeholder="Starting number" bind:value={x0} onchange={onChange}>
         </label>
 
         <label>
             {@html katexAsHtmlInline("x_1")}
-            <input type="number" class="form-control" placeholder="Starting number" bind:value={x1} on:change={onChange}>
+            <input type="number" class="form-control" placeholder="Starting number" bind:value={x1} onchange={onChange}>
         </label>
 
         {#if x0 == x1}
@@ -169,7 +169,7 @@
         <div class="d-flex flex-column gap-3">
             {#each functions as e}
             <label>
-                <input type="radio" value={e} bind:group={selectedFunc} on:change={onChange}/>
+                <input type="radio" value={e} bind:group={selectedFunc} onchange={onChange}/>
                 {@html katexAsHtmlInline(`f(x)=${e.tex}`)}
             </label>
             {/each}

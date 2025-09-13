@@ -114,7 +114,7 @@
     </div>
 </div>
 
-<svelte:window on:keydown={onRequestPageKey} />
+<svelte:window onkeydown={onRequestPageKey} />
 
 <div class="row">
     <div class="col">
@@ -127,7 +127,7 @@
                     {#each implementations as implementation, idx}
                     <label class="form-check-label">
                         <input type="radio" class="form-check-input" name="algorithm" autocomplete="off" checked="{idx === 0}"
-                            bind:group={algorithm} value={implementations[idx]} on:change={setupHistory}>
+                            bind:group={algorithm} value={implementations[idx]} onchange={setupHistory}>
                         {implementation.abbrev}
                     </label>
                     {/each}
@@ -139,7 +139,7 @@
                 <label class="form-label" for="pageRequest">Request Page</label>
                 <div class="d-flex align-items-center gap-1" id="pageRequest">
                     {#each {length: 9} as _, i}
-                    <button type="button" class="btn btn-outline-primary" on:click={onRequestPage} value="{i+1}">{i+1}</button>
+                    <button type="button" class="btn btn-outline-primary" onclick={onRequestPage} value="{i+1}">{i+1}</button>
                     {/each}
                 </div>
                 <div class="form-text">Or request page via number keys on your keyboard.</div>
@@ -152,7 +152,7 @@
     <div class="col">
         <div class="d-flex align-items-center gap-2 mb-1">
             <span><strong>Page faults:</strong> {pageFaults}</span>
-            <button class="btn btn-sm btn-outline-secondary" type="button" on:click={setupHistory}>Clear History</button>
+            <button class="btn btn-sm btn-outline-secondary" type="button" onclick={setupHistory}>Clear History</button>
         </div>
         <div class="d-flex overflow-auto">
             <div class="d-flex flex-column">
