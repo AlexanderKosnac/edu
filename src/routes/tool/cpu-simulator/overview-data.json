@@ -1,0 +1,9 @@
+{
+    "name": "CPU simulator",
+    "description": "A low level simulation of a CPU.",
+    "tags": [
+        "Computer Science",
+        "Tool"
+    ],
+    "usable": false
+}
