@@ -1,4 +1,7 @@
 <script>
+    import { toHex } from "$lib/hexUtility";
+
+    import { OPCODES } from "./assembler.js";
 </script>
 
 <svelte:head>
@@ -13,6 +16,37 @@
 
 <div class="row">
     <div class="col">
+        <table class="table table-bordered w-auto mt-1">
+            <thead>
+                <tr>
+                    <th>Mnemonic</th>
+                    <th>Opcode</th>
+                    <th>Encoding</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                {#each Object.entries(OPCODES) as [_, d]}
+                <tr>
+                    <td>
+                        <samp>{d.mnemonic}</samp>
+                    </td>
+                    <td>
+                        <samp>0x{toHex(d.opcode)}</samp>
+                    </td>
+                    <td>
+                        <samp>{d.encoding}</samp>
+                    </td>
+                    <td>
+                        <samp>{d.description}</samp>
+                    </td>
+                </tr>
+                {/each}
+            </tbody>
+        </table>
+    </div>
+    <div class="col">
+        
     </div>
 </div>
 

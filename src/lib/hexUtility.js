@@ -10,3 +10,11 @@ export function hexStringToByteArray(hexString) {
 
     return byteArray;
 }
+
+export function bytesToHexString(bytes) {
+    return Array.from(bytes).map(b => toHex(b)).join(" ");
+}
+
+export function toHex(n, length = 2) {
+    return n.toString(16).toUpperCase().padStart(length, "0");
+}
