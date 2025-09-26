@@ -16,10 +16,17 @@
 
 <div class="row">
     <div class="col">
+        
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
         <table class="table table-bordered w-auto mt-1">
             <thead>
                 <tr>
                     <th>Mnemonic</th>
+                    <th>Size</th>
                     <th>Opcode</th>
                     <th>Encoding</th>
                     <th>Description</th>
@@ -30,6 +37,9 @@
                 <tr>
                     <td>
                         <samp>{d.mnemonic}</samp>
+                    </td>
+                    <td>
+                        <samp>{d.size}</samp>
                     </td>
                     <td>
                         <samp>0x{toHex(d.opcode)}</samp>
@@ -44,9 +54,6 @@
                 {/each}
             </tbody>
         </table>
-    </div>
-    <div class="col">
-        
     </div>
 </div>
 
