@@ -1,7 +1,24 @@
 <script>
     import { toHex } from "$lib/hexUtility";
 
-    import { OPCODES } from "./assembler.js";
+    import { OPCODES, assemble } from "./assembler.js";
+
+    let src = `\
+; Sum the numbers from N down to 1 and OUT the result
+        MOV R0, #10    ; N
+        MOV R1, #0     ; sum
+loop:   CMP R0, R1
+        JZ done
+        ADD R1, R0
+        DEC R0
+        JMP loop
+done:   OUT R1
+        HALT`;
+    let srcAssembled = "";
+
+    function doAssemble() {
+        srcAssembled = JSON.stringify(assemble(src), null, 2);
+    }
 </script>
 
 <svelte:head>
@@ -16,7 +33,11 @@
 
 <div class="row">
     <div class="col">
-        
+        <textarea class="form-control font-monospace" rows="20" value={src}></textarea>
+        <button type="button" class="btn btn-primary" onclick={doAssemble}>Assemble</button>
+    </div>
+    <div class="col">
+        <textarea class="form-control font-monospace" rows="20" bind:value="{srcAssembled}" readonly></textarea>
     </div>
 </div>
 
