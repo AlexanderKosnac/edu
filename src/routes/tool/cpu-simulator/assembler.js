@@ -62,10 +62,34 @@ export function assemble(src, origin = 0x0000) {
     }
 
     // Pass 2
+    const out = [];
+    const pushByte = (b) => out.push(b & 0xFF);
+    const pushWord = (w) => {
+        pushByte((w >> 8) & 0xFF);
+        pushByte(w & 0xFF);
+    }
+
+    for (const inst of program) {
+        const m = inst.mnemonic.toUpperCase();
+        const ops = inst.operands;
+        console.log(`${m}: ${ops}`);
+        switch (m) {
+            case "NOP":
+                pushByte(OPCODES.NOP);
+                break;
+            case "HALT":
+                pushByte(OPCODES.HALT);
+                break;
+            default:
+                break;
+                //throw new Error(`Unhandled mnemonic ${m} (source: ${inst.source})`);
+        }
+    }
 
     return {
-        labels: labels,
-        program: program,
-        pc: pc,
+        bytes: new Uint8Array(out),
+        labels,
+        program,
+        pc,
     };
 }
