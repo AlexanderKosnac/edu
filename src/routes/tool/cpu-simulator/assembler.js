@@ -29,6 +29,22 @@ export const OPCODES = {
     POP:   opcode(0x81, 2, "POP Rn",         "81 R",                 "pop into register (load, SP++)"),
 };
 
+// Parses numbers of different formats. Also resolves labels to their address.
+function parseNumber(token, labels = {}) {
+    if (typeof token !== "string")
+        return token;
+    token = token.replace(/^#/, "");
+    if (/^0x[0-9a-f]+$/i.test(token))
+        return parseInt(token, 16) & 0xFFFF;
+    if (/^0b[01]+$/i.test(token))
+        return parseInt(token.slice(2), 2) & 0xFFFF;
+    if (/^\d+$/.test(token))
+        return parseInt(token, 10) & 0xFFFF;
+    if (token in labels)
+        return labels[token] & 0xFFFF;
+    throw new Error(`Unknown token: ${token}`);
+}
+
 export function assemble(src, origin = 0x0000) {
     const lines = src.split("\n");
     const labels = {};
@@ -80,9 +96,110 @@ export function assemble(src, origin = 0x0000) {
             case "HALT":
                 pushByte(OPCODES.HALT);
                 break;
-            default:
+            case "MOV": {
+                const dst = ops[0].toUpperCase();
+                const src = ops[1];
+                const rdst = parseInt(dst.slice(1));
+                if (/^R\d+$/i.test(src)) {
+                    pushByte(OPCODES.MOVR);
+                    pushByte(rdst);
+                    pushByte(parseInt(src.slice(1)));
+                } else {
+                    const imm = parseNumber(src, labels) & 0xFF;
+                    pushByte(OPCODES.MOV);
+                    pushByte(rdst);
+                    pushByte(imm);
+                }
                 break;
-                //throw new Error(`Unhandled mnemonic ${m} (source: ${inst.source})`);
+            }
+            case "LOAD": {
+                const r = parseInt(ops[0].slice(1));
+                const addr = parseNumber(ops[1], labels) & 0xFFFF;
+                pushByte(OPCODES.LOAD);
+                pushByte(r);
+                pushWord(addr);
+                break;
+            }
+            case "STORE": {
+                const r = parseInt(ops[0].slice(1));
+                const addr = parseNumber(ops[1], labels) & 0xFFFF;
+                pushByte(OPCODES.STORE);
+                pushByte(r);
+                pushWord(addr);
+                break;
+            }
+            case "ADD": {
+                const a = parseInt(ops[0].slice(1));
+                const b = parseInt(ops[1].slice(1));
+                pushByte(OPCODES.ADD);
+                pushByte(a);
+                pushByte(b); break;
+            }
+            case "ADDI": {
+                const a = parseInt(ops[0].slice(1));
+                const imm = parseNumber(ops[1], labels) & 0xFF;
+                pushByte(OPCODES.ADDI);
+                pushByte(a);
+                pushByte(imm);
+                break;
+            }
+            case "SUB": {
+                const a = parseInt(ops[0].slice(1));
+                const b = parseInt(ops[1].slice(1));
+                pushByte(OPCODES.SUB);
+                pushByte(a);
+                pushByte(b);
+                break;
+            }
+            case "CMP": {
+                const a = parseInt(ops[0].slice(1));
+                const b = parseInt(ops[1].slice(1));
+                pushByte(OPCODES.CMP);
+                pushByte(a);
+                pushByte(b);
+                break;
+            }
+            case "JMP":
+            case "JZ":
+            case "JNZ": {
+                const opcode = m === "JMP" ? OPCODES.JMP : (m === "JZ" ? OPCODES.JZ : OPCODES.JNZ);
+                const addr = parseNumber(ops[0], labels) & 0xFFFF;
+                pushByte(opcode);
+                pushWord(addr);
+                break;
+            }
+            case "INC": {
+                const r = parseInt(ops[0].slice(1));
+                pushByte(OPCODES.INC);
+                pushByte(r);
+                break;
+            }
+            case "DEC": {
+                const r = parseInt(ops[0].slice(1));
+                pushByte(OPCODES.DEC);
+                pushByte(r);
+                break;
+            }
+            case "OUT": {
+                const r = parseInt(ops[0].slice(1));
+                pushByte(OPCODES.OUT);
+                pushByte(r);
+                break;
+            }
+            case "PUSH": {
+                const r = parseInt(ops[0].slice(1));
+                pushByte(OPCODES.PUSH);
+                pushByte(r);
+                break;
+            }
+            case "POP": {
+                const r = parseInt(ops[0].slice(1));
+                pushByte(OPCODES.POP);
+                pushByte(r);
+                break;
+            }
+            default:
+                throw new Error(`Unhandled mnemonic ${m} (source: ${inst.source})`);
         }
     }
 
