@@ -88,25 +88,24 @@ export function assemble(src, origin = 0x0000) {
     for (const inst of program) {
         const m = inst.mnemonic.toUpperCase();
         const ops = inst.operands;
-        console.log(`${m}: ${ops}`);
         switch (m) {
             case "NOP":
-                pushByte(OPCODES.NOP);
+                pushByte(OPCODES.NOP.opcode);
                 break;
             case "HALT":
-                pushByte(OPCODES.HALT);
+                pushByte(OPCODES.HALT.opcode);
                 break;
             case "MOV": {
                 const dst = ops[0].toUpperCase();
                 const src = ops[1];
                 const rdst = parseInt(dst.slice(1));
                 if (/^R\d+$/i.test(src)) {
-                    pushByte(OPCODES.MOVR);
+                    pushByte(OPCODES.MOVR.opcode);
                     pushByte(rdst);
                     pushByte(parseInt(src.slice(1)));
                 } else {
                     const imm = parseNumber(src, labels) & 0xFF;
-                    pushByte(OPCODES.MOV);
+                    pushByte(OPCODES.MOV.opcode);
                     pushByte(rdst);
                     pushByte(imm);
                 }
@@ -115,7 +114,7 @@ export function assemble(src, origin = 0x0000) {
             case "LOAD": {
                 const r = parseInt(ops[0].slice(1));
                 const addr = parseNumber(ops[1], labels) & 0xFFFF;
-                pushByte(OPCODES.LOAD);
+                pushByte(OPCODES.LOAD.opcode);
                 pushByte(r);
                 pushWord(addr);
                 break;
@@ -123,7 +122,7 @@ export function assemble(src, origin = 0x0000) {
             case "STORE": {
                 const r = parseInt(ops[0].slice(1));
                 const addr = parseNumber(ops[1], labels) & 0xFFFF;
-                pushByte(OPCODES.STORE);
+                pushByte(OPCODES.STORE.opcode);
                 pushByte(r);
                 pushWord(addr);
                 break;
@@ -131,14 +130,14 @@ export function assemble(src, origin = 0x0000) {
             case "ADD": {
                 const a = parseInt(ops[0].slice(1));
                 const b = parseInt(ops[1].slice(1));
-                pushByte(OPCODES.ADD);
+                pushByte(OPCODES.ADD.opcode);
                 pushByte(a);
                 pushByte(b); break;
             }
             case "ADDI": {
                 const a = parseInt(ops[0].slice(1));
                 const imm = parseNumber(ops[1], labels) & 0xFF;
-                pushByte(OPCODES.ADDI);
+                pushByte(OPCODES.ADDI.opcode);
                 pushByte(a);
                 pushByte(imm);
                 break;
@@ -146,7 +145,7 @@ export function assemble(src, origin = 0x0000) {
             case "SUB": {
                 const a = parseInt(ops[0].slice(1));
                 const b = parseInt(ops[1].slice(1));
-                pushByte(OPCODES.SUB);
+                pushByte(OPCODES.SUB.opcode);
                 pushByte(a);
                 pushByte(b);
                 break;
@@ -154,7 +153,7 @@ export function assemble(src, origin = 0x0000) {
             case "CMP": {
                 const a = parseInt(ops[0].slice(1));
                 const b = parseInt(ops[1].slice(1));
-                pushByte(OPCODES.CMP);
+                pushByte(OPCODES.CMP.opcode);
                 pushByte(a);
                 pushByte(b);
                 break;
@@ -164,37 +163,37 @@ export function assemble(src, origin = 0x0000) {
             case "JNZ": {
                 const opcode = m === "JMP" ? OPCODES.JMP : (m === "JZ" ? OPCODES.JZ : OPCODES.JNZ);
                 const addr = parseNumber(ops[0], labels) & 0xFFFF;
-                pushByte(opcode);
+                pushByte(opcode.opcode);
                 pushWord(addr);
                 break;
             }
             case "INC": {
                 const r = parseInt(ops[0].slice(1));
-                pushByte(OPCODES.INC);
+                pushByte(OPCODES.INC.opcode);
                 pushByte(r);
                 break;
             }
             case "DEC": {
                 const r = parseInt(ops[0].slice(1));
-                pushByte(OPCODES.DEC);
+                pushByte(OPCODES.DEC.opcode);
                 pushByte(r);
                 break;
             }
             case "OUT": {
                 const r = parseInt(ops[0].slice(1));
-                pushByte(OPCODES.OUT);
+                pushByte(OPCODES.OUT.opcode);
                 pushByte(r);
                 break;
             }
             case "PUSH": {
                 const r = parseInt(ops[0].slice(1));
-                pushByte(OPCODES.PUSH);
+                pushByte(OPCODES.PUSH.opcode);
                 pushByte(r);
                 break;
             }
             case "POP": {
                 const r = parseInt(ops[0].slice(1));
-                pushByte(OPCODES.POP);
+                pushByte(OPCODES.POP.opcode);
                 pushByte(r);
                 break;
             }
