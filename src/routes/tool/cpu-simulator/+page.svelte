@@ -2,6 +2,9 @@
     import { toHex } from "$lib/hexUtility";
 
     import { OPCODES, assemble } from "./assembler.js";
+    import { Cpu } from "./cpu.js";
+
+    let cpu = new Cpu();
 
     let src = `\
 ; Sum the numbers from N down to 1 and OUT the result
@@ -17,7 +20,20 @@ done:   OUT R1
     let srcAssembled = "";
 
     function doAssemble() {
-        srcAssembled = JSON.stringify(assemble(src), null, 2);
+        let a = assemble(src);
+        srcAssembled = JSON.stringify(a, null, 2);
+        cpu.loadProgram(a.bytes);
+        cpu = cpu;
+    }
+
+    function doStep() {
+        cpu.step();
+        cpu = cpu;
+    }
+
+    function doReset() {
+        cpu.reset();
+        cpu = cpu;
     }
 </script>
 
@@ -97,8 +113,7 @@ done:   OUT R1
 
 <div class="row">
     <div class="col">
-        <textarea class="form-control font-monospace" rows="20" value={src}></textarea>
-        <button type="button" class="btn btn-primary" onclick={doAssemble}>Assemble</button>
+        <textarea class="form-control font-monospace" rows="20" bind:value={src}></textarea>
     </div>
     <div class="col">
         <textarea class="form-control font-monospace" rows="20" bind:value="{srcAssembled}" readonly></textarea>
@@ -154,4 +169,7 @@ done:   OUT R1
 </div>
 
 <style>
+    svg {
+        border: 1px solid var(--bs-body-color);
+    }
 </style>
