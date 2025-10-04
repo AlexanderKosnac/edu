@@ -31,10 +31,64 @@
         <input bind:this={imageInput} type="file" class="form-control" id="img" name="img" accept="image/*" onchange={loadExif}>
         <button type="button" class="btn btn-primary" onclick={loadExif}>Load Exif</button>
     </div>
+</div>
+
+{#if tags}
+<div class="row">
+    <h2>Thumbnail</h2>
     <div class="col">
-        <pre>{JSON.stringify(tags, null, 2)}</pre>
+        {#if tags.Thumbnail}
+            <img src="data:{tags.Thumbnail.type};base64, {tags.Thumbnail.base64}" alt="Thumbnail" />
+        {:else}
+            No thumbnail data.
+        {/if}
     </div>
 </div>
+
+<div class="row">
+    <h2>File</h2>
+    <div class="col">
+        {#if tags.file}
+            <pre>{JSON.stringify(tags.file, null, 2)}</pre>
+        {:else}
+            No thumbnail data.
+        {/if}
+    </div>
+</div>
+
+<div class="row">
+    <h2>Exif</h2>
+    <div class="col">
+        {#if tags.exif}
+            <pre>{JSON.stringify(tags.exif, null, 2)}</pre>
+        {:else}
+            No Exif data.
+        {/if}
+    </div>
+</div>
+
+<div class="row">
+    <h2>ICC</h2>
+    <div class="col">
+        {#if tags.icc}
+            <pre>{JSON.stringify(tags.icc, null, 2)}</pre>
+        {:else}
+            No ICC data.
+        {/if}
+    </div>
+</div>
+
+<div class="row">
+    <h2>XMP</h2>
+    <div class="col">
+        {#if tags.xmp}
+            <pre>{JSON.stringify(tags.xmp, null, 2)}</pre>
+        {:else}
+            No XMP data.
+        {/if}
+    </div>
+</div>
+{/if}
 
 <div class="row">
     <div class="col">
