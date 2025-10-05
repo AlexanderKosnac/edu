@@ -4,25 +4,25 @@
     import { OPCODES, assemble } from "./assembler.js";
     import { Cpu } from "./cpu.js";
 
-    let cpu = new Cpu();
+    let cpu = new Cpu(1024);
 
     let src = `\
 ; Sum the numbers from N down to 1 and OUT the result
-        MOV R0, #10    ; N
-        MOV R1, #0     ; sum
-loop:   CMP R0, R1
-        JZ done
+        MOV R0, #10  ; N
+        MOV R1, #0   ; sum
+loop:   JZ done
         ADD R1, R0
         DEC R0
         JMP loop
 done:   OUT R1
         HALT`;
+    let assembly;
     let srcAssembled = "";
 
     function doAssemble() {
-        let a = assemble(src);
-        srcAssembled = JSON.stringify(a, null, 2);
-        cpu.loadProgram(a.bytes);
+        assembly = assemble(src);
+        srcAssembled = JSON.stringify(assembly, null, 2);
+        cpu.loadProgram(assembly.bytes);
         cpu = cpu;
     }
 
@@ -50,14 +50,13 @@ done:   OUT R1
 <div class="row">
     <div class="col-auto">
         <div class="d-flex flex-column gap-1">
-            <button type="button" class="btn btn-primary" onclick={doStep}>Step</button>
+            <button type="button" class="btn btn-primary" onclick={doStep} disabled={cpu.halted}>Step</button>
             <button type="button" class="btn btn-primary" onclick={doReset}>Reset</button>
             <button type="button" class="btn btn-primary" onclick={doAssemble}>Assemble and load</button>
         </div>
     </div>
     <div class="col">
-        {cpu.memory}
-        <svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+        <svg width="1024" height="512" viewBox="0 0 1024 512" xmlns="http://www.w3.org/2000/svg">
             {#each cpu.regs as reg, i}
                 <g>
                     <rect x="0" y="{25*i}" width="20" height="20" stroke="currentColor" fill="transparent"/>
@@ -72,7 +71,7 @@ done:   OUT R1
                 <text x="150" y="10" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="middle">PC</text>
 
                 <rect x="175" y="0" width="80" height="20" stroke="currentColor" fill="transparent"/>
-                <text x="175" y="10" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="middle">0x{cpu.pc.toString(16)}</text>
+                <text x="175" y="10" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="middle">0x{toHex(cpu.pc)}</text>
             </g>
 
             <g>
@@ -80,7 +79,7 @@ done:   OUT R1
                 <text x="150" y="35" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="middle">SP</text>
 
                 <rect x="175" y="25" width="80" height="20" stroke="currentColor" fill="transparent"/>
-                <text x="175" y="35" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="middle">0x{cpu.sp.toString(16)}</text>
+                <text x="175" y="35" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="middle">0x{toHex(cpu.sp)}</text>
             </g>
 
             <g>
@@ -94,7 +93,7 @@ done:   OUT R1
             </g>
 
             <g>
-                <rect x="150" y="75" width="50" height="20" stroke="currentColor" fill="{cpu.halted === 0 ? "transparent" : "red"}"/>
+                <rect x="150" y="75" width="50" height="20" stroke="currentColor" fill="{cpu.halted ? "red" : "transparent"}"/>
                 <text x="150" y="85" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="middle">Halted</text>
             </g>
 
@@ -103,10 +102,20 @@ done:   OUT R1
                 <text x="150" y="110" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="middle">{cpu.output}</text>
             </g>
 
-            <g>
-                <rect x="0" y="320" width="200" height="200" stroke="currentColor" fill="transparent"/>
-                <text x="0" y="320" font-size="12" fill="currentColor">{cpu.memory}</text>
-            </g>
+            {#each cpu.memory as m, i}
+                {@const col = i % 16}
+                {@const row = Math.floor(i / 16)}
+                <text x="{400+20*col}" y="{12*row}" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="hanging">
+                    {toHex(m)}
+                </text>
+            {/each}
+
+            {#each assembly?.program as e, i}
+                <text x="750" y="{12*i}" font-size="12" fill={cpu.pc === e.addr ? "red" : "currentColor"}
+                    text-anchor="start" dominant-baseline="hanging">
+                    {toHex(e.addr, 8)}: {e.source}
+                </text>
+            {/each}
         </svg>
     </div>
 </div>
@@ -116,7 +125,7 @@ done:   OUT R1
         <textarea class="form-control font-monospace" rows="20" bind:value={src}></textarea>
     </div>
     <div class="col">
-        <textarea class="form-control font-monospace" rows="20" bind:value="{srcAssembled}" readonly></textarea>
+        <pre>{srcAssembled}</pre>
     </div>
 </div>
 
@@ -171,5 +180,7 @@ done:   OUT R1
 <style>
     svg {
         border: 1px solid var(--bs-body-color);
+        font-family: monospace;
+        white-space: pre;
     }
 </style>
