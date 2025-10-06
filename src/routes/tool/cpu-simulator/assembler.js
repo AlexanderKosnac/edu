@@ -29,8 +29,8 @@ export const OPCODES = {
     POP:   opcode(0x81, 2, "POP Rn",         "81 R",                 "pop into register (load, SP++)"),
 };
 
-// Parses numbers of different formats. Also resolves labels to their address.
-function parseNumber(token, labels = {}) {
+// Parse token, including numbers, registers, and labels.
+function parseToken(token, labels = {}) {
     if (typeof token !== "string")
         return token;
     token = token.replace(/^#/, "");
@@ -72,6 +72,8 @@ export function assemble(src, origin = 0x0000) {
         const operands = parts.slice(1).filter(p => p !== ",");
 
         const opcode = OPCODES[mnemonic]
+        if (opcode === undefined)
+            throw new Error(`Mnemonic ${mnemonic} is not a known opcode.`);
 
         program.push({mnemonic, operands, addr: pc, source: raw});
         pc += opcode.size;
@@ -104,7 +106,7 @@ export function assemble(src, origin = 0x0000) {
                     pushByte(rdst);
                     pushByte(parseInt(src.slice(1)));
                 } else {
-                    const imm = parseNumber(src, labels) & 0xFF;
+                    const imm = parseToken(src, labels) & 0xFF;
                     pushByte(OPCODES.MOV.opcode);
                     pushByte(rdst);
                     pushByte(imm);
@@ -113,7 +115,7 @@ export function assemble(src, origin = 0x0000) {
             }
             case "LOAD": {
                 const r = parseInt(ops[0].slice(1));
-                const addr = parseNumber(ops[1], labels) & 0xFFFF;
+                const addr = parseToken(ops[1], labels) & 0xFFFF;
                 pushByte(OPCODES.LOAD.opcode);
                 pushByte(r);
                 pushWord(addr);
@@ -121,7 +123,7 @@ export function assemble(src, origin = 0x0000) {
             }
             case "STORE": {
                 const r = parseInt(ops[0].slice(1));
-                const addr = parseNumber(ops[1], labels) & 0xFFFF;
+                const addr = parseToken(ops[1], labels) & 0xFFFF;
                 pushByte(OPCODES.STORE.opcode);
                 pushByte(r);
                 pushWord(addr);
@@ -136,7 +138,7 @@ export function assemble(src, origin = 0x0000) {
             }
             case "ADDI": {
                 const a = parseInt(ops[0].slice(1));
-                const imm = parseNumber(ops[1], labels) & 0xFF;
+                const imm = parseToken(ops[1], labels) & 0xFF;
                 pushByte(OPCODES.ADDI.opcode);
                 pushByte(a);
                 pushByte(imm);
@@ -162,7 +164,7 @@ export function assemble(src, origin = 0x0000) {
             case "JZ":
             case "JNZ": {
                 const opcode = m === "JMP" ? OPCODES.JMP : (m === "JZ" ? OPCODES.JZ : OPCODES.JNZ);
-                const addr = parseNumber(ops[0], labels) & 0xFFFF;
+                const addr = parseToken(ops[0], labels) & 0xFFFF;
                 pushByte(opcode.opcode);
                 pushWord(addr);
                 break;
