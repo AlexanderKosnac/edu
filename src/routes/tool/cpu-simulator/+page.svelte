@@ -39,6 +39,14 @@ done:   OUT R1
         cpu.reset();
         cpu = cpu;
     }
+
+    function getMemoryIndexColor(i) {
+        if (i === cpu.pc )
+            return "red";
+        else if (i >= cpu.sp)
+            return "yellow";
+        return "currentColor";
+    }
 </script>
 
 <svelte:head>
@@ -109,7 +117,8 @@ done:   OUT R1
             {#each cpu.memory as m, i}
                 {@const col = i % 16}
                 {@const row = Math.floor(i / 16)}
-                <text x="{400+20*col}" y="{12*row}" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="hanging">
+                <text x="{400+20*col}" y="{12*row}" font-size="12" fill={getMemoryIndexColor(i)}
+                    text-anchor="start" dominant-baseline="hanging">
                     {toHex(m)}
                 </text>
             {/each}

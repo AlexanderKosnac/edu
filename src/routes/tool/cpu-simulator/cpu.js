@@ -5,7 +5,7 @@ export class Cpu {
         this.memory = new Uint8Array(memorySize);
         this.regs = new Uint8Array(8);
         this.pc = 0x0000;
-        this.sp = memorySize & 0xFFFF;
+        this.sp = this.memory.length;
         this.flags = {
             Z: 0,
         };
@@ -16,7 +16,7 @@ export class Cpu {
     reset() {
         this.regs.fill(0);
         this.pc = 0x0000;
-        this.sp = memorySize & 0xFFFF;
+        this.sp = this.memory.length;
         this.flags = {
             Z: 0,
         };
