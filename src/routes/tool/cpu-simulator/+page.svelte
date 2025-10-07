@@ -20,10 +20,14 @@ done:   OUT R1
     let srcAssembled = "";
 
     function doAssemble() {
-        assembly = assemble(src);
-        srcAssembled = JSON.stringify(assembly, null, 2);
-        cpu.loadProgram(assembly.bytes);
-        cpu = cpu;
+        try {
+            assembly = assemble(src);
+            srcAssembled = JSON.stringify(assembly, null, 2);
+            cpu.loadProgram(assembly.bytes);
+            cpu = cpu;
+        } catch (error) {
+            alert(`Failed to assemble source: ${error}`);
+        }
     }
 
     function doStep() {
@@ -56,7 +60,7 @@ done:   OUT R1
         </div>
     </div>
     <div class="col">
-        <svg width="1024" height="512" viewBox="0 0 1024 512" xmlns="http://www.w3.org/2000/svg">
+        <svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
             {#each cpu.regs as reg, i}
                 <g>
                     <rect x="0" y="{25*i}" width="20" height="20" stroke="currentColor" fill="transparent"/>
@@ -124,12 +128,6 @@ done:   OUT R1
     <div class="col">
         <textarea class="form-control font-monospace" rows="20" bind:value={src}></textarea>
     </div>
-    <div class="col">
-        <pre>{srcAssembled}</pre>
-    </div>
-</div>
-
-<div class="row">
     <div class="col">
         <table class="table table-bordered w-auto mt-1">
             <thead>
