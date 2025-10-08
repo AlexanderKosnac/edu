@@ -4,18 +4,12 @@
     import { OPCODES, assemble } from "./assembler.js";
     import { Cpu } from "./cpu.js";
 
+    const asmFiles = import.meta.glob("./*.asm", { query: "?raw", import: "default", eager: true });
+
     let cpu = new Cpu(1024);
 
-    let src = `\
-; Sum the numbers from N down to 1 and OUT the result
-        MOV R0, #10  ; N
-        MOV R1, #0   ; sum
-loop:   JZ done
-        ADD R1, R0
-        DEC R0
-        JMP loop
-done:   OUT R1
-        HALT`;
+    let src = asmFiles["./small-gauss.asm"];
+
     let assembly;
     let srcAssembled = "";
 
@@ -38,6 +32,10 @@ done:   OUT R1
     function doReset() {
         cpu.reset();
         cpu = cpu;
+    }
+
+    function loadFile(file) {
+        src = asmFiles[file];
     }
 
     function getMemoryIndexColor(i) {
@@ -134,9 +132,24 @@ done:   OUT R1
 </div>
 
 <div class="row">
+    <div class="col-auto">
+        <strong>Examples:</strong>
+        <ul>
+            {#each Object.entries(asmFiles) as [file, _]}
+                <li>
+                    <button type="button" class="btn btn-link" onclick={() => loadFile(file)}>
+                        <samp>{file}</samp>
+                    </button>
+                </li>
+            {/each}
+        </ul> 
+    </div>
     <div class="col">
         <textarea class="form-control font-monospace" rows="20" bind:value={src}></textarea>
     </div>
+</div>
+
+<div class="row">
     <div class="col">
         <table class="table table-bordered w-auto mt-1">
             <thead>
