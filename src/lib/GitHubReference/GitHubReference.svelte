@@ -1,5 +1,6 @@
 <script>
     import { page } from '$app/stores';
+    import { base } from '$app/paths';
 
     let {
         root = $bindable(),
@@ -9,7 +10,10 @@
         ...others
     } = $props();
     
-    let currentPath = $derived($page.url.pathname);
+    let currentPath = $derived(
+        $page.url.pathname
+            .substring($page.url.pathname.startsWith(base) ? base.length + 1 : 0)
+    );
 </script>
 
 <div class="d-flex flex-row gap-1 justify-content-center">
@@ -21,7 +25,7 @@
     </a>
 
     {#if currentPath != "/"}
-        <a href="{root}/{routeRoot}{currentPath}" target="_blank" draggable="false">View Source</a>
+        <a href="{root}/{routeRoot}/{currentPath}" target="_blank" draggable="false">View Source</a>
     {/if}
 </div>
 
