@@ -36,57 +36,82 @@
 {#if tags}
 <div class="row">
     <h2>Thumbnail</h2>
-    <div class="col">
-        {#if tags.Thumbnail}
+    {#if tags.Thumbnail}
+        <div class="col">
             <img src="data:{tags.Thumbnail.type};base64, {tags.Thumbnail.base64}" alt="Thumbnail" />
-        {:else}
+        </div>
+        <div class="col">
+            <pre>{JSON.stringify(tags.Thumbnail, null, 2)}</pre>
+        </div>
+    {:else}
+        <div class="col">
             No thumbnail data.
-        {/if}
-    </div>
+        </div>
+    {/if}        
 </div>
 
 <div class="row">
     <h2>File</h2>
-    <div class="col">
-        {#if tags.file}
+    {#if tags.file}
+        <div class="col">
+            
+        </div>
+        <div class="col">
             <pre>{JSON.stringify(tags.file, null, 2)}</pre>
-        {:else}
-            No thumbnail data.
-        {/if}
-    </div>
+        </div>
+    {:else}
+        <div class="col">
+            No file data.
+        </div>
+    {/if}
 </div>
 
 <div class="row">
     <h2>Exif</h2>
-    <div class="col">
-        {#if tags.exif}
-            <pre>{JSON.stringify(tags.exif, null, 2)}</pre>
-        {:else}
+    {#if tags.exif}
+        <div class="col">
+
+        </div>
+        <div class="col">
+            <pre>{JSON.stringify(tags.exif, null, 2)}</pre>            
+        </div>
+    {:else}
+        <div class="col">
             No Exif data.
-        {/if}
-    </div>
+        </div>
+    {/if}
 </div>
 
 <div class="row">
     <h2>ICC</h2>
-    <div class="col">
-        {#if tags.icc}
+    {#if tags.icc}
+        <div class="col">
+            
+        </div>
+        <div class="col">
             <pre>{JSON.stringify(tags.icc, null, 2)}</pre>
-        {:else}
+        </div>
+    {:else}
+        <div class="col">
             No ICC data.
-        {/if}
-    </div>
+        </div>
+    {/if}
 </div>
 
 <div class="row">
     <h2>XMP</h2>
-    <div class="col">
-        {#if tags.xmp}
+    {#if tags.xmp}
+        <div class="col">
+            
+        </div>
+        <div class="col">
             <pre>{JSON.stringify(tags.xmp, null, 2)}</pre>
-        {:else}
+        </div>
+    {:else}
+        <div class="col">
             No XMP data.
-        {/if}
-    </div>
+        </div>
+    {/if}
 </div>
 {/if}
 
