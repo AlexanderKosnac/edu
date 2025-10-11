@@ -36,10 +36,20 @@
         }
     }
 
-    let today = new Date();
+    function setDateToToday() {
+        dateInput = (new Date()).toISOString().split("T")[0];
+    }
 
-    let day = getDayOfYear(today);
-    let ifc = dayOfYearInIfc(day, isLeapYear(today.getFullYear()));
+    let dateInput = "2000-01-01";
+    setDateToToday();
+
+    let selectedDate, day, dateIsLeapYear, ifc;
+    $: {
+        selectedDate = new Date(dateInput);
+        day = getDayOfYear(selectedDate);
+        dateIsLeapYear = isLeapYear(selectedDate.getFullYear());
+        ifc = dayOfYearInIfc(day, dateIsLeapYear);
+    }
 </script>
 
 <svelte:head>
@@ -53,9 +63,25 @@
 </div>
 
 <div class="row">
-    <div class="col">
-        <h2>Generic Monthly Layout</h2>
-        <table class="table table-bordered calendar">
+    <div class="col-auto">
+        <table class="date-overview-table">
+            <tbody>
+                <tr>
+                    <th>Gregorian:</th>
+                    <td class="d-flex flex-row gap-1 text-nowrap align-items-center">
+                        <input type="date" class="form-control" bind:value={dateInput}/>
+                        (Day {day})
+                        <button type="button" class="btn btn-sm btn-primary" onclick={setDateToToday}>Today</button>
+                    </td>
+                </tr>
+                <tr>
+                    <th>IFC:</th>
+                    <td>{ifc.day} {MONTHS_IFC[ifc.month]}</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <table class="table table-bordered calendar mt-3">
             <thead>
                 <tr>
                     <th scope="col">Sun</th>
@@ -79,18 +105,6 @@
             </tbody>
         </table>
     </div>
-    <div class="col">
-        <h2>Today in Gregorian:</h2>
-        <div class="pb-4">
-            {String(today.getDate()).padStart(2, "0")}.{String(today.getMonth()+1).padStart(2, "0")}.{today.getFullYear()}
-            (Day {day})
-        </div>
-
-        <h2>Today in IFC:</h2>
-        <div>
-            {ifc.day} {MONTHS_IFC[ifc.month]}
-        </div>
-    </div>
 </div>
 
 <div class="row">
@@ -109,6 +123,10 @@
     }
     .today {
         font-weight: 900;
-        color: red;
+        background-color: red;
+    }
+    .date-overview-table > tbody > tr, td {
+        padding: 5px;
+        vertical-align: middle;
     }
 </style>
