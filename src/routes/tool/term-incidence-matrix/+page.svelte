@@ -1,5 +1,5 @@
 <script>
-    const totalKey = "Total";
+    const total = "Total";
 
     let fileInput;
 
@@ -8,7 +8,7 @@
 
     async function loadFiles() {
         matrix = {
-            [totalKey]: {},
+            [total]: {},
         };
         if (fileInput.files.length < 1)
             return;
@@ -16,10 +16,10 @@
             const text = await readFileAsText(file);
             matrix[file.name] = {};
             for (const token of tokenize(text)) {
-                if (token in matrix[totalKey]) {
-                    matrix[totalKey][token] += 1;
+                if (token in matrix[total]) {
+                    matrix[total][token] += 1;
                 } else {
-                    matrix[totalKey][token] = 1;
+                    matrix[total][token] = 1;
                 }
 
                 if (token in matrix[file.name]) {
@@ -40,6 +40,32 @@
             reader.onerror = () => reject(reader.error);
             reader.readAsText(file);
         });
+    }
+
+    function downloadAsFile(content, filename = "data.txt") {
+        const blob = new Blob([content], { type: "text/plain" });
+
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = filename;
+
+        link.click();
+
+        URL.revokeObjectURL(link.href);
+    }
+
+    function getMatrixAsCsv(separator = ";") {
+        let csv = ["Token", ...Object.keys(matrix)].join(separator) + "\n";
+
+        for (const token of tokens) {
+            csv += [token, ...Object.values(matrix).map(data => data[token] ?? 0)]
+                .join(separator) + "\n";
+        }
+        return csv;
+    }
+
+    function downloadAsCsv() {
+        downloadAsFile(getMatrixAsCsv(), "term-incidence-matrix.csv")
     }
 
     function tokenize(input) {
@@ -71,11 +97,18 @@
 
 <div class="row">
     <div class="col">
-        You can select multiple plaintext files:
-        <div class="d-flex flex-row gap-1">
-            <input type="file" class="form-control" id="img" name="img" accept="text/plain" multiple bind:this={fileInput}>
-            <button type="button" class="btn btn-primary" onclick={loadFiles}>Load</button>
+        <div class="d-flex flex-column gap-1">
+            <span>You can select multiple plaintext files:</span>
+            <div class="d-flex flex-row gap-1">
+                <input type="file" class="form-control" id="img" name="img" accept="text/plain" multiple bind:this={fileInput}>
+                <button type="button" class="btn btn-primary" onclick={loadFiles}>Load</button>
+            </div>
         </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
         <ul>
             {#each Object.entries(matrix) as [filename, data]}
                 <li><strong>{filename}</strong> ({Object.keys(data).length} tokens): {Object.keys(data).join(", ")}</li>
@@ -87,6 +120,9 @@
 {#if tokens.length > 0}
 <div class="row">
     <div class="col">
+        <div class="d-flex flex-row gap-1">
+            <button type="button" class="btn btn-secondary" onclick={downloadAsCsv}>Download as CSV</button>
+        </div>        
         <table class="table w-auto">
             <thead>
                 <tr>
