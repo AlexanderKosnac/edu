@@ -1,16 +1,27 @@
 <script>
+    const totalKey = "Total";
+
     let fileInput;
 
     let tokens = [];
     let matrix = {};
 
     async function loadFiles() {
-        matrix = {};
-        if (fileInput.files.length < 1) return;
+        matrix = {
+            [totalKey]: {},
+        };
+        if (fileInput.files.length < 1)
+            return;
         for (const file of fileInput.files) {
             const text = await readFileAsText(file);
             matrix[file.name] = {};
             for (const token of tokenize(text)) {
+                if (token in matrix[totalKey]) {
+                    matrix[totalKey][token] += 1;
+                } else {
+                    matrix[totalKey][token] = 1;
+                }
+
                 if (token in matrix[file.name]) {
                     matrix[file.name][token] += 1;
                 } else {
