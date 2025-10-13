@@ -10,6 +10,10 @@
         }
     }
 
+    let gridSize = 40;
+    $: svgWidth = (sequence2.length + 2) * gridSize;
+    $: svgHeight = (sequence1.length + 2) * gridSize;
+
     const D = "diagonal";
     const U = "up";
     const L = "left";
@@ -19,10 +23,7 @@
 
     let gapCost = -1;
 
-    $: tableWidth = sequence2.length+1
-    $: tableHeight = sequence1.length+1
-
-    $: m = getAlignmentArray(tableHeight, tableWidth)
+    $: m = getAlignmentArray(sequence1.length + 1, sequence2.length + 1)
 
     function getAlignmentArray(height, width) {
         let arr = Array.from(Array(height), _ => Array(width).fill(NaN));
@@ -54,8 +55,8 @@
 
     function align() {
         // Fill rest of table
-        for (let i=1; i<tableHeight; i++) {
-            for (let j=1; j<tableWidth; j++) {
+        for (let i=1; i<sequence1.length + 1; i++) {
+            for (let j=1; j<sequence2.length + 1; j++) {
                 m[i][j] = [
                     new Element(m[i-1][j-1].value + w(sequence1.charAt(i-1), sequence2.charAt(j-1)), D),
                     new Element(m[i-1][j].value + gapCost, U),
@@ -66,8 +67,8 @@
 
         // Backtrace through table
         alignment.clear();
-        let i = tableHeight;
-        let j = tableWidth;
+        let i = sequence1.length + 1;
+        let j = sequence2.length + 1;
         while (i > 0 && j > 0) {
             let e = m[i-1][j-1];
             e.active = true;
@@ -97,6 +98,19 @@
         alignment = alignment;
     }
 
+    function getAlignmentPath(startX, startY, matrix, cellSize) {
+        const points = [];
+        matrix.forEach((row, y) => {
+            row.forEach((cell, x) => {
+                if (cell.active) {
+                    points.push({ x: x * cellSize, y: y * cellSize });
+                }
+            });
+        });
+
+        return points.length ? `M ${startX} ${startY} ${points.map(p => `${startX + p.x} ${startY + p.y}`).join(" L ")}` : "";
+    }
+
     onMount(() => {
         align();
 	});
@@ -111,6 +125,38 @@
         <h1>Needleman-Wunsch Algorithm</h1>
     </div>
 </div>
+
+{#snippet cell(i, j, data)}
+    {@const x = i * gridSize}
+    {@const y = j * gridSize}
+    {@const arrowSize = 0.2 * gridSize}
+    <g>
+        <rect x="{x}" y="{y}" width={gridSize} height={gridSize}
+            stroke="currentColor" stroke-width="1" fill="none"/>
+
+        {#if data.arrow == D}
+            <path d="M {x} {y} h {arrowSize} M {x} {y} v {arrowSize} M {x} {y}"
+                fill="transparent" stroke="currentColor" stroke-width="4" stroke-linecap="round"
+                opacity={data.active ? 1.0 : 0.2}/>
+        {:else if data.arrow == U}
+            <path d="M {x} {y} h {arrowSize} M {x} {y} v {arrowSize} M {x} {y}"
+                fill="transparent" stroke="currentColor" stroke-width="4" stroke-linecap="round"
+                transform="translate({gridSize / 2.0}, 0) rotate(45, {x}, {y})"
+                opacity={data.active ? 1.0 : 0.2}/>
+        {:else if data.arrow == L}
+            <path d="M {x} {y} h {arrowSize} M {x} {y} v {arrowSize} M {x} {y}"
+                fill="transparent" stroke="currentColor" stroke-width="4" stroke-linecap="round"
+                transform="translate(0, {gridSize / 2.0}) rotate(-45, {x}, {y})"
+                opacity={data.active ? 1.0 : 0.2}/>
+        {/if}
+
+        <text x="{x + (gridSize / 2.0)}" y="{y + (gridSize / 2.0)}"
+            fill="currentColor" text-anchor="middle" dominant-baseline="middle"
+            font-size={data.fontSize ?? 16} font-weight={data.fontWeight ?? "normal"}>
+            {data.value}
+        </text>
+    </g>
+{/snippet}
 
 <div class="row">
     <div class="col">
@@ -128,41 +174,50 @@
             </div>
 
             <div>
-                <button type="button" class="btn btn-primary" onclick={align}>Align!</button>
+                <button type="button" class="btn btn-primary" onclick={align}>Align</button>
             </div>
         </div>
     </div>
 </div>
 
-<h2>Alignment:</h2>
-<div class="overflow-auto font-monospace">
-Sequence 1:&nbsp;{alignment.seq1}<br>
-Sequence 2:&nbsp;{alignment.seq2}<br>
-Alignment&nbsp;:&nbsp;{alignment.seqR}<br>
+<div class="row">
+    <div class="col">
+        <h2>Alignment:</h2>
+        <div class="overflow-auto font-monospace">
+            Sequence 1:&nbsp;{alignment.seq1}<br>
+            Sequence 2:&nbsp;{alignment.seq2}<br>
+            Alignment&nbsp;:&nbsp;{alignment.seqR}<br>
+        </div>
+    </div>
 </div>
 
 <div class="row">
-    <div class="col">
-        <div class="overflow-auto">
-            <table>
-                <tbody>
-                    <tr>
-                        <Cell type="header"/>
-                        {#each " "+sequence2 as s}
-                            <Cell type="header" value={s}/>
-                        {/each}
-                    </tr>
-                    {#each m as row, i}
-                        <tr>
-                            <Cell type="header" value={(" "+sequence1).charAt(i)}/>
-                            {#each row as e}
-                                <Cell value={isNaN(e.value) ? "?" : e.value} direction={e.direction} active={e.active}/>
-                            {/each}
-                        </tr>
-                    {/each}
-                </tbody>
-            </table>
-        </div>
+    <div class="col overflow-auto">
+        <svg width="{svgWidth}" height="{svgHeight}" viewBox="0 0 {svgWidth} {svgHeight}" xmlns="http://www.w3.org/2000/svg">
+            <path d="{getAlignmentPath(gridSize * 1.5, gridSize * 1.5, m, gridSize)}" fill="transparent" stroke="blue" stroke-width="10" stroke-linecap="round"/>
+
+            {@render cell(0, 0, "")}
+            {@render cell(1, 0, "")}
+            {@render cell(0, 1, "")}
+
+            {#each sequence1 as s, i}
+                {@render cell(0, i + 2, { value: s, fontSize: 18, fontWeight: "bold" })}
+            {/each}
+
+            {#each sequence2 as s, i}
+                {@render cell(i + 2, 0, { value: s, fontSize: 18, fontWeight: "bold" })}
+            {/each}
+
+            {#each m as row, i}
+                {#each row as c, j}
+                    {@render cell(j + 1, i + 1, {
+                        value: c.value,
+                        arrow: c.direction,
+                        active: c.active,
+                    })}
+                {/each}
+            {/each}
+        </svg>
     </div>
 </div>
 
