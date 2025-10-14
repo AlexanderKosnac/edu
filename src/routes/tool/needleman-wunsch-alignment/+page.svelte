@@ -1,6 +1,5 @@
 <script>
 	import { onMount } from "svelte";
-    import Cell from "./Cell.svelte";
 
     class Element {
         constructor(value, direction) {
@@ -134,20 +133,15 @@
         <rect x="{x}" y="{y}" width={gridSize} height={gridSize}
             stroke="currentColor" stroke-width="1" fill="none"/>
 
-        {#if data.arrow == D}
+        {#if data.arrow}
             <path d="M {x} {y} h {arrowSize} M {x} {y} v {arrowSize} M {x} {y}"
                 fill="transparent" stroke="currentColor" stroke-width="4" stroke-linecap="round"
-                opacity={data.active ? 1.0 : 0.2}/>
-        {:else if data.arrow == U}
-            <path d="M {x} {y} h {arrowSize} M {x} {y} v {arrowSize} M {x} {y}"
-                fill="transparent" stroke="currentColor" stroke-width="4" stroke-linecap="round"
-                transform="translate({gridSize / 2.0}, 0) rotate(45, {x}, {y})"
-                opacity={data.active ? 1.0 : 0.2}/>
-        {:else if data.arrow == L}
-            <path d="M {x} {y} h {arrowSize} M {x} {y} v {arrowSize} M {x} {y}"
-                fill="transparent" stroke="currentColor" stroke-width="4" stroke-linecap="round"
-                transform="translate(0, {gridSize / 2.0}) rotate(-45, {x}, {y})"
-                opacity={data.active ? 1.0 : 0.2}/>
+                opacity={data.active ? 1.0 : 0.3}
+                transform={
+                    data.arrow === D ? "" :
+                    data.arrow === U ? `translate(${gridSize / 2}, 0) rotate(45, ${x}, ${y})` :
+                    data.arrow === L ? `translate(0, ${gridSize / 2}) rotate(-45, ${x}, ${y})` :
+                    ""}/>
         {/if}
 
         <text x="{x + (gridSize / 2.0)}" y="{y + (gridSize / 2.0)}"
