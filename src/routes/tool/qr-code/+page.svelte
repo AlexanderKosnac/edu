@@ -28,6 +28,14 @@
     ];
     let selectedPart = parts[0];
 
+    let encodingOptions = [
+        { name: "Numeric", pattern: [0, 0, 0, 1] },
+        { name: "Alphanumeric", pattern: [0, 0, 1, 0] },
+        { name: "Binary", pattern: [0, 1, 0, 0] },
+        { name: "Kanji", pattern: [1, 0, 0, 0] },
+    ];
+    let selectedEncodingOption = encodingOptions[0];
+
     let errorCorrectionLevels = [
         { name: "Low", short: "L", percentageRestoration:  7, pattern: [0, 1] },
         { name: "Medium", short: "M", percentageRestoration: 15, pattern: [0, 0] },
@@ -198,7 +206,7 @@
         drawTimingStripHorizontal(8, 6, 9);
         drawTimingStripVertical(6, 8, 9);
 
-        drawData([0, 1, 0, 0], ENCODING);
+        drawData(selectedEncodingOption.pattern, ENCODING);
         drawData(byteAsBinaryList(inputAscii.length * 8), DATA_LENGTH);
         drawData(charsAsBinaryList(inputAscii), DATA);
     }
@@ -222,6 +230,15 @@
     <div class="col">
         <label for="asciiInput">ASCII Input:</label>
         <input type="text" id="asciiInput" class="form-control font-monospace" bind:value="{inputAscii}" oninput={createQrCode}/>
+
+        <label>
+            Encoding:
+            <select class="form-select" bind:value={selectedEncodingOption}>
+                {#each encodingOptions as o}
+                    <option value={o}>{o.name}</option>
+                {/each}
+            </select>
+        </label>
 
         <label>
             Error Correction Level:
