@@ -5,13 +5,14 @@
 
     let tags;
 
-    async function loadExif() {
+    async function loadData() {
         const file = imageInput.files[0];
         const buffer = await file.arrayBuffer();
 
         tags = ExifReader.load(buffer, {
             async: true,
             expanded: true,
+            includeUnknown: true,
         });
     }
 </script>
@@ -28,8 +29,10 @@
 
 <div class="row">
     <div class="col-auto">
-        <input bind:this={imageInput} type="file" class="form-control" id="img" name="img" accept="image/*" onchange={loadExif}>
-        <button type="button" class="btn btn-primary" onclick={loadExif}>Load Exif</button>
+        <div class="d-flex flex-row gap-1 align-items-center">
+            <input bind:this={imageInput} type="file" class="form-control" id="img" name="img" accept="image/*" onchange={loadData}>
+            <button type="button" class="btn btn-primary text-nowrap" onclick={loadData}>Load Data</button>
+        </div>
     </div>
 </div>
 
@@ -38,7 +41,22 @@
     <h2>Thumbnail</h2>
     {#if tags.Thumbnail}
         <div class="col">
-            <img src="data:{tags.Thumbnail.type};base64, {tags.Thumbnail.base64}" alt="Thumbnail" />
+            <table class="table table-bordered w-auto mt-1">
+                <tbody>
+                    <tr>
+                        <td>Thumbnail</td>
+                        <td><img src="data:{tags.Thumbnail.type};base64, {tags.Thumbnail.base64}" alt="Thumbnail" /></td>
+                    </tr>
+                    <tr>
+                        <td>Base64</td>
+                        <td><input type="text" class="form-control" value={tags.Thumbnail.base64} readonly/></td>
+                    </tr>
+                    <tr>
+                        <td>Type</td>
+                        <td><samp>{tags.Thumbnail.type}</samp></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div class="col">
             <pre>{JSON.stringify(tags.Thumbnail, null, 2)}</pre>
