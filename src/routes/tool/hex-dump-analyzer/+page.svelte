@@ -1,9 +1,10 @@
 <script>
     import { hexStringToByteArray } from "$lib/hexUtility";
     import { hexHttpRequest } from "./data.js";
+    import { toHex } from "$lib/hexUtility";
 
     let hexInput = hexHttpRequest;
-    let startAddress = 0;
+    let startAddress = 0x34;
 
     const ByteType = Object.freeze({
         INT8: "int8",
@@ -28,8 +29,8 @@
     });
 
     let highlights = [
-        { start: 0x10, size: 0x04, color: "#ed333b", type: ByteType.UINT32_BE },
-        { start: 0x16, size: 0x03, color: "#57e389", type: ByteType.FLOAT32_BE },
+        { start: 0x36, size: 0x04, color: "#ed333b", type: ByteType.FLOAT32_LE },
+        { start: 0x40, size: 0x08, color: "#57e389", type: ByteType.INT64_LE },
     ];
 
     function addHighlight() {
@@ -118,57 +119,46 @@
         }
     }
 
-    function formatHexDump(bytes, bytesPerLine = 16, startOffset = 0, highlights = []) {
+    function formatHexDump(bytes, bytesPerLine = 16, startAddress = 0, highlights = []) {
         let dump = "";
-
-        const padBytes = startOffset % bytesPerLine;
-        let index = 0;
 
         function getHighlightForOffset(offset) {
             return highlights.find(h => offset >= h.start && offset < h.start + h.size);
         }
 
-        while (index < bytes.length) {
-            const padCount = index === 0 ? padBytes : 0;
-            const lineOffset = startOffset + index - padCount;
+        const baseAddress = Math.floor(startAddress / 16) * 16;
 
-            const address = lineOffset.toString(16).padStart(8, '0');
+        function atAddress(address) {
+            return bytes[address - startAddress];
+        }
 
-            const lineBytes = bytes.slice(index, index + bytesPerLine - padCount);
+        const nLines = Math.ceil((startAddress - baseAddress + bytes.length) / bytesPerLine);
 
-            let hexParts = [];
-            let asciiParts = [];
+        for (let i = 0; i < nLines; i++) {
+            const lineAddress = baseAddress + i * bytesPerLine;
 
-            for (let i = 0; i < padCount; i++) {
-                hexParts.push("  ");
-                asciiParts.push(" ");
-            }
+            const hexParts = [];
+            const asciiParts = [];
 
-            for (let i = 0; i < bytesPerLine; i++) {
-                const offset = lineOffset + i;
-                const highlight = getHighlightForOffset(offset);
+            for (let j = 0; j < bytesPerLine; j++) {
+                const byteAddress = lineAddress + j;
+                const highlight = getHighlightForOffset(byteAddress);
 
-                let outOfBounds = i >= lineBytes.length;
-
-                let hexByte = outOfBounds ? "  " : lineBytes[i].toString(16).padStart(2, '0');
-                let asciiChar = outOfBounds ? " " : (lineBytes[i] >= 0x20 && lineBytes[i] <= 0x7E) ? String.fromCharCode(lineBytes[i]) : '.';
+                let b = atAddress(byteAddress);
+                let hex = b === undefined ? "  " : toHex(b);
+                let ascii = b === undefined ? " " : (b >= 0x20 && b <= 0x7E) ? String.fromCharCode(b) : ".";
 
                 if (highlight) {
                     const fontColor = getContrastingColor(highlight.color);
-                    hexByte = `<span style="color: ${fontColor}; background-color: ${highlight.color}">${hexByte}</span>`;
-                    asciiChar = `<span style="color: ${fontColor}; background-color: ${highlight.color}">${asciiChar}</span>`;
+                    hex = `<span style="color: ${fontColor}; background-color: ${highlight.color}">${hex}</span>`;
+                    ascii = `<span style="color: ${fontColor}; background-color: ${highlight.color}">${ascii}</span>`;
                 }
 
-                hexParts.push(hexByte);
-                asciiParts.push(asciiChar);
+                hexParts.push(hex);
+                asciiParts.push(ascii);
             }
 
-            let hex = hexParts.join(' ').padEnd(bytesPerLine * 3 - 1, ' ');
-            let ascii = asciiParts.join('').padEnd(bytesPerLine, ' ');
-
-            dump += `${address}  ${hex}  |${ascii}|\n`;
-
-            index += lineBytes.length;
+            dump += `${toHex(lineAddress, 8)}  ${hexParts.join(" ")}  |${asciiParts.join("")}|\n`;
         }
 
         return dump;
@@ -220,10 +210,13 @@
         </thead>
         <tbody>
             {#each highlights as _, i}
+            {@const highlightStartIdx = highlights[i].start - startAddress}
             <tr>
                 <td>
-                    {#if byteData?.length >= highlights[i].start + highlights[i].size}
-                        {interpretBytes(highlights[i].start, highlights[i].size, highlights[i].type)}
+                    {#if highlightStartIdx >= 0 && highlightStartIdx + highlights[i].size <= byteData?.length }
+                        {interpretBytes(highlightStartIdx, highlights[i].size, highlights[i].type)}
+                    {:else}
+                        Out of bounds
                     {/if}
                 </td>
                 <td><input type="number" class="form-control offset-input" min="0" bind:value={highlights[i].start}/></td>

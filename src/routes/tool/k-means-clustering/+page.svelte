@@ -74,7 +74,6 @@
     const emptyClusterHandler = {
         "Random Position": () => {
             let pp = getRandomPoints(1, 0, width, 0, height)[0];
-            console.log(pp);
             return pp;
         },
     };
