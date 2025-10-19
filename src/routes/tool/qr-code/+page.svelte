@@ -1,6 +1,4 @@
 <script>
-    import { onMount } from "svelte";
-
     const NONE = "none";
     const UNUSED = "unused";
     const ENCODING = "encoding";
@@ -34,7 +32,7 @@
         { name: "Binary", pattern: [0, 1, 0, 0] },
         { name: "Kanji", pattern: [1, 0, 0, 0] },
     ];
-    let selectedEncodingOption = encodingOptions[0];
+    let selectedEncodingOption = encodingOptions[1];
 
     let errorCorrectionLevels = [
         { name: "Low", short: "L", percentageRestoration:  7, pattern: [0, 1] },
@@ -144,34 +142,23 @@
         return byte.toString(2).padStart(8, "0").split("").map(bit => Number(bit));
     }
 
-    function drawData(dataBits, type) {
-        let x = qrcDim - 1;
-        let y = qrcDim - 1;
-        let bitIndex = 0;
-        let direction = -1;
-
-        while (x > 0) {
-            for (let step = 0; step < qrcDim; step++) {
-                for (let i = 0; i < 2; i++) {
-                    let dx = x - i;
-                    let dy = y;
-
-                    if (cells[dx][dy].type === UNUSED && bitIndex < dataBits.length) {
-                        setCell(dx, dy, dataBits[bitIndex], type);
-                        bitIndex++;
-                    }
-
-                    if (i === 1) {
-                        dy += direction;
-                        if (dy < 0 || dy >= qrcDim) {
-                            direction = -direction;
-                            x -= 2;
-                            break;
-                        }
-                        y = dy;
-                    }
+    function* yieldAvailableDataCells() {
+        for (let i = qrcDim - 1; i >= 0; i--) {
+            for (let j = qrcDim - 1; j >= 0; j--) {
+                if (cells[i][j].type == UNUSED) {
+                    yield { i, j };
                 }
             }
+        }
+    }
+
+    function drawData(dataBits, type) {
+        let i = 0;
+        for (const { i: x, j: y } of yieldAvailableDataCells()) {
+            if (i >= dataBits.length)
+                break;
+            setCell(x, y, dataBits[i], type);
+            i++;
         }
     }
 
@@ -201,19 +188,19 @@
         drawFormatInfoVertical(8, 18, 7);
 
         drawPatternStripHorizontal(0, 8, selectedErrorCorrectionLevel.pattern);
-        drawPatternStripVertical(8, 23, selectedErrorCorrectionLevel.pattern.reverse());
+        drawPatternStripVertical(8, 23, selectedErrorCorrectionLevel.pattern.toReversed());
 
         drawTimingStripHorizontal(8, 6, 9);
         drawTimingStripVertical(6, 8, 9);
 
         drawData(selectedEncodingOption.pattern, ENCODING);
+        /*
         drawData(byteAsBinaryList(inputAscii.length * 8), DATA_LENGTH);
         drawData(charsAsBinaryList(inputAscii), DATA);
+        //*/
     }
 
-    onMount(()=> {
-        createQrCode();
-    });
+
 </script>
 
 <svelte:head>
@@ -229,7 +216,7 @@
 <div class="row mb-1">
     <div class="col">
         <label for="asciiInput">ASCII Input:</label>
-        <input type="text" id="asciiInput" class="form-control font-monospace" bind:value="{inputAscii}" oninput={createQrCode}/>
+        <input type="text" id="asciiInput" class="form-control font-monospace" bind:value="{inputAscii}"/>
 
         <label>
             Encoding:
@@ -242,12 +229,14 @@
 
         <label>
             Error Correction Level:
-            <select class="form-select" bind:value={selectedErrorCorrectionLevel} onchange={createQrCode}>
+            <select class="form-select" bind:value={selectedErrorCorrectionLevel}>
                 {#each errorCorrectionLevels as l}
                     <option value={l}>{l.short} ({l.name}: ~{l.percentageRestoration}% restoration)</option>
                 {/each}
             </select>
         </label>
+
+        <button type="button" class="btn btn-primary" onclick={createQrCode}>Generate</button>
     </div>
 </div>
 
