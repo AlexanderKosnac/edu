@@ -27,10 +27,15 @@
     let selectedPart = parts[0];
 
     let encodingOptions = [
-        { name: "Numeric", pattern: [0, 0, 0, 1] },
-        { name: "Alphanumeric", pattern: [0, 0, 1, 0] },
-        { name: "Binary", pattern: [0, 1, 0, 0] },
-        { name: "Kanji", pattern: [1, 0, 0, 0] },
+        { name: "Numeric", pattern: [1, 0, 0, 0] },
+        { name: "Alphanumeric", pattern: [0, 1, 0, 0] },
+        { name: "Binary", pattern: [0, 0, 1, 0] },
+        { name: "Kanji", pattern: [0, 0, 0, 1] },
+        { name: "Structured append", pattern: [1, 1, 0, 0] },
+        { name: "ECI", pattern: [1, 1, 1, 0] },
+        { name: "FNC1 in first position", pattern: [1, 0, 1, 0] },
+        { name: "FNC1 in second position", pattern: [1, 0, 0, 1] },
+        { name: "End of message", pattern: [0, 0, 0, 0] },
     ];
     let selectedEncodingOption = encodingOptions[1];
 
