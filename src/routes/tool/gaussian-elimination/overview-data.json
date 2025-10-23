@@ -1,0 +1,7 @@
+{
+    "name": "Gaussian elimination",
+    "description": "The well known algorithm for solving system of linear equations.",
+    "tags": [
+        "Mathematics"
+    ]
+}
