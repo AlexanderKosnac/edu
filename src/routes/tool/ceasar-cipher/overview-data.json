@@ -1,0 +1,7 @@
+{
+    "name": "Caesar cipher",
+    "description": "The simple and widely known shift cipher.",
+    "tags": [
+        "Cryptography"
+    ]
+}
