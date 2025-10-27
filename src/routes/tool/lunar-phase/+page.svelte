@@ -1,10 +1,7 @@
 <script>
-    import { onMount } from "svelte";
+    const radius = 100;
 
     let selectedDateString = getDateLocal();
-    $: selectedDate = new Date(selectedDateString);
-
-    let phaseName;
 
     const newMoonRef = new Date(Date.UTC(2000, 0, 6, 18, 14)); // Reference New Moon date: 2000-01-06 18:14 UTC
     const synodicMonth = 29.530588853; // average lunar month length (days)
@@ -20,22 +17,37 @@
         "Waning Crescent"
     ];
 
-    function updateLunarPhase() {
-        phaseName = getMoonPhaseName(selectedDate);
-    }
-
     function getDateLocal(date = new Date()) {
-        const now = new Date();
-        const year = now.getFullYear();
-        const month = String(now.getMonth() + 1).padStart(2, "0");
-        const day = String(now.getDate()).padStart(2, "0");
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, "0");
+        const day = String(date.getDate()).padStart(2, "0");
         return `${year}-${month}-${day}`;
     }
 
-    function getMoonPhase(date = new Date()) {
-        const diff = (date.getTime() - newMoonRef.getTime()) / 1000 / 86400;
+    /*
+     * Phase as a fraction from 0 to 1.
+     * - 0   = new moon
+     * - 0.5 = full moon
+     * - 1   = new moon
+     */
+    function getMoonPhaseFraction(date = new Date()) {
+        const diff = (date.getTime() - newMoonRef.getTime()) / 86_400_000;
         const lunations = diff / synodicMonth;
-        return Math.floor((lunations - Math.floor(lunations)) * 8);
+        return lunations - Math.floor(lunations); // between 0 and 1
+    }
+
+    function getMoonPhase(date = new Date()) {
+        const f = getMoonPhaseFraction(date);
+        return Math.floor(f * 8);
+    }
+
+    function getMoonPhaseName(date = new Date()) {
+        return phases[getMoonPhase(date)];
+    }
+
+    // Maps 0 to 1 to -1 to 1
+    function phaseFractionToIlluminationFraction(phase) {
+        return Math.cos(phase * 2 * Math.PI);
     }
 
     function daysUntilPhase(targetPhaseIndex, fromDate = new Date()) {
@@ -44,19 +56,30 @@
         return d * (synodicMonth / 8);
     }
 
-    function getMoonPhaseName(date = new Date()) {
-        return phases[getMoonPhase(date)];
-    }
-
     function datePlusDays(date, days) {
-        var result = new Date(date);
+        let result = new Date(date);
         result.setDate(result.getDate() + days);
         return result;
     }
 
-    onMount(() => {
-        updateLunarPhase();
-    });
+
+    function nextDay() {
+        const d = new Date(selectedDateString);
+        d.setDate(d.getDate() + 1);
+        selectedDateString = getDateLocal(d);
+    }
+
+    function previousDay() {
+        const d = new Date(selectedDateString);
+        d.setDate(d.getDate() - 1);
+        selectedDateString = getDateLocal(d);
+    }
+
+    $: selectedDate = new Date(selectedDateString);
+    $: phaseName = getMoonPhaseName(selectedDate);
+
+    $: phaseFraction = getMoonPhaseFraction(selectedDate);
+    $: offset = phaseFractionToIlluminationFraction(phaseFraction) * radius;
 </script>
 
 <svelte:head>
@@ -71,15 +94,36 @@
 
 <div class="row">
     <div class="col-auto">
-        <label>
-            Date:
-            <input type="date" class="form-control" bind:value={selectedDateString} oninput={updateLunarPhase}/>
-        </label>
+        <div class="input-group">
+            <span class="input-group-text">Date:</span>
+            <input type="date" class="form-control" bind:value={selectedDateString} />
+            <button type="button" class="btn btn-secondary" onclick={previousDay}>-1</button>
+            <button type="button" class="btn btn-secondary" onclick={nextDay}>+1</button>
+        </div>
     </div>
     <div class="col">
         {newMoonRef}<br>
         {synodicMonth} days<br>
         {phaseName}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div>
+            <input type="range" class="form-range" min="0" max="1" step="0.01" bind:value={phaseFraction}>
+            <span>pf: {phaseFraction};</span>
+        </div>
+    </div>
+    <div class="col">
+        <svg width="256" height="256" viewBox="-128 -128 256 256" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="0" cy="0" r="{radius}" fill="#333" />
+            {#if phaseFraction < 0.5}
+                <path d="M 0 {radius}  A {radius},{radius} 0 1 1 0,{-radius}  A {offset},{radius} 0 0 {offset > 0 ? 0 : 1} 0,{radius}  Z" fill="#f4f4f4" />
+            {:else}
+                <path d="M 0 {radius}  A {radius},{radius} 0 1 0 0,{-radius}  A {offset},{radius} 0 0 {offset > 0 ? 1 : 0} 0,{radius}  Z" fill="#f4f4f4" />
+            {/if}
+        </svg>
     </div>
 </div>
 
@@ -103,4 +147,7 @@
 </div>
 
 <style>
+    svg {
+        border: 1px solid var(--bs-body-color);
+    }
 </style>
