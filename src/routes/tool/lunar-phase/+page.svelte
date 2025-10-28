@@ -125,6 +125,17 @@
             {/if}
         </svg>
     </div>
+    <div class="col">
+        <svg width="256" height="256" viewBox="-128 -128 256 256" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="0" cy="0" r="20" fill="blue" />
+            <g transform="rotate(50) translate(50, 0) rotate(-50)">
+                <circle cx="0" cy="0" r="10" fill="white" />
+                <path d="M 0,-10 A 1,1 0 0 0 0,10 Z" fill="grey" />
+                <path d="M 0,-10 A 1,1 0 0 1 0,10 Z" fill="white" />
+            </g>
+            <circle cx="0" cy="0" r="50" fill="none" stroke="lightgrey" stroke-dasharray="4" />
+        </svg>
+    </div>
 </div>
 
 <div class="row">
