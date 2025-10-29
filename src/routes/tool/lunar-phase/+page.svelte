@@ -62,7 +62,6 @@
         return result;
     }
 
-
     function nextDay() {
         const d = new Date(selectedDateString);
         d.setDate(d.getDate() + 1);
@@ -79,6 +78,7 @@
     $: phaseName = getMoonPhaseName(selectedDate);
 
     $: phaseFraction = getMoonPhaseFraction(selectedDate);
+    $: phaseFractionRotation = phaseFraction * 360;
     $: offset = phaseFractionToIlluminationFraction(phaseFraction) * radius;
 </script>
 
@@ -117,23 +117,20 @@
     </div>
     <div class="col">
         <svg width="256" height="256" viewBox="-128 -128 256 256" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="0" cy="0" r="{radius}" fill="#333" />
+            <circle cx="0" cy="0" r="{radius}" fill="#444" />
             {#if phaseFraction < 0.5}
-                <path d="M 0 {radius}  A {radius},{radius} 0 1 1 0,{-radius}  A {offset},{radius} 0 0 {offset > 0 ? 0 : 1} 0,{radius}  Z" fill="#f4f4f4" />
-            {:else}
                 <path d="M 0 {radius}  A {radius},{radius} 0 1 0 0,{-radius}  A {offset},{radius} 0 0 {offset > 0 ? 1 : 0} 0,{radius}  Z" fill="#f4f4f4" />
+            {:else}
+                <path d="M 0 {radius}  A {radius},{radius} 0 1 1 0,{-radius}  A {offset},{radius} 0 0 {offset > 0 ? 0 : 1} 0,{radius}  Z" fill="#f4f4f4" />
             {/if}
         </svg>
-    </div>
-    <div class="col">
         <svg width="256" height="256" viewBox="-128 -128 256 256" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="0" cy="0" r="20" fill="blue" />
-            <g transform="rotate(50) translate(50, 0) rotate(-50)">
-                <circle cx="0" cy="0" r="10" fill="white" />
-                <path d="M 0,-10 A 1,1 0 0 0 0,10 Z" fill="grey" />
-                <path d="M 0,-10 A 1,1 0 0 1 0,10 Z" fill="white" />
+            <circle cx="0" cy="0" r="40" fill="blue" />
+            <circle cx="0" cy="0" r={radius} fill="none" stroke="lightgrey" stroke-dasharray="4" />
+            <g transform="rotate({-phaseFractionRotation}) translate({radius}, 0) rotate({phaseFractionRotation})">
+                <path d="M 0,-20 A 1,1 0 0 0 0,20 Z" fill="#444" />
+                <path d="M 0,-20 A 1,1 0 0 1 0,20 Z" fill="#f4f4f4" />
             </g>
-            <circle cx="0" cy="0" r="50" fill="none" stroke="lightgrey" stroke-dasharray="4" />
         </svg>
     </div>
 </div>
