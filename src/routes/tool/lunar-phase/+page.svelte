@@ -1,6 +1,4 @@
 <script>
-    const radius = 100;
-
     let selectedDateString = getDateLocal();
 
     const newMoonRef = new Date(Date.UTC(2000, 0, 6, 18, 14)); // Reference New Moon date: 2000-01-06 18:14 UTC
@@ -89,6 +87,36 @@
     </div>
 </div>
 
+{#snippet moon(size, radius, phaseFraction)}
+    {@const offset = phaseFractionToIlluminationFraction(phaseFraction) * radius}
+    <svg width={size} height={size} viewBox="-{Math.floor(size/2)} -{Math.floor(size/2)} {size} {size}" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="0" cy="0" r="{radius}" fill="#444" />
+        {#if phaseFraction < 0.5}
+            <path d="M 0 {radius}  A {radius},{radius} 0 1 0 0,{-radius}  A {offset},{radius} 0 0 {offset > 0 ? 1 : 0} 0,{radius}  Z" fill="#f4f4f4" />
+        {:else}
+            <path d="M 0 {radius}  A {radius},{radius} 0 1 1 0,{-radius}  A {offset},{radius} 0 0 {offset > 0 ? 0 : 1} 0,{radius}  Z" fill="#f4f4f4" />
+        {/if}
+    </svg>
+{/snippet}
+
+{#snippet moonEarthRelation(size, radius, phaseFraction)}
+    {@const phaseFractionRotation = phaseFraction * 360}
+    {@const moonRadius = radius * 0.2}
+    {@const earthRadius = radius * 0.4}
+    <svg width={size} height={size} viewBox="-{Math.floor(size/2)} -{Math.floor(size/2)} {size} {size}" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="0" cy="0" r="{earthRadius}" fill="blue" />
+        <circle cx="0" cy="0" r={radius} fill="none" stroke="currentColor" stroke-dasharray="4" />
+        <g transform="rotate({-phaseFractionRotation}) translate({radius}, 0) rotate({phaseFractionRotation})">
+            <path d="M 0,-{moonRadius} A 1,1 0 0 0 0,{moonRadius} Z" fill="#444" />
+            <path d="M 0,-{moonRadius} A 1,1 0 0 1 0,{moonRadius} Z" fill="#f4f4f4" />
+            <text fill="currentColor" text-anchor="middle" transform="translate(0, -{moonRadius * 1.3})">
+                {phases[getMoonPhaseIndexFromFraction(phaseFraction)]}
+            </text>
+        </g>
+    </svg>
+{/snippet}
+
+
 <div class="row">
     <div class="col-auto">
         <div class="input-group">
@@ -107,37 +135,17 @@
 
 <div class="row">
     <div class="col">
-        <div>
-            <input type="range" class="form-range" min="0" max="1" step="0.01" bind:value={phaseFraction}>
-            <span>pf: {phaseFraction};</span>
+        <div class="d-flex">
+            <div class="d-flex flex-column align-items-center">
+                {@render moon(300, 120, currentPhaseFraction)}
+                {currentPhaseName}
+            </div>
+            <div>
+                {@render moonEarthRelation(300, 120, currentPhaseFraction)}
+            </div>
         </div>
     </div>
     <div class="col">
-        <svg width="256" height="256" viewBox="-128 -128 256 256" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="0" cy="0" r="{radius}" fill="#444" />
-            {#if phaseFraction < 0.5}
-                <path d="M 0 {radius}  A {radius},{radius} 0 1 0 0,{-radius}  A {offset},{radius} 0 0 {offset > 0 ? 1 : 0} 0,{radius}  Z" fill="#f4f4f4" />
-            {:else}
-                <path d="M 0 {radius}  A {radius},{radius} 0 1 1 0,{-radius}  A {offset},{radius} 0 0 {offset > 0 ? 0 : 1} 0,{radius}  Z" fill="#f4f4f4" />
-            {/if}
-        </svg>
-        <svg width="256" height="256" viewBox="-128 -128 256 256" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="0" cy="0" r="40" fill="blue" />
-            <circle cx="0" cy="0" r={radius} fill="none" stroke="currentColor" stroke-dasharray="4" />
-            <g transform="rotate({-phaseFractionRotation}) translate({radius}, 0) rotate({phaseFractionRotation})">
-                <path d="M 0,-20 A 1,1 0 0 0 0,20 Z" fill="#444" />
-                <path d="M 0,-20 A 1,1 0 0 1 0,20 Z" fill="#f4f4f4" />
-                <text fill="currentColor" text-anchor="middle" transform="translate(0, -25)">{currentPhaseName}</text>
-            </g>
-        </svg>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col">
-        {#each phases as phase, i}
-            {phase}: {datePlusDays(new Date(), daysUntilPhase(i))} {daysUntilPhase(i)} days<br>
-        {/each}
     </div>
 </div>
 
