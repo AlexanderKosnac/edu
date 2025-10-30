@@ -36,13 +36,13 @@
         return lunations - Math.floor(lunations); // between 0 and 1
     }
 
-    function getMoonPhase(date = new Date()) {
-        const f = getMoonPhaseFraction(date);
-        return Math.floor(f * 8);
+    function getMoonPhaseIndexFromFraction(f) {
+        return Math.round(f * 8) % 8;
     }
 
-    function getMoonPhaseName(date = new Date()) {
-        return phases[getMoonPhase(date)];
+    function getMoonPhaseIndex(date = new Date()) {
+        const f = getMoonPhaseFraction(date);
+        return getMoonPhaseIndexFromFraction(f);
     }
 
     // Maps 0 to 1 to -1 to 1
@@ -51,7 +51,7 @@
     }
 
     function daysUntilPhase(targetPhaseIndex, fromDate = new Date()) {
-        const currentPhaseIndex = getMoonPhase(fromDate);
+        const currentPhaseIndex = getMoonPhaseIndex(fromDate);
         let d = ((targetPhaseIndex - currentPhaseIndex + 7) % 8) + 1;
         return d * (synodicMonth / 8);
     }
@@ -75,11 +75,8 @@
     }
 
     $: selectedDate = new Date(selectedDateString);
-    $: phaseName = getMoonPhaseName(selectedDate);
-
-    $: phaseFraction = getMoonPhaseFraction(selectedDate);
-    $: phaseFractionRotation = phaseFraction * 360;
-    $: offset = phaseFractionToIlluminationFraction(phaseFraction) * radius;
+    $: currentPhaseFraction = getMoonPhaseFraction(selectedDate);
+    $: currentPhaseName = phases[getMoonPhaseIndexFromFraction(currentPhaseFraction)];
 </script>
 
 <svelte:head>
@@ -104,7 +101,7 @@
     <div class="col">
         {newMoonRef}<br>
         {synodicMonth} days<br>
-        {phaseName}
+        {currentPhaseName}
     </div>
 </div>
 
@@ -126,10 +123,11 @@
         </svg>
         <svg width="256" height="256" viewBox="-128 -128 256 256" xmlns="http://www.w3.org/2000/svg">
             <circle cx="0" cy="0" r="40" fill="blue" />
-            <circle cx="0" cy="0" r={radius} fill="none" stroke="lightgrey" stroke-dasharray="4" />
+            <circle cx="0" cy="0" r={radius} fill="none" stroke="currentColor" stroke-dasharray="4" />
             <g transform="rotate({-phaseFractionRotation}) translate({radius}, 0) rotate({phaseFractionRotation})">
                 <path d="M 0,-20 A 1,1 0 0 0 0,20 Z" fill="#444" />
                 <path d="M 0,-20 A 1,1 0 0 1 0,20 Z" fill="#f4f4f4" />
+                <text fill="currentColor" text-anchor="middle" transform="translate(0, -25)">{currentPhaseName}</text>
             </g>
         </svg>
     </div>
