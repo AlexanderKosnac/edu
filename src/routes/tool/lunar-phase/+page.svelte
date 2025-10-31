@@ -1,8 +1,8 @@
 <script>
     let selectedDateString = getDateLocal();
 
-    const newMoonRef = new Date(Date.UTC(2000, 0, 6, 18, 14)); // Reference New Moon date: 2000-01-06 18:14 UTC
-    const synodicMonth = 29.530588853; // average lunar month length (days)
+    const newMoonRef = new Date(Date.UTC(2024, 0, 11, 11, 57));
+    const synodicMonth = 29.53058867; // average lunar month length (days)
 
     const phases = [
         "New Moon",
