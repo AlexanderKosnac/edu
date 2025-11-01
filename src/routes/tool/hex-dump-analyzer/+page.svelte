@@ -2,7 +2,7 @@
     import { hexStringToByteArray } from "$lib/hexUtility";
     import { hexHttpRequest } from "./data.js";
     import { toHex } from "$lib/hexUtility";
-    import { getContrastingColor } from "$lib/colorUtility";
+    import { getContrastingColor, getRandomColor, getEvenlySpacedColorsHex } from "$lib/colorUtility";
 
     let hexInput = hexHttpRequest;
     let startAddress = 0x34;
@@ -34,11 +34,6 @@
         { start: 0x40, size: 0x08, color: "#57e389", type: ByteType.INT64_LE },
     ];
 
-    function addHighlight() {
-        highlights.push({ start: 0x00, size: 0x04, color: "#ed333b", type: ByteType.UINT32_BE });
-        highlights = highlights;
-    }
-
     function exportHighlights() {
         prompt("Save the highlight export below:", JSON.stringify(highlights));
     }
@@ -49,6 +44,11 @@
         } catch (error) {
             alert(`Failed to import highlights: ${error}`);
         }
+    }
+
+    function addHighlight() {
+        highlights.push({ start: 0x00, size: 0x04, color: getRandomColor(), type: ByteType.UINT32_LE });
+        highlights = highlights;
     }
 
     function removeHighlight(i) {
@@ -106,6 +106,15 @@
             default:
                 return "Unhandled";
         }
+    }
+
+    function autoAssignColors() {
+        const n = highlights.length;
+        const colors = getEvenlySpacedColorsHex(n);
+        for (let i = 0; i < n; i++) {
+            highlights[i].color = colors[i];
+        }
+        highlights = highlights;
     }
 
     function formatHexDump(bytes, bytesPerLine = 16, startAddress = 0, highlights = []) {
@@ -203,7 +212,9 @@
             <tr>
                 <td>
                     {#if highlightStartIdx >= 0 && highlightStartIdx + highlights[i].size <= byteData?.length }
-                        {interpretBytes(highlightStartIdx, highlights[i].size, highlights[i].type)}
+                        <samp>
+                            {interpretBytes(highlightStartIdx, highlights[i].size, highlights[i].type)}
+                        </samp>
                     {:else}
                         Out of bounds
                     {/if}
@@ -224,12 +235,16 @@
             <tr>
                 <td colspan="6">
                     <div class="d-flex justify-content-between">
-                      <button type="button" class="btn btn-primary" onclick={addHighlight}>New</button>
+                        <button type="button" class="btn btn-primary" onclick={addHighlight}>New</button>
 
-                      <div>
-                          <button type="button" class="btn btn-primary" onclick={exportHighlights}>Export</button>
-                          <button type="button" class="btn btn-primary" onclick={importHighlights}>Import</button>
-                      </div>
+                        <div>
+                            <button type="button" class="btn btn-secondary" onclick={autoAssignColors}>Auto Colors</button>
+                        </div>
+
+                        <div>
+                            <button type="button" class="btn btn-primary" onclick={exportHighlights}>Export</button>
+                            <button type="button" class="btn btn-primary" onclick={importHighlights}>Import</button>
+                        </div>
                     </div>
                 </td>
             </tr>
