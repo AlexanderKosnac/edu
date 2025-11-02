@@ -27,7 +27,19 @@ export function getEvenlySpacedColorsHex(n) {
     const colors = [];
     for (let i = 0; i < n; i++) {
         const hue = (i * 360) / n;
-        const rgb = hslToRgb(hue / 360, 1, 0.5);
+        const rgb = hslToRgb(hue / 360, 1.0, 0.5);
+        colors.push(rgbToHex(...rgb));
+    }
+    return colors;
+}
+
+export function generateHighContrastColorsHex(n) {
+    const colors = [];
+    const goldenRatio = 137.508; // For good hue distribution
+    let hue = 0;
+    for (let i = 0; i < n; i++) {
+        hue = (hue + goldenRatio) % 360;
+        const rgb = hslToRgb(hue / 360, 1.0, 0.5);
         colors.push(rgbToHex(...rgb));
     }
     return colors;

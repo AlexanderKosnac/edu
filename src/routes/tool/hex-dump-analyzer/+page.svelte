@@ -2,7 +2,7 @@
     import { hexStringToByteArray } from "$lib/hexUtility";
     import { hexHttpRequest } from "./data.js";
     import { toHex } from "$lib/hexUtility";
-    import { getContrastingColor, getRandomColor, getEvenlySpacedColorsHex } from "$lib/colorUtility";
+    import { getContrastingColor, getRandomColor, getEvenlySpacedColorsHex, generateHighContrastColorsHex } from "$lib/colorUtility";
 
     let hexInput = hexHttpRequest;
     let startAddress = 0x34;
@@ -108,9 +108,11 @@
         }
     }
 
-    function autoAssignColors() {
+    function autoAssignColors(colorGetter = undefined) {
+        const f = colorGetter ?? getEvenlySpacedColorsHex;
+
         const n = highlights.length;
-        const colors = getEvenlySpacedColorsHex(n);
+        const colors = f(n);
         for (let i = 0; i < n; i++) {
             highlights[i].color = colors[i];
         }
@@ -238,7 +240,15 @@
                         <button type="button" class="btn btn-primary" onclick={addHighlight}>New</button>
 
                         <div>
-                            <button type="button" class="btn btn-secondary" onclick={autoAssignColors}>Auto Colors</button>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Auto Colors
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#" onclick={() => autoAssignColors(getEvenlySpacedColorsHex)}>Evenly spaced</a></li>
+                                    <li><a class="dropdown-item" href="#" onclick={() => autoAssignColors(generateHighContrastColorsHex)}>High contrast</a></li>
+                                </ul>
+                            </div>
                         </div>
 
                         <div>
