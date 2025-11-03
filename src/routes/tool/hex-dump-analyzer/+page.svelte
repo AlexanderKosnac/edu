@@ -1,11 +1,13 @@
 <script>
-    import { hexStringToByteArray } from "$lib/hexUtility";
+    import { hexStringToByteArray, bytesToHexString, toHex } from "$lib/hexUtility";
     import { hexHttpRequest } from "./data.js";
-    import { toHex } from "$lib/hexUtility";
     import { getContrastingColor, getRandomColor, getEvenlySpacedColorsHex, generateHighContrastColorsHex } from "$lib/colorUtility";
 
     let hexInput = hexHttpRequest;
     let startAddress = 0x34;
+    let separator = " ";
+    let hexWith0x = false;
+    let hexAsUpperCase = true;
 
     const ByteType = Object.freeze({
         INT8: "int8",
@@ -58,6 +60,10 @@
 
     $: sanitizedHexInput = hexInput.replace(/[^0-9a-fA-F]/g, '');
     $: byteData = hexStringToByteArray(sanitizedHexInput);
+    $: formattedHex = bytesToHexString(byteData, separator, {
+        asUpperCase: hexAsUpperCase,
+        prepend0x: hexWith0x,
+    });
     $: hexDumpString = formatHexDump(byteData ?? [], 16, startAddress, highlights);
 
     function interpretBytes(offset, length, type) {
@@ -186,13 +192,28 @@
             <input type="number" id="startAddressInput" class="form-control" min="0" bind:value={startAddress}/>
         </div>
         <div class="form-group">
-            <label for="sanitizedHexInput">Sanitized Hex String:</label>
-            <input type="text" id="sanitizedHexInput" class="form-control" value={sanitizedHexInput} readonly/>
+            <label for="formattedHex">Sanitized Hex String:</label>
+            <div class="input-group">
+                <input type="text" id="formattedHex" class="form-control" value={formattedHex} readonly/>
+
+                <span class="input-group-text">Separator</span>
+                <input type="text" class="form-control" bind:value={separator} style="max-width: 5em"/>
+
+                <div class="input-group-text">
+                    <label for="hexWith0x" class="d-block mx-2">0x</label>
+                    <input id="hexWith0x" class="form-check-input" type="checkbox" bind:checked={hexWith0x}/>
+                </div>
+
+                <div class="input-group-text">
+                    <label for="hexAsUpperCase" class="d-block mx-2">aA</label>
+                    <input id="hexAsUpperCase" class="form-check-input" type="checkbox" bind:checked={hexAsUpperCase}/>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-<div class="row">
+<div class="row mt-3">
     <div class="col-auto">
         <pre>{@html hexDumpString}</pre>
     </div>

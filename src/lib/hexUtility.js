@@ -11,10 +11,15 @@ export function hexStringToByteArray(hexString) {
     return byteArray;
 }
 
-export function bytesToHexString(bytes) {
-    return Array.from(bytes).map(b => toHex(b)).join(" ");
+export function bytesToHexString(bytes, separator = " ", options = {}) {
+    return Array.from(bytes).map(b => toHex(b, 2, options)).join(separator);
 }
 
-export function toHex(n, length = 2) {
-    return n.toString(16).toUpperCase().padStart(length, "0");
+export function toHex(n, length = 2, options = {}) {
+    let hex = n.toString(16).padStart(length, "0");
+    if (options.asUpperCase)
+        hex = hex.toUpperCase()
+    if (options.prepend0x)
+        hex = `0x${hex}`;
+    return hex;
 }
