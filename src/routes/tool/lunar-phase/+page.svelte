@@ -1,5 +1,5 @@
 <script>
-    let selectedDateString = getDateLocal();
+    let selectedDatetimeString = getDateLocal();
 
     const newMoonRef = new Date(Date.UTC(2024, 0, 11, 11, 57));
     const synodicMonth = 29.53058867; // average lunar month length (days)
@@ -19,7 +19,9 @@
         const year = date.getFullYear();
         const month = String(date.getMonth() + 1).padStart(2, "0");
         const day = String(date.getDate()).padStart(2, "0");
-        return `${year}-${month}-${day}`;
+        const hour = String(date.getHours()).padStart(2, "0");
+        const minute = String(date.getMinutes()).padStart(2, "0");
+        return `${year}-${month}-${day}T${hour}:${minute}`;
     }
 
     /*
@@ -60,20 +62,21 @@
         return result;
     }
 
-    function nextDay() {
-        const d = new Date(selectedDateString);
-        d.setDate(d.getDate() + 1);
-        selectedDateString = getDateLocal(d);
+    let currentTimeUnit = "day";
+
+    function changeTime(value) {
+        const d = new Date(selectedDatetimeString);
+        const methods = {
+            day: () => d.setDate(d.getDate() + value),
+            hour: () => d.setHours(d.getHours() + value),
+            minute: () => d.setMinutes(d.getMinutes() + value),
+        };
+        methods[currentTimeUnit]();
+        selectedDatetimeString = getDateLocal(d);
     }
 
-    function previousDay() {
-        const d = new Date(selectedDateString);
-        d.setDate(d.getDate() - 1);
-        selectedDateString = getDateLocal(d);
-    }
-
-    $: selectedDate = new Date(selectedDateString);
-    $: currentPhaseFraction = getMoonPhaseFraction(selectedDate);
+    $: selectedDatetime = new Date(selectedDatetimeString);
+    $: currentPhaseFraction = getMoonPhaseFraction(selectedDatetime);
     $: currentPhaseName = phases[getMoonPhaseIndexFromFraction(currentPhaseFraction)];
 </script>
 
@@ -116,26 +119,33 @@
     </svg>
 {/snippet}
 
-
 <div class="row">
     <div class="col-auto">
         <div class="input-group">
             <span class="input-group-text">Date:</span>
-            <input type="date" class="form-control" bind:value={selectedDateString} />
-            <button type="button" class="btn btn-secondary" onclick={previousDay}>-1</button>
-            <button type="button" class="btn btn-secondary" onclick={nextDay}>+1</button>
+            <input type="datetime-local" class="form-control" bind:value={selectedDatetimeString} />
+            <button type="button" class="btn btn-secondary" onclick={() => changeTime(-1)}>-1</button>
+            <button type="button" class="btn btn-secondary" onclick={() => changeTime(+1)}>+1</button>
+            <select class="form-select" id="stepSelect" bind:value={currentTimeUnit} style="max-width: 8em">
+                <option value="day">Day</option>
+                <option value="hour">Hour</option>
+                <option value="minute">Minute</option>
+            </select>
         </div>
+        New moon reference date: {newMoonRef}<br>
+        Average lunar month length (days) {synodicMonth} days
     </div>
     <div class="col">
-        {newMoonRef}<br>
-        {synodicMonth} days<br>
-        {currentPhaseName}
+        <div>
+            <input type="range" class="form-range" min="0" max="1" step="0.01" bind:value={currentPhaseFraction}>
+            <span>pf: {currentPhaseFraction};</span>
+        </div>
     </div>
 </div>
 
 <div class="row">
     <div class="col">
-        <div class="d-flex">
+        <div class="d-flex gap-1">
             <div class="d-flex flex-column align-items-center">
                 {@render moon(300, 120, currentPhaseFraction)}
                 {currentPhaseName}
