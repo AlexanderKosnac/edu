@@ -1,40 +1,18 @@
 <script>
     import { hexStringToByteArray, bytesToHexString, toHex } from "$lib/hexUtility";
-    import { hexHttpRequest } from "./data.js";
+    import { ByteType, hexHttpRequest } from "./data.js";
     import { getContrastingColor, getRandomColor, getEvenlySpacedColorsHex, generateHighContrastColorsHex } from "$lib/colorUtility";
 
     let hexInput = hexHttpRequest;
     let startAddress = 0x34;
-    let separator = " ";
-    let hexWith0x = false;
-    let hexAsUpperCase = true;
-
-    const ByteType = Object.freeze({
-        INT8: "int8",
-        UINT8: "uint8",
-        INT16_LE: "int16",
-        INT16_BE: "int16 (big-endian)",
-        UINT16_LE: "uint16",
-        UINT16_BE: "uint16 (big-endian)",
-        INT32_LE: "int32",
-        INT32_BE: "int32 (big-endian)",
-        UINT32_LE: "uint32",
-        UINT32_BE: "uint32 (big-endian)",
-        INT64_LE: "int64",
-        INT64_BE: "int64 (big-endian)",
-        UINT64_LE: "uint64",
-        UINT64_BE: "uint64 (big-endian)",
-        FLOAT32_LE: "float32",
-        FLOAT32_BE: "float32 (big-endian)",
-        FLOAT64_LE: "float64",
-        FLOAT64_BE: "float64 (big-endian)",
-        ASCII: "ASCII",
-    });
-
     let highlights = [
         { start: 0x36, size: 0x04, color: "#ed333b", type: ByteType.FLOAT32_LE },
         { start: 0x40, size: 0x08, color: "#57e389", type: ByteType.INT64_LE },
     ];
+
+    let separator = " ";
+    let hexWith0x = false;
+    let hexAsUpperCase = true;
 
     function exportHighlights() {
         prompt("Save the highlight export below:", JSON.stringify(highlights));
