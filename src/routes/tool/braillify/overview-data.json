@@ -1,0 +1,7 @@
+{
+    "name": "Braillify",
+    "description": "A tool to convert an image into a representation using unicode braille characters as pixels.",
+    "tags": [
+        "Image processing"
+    ]
+}
