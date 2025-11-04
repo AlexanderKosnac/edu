@@ -65,6 +65,8 @@
         prepend0x: hexWith0x,
     });
     $: hexDumpString = formatHexDump(byteData ?? [], 16, startAddress, highlights);
+    $: nBytes0x00 = countBytes(byteData, 0x00);
+    $: nBytes0xFF = countBytes(byteData, 0xFF);
 
     function interpretBytes(offset, length, type) {
         const slice = byteData.slice(offset, offset + length);
@@ -123,6 +125,14 @@
             highlights[i].color = colors[i];
         }
         highlights = highlights;
+    }
+
+    function countBytes(bytes, b) {
+        let count = 0;
+        for (let i = 0; i < bytes.length; i++) {
+            if (bytes[i] === b) count++;
+        }
+        return count;
     }
 
     function formatHexDump(bytes, bytesPerLine = 16, startAddress = 0, highlights = []) {
@@ -213,7 +223,17 @@
     </div>
 </div>
 
-<div class="row mt-3">
+<div class="row">
+    <div class="col">
+        <ul>
+            <li>Number of Bytes: {byteData.length}</li>
+            <li><samp>0x00</samp>-Density: {(nBytes0x00 / byteData.length).toFixed(3)} ({nBytes0x00} bytes)</li>
+            <li><samp>0xFF</samp>-Density: {(nBytes0xFF / byteData.length).toFixed(3)} ({nBytes0xFF} bytes)</li>
+        </ul>
+    </div>
+</div>
+
+<div class="row">
     <div class="col-auto">
         <pre>{@html hexDumpString}</pre>
     </div>
