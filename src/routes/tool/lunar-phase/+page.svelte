@@ -155,7 +155,29 @@
             </div>
         </div>
     </div>
+
     <div class="col">
+        <table class="table table-bordered w-auto mt-1">
+            <thead>
+                <tr>
+                    <th>Phase</th>
+                    <th>Symbol</th>
+                    <th>Next Occurrence</th>
+                </tr>
+            </thead>
+            <tbody>
+                {#each phases as phase, i}
+                <tr>
+                    <td>{phase}</td>
+                    <td>{@render moon(64, 24, i/8)}</td>
+                    <td>
+                        {datePlusDays(new Date(), daysUntilPhase(i))}<br>
+                        {daysUntilPhase(i).toFixed(3)} days
+                    </td>
+                </tr>
+                {/each}
+            </tbody>
+        </table>
     </div>
 </div>
 
