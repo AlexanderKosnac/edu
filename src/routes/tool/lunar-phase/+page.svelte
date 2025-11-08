@@ -119,6 +119,18 @@
                 {phases[getMoonPhaseIndexFromFraction(phaseFraction)]}
             </text>
         </g>
+
+        <circle cx="0" cy="0" r="1" fill="none" stroke="currentColor" />
+        {#each [15, 30, 45, 60, 75, 90] as lat}
+            {@const r = earthRadius * Math.cos(lat * Math.PI / 180)}
+            <circle cx="0" cy="0" r={r} fill="none" stroke="currentColor" />
+        {/each}
+        {#each Array.from({ length: 12 }, (_, i) => i * 30) as lon}
+            {@const angle = lon * Math.PI / 180}
+            {@const x = Math.sin(angle) * earthRadius}
+            {@const y = -Math.cos(angle) * earthRadius}
+            <line x1="0" y1="0" x2={x} y2={y} stroke="currentColor" />
+        {/each}
     </svg>
 {/snippet}
 
