@@ -1,6 +1,8 @@
 <script>
     let selectedDatetimeString = getDateLocal();
 
+    let latitude = 90;
+
     const newMoonRef = new Date(Date.UTC(2000, 0, 6, 18, 14, 0)); // Meeus Lunation Number 0
     const synodicMonth = 29.53058867; // average lunar month length (days)
 
@@ -62,6 +64,30 @@
         return result;
     }
 
+    async function fetchPosition() {
+        return new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, {
+                maximumAge: 0,
+                timeout: 5000,
+                enableHighAccuracy: true,
+            });
+        });
+    }
+
+    async function useCurrentLatitude() {
+        try {
+            const data = await fetchPosition();
+            latitude = data.coords.latitude;
+        } catch (error) {
+            alert(`Failed to retrieve current position. ${error}`);
+        }
+    }
+
+    // Latitude with 90 = 90°N and -90 = 90°S
+    function getMoonRotation(latitude) {
+        return latitude - 90;
+    }
+
     let currentTimeUnit = "day";
 
     function changeTime(value) {
@@ -78,6 +104,7 @@
     $: selectedDatetime = new Date(selectedDatetimeString);
     $: currentPhaseFraction = getMoonPhaseFraction(selectedDatetime);
     $: currentPhaseName = phases[getMoonPhaseIndexFromFraction(currentPhaseFraction)];
+    $: moonRotation = getMoonRotation(latitude);
 </script>
 
 <svelte:head>
@@ -90,15 +117,17 @@
     </div>
 </div>
 
-{#snippet moon(size, radius, phaseFraction)}
+{#snippet moon(size, radius, phaseFraction, rotation)}
     {@const offset = phaseFractionToIlluminationFraction(phaseFraction) * radius}
     <svg width={size} height={size} viewBox="-{Math.floor(size/2)} -{Math.floor(size/2)} {size} {size}" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="0" cy="0" r="{radius}" fill="#444" />
-        {#if phaseFraction < 0.5}
-            <path d="M 0 {radius}  A {radius},{radius} 0 1 0 0,{-radius}  A {offset},{radius} 0 0 {offset > 0 ? 1 : 0} 0,{radius}  Z" fill="#f4f4f4" />
-        {:else}
-            <path d="M 0 {radius}  A {radius},{radius} 0 1 1 0,{-radius}  A {offset},{radius} 0 0 {offset > 0 ? 0 : 1} 0,{radius}  Z" fill="#f4f4f4" />
-        {/if}
+        <g transform="rotate({rotation})">
+            <circle cx="0" cy="0" r="{radius}" fill="#444" />
+            {#if phaseFraction < 0.5}
+                <path d="M 0 {radius}  A {radius},{radius} 0 1 0 0,{-radius}  A {offset},{radius} 0 0 {offset > 0 ? 1 : 0} 0,{radius}  Z" fill="#f4f4f4" />
+            {:else}
+                <path d="M 0 {radius}  A {radius},{radius} 0 1 1 0,{-radius}  A {offset},{radius} 0 0 {offset > 0 ? 0 : 1} 0,{radius}  Z" fill="#f4f4f4" />
+            {/if}
+        </g>
     </svg>
 {/snippet}
 
@@ -142,7 +171,7 @@
         </div>
         <div class="input-group">
             <span class="input-group-text">Date:</span>
-            <input type="datetime-local" class="form-control" bind:value={selectedDatetimeString} style="max-width: 20em" />
+            <input type="datetime-local" class="form-control" bind:value={selectedDatetimeString} />
             <button type="button" class="btn btn-secondary" onclick={() => changeTime(-1)}>-1</button>
             <button type="button" class="btn btn-secondary" onclick={() => changeTime(+1)}>+1</button>
             <select class="form-select" id="stepSelect" bind:value={currentTimeUnit} style="max-width: 8em">
@@ -152,10 +181,23 @@
             </select>
         </div>
 
+        <div class="input-group">
+            <span class="input-group-text">Latitude</span>
+            <span class="input-group-text">
+                {Math.abs(latitude)}°
+                {#if latitude > 0}N{/if}
+                {#if latitude < 0}S{/if}
+            </span>
+            <input type="range" class="form-control form-range" min="-90" max="90" step="1" bind:value={latitude}/>
+            <button type="button" class="btn btn-secondary" onclick={useCurrentLatitude}>
+                <i class="bi bi-geo-alt-fill"></i>
+            </button>
+        </div>
+
         <div class="row">
             <div class="col">
                 <div class="d-flex flex-column align-items-center">
-                    {@render moon(400, 160, currentPhaseFraction)}
+                    {@render moon(400, 160, currentPhaseFraction, moonRotation)}
                     {currentPhaseName}
                 </div>
             </div>
@@ -206,5 +248,11 @@
 <style>
     svg {
         border: 1px solid var(--bs-body-color);
+    }
+    .form-range {
+        align-items: center;
+        padding: 5px;
+        height: auto;
+        width: auto;
     }
 </style>
