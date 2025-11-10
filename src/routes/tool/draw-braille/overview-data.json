@@ -1,0 +1,7 @@
+{
+    "name": "Draw braille",
+    "description": "Draw a strict black and white image and convert it to braille.",
+    "tags": [
+        "Image processing"
+    ]
+}
