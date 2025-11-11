@@ -50,24 +50,18 @@
 
 <div class="row">
     <div class="col-auto">
-        <div class="d-flex flex-column gap-1">
-            <div class="d-flex gap-1">
-                <label>
-                    Number:
-                    <input type="text" class="form-control" bind:value={input}/>
-                </label>
-                <label>
-                    Base:
-                    <input type="number" class="form-control" bind:value={base} min="2" max="36" onchange={changeBase}/>
-                </label>
-            </div>
-            <div class="d-flex flex-row gap-1">
-                <button type="button" class="btn btn-primary" onclick={decrement}>-</button>
-                <button type="button" class="btn btn-primary" onclick={increment}>+</button>
-            </div>
+        <div class="input-group">
+            <span class="input-group-text">Number</span>
+            <input type="text" class="form-control" bind:value={input}/>
+            <button type="button" class="btn btn-secondary" onclick={decrement}>-1</button>
+            <button type="button" class="btn btn-secondary" onclick={increment}>+1</button>
+            <span class="input-group-text">Base</span>
+            <input type="number" class="form-control" bind:value={base} min="2" max="36" onchange={changeBase}/>
         </div>
     </div>
+</div>
 
+<div class="row">
     <div class="col">
         {#if results}
         <div class="d-flex flex-row gap-3">
