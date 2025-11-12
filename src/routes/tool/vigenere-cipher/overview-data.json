@@ -1,0 +1,7 @@
+{
+    "name": "Vigenere cipher",
+    "description": "A cipher utilizing a key and multiple Caesar ciphers.",
+    "tags": [
+        "Cryptography"
+    ]
+}
