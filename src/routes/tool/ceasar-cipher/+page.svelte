@@ -1,35 +1,17 @@
 <script>
-    let cypherShift = 23;
+    import { integerAsLetter, encodePlaintext, decodeCiphertext } from "$lib/cipherUtility.js";
+
+    let cipherShift = 23;
 
     let plaintext = "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG";
-    let ciphertext = "";
-
-    function charIsIgnored(c) {
-        const n = c.charCodeAt(0);
-        const isLetter = (n >= 0x41 && n <= 0x5A) || (n >= 0x61 && n <= 0x7A);
-        return !isLetter;
-    }
-
-    function letterAsInteger(l) {
-        return l.charCodeAt(0) + 0x41;
-    }
-
-    function integerAsLetter(i) {
-        return String.fromCharCode((i % 26) + 0x41);
-    }
+    let ciphertext = "QEB NRFZH YOLTK CLU GRJMP LSBO QEB IXWV ALD";
 
     function onPlaintextChanged() {
-        ciphertext = "";
-        for (const c of plaintext.toUpperCase()) {
-            ciphertext += charIsIgnored(c) ? c : integerAsLetter(letterAsInteger(c) + cypherShift);
-        }
+        ciphertext = encodePlaintext(plaintext, cipherShift);
     }
 
     function onCiphertextChanged() {
-        plaintext = "";
-        for (const c of ciphertext.toUpperCase()) {
-            plaintext += charIsIgnored(c) ? c : integerAsLetter(letterAsInteger(c) - cypherShift);
-        }
+        plaintext = decodeCiphertext(ciphertext, cipherShift);
     }
 </script>
 
@@ -47,7 +29,7 @@
     <div class="col">
         <label>
             Shift:
-            <input type="number" class="form-control" bind:value={cypherShift} min="0"/>
+            <input type="number" class="form-control" bind:value={cipherShift} min="0"/>
         </label>
         <table class="table table-bordered w-auto mt-1">
             <tbody>
@@ -64,9 +46,9 @@
                     {/each}
                 </tr>
                 <tr>
-                    <th>Cipher ({cypherShift})</th>
+                    <th>Cipher ({cipherShift})</th>
                     {#each { length: 26 } as _, i}
-                        <td>{integerAsLetter(i + cypherShift)}</td>
+                        <td>{integerAsLetter(i + cipherShift)}</td>
                     {/each}
                 </tr>
             </tbody>
