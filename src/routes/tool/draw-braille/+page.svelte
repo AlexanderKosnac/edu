@@ -9,19 +9,24 @@
     let canvas;
 
     let ctx;
-    let imageData;
 
-    $: braille = imageData ? imageDataToBraille(imageData) : "";
+    $: braille = canvas ? imageDataToBraille(getCurrentImageData()) : "";
+    $: if (ctx && canvasWidth && canvasHeight) resizeCanvas();
 
-        return output;
+    function getCurrentImageData() {
+        return ctx.getImageData(0, 0, canvasWidth, canvasHeight);
     }
 
     function setPixel(x, y, r, g, b) {
-        const index = (y * canvas.width + x) * 4;
-        imageData.data[index + 0] = r;
-        imageData.data[index + 1] = g;
-        imageData.data[index + 2] = b;
-        imageData.data[index + 3] = 255;
+        const imgData = ctx.getImageData(x, y, 1, 1);
+        const data = imgData.data;
+
+        data[0] = r;
+        data[1] = g;
+        data[2] = b;
+        data[3] = 255;
+
+        ctx.putImageData(imgData, x, y);
     }
 
     function setPixelOnClick(e) {
@@ -31,17 +36,32 @@
         const x = Math.floor((e.clientX - rect.left) * scaleX);
         const y = Math.floor((e.clientY - rect.top) * scaleY);
         setPixel(x, y, 0, 0, 0);
-        ctx.putImageData(imageData, 0, 0);
     }
 
     function clearPixelOnClick(e) {
 
     }
 
+    function resizeCanvas() {
+        console.log(`resize triggered ${canvasWidth}x${canvasHeight}`);
+        const imageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
+        const data = imageData.data;
+
+        for (let i = 0; i < data.length; i += 4) {
+            const alpha = data[i + 3];
+            if (alpha === 0) {
+                data[i] = 255;
+                data[i + 1] = 255;
+                data[i + 2] = 0;
+                data[i + 3] = 255;
+            }
+        }
+        ctx.putImageData(imageData, 0, 0);
+    }
+
     function clearCanvas() {
         ctx.fillStyle = "white";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
     }
 
     onMount(()=> {
@@ -62,18 +82,28 @@
 
 <div class="row">
     <div class="col">
+        <div class="d-flex flex-row gap-1 mb-1">
+            <button type="button" class="btn btn-secondary" onclick={clearCanvas}>Clear</button>
+            <div class="input-group">
+                <span class="input-group-text">Dimensions</span>
+                <input type="number" class="form-control" placeholder="Width" aria-label="Grid Width" step="2" min="2"
+                    bind:value={canvasWidth}/>
+                <span class="input-group-text">x</span>
+                <input type="number" class="form-control" placeholder="Height" aria-label="Grid Height" step="4" min="4"
+                    bind:value={canvasHeight}/>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
         <canvas width="{canvasWidth}" height="{canvasHeight}"
             bind:this={canvas}
             onclick={setPixelOnClick}
             oncontextmenu={clearPixelOnClick}>
         </canvas>
     </div>
-    <div class="col">
-        <button type="button" class="btn btn-secondary" onclick={clearCanvas}>Clear</button>
-    </div>
-</div>
-
-<div class="row">
     <div class="col">
         <pre>{braille}</pre>
     </div>
@@ -91,8 +121,7 @@
 <style>
     canvas {
         image-rendering: pixelated;
-        width: 400px;
-        height: 400px;
+        height: 600px;
         border: 1px solid var(--bs-body-color)
     }
 </style>
