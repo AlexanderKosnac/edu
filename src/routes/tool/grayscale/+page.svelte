@@ -59,7 +59,8 @@ function loadPreset(idx) {
 }
 
 function loadImage() {
-    if (fileInput.files.length < 1) return;
+    if (fileInput.files.length < 1)
+        return;
     const file = fileInput.files[0];
     const url = URL.createObjectURL(file);
     input.src = url;

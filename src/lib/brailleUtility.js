@@ -1,4 +1,4 @@
-export function imageDataToBraille(imageData, threshold = 128) {
+export function imageDataToBraille(imageData, threshold = 128, brightnessCoefficients = [0.299, 0.587, 0.114]) {
     let data = imageData.data;
     let width = imageData.width;
     let height = imageData.height;
@@ -24,7 +24,8 @@ export function imageDataToBraille(imageData, threshold = 128) {
                     const r = data[i];
                     const g = data[i + 1];
                     const b = data[i + 2];
-                    const brightness = 0.299 * r + 0.587 * g + 0.114 * b;
+                    const c = brightnessCoefficients;
+                    const brightness = c[0] * r + c[1] * g + c[2] * b;
 
                     if (brightness < threshold)
                         bits |= dotMap[dy][dx];
