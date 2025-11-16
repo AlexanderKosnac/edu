@@ -6,6 +6,11 @@
     let fileInput;
     let threshold = 128;
 
+    let outputLineHeight = 1.2;
+    let lineHeightUnit = "";
+    let outputFontSize = 12;
+    let fontSizeUnit = "px";
+
     let input;
     let canvas;
 
@@ -62,8 +67,7 @@
 </div>
 
 <div class="row">
-    <div class="col-xl">
-        {input?.src}
+    <div class="col-auto">
         <div class="d-flex flex-column gap-1 mb-1">
             <div class="input-group">
                 <input type="file" class="form-control" id="img" name="img" accept="image/*" bind:this={fileInput}>
@@ -82,15 +86,34 @@
 
                 <span class="input-group-text">= {sum.toFixed(3)}</span>
             </div>
+
             <div class="input-group">
-                <span class="input-group-text">Threshold</span>
+                <span class="input-group-text" title="Threshold of the brightness value considered as a visible pixel.">Threshold</span>
                 <input type="number" class="form-control" id="threshold" bind:value={threshold} min="0" max="255"/>
             </div>
+
             <div class="d-flex align-items-center gap-2">
                 <button type="button" class="btn btn-primary" onclick={braillify}>Braillify</button>
                 {#if input?.src === ""}
                     <span class="text-danger">No image loaded.</span>
                 {/if}
+            </div>
+
+            <div class="input-group">
+                <span class="input-group-text">Line height:</span>
+                <input type="number" class="form-control" step="0.01" min="0" bind:value={outputLineHeight}/>
+                <select class="form-select unitDropdown" bind:value={lineHeightUnit}>
+                    <option value="">-</option>
+                    <option value="px">px</option>
+                    <option value="em">em</option>
+                </select>
+
+                <span class="input-group-text">Font size:</span>
+                <input type="number" class="form-control" step="1" min="0" bind:value={outputFontSize}/>
+                <select class="form-select unitDropdown" bind:value={fontSizeUnit}>
+                    <option value="px">px</option>
+                    <option value="em">em</option>
+                </select>
             </div>
         </div>
     </div>
@@ -104,7 +127,7 @@
 
 <div class="row">
     <div class="col">
-        <p class="braille-output font-monospace">{braille}</p>
+        <pre style={`font-size: ${outputFontSize}${fontSizeUnit}; line-height: ${outputLineHeight}${lineHeightUnit};`}>{braille}</pre>
     </div>
 </div>
 
@@ -130,8 +153,7 @@
         image-rendering: pixelated;
         image-rendering: crisp-edges;
     }
-    .braille-output {
-        line-height: 1.1;
-        font-size: 20px;
+    .unitDropdown {
+        max-width: 5em;
     }
 </style>
