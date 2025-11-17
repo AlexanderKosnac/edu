@@ -4,7 +4,6 @@ import { onMount } from "svelte";
 import { clamp } from "$lib/math.js";
 
 import ConvolutionMask from "./ConvolutionMask.svelte";
-import Matrix from "./Matrix.svelte";
 
 import { activeKernel, presets } from "./stores.js";
 
@@ -106,6 +105,18 @@ onMount(() => {
 });
 </script>
 
+{#snippet matrixKernel(matrix)}
+<div class="d-flex flex-column gap-1">
+    {#each matrix as row, i}
+    <div class="d-flex flex-row gap-1">
+        {#each row as _, j}
+            <span class="matrix-entry border">{matrix[j][i]}</span>
+        {/each}
+    </div>
+    {/each}
+</div>
+{/snippet}
+
 <svelte:head>
     <title>Image Kernels</title>
 </svelte:head>
@@ -160,7 +171,7 @@ onMount(() => {
                     {#if preset.factorDisplay || preset.factor}
                         <span>{preset.factorDisplay ?? preset.factor}</span>
                     {/if}
-                    <Matrix matrix={preset.matrix}/>
+                    {@render matrixKernel(preset.matrix)}
                 </div>
             </div>
         {/each}
@@ -185,5 +196,12 @@ onMount(() => {
     }
     .hidden {
         display: none;
+    }
+    .matrix-entry {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 30px;
+        height: 30px;
     }
 </style>
