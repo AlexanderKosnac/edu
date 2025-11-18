@@ -29,7 +29,7 @@
     <div class="col">
         <label>
             Shift:
-            <input type="number" class="form-control" bind:value={cipherShift} min="0"/>
+            <input type="number" class="form-control" bind:value={cipherShift} min="0" oninput={onPlaintextChanged}/>
         </label>
         <table class="table table-bordered w-auto mt-1">
             <tbody>
