@@ -58,10 +58,8 @@
 
 <div class="row">
     <div class="col">
-        <div class="form-group">
-            <label for="inputText">Plaintext:</label>
-            <textarea class="form-control font-monospace" id="inputText" pattern="[A-Za-z0-9]+" rows="20" bind:value="{plaintext}" oninput={onPlaintextChanged}></textarea>
-        </div>
+        <label for="inputText">Plaintext:</label>
+        <textarea class="form-control font-monospace" id="inputText" pattern="[A-Za-z0-9]+" rows="20" bind:value="{plaintext}" oninput={onPlaintextChanged}></textarea>
     </div>
 
     <div class="col">
