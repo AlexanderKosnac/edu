@@ -12,16 +12,15 @@ let kernelInput;
 let fileInput;
 let useGraylevel = false;
 
-// Image and canvas elements
 let input;
 let original;
 let convoluted;
 
 function loadPreset(preset) {
-    $activeKernel.convolution = preset.matrix;
-    let [width, length] = [$activeKernel.convolution[0].length, $activeKernel.convolution.length];
-    $activeKernel.center = [Math.floor(width/2), Math.floor(length/2)];
-    $activeKernel.dimension = [width, length];
+    $activeKernel.convolution = structuredClone(preset.matrix);
+    let [width, height] = [$activeKernel.convolution[0].length, $activeKernel.convolution.length];
+    $activeKernel.center = [Math.floor(width/2), Math.floor(height/2)];
+    $activeKernel.dimension = [width, height];
     $activeKernel.factor = preset.factor ?? 1;
     $activeKernel.normalize = false;
 }
@@ -39,8 +38,75 @@ function loadImage() {
     [convoluted.naturalWidth, convoluted.naturalHeight] = dim;
 }
 
+function applyKernel(imageData, kernel, useGraylevel = false) {
+    const { width, height, data } = imageData;
+
+    const out = new ImageData(width, height);
+    const outData = out.data;
+
+    function getIdx(x, y) {
+        return (y * width + x) * 4;
+    }
+
+    function sample(x, y, fallback = [128, 128, 128]) {
+        if (x < 0 || x >= width || y < 0 || y >= height)
+            return fallback;
+
+        const idx = getIdx(x, y);
+        const r = data[idx];
+        const g = data[idx+1];
+        const b = data[idx+2];
+
+        if (useGraylevel) {
+            const grey = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+            return [grey, grey, grey];
+        }
+        return [r, g, b];
+    }
+
+    function getConvolutedValue(x, y) {
+        const acc = [0, 0, 0];
+
+        const rows = kernel.dimension[0];
+        const cols = kernel.dimension[1];
+        const cy = kernel.center[0];
+        const cx = kernel.center[1];
+
+        for (let i = 0; i < rows; i++) {
+            for (let j = 0; j < cols; j++) {
+                const px = x - cx + j;
+                const py = y - cy + i;
+
+                const sampleRGB = sample(px, py);
+                const kVal = kernel.convolution[i][j] * kernel.factor * kernel.normFactor;
+
+                acc[0] += kVal * sampleRGB[0];
+                acc[1] += kVal * sampleRGB[1];
+                acc[2] += kVal * sampleRGB[2];
+            }
+        }
+
+        return acc.map(v => clamp(Math.abs(v), 0, 255));
+    }
+
+    for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) {
+            const idx = getIdx(x, y);
+            const rgb = getConvolutedValue(x, y);
+
+            outData[idx]   = rgb[0];
+            outData[idx+1] = rgb[1];
+            outData[idx+2] = rgb[2];
+            outData[idx+3] = 255;
+        }
+    }
+
+    return out;
+}
+
 function run() {
-    if (input.src === "") return;
+    if (input.src === "")
+        return;
 
     let dim = [input.naturalWidth, input.naturalHeight];
     [original.width, original.height] = dim;
@@ -54,49 +120,7 @@ function run() {
     ctxOriginal.drawImage(input, 0, 0);
 
     const imageDataOriginal = ctxOriginal.getImageData(0, 0, dim[0], dim[1]);
-    const imageDataConvoluted = ctxConvoluted.getImageData(0, 0, dim[0], dim[1]);
-
-    function getIdx(x, y) {
-        return (y * imageDataOriginal.width + x) * 4;
-    }
-
-    function f(x, y, fallback) {
-        if (x < 0 || x >= imageDataOriginal.width || y < 0 || y >= imageDataOriginal.height) return fallback;
-        const idx = getIdx(x, y);
-        const rgb = imageDataOriginal.data.slice(idx, idx+3);
-        if (useGraylevel) {
-            let grey = 0.2126*rgb[0] + 0.7152*rgb[1] + 0.0722*rgb[2];
-            return [grey, grey, grey];
-        } else {
-            return rgb;
-        }
-    }
-
-    function getConvolutedValue(x, y) {
-        let acc = [0, 0, 0];
-        const xc = x - $activeKernel.center[1];
-        const yc = y - $activeKernel.center[0];
-        for (let i=0; i<$activeKernel.dimension[0]; i++) {
-            for (let j=0; j<$activeKernel.dimension[1]; j++) {
-                f(xc+j, yc+i, [128, 128, 128]).forEach((v, idx) => {
-                    acc[idx] += $activeKernel.factor * $activeKernel.normFactor * $activeKernel.convolution[j][i] * v;
-                });
-            }
-        }
-        return acc.map(i => clamp(Math.abs(i), 0, 255));
-    }
-
-    for (let y=0; y<imageDataConvoluted.height; y++) {
-        for (let x=0; x<imageDataConvoluted.width; x++) {
-            const i = getIdx(x, y);
-            const conv = getConvolutedValue(x, y);
-            imageDataConvoluted.data[i+0] = conv[0]
-            imageDataConvoluted.data[i+1] = conv[1];
-            imageDataConvoluted.data[i+2] = conv[2];
-            imageDataConvoluted.data[i+3] = 255;
-        }
-    }
-
+    const imageDataConvoluted = applyKernel(imageDataOriginal, $activeKernel, useGraylevel);
     ctxConvoluted.putImageData(imageDataConvoluted, 0, 0);
 }
 
