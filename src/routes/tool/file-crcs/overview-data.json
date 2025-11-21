@@ -1,0 +1,7 @@
+{
+    "name": "File CRCs",
+    "description": "A tool to calculate many different checksums over a set of files.",
+    "tags": [
+        "Computer science"
+    ]
+}
