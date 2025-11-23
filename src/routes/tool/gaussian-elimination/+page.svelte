@@ -10,9 +10,9 @@
     let bN = [1, 2, 3, 2];
 
     let matrix = matrixN;
-    let b = undefined;
+    let b = bN;
 
-    $: solution = gaussianElimination(matrix, b)
+    $: solution = gaussianEliminationAndSolve(matrix, b)
 
     let history = [];
 
@@ -23,16 +23,38 @@
         });
     };
 
+    function splitAugmentedMatrix(augmented) {
+        if (!augmented.length)
+            return { A: [], b: [] };
+
+        const n = augmented[0].length - 1;
+        return {
+            A: augmented.map(row => row.slice(0, n)),
+            b: augmented.map(row => row[n]),
+        };
+    }
+
     let onAfterRowSwap = storeLabeledMatrix;
     let onAfterRowElimination = storeLabeledMatrix;
     let onColumnSolved = storeLabeledMatrix;
 
-    function gaussianElimination(A, b = undefined) {
-        const n = A.length;
+    function gaussianEliminationAndSolve(A, b = undefined) {
+        let s = gaussianElimination(A, b);
+        console.log(s);
+        return {
+            UT: s.UT, b: s.b,
+            x: s.b === undefined ? undefined : backSubstitution(s.UT, s.b),
+        };
+    }
 
-        if (b) { // Augment A by b
+    function gaussianElimination(A, b = undefined) {
+        let UT = structuredClone(A);
+        let b2 = structuredClone(b);
+        const n = UT.length;
+
+        if (b2) { // Augment A by b
             for (let i = 0; i < n; i++) {
-                A[i] = [...A[i], b[i]];
+                UT[i] = [...UT[i], b2[i]];
             }
         }
 
@@ -40,37 +62,50 @@
             // Pivoting
             let maxRow = i;
             for (let k = i + 1; k < n; k++) {
-                if (Math.abs(A[k][i]) > Math.abs(A[maxRow][i])) {
+                if (Math.abs(UT[k][i]) > Math.abs(UT[maxRow][i])) {
                     maxRow = k;
                 }
             }
-            [A[i], A[maxRow]] = [A[maxRow], A[i]];
+            [UT[i], UT[maxRow]] = [UT[maxRow], UT[i]];
             if (i != maxRow)
-                onAfterRowSwap(`Swapped ${maxRow} -> ${i}.`, A);
+                onAfterRowSwap(`Swapped ${maxRow} -> ${i}.`, UT);
 
             // 0 pivot, thus unsolvable.
-            if (Math.abs(A[i][i]) < 1e-12)
+            if (Math.abs(UT[i][i]) < 1e-12)
                 throw new Error("Matrix is singular or nearly singular.");
 
             // Eliminate rows below pivot.
             for (let k = i + 1; k < n; k++) {
-                let factor = A[k][i] / A[i][i];
-                for (let j = i; j < (b ? n + 1 : n); j++) {
-                    A[k][j] -= factor * A[i][j];
+                let factor = UT[k][i] / UT[i][i];
+                for (let j = i; j < (b2 ? n + 1 : n); j++) {
+                    UT[k][j] -= factor * UT[i][j];
                 }
-                onAfterRowElimination(`Eliminate row ${k} by ${factor} * row ${i}.`, A);
+                onAfterRowElimination(`Eliminate row ${k} by ${factor} * row ${i}.`, UT);
             }
-            onColumnSolved(`Column ${i} solved.`, A);
+            onColumnSolved(`Column ${i} solved.`, UT);
         }
 
-        return { A, b };
+        if (b2) {
+            let m = splitAugmentedMatrix(UT)
+            return { UT: m.A, b: m.b };
+        } else {
+            return { UT, b: undefined };
+        }
     }
 
+    function backSubstitution(UT, b) {
+        const n = UT.length;
+        const x = new Array(n).fill(0);
+
+        for (let i = n - 1; i >= 0; i--) {
+            let sum = b[i];
+            for (let j = i + 1; j < n; j++) {
+                sum -= UT[i][j] * x[j];
             }
-            onColumnSolved(`Column ${k} solved`, utm);
+            x[i] = sum / UT[i][i];
         }
 
-        return utm;
+        return x;
     }
 </script>
 
@@ -84,16 +119,20 @@
     </div>
 </div>
 
-{solution.A}
-{solution.b}
-
 <div class="row">
     <div class="col">
         Input matrix:
         {@html katexAsHtml(toKatexMatrix(matrix) + " " + (b === undefined ? "" : toKatexVector(b)))}
 
-        Echelon form:
-        {@html katexAsHtml(toKatexMatrix(solution.A))}
+        {#if solution}
+            Echelon form:
+            {@html katexAsHtml(toKatexMatrix(solution.UT) + " " + (solution.b === undefined ? "" : toKatexVector(solution.b)))}
+        {/if}
+
+        {#if solution.b}
+            Solution vector:
+            {@html katexAsHtml(`${backSubstitution(solution.UT, solution.b)}`)}
+        {/if}
     </div>
 </div>
 
