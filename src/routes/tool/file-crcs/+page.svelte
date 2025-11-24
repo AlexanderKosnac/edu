@@ -21,32 +21,72 @@ xxhash128(data: IDataType, seedLow?: number, seedHigh?: number): Promise<string>
         whirlpool,
     } from "hash-wasm";
 
+    const crcs = {
+        adler32: {
+            name: "Adler-32",
+            func: adler32,
+        },
+        md4: {
+            name: "MD4",
+            func: md4,
+        },
+        md5: {
+            name: "MD5",
+            func: md5,
+        },
+        ripemd160: {
+            name: "RIPEMD-160",
+            func: ripemd160,
+        },
+        sha1: {
+            name: "SHA-1",
+            func: sha1,
+        },
+        sha224: {
+            name: "SHA-224",
+            func: sha224,
+        },
+        sha256: {
+            name: "SHA-256",
+            func: sha256,
+        },
+        sha384: {
+            name: "SHA-384",
+            func: sha384,
+        },
+        sha512: {
+            name: "SHA-512",
+            func: sha512,
+        },
+        sm3: {
+            name: "sm3",
+            func: sm3,
+        },
+        whirlpool: {
+            name: "Whirlpool",
+            func: whirlpool,
+        },
+    };
+
+    let fileInput;
+
     let results = {};
 
-    async function handleFile(event) {
+    async function calculateCrcs() {
         results = {};
 
-        const files = event.target.files;
-        if (!files.length)
+        const files = fileInput.files;
+        if (!files?.length)
             return;
 
         for (let file of files) {
             const buffer = await file.arrayBuffer();
             const bytes = new Uint8Array(buffer);
 
-            results[file.name] = {
-                adler32: await adler32(bytes),
-                md4: await md4(bytes),
-                md5: await md5(bytes),
-                ripemd160: await ripemd160(bytes),
-                sha1: await sha1(bytes),
-                sha224: await sha224(bytes),
-                sha256: await sha256(bytes),
-                sha384: await sha384(bytes),
-                sha512: await sha512(bytes),
-                sm3: await sm3(bytes),
-                whirlpool: await whirlpool(bytes),
-            };
+            results[file.name] = {};
+            for (let [key, crc] of Object.entries(crcs)) {
+                results[file.name][key] = await crc.func(bytes);
+            }
         }
     }
 </script>
@@ -63,15 +103,24 @@ xxhash128(data: IDataType, seedLow?: number, seedHigh?: number): Promise<string>
 
 <div class="row">
     <div class="col">
-        <input type="file" class="form-control" id="img" name="img" accept="*/*" multiple onchange={handleFile}>
+        <div class="d-flex flex-column gap-1">
+            <input type="file" class="form-control" id="img" name="img" accept="*/*" multiple bind:this={fileInput}>
+            <div>
+                <button type="button" class="btn btn-primary" onclick={calculateCrcs}>Calculate CRCs</button>
+            </div>
+        </div>
 
         {#if Object.keys(results).length > 0}
-            {#each Object.entries(results) as [file, crcs]}
-                <h2>Results for: {file}</h2>
-                {#each Object.entries(crcs) as [name, value]}
-                    {name}: {value}<br>
-                {/each}
+        <ul>
+            {#each Object.entries(results) as [file, fileChecksums]}
+                <li>{file}</li>
+                <ul>
+                    {#each Object.entries(crcs) as [name, crc]}
+                        <li>{crc.name}: <samp>{fileChecksums[name]}</samp></li>
+                    {/each}
+                </ul>
             {/each}
+        </ul>
         {/if}
     </div>
 </div>
