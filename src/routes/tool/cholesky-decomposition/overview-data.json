@@ -1,6 +1,6 @@
 {
     "name": "Cholesky decomposition",
-    "description": "Decomposes a .",
+    "description": "Decomposes a matrix into a lower triangular matrix and its conjugate transpose.",
     "tags": [
         "Mathematics"
     ]
