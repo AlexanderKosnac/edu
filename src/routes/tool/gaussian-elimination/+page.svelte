@@ -40,7 +40,6 @@
 
     function gaussianEliminationAndSolve(A, b = undefined) {
         let s = gaussianElimination(A, b);
-        console.log(s);
         return {
             UT: s.UT, b: s.b,
             x: s.b === undefined ? undefined : backSubstitution(s.UT, s.b),

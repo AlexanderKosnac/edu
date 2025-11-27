@@ -9,7 +9,8 @@
 
     let matrix = matrixN;
 
-    let solution = choleskyDecompositionLLT(matrix);
+    let solutionLLT = choleskyDecompositionLLT(matrix);
+    let solutionLDLT = choleskyDecompositionLDLT(matrix);
 
     function choleskyDecompositionLLT(A) {
         const n = A.length;
@@ -37,18 +38,55 @@
         return L;
     }
 
+    function choleskyDecompositionLDLT(A) {
+        const n = A.length;
+        const L = Array.from({ length: n }, () => Array(n).fill(0));
+        const D = Array(n).fill(0);
+
+        for (let i = 0; i < n; i++) {
+            // Diagonal
+            let sum = A[i][i];
+            for (let k = 0; k < i; k++) {
+                sum -= L[i][k] * L[i][k] * D[k];
+            }
+            D[i] = sum;
+
+            if (D[i] === 0) {
+                throw new Error("Matrix is not positive definite.");
+            }
+
+            // Off-diagonal, with diagonal 1
+            L[i][i] = 1;
+            for (let j = i + 1; j < n; j++) {
+                let sum2 = A[j][i];
+                for (let k = 0; k < i; k++) {
+                    sum2 -= L[j][k] * L[i][k] * D[k];
+                }
+                L[j][i] = sum2 / D[i];
+            }
+        }
+
+        return { L, D: vectorToDiagonalMatrix(D) };
+    }
+
     function conjugateTranspose(A) {
         return A[0].map((_, i) => A.map(row => row[i]));
+    }
+
+    function vectorToDiagonalMatrix(arr) {
+        return arr.map((val, i) =>
+            arr.map((_, j) => (i === j ? val : 0))
+        );
     }
 </script>
 
 <svelte:head>
-    <title>Cholseky decomposition</title>
+    <title>Cholesky decomposition</title>
 </svelte:head>
 
 <div class="row">
     <div class="col">
-        <h1>Cholseky decomposition</h1>
+        <h1>Cholesky decomposition</h1>
     </div>
 </div>
 
@@ -61,7 +99,9 @@
 
 <div class="row">
     <div class="col">
-        {@html katexAsHtml("LL^T="+ toKatexMatrix(solution) + " " + toKatexMatrix(conjugateTranspose(solution)))}
+        Decompositions:
+        {@html katexAsHtml("LL^T="+ toKatexMatrix(solutionLLT) + " " + toKatexMatrix(conjugateTranspose(solutionLLT)))}
+        {@html katexAsHtml("LDL^T="+ toKatexMatrix(solutionLDLT.L) + " " + toKatexMatrix(solutionLDLT.D) + " " + toKatexMatrix(conjugateTranspose(solutionLDLT.L)))}
     </div>
 </div>
 
@@ -69,7 +109,7 @@
     <div class="col">
         <h2>References:</h2>
         <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Cholesky_decomposition" target="_blank">Cholseky decomposition</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Cholesky_decomposition" target="_blank">Cholesky decomposition</a></li>
         </ul>
     </div>
 </div>
