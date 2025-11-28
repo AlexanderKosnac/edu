@@ -4,9 +4,6 @@
     blake2s(data: IDataType, bits?: number, key?: IDataType): Promise<string> // default is 256 bits
     blake3(data: IDataType, bits?: number, key?: IDataType): Promise<string> // default is 256 bits
 
-    crc32(data: IDataType, polynomial?: number): Promise<string> // default polynomial is 0xedb88320, for CRC32C use 0x82f63b78
-    crc64(data: IDataType, polynomial?: string): Promise<string> // default polynomial is 'c96c5795d7870f42' (ECMA)
-
     keccak(data: IDataType, bits?: 224 | 256 | 384 | 512): Promise<string> // default is 512 bits
     sha3(data: IDataType, bits?: 224 | 256 | 384 | 512): Promise<string> // default is 512 bits
 
@@ -23,6 +20,7 @@
         sha1, sha224, sha256, sha384, sha512,
         sm3,
         whirlpool,
+        crc32, crc64,
     } from "hash-wasm";
 
     const crcs = {
@@ -81,6 +79,32 @@
             func: whirlpool,
             use: true,
         },
+        crc32: {
+            name: "CRC32",
+            func: crc32,
+            use: true,
+            params: [
+                {
+                    name: "Polynomial",
+                    type: "number",
+                    default: 0xedb88320,
+                    value: 0xedb88320,
+                }
+            ],
+        },
+        crc64: {
+            name: "CRC64",
+            func: crc64,
+            use: true,
+            params: [
+                {
+                    name: "Polynomial",
+                    type: "text",
+                    default: "c96c5795d7870f42",
+                    value: "c96c5795d7870f42",
+                }
+            ],
+        },
     };
 
     let fileInput;
@@ -100,9 +124,17 @@
 
             results[file.name] = {};
             for (let [key, crc] of Object.entries(crcs)) {
-                if (crc.use) {
-                    results[file.name][key] = await crc.func(bytes);
+                if (!crc.use)
+                    continue;
+
+                let params = [];
+                if (crc.params?.length) {
+                    for (let p of crc.params) {
+                        params.push(p.value ?? p.default);
+                    }
                 }
+
+                results[file.name][key] = await crc.func(bytes, ...params);
             }
         }
     }
@@ -127,11 +159,22 @@
 <div class="row">
     <div class="col-auto">
         <div class="d-flex flex-column gap-1">
-            {#each Object.entries(crcs) as [key, crc]}
+            {#each Object.entries(crcs) as [_, crc]}
                 <label>
                     <input type="checkbox" class="form-check-input" bind:checked={crc.use}/>
                     {crc.name}
                 </label>
+
+                {#if crc.use && crc.params && crc.params.length}
+                    {#each crc.params as param}
+                        <div>
+                            <label>
+                                {param.name}:
+                                <input type={param.type} class="form-control" bind:value={param.value} placeholder={param.default}>
+                            </label>
+                        </div>
+                    {/each}
+                {/if}
             {/each}
         </div>
     </div>
