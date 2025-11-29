@@ -1,17 +1,16 @@
 <script>
 /* To be implemented:
-    blake2b(data: IDataType, bits?: number, key?: IDataType): Promise<string> // default is 512 bits
-    blake2s(data: IDataType, bits?: number, key?: IDataType): Promise<string> // default is 256 bits
-    blake3(data: IDataType, bits?: number, key?: IDataType): Promise<string> // default is 256 bits
+    blake2b(data: IDataType, bits?: number, key?: IDataType) // default is 512 bits
+    blake2s(data: IDataType, bits?: number, key?: IDataType) // default is 256 bits
+    blake3(data: IDataType, bits?: number, key?: IDataType) // default is 256 bits
 
-    keccak(data: IDataType, bits?: 224 | 256 | 384 | 512): Promise<string> // default is 512 bits
-    sha3(data: IDataType, bits?: 224 | 256 | 384 | 512): Promise<string> // default is 512 bits
+    keccak(data: IDataType, bits?: 224 | 256 | 384 | 512) // default is 512 bits
+    sha3(data: IDataType, bits?: 224 | 256 | 384 | 512) // default is 512 bits
 
-    xxhash32(data: IDataType, seed?: number): Promise<string>
-
-    xxhash64(data: IDataType, seedLow?: number, seedHigh?: number): Promise<string>
-    xxhash3(data: IDataType, seedLow?: number, seedHigh?: number): Promise<string>
-    xxhash128(data: IDataType, seedLow?: number, seedHigh?: number): Promise<string>
+    xxhash32(data: IDataType, seed?: number)
+    xxhash64(data: IDataType, seedLow?: number, seedHigh?: number)
+    xxhash3(data: IDataType, seedLow?: number, seedHigh?: number)
+    xxhash128(data: IDataType, seedLow?: number, seedHigh?: number)
 */
     import {
         adler32,
@@ -158,8 +157,18 @@
 
 <div class="row">
     <div class="col-auto">
-        <div class="d-flex flex-column gap-1">
-            {#each Object.entries(crcs) as [_, crc]}
+        <div class="d-flex flex-column gap-1 p-1">
+            {#each Object.entries(crcs).filter(([_, value]) => !value.params) as [_, crc]}
+                <label>
+                    <input type="checkbox" class="form-check-input" bind:checked={crc.use}/>
+                    {crc.name}
+                </label>
+            {/each}
+        </div>
+    </div>
+    <div class="col">
+        <div class="d-flex flex-column gap-1 p-1">
+            {#each Object.entries(crcs).filter(([_, value]) => value.params) as [_, crc]}
                 <label>
                     <input type="checkbox" class="form-check-input" bind:checked={crc.use}/>
                     {crc.name}
@@ -177,9 +186,6 @@
                 {/if}
             {/each}
         </div>
-    </div>
-    <div class="col">
-        Insert CRCs with complex inputs here.
     </div>
 </div>
 
