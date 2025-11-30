@@ -6,11 +6,6 @@
 
     keccak(data: IDataType, bits?: 224 | 256 | 384 | 512) // default is 512 bits
     sha3(data: IDataType, bits?: 224 | 256 | 384 | 512) // default is 512 bits
-
-    xxhash32(data: IDataType, seed?: number)
-    xxhash64(data: IDataType, seedLow?: number, seedHigh?: number)
-    xxhash3(data: IDataType, seedLow?: number, seedHigh?: number)
-    xxhash128(data: IDataType, seedLow?: number, seedHigh?: number)
 */
     import {
         adler32,
@@ -20,6 +15,7 @@
         sm3,
         whirlpool,
         crc32, crc64,
+        xxhash32, xxhash64, xxhash3, xxhash128,
     } from "hash-wasm";
 
     const crcs = {
@@ -88,7 +84,7 @@
                     type: "number",
                     default: 0xedb88320,
                     value: 0xedb88320,
-                }
+                },
             ],
         },
         crc64: {
@@ -101,7 +97,60 @@
                     type: "text",
                     default: "c96c5795d7870f42",
                     value: "c96c5795d7870f42",
-                }
+                },
+            ],
+        },
+
+        xxhash32: {
+            func: xxhash32,
+            use: true,
+            params: [
+                {
+                    name: "Seed",
+                    type: "number",
+                },
+            ],
+        },
+        xxhash64: {
+            func: xxhash64,
+            use: true,
+            params: [
+                {
+                    name: "Seed Low",
+                    type: "number",
+                },
+                {
+                    name: "Seed High",
+                    type: "number",
+                },
+            ],
+        },
+        xxhash3: {
+            func: xxhash3,
+            use: true,
+            params: [
+                {
+                    name: "Seed Low",
+                    type: "number",
+                },
+                {
+                    name: "Seed High",
+                    type: "number",
+                },
+            ],
+        },
+        xxhash128: {
+            func: xxhash128,
+            use: true,
+            params: [
+                {
+                    name: "Seed Low",
+                    type: "number",
+                },
+                {
+                    name: "Seed High",
+                    type: "number",
+                },
             ],
         },
     };
@@ -158,20 +207,20 @@
 <div class="row">
     <div class="col-auto">
         <div class="d-flex flex-column gap-1 p-1">
-            {#each Object.entries(crcs).filter(([_, value]) => !value.params) as [_, crc]}
+            {#each Object.entries(crcs).filter(([_, value]) => !value.params) as [key, crc]}
                 <label>
                     <input type="checkbox" class="form-check-input" bind:checked={crc.use}/>
-                    {crc.name}
+                    {crc.name ?? key}
                 </label>
             {/each}
         </div>
     </div>
     <div class="col">
         <div class="d-flex flex-column gap-1 p-1">
-            {#each Object.entries(crcs).filter(([_, value]) => value.params) as [_, crc]}
+            {#each Object.entries(crcs).filter(([_, value]) => value.params) as [key, crc]}
                 <label>
                     <input type="checkbox" class="form-check-input" bind:checked={crc.use}/>
-                    {crc.name}
+                    {crc.name ?? key}
                 </label>
 
                 {#if crc.use && crc.params && crc.params.length}
@@ -203,7 +252,7 @@
                 <li>{file}</li>
                 <ul>
                     {#each Object.entries(fileChecksums) as [key, crc]}
-                        <li>{crcs[key].name}: <samp>{crc}</samp></li>
+                        <li>{crcs[key].name ?? key}: <samp>{crc}</samp></li>
                     {/each}
                 </ul>
             {/each}
