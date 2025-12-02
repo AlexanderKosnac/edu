@@ -186,6 +186,22 @@
             }
         }
     }
+
+    function downloadFile(filename, text) {
+        const blob = new Blob([text], { type: "text/plain" });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        a.click();
+
+        URL.revokeObjectURL(url);
+    }
+
+    function downloadCrcJson() {
+        downloadFile("crcs.csv", JSON.stringify(results, null, 2));
+    }
 </script>
 
 <svelte:head>
@@ -241,6 +257,7 @@
 <div class="row">
     <div class="col">
         <button type="button" class="btn btn-primary" onclick={calculateCrcs}>Calculate CRCs</button>
+        <button type="button" class="btn btn-secondary" onclick={downloadCrcJson}>JSON</button>
     </div>
 </div>
 
