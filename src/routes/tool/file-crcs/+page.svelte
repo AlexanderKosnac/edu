@@ -200,7 +200,29 @@
     }
 
     function downloadCrcJson() {
-        downloadFile("crcs.csv", JSON.stringify(results, null, 2));
+        downloadFile("crcs.json", JSON.stringify(results, null, 4));
+    }
+
+    function downloadCrcCsv() {
+        const sepratator = ",";
+
+        const files = Object.keys(results);
+
+        const columns = ["file", ...Object.keys(results[files[0]])];
+
+        const rows = [columns.join(sepratator)];
+
+        for (const file of files) {
+            const row = [file];
+            for (let i = 1; i < columns.length; i++) {
+                const key = columns[i];
+                row.push(results[file][key] || "");
+            }
+            rows.push(row.join(sepratator));
+        }
+
+        let csv = rows.join("\n");
+        downloadFile("crcs.csv", csv);
     }
 </script>
 
@@ -258,6 +280,7 @@
     <div class="col">
         <button type="button" class="btn btn-primary" onclick={calculateCrcs}>Calculate CRCs</button>
         <button type="button" class="btn btn-secondary" onclick={downloadCrcJson}>JSON</button>
+        <button type="button" class="btn btn-secondary" onclick={downloadCrcCsv}>CSV</button>
     </div>
 </div>
 
