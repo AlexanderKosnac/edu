@@ -10,12 +10,9 @@
 
     let ctx;
 
-    $: braille = canvas ? imageDataToBraille(getCurrentImageData()) : "";
-    $: if (ctx && canvasWidth && canvasHeight) resizeCanvas();
+    let braille = "";
 
-    function getCurrentImageData() {
-        return ctx.getImageData(0, 0, canvasWidth, canvasHeight);
-    }
+    $: if (ctx && canvasWidth && canvasHeight) resizeCanvas();
 
     function setPixel(x, y, r, g, b) {
         const imgData = ctx.getImageData(x, y, 1, 1);
@@ -30,20 +27,24 @@
     }
 
     function setPixelOnClick(e) {
+        setPixelOnClickToColor(e, 0, 0, 0);
+    }
+
+    function clearPixelOnClick(e) {
+        setPixelOnClickToColor(e, 255, 255, 255);
+    }
+
+    function setPixelOnClickToColor(e, r, g, b) {
         const rect = canvas.getBoundingClientRect();
         const scaleX = canvas.width / rect.width;
         const scaleY = canvas.height / rect.height;
         const x = Math.floor((e.clientX - rect.left) * scaleX);
         const y = Math.floor((e.clientY - rect.top) * scaleY);
-        setPixel(x, y, 0, 0, 0);
-    }
-
-    function clearPixelOnClick(e) {
-
+        setPixel(x, y, r, g, b);
+        braille = imageDataToBraille(ctx.getImageData(0, 0, canvasWidth, canvasHeight));
     }
 
     function resizeCanvas() {
-        console.log(`resize triggered ${canvasWidth}x${canvasHeight}`);
         const imageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
         const data = imageData.data;
 
@@ -98,10 +99,9 @@
 
 <div class="row">
     <div class="col">
-        <canvas width="{canvasWidth}" height="{canvasHeight}"
-            bind:this={canvas}
+        <canvas width="16" height="16" bind:this={canvas}
             onclick={setPixelOnClick}
-            oncontextmenu={clearPixelOnClick}>
+            oncontextmenu={e => { e.preventDefault(); clearPixelOnClick(e); }}>
         </canvas>
     </div>
     <div class="col">
