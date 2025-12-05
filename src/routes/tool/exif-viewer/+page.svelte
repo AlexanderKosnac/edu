@@ -17,6 +17,26 @@
     }
 </script>
 
+{#snippet descriptionTable(obj)}
+<table class="table table-bordered w-auto mt-1">
+    <thead>
+        <tr>
+            <th>Field</th>
+            <th>Description</th>
+        </tr>
+    </thead>
+    <tbody>
+        {#each Object.entries(obj) as [name, data]}
+            <tr>
+                <td>{name}</td>
+                <td>{data.description ?? data}</td>
+            </tr>
+        {/each}
+    </tbody>
+</table>
+
+{/snippet}
+
 <svelte:head>
     <title>Exif Viewer</title>
 </svelte:head>
@@ -57,6 +77,7 @@
                     </tr>
                 </tbody>
             </table>
+            {@render descriptionTable(tags.Thumbnail)}
         </div>
         <div class="col">
             <pre>{JSON.stringify(tags.Thumbnail, null, 2)}</pre>
@@ -72,7 +93,7 @@
     <h2>File</h2>
     {#if tags.file}
         <div class="col">
-            
+            {@render descriptionTable(tags.file)}
         </div>
         <div class="col">
             <pre>{JSON.stringify(tags.file, null, 2)}</pre>
@@ -88,7 +109,7 @@
     <h2>Exif</h2>
     {#if tags.exif}
         <div class="col">
-
+            {@render descriptionTable(tags.exif)}
         </div>
         <div class="col">
             <pre>{JSON.stringify(tags.exif, null, 2)}</pre>            
@@ -104,7 +125,7 @@
     <h2>ICC</h2>
     {#if tags.icc}
         <div class="col">
-            
+            {@render descriptionTable(tags.icc)}
         </div>
         <div class="col">
             <pre>{JSON.stringify(tags.icc, null, 2)}</pre>
@@ -120,7 +141,7 @@
     <h2>XMP</h2>
     {#if tags.xmp}
         <div class="col">
-            
+            {@render descriptionTable(tags.xmp)}
         </div>
         <div class="col">
             <pre>{JSON.stringify(tags.xmp, null, 2)}</pre>
