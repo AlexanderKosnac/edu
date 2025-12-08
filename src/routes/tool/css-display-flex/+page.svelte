@@ -7,6 +7,8 @@
         "flex-grow": { "red": 1, "yellow": 2, "green": 0 },
         "flex-shrink": 0,
         "justify-content": "center",
+        "align-self": "auto",
+        "align-items": "stretch",
     }
 </script>
 
@@ -61,7 +63,7 @@
                 <input type="radio" name="flex-wrap" value={val} bind:group={data["flex-wrap"]}/>
                 <tt>{val}</tt>
             </label>
-            {/each}    
+            {/each}
         </div>
     </div>
 </div>
@@ -140,6 +142,40 @@
                         <tt>{val}</tt>
                     </label>
                     {/each}
+                {/each}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <h2><tt>align-items</tt> and <tt>align-self</tt></h2>
+    <div class="col">
+        <div class="d-flex gap-1 border" style="height: 240px; align-items: {data["align-items"]}">
+            <div class="element {COLORS[0]}"></div>
+            <div class="element {COLORS[1]}" style="align-self: {data["align-self"]}"></div>
+            <div class="element {COLORS[2]}"></div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="d-flex flex-row">
+            <div class="d-flex flex-column">
+                <strong>align-items</strong>
+                {#each ["stretch", "flex-start", "flex-end", "center", "baseline", "first baseline", "last baseline", "start", "end", "self-start", "self-end"] as val}
+                    <label>
+                        <input type="radio" name="align-items" value={val} bind:group={data["align-items"]}/>
+                        <tt>{val}</tt>
+                    </label>
+                {/each}
+            </div>
+
+            <div class="d-flex flex-column">
+                <strong>align-self</strong>
+                {#each ["auto", "flex-start", "flex-end", "center", "baseline", "stretch"] as val}
+                    <label>
+                        <input type="radio" name="align-self" value={val} bind:group={data["align-self"]}/>
+                        <tt>{val}</tt>
+                    </label>
                 {/each}
             </div>
         </div>
