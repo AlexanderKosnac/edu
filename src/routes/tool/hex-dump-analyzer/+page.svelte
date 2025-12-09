@@ -260,12 +260,12 @@
 
                         <div>
                             <div class="btn-group">
-                                <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                <button type="button" id="colorDistributor" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
                                     Auto Colors
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#" onclick={() => autoAssignColors(getEvenlySpacedColorsHex)}>Evenly spaced</a></li>
-                                    <li><a class="dropdown-item" href="#" onclick={() => autoAssignColors(generateHighContrastColorsHex)}>High contrast</a></li>
+                                    <li><a class="dropdown-item" href="#colorDistributor" onclick={() => autoAssignColors(getEvenlySpacedColorsHex)}>Evenly spaced</a></li>
+                                    <li><a class="dropdown-item" href="#colorDistributor" onclick={() => autoAssignColors(generateHighContrastColorsHex)}>High contrast</a></li>
                                 </ul>
                             </div>
                         </div>
