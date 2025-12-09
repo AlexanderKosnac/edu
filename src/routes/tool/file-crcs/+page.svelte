@@ -18,7 +18,7 @@
         xxhash32, xxhash64, xxhash3, xxhash128,
     } from "hash-wasm";
 
-    const crcs = {
+    let crcs = {
         adler32: {
             name: "Adler-32",
             func: adler32,
@@ -187,6 +187,21 @@
         }
     }
 
+    function deselectAll() {
+        Object.values(crcs).forEach(crc => crc.use = false);
+        crcs = {...crcs};
+    }
+
+    function selectAll() {
+        Object.values(crcs).forEach(crc => crc.use = true);
+        crcs = {...crcs};
+    }
+
+    function selectBasic() {
+        Object.values(crcs).forEach(crc => crc.use = crc.params === undefined);
+        crcs = {...crcs};
+    }
+
     function downloadFile(filename, text) {
         const blob = new Blob([text], { type: "text/plain" });
         const url = URL.createObjectURL(blob);
@@ -238,7 +253,14 @@
 
 <div class="row">
     <div class="col">
-        <input type="file" class="form-control" id="img" name="img" accept="*/*" multiple bind:this={fileInput}>
+        <div class="d-flex flex-column gap-1">
+            <input type="file" class="form-control" id="img" name="img" accept="*/*" multiple bind:this={fileInput}>
+            <div class="d-flex gap-1">
+                <button type="button" class="btn btn-secondary" onclick={deselectAll}>Deselect All</button>
+                <button type="button" class="btn btn-secondary" onclick={selectAll}>Select All</button>
+                <button type="button" class="btn btn-secondary" onclick={selectBasic}>Select Basic</button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -254,8 +276,9 @@
         </div>
     </div>
     <div class="col">
-        <div class="d-flex flex-column gap-1 p-1">
+        <div class="d-flex flex-row gap-1 flex-wrap p-1">
             {#each Object.entries(crcs).filter(([_, value]) => value.params) as [key, crc]}
+            <div class="border p-1">
                 <label>
                     <input type="checkbox" class="form-check-input" bind:checked={crc.use}/>
                     {crc.name ?? key}
@@ -271,6 +294,7 @@
                         </div>
                     {/each}
                 {/if}
+            </div>
             {/each}
         </div>
     </div>
