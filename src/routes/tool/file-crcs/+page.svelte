@@ -1,11 +1,7 @@
 <script>
 /* To be implemented:
-    blake2b(data: IDataType, bits?: number, key?: IDataType) // default is 512 bits
-    blake2s(data: IDataType, bits?: number, key?: IDataType) // default is 256 bits
-    blake3(data: IDataType, bits?: number, key?: IDataType) // default is 256 bits
-
-    keccak(data: IDataType, bits?: 224 | 256 | 384 | 512) // default is 512 bits
-    sha3(data: IDataType, bits?: 224 | 256 | 384 | 512) // default is 512 bits
+keccak(data: IDataType, bits?: 224 | 256 | 384 | 512) // default is 512 bits
+sha3(data: IDataType, bits?: 224 | 256 | 384 | 512) // default is 512 bits
 */
     import {
         adler32,
@@ -16,6 +12,7 @@
         whirlpool,
         crc32, crc64,
         xxhash32, xxhash64, xxhash3, xxhash128,
+        blake2b, blake2s, blake3,
     } from "hash-wasm";
 
     let crcs = {
@@ -100,7 +97,6 @@
                 },
             ],
         },
-
         xxhash32: {
             func: xxhash32,
             use: true,
@@ -150,6 +146,45 @@
                 {
                     name: "Seed High",
                     type: "number",
+                },
+            ],
+        },
+        blake2b: {
+            name: "BLAKE2b",
+            func: blake2b,
+            use: true,
+            params: [
+                {
+                    name: "Bits",
+                    type: "number",
+                    default: 512,
+                    value: 512,
+                },
+            ],
+        },
+        blake2s: {
+            name: "BLAKE2s",
+            func: blake2s,
+            use: true,
+            params: [
+                {
+                    name: "Bits",
+                    type: "number",
+                    default: 256,
+                    value: 256,
+                },
+            ],
+        },
+        blake3: {
+            name: "BLAKE3",
+            func: blake3,
+            use: true,
+            params: [
+                {
+                    name: "Bits",
+                    type: "number",
+                    default: 256,
+                    value: 256,
                 },
             ],
         },

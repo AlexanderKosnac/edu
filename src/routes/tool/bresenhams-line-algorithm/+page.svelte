@@ -14,7 +14,7 @@
     $: labelA = formatXY(pixelCoord(pA));
     $: labelB = formatXY(pixelCoord(pB));
 
-    let pixels = Array(N_PIXELS_WIDTH).fill().map(()=>Array(N_PIXELS_HEIGHT).fill());
+    let pixels = Array(N_PIXELS_WIDTH).fill().map(() => Array(N_PIXELS_HEIGHT).fill());
 
     let showPixelIndices = false;
     let lineColor = "#ffaa00";
