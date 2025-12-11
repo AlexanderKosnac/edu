@@ -1,16 +1,15 @@
 <script>
-    let flowtext;
-
-    let min = -5;
-    let minInclusive;
-    let max = 10;
-    let maxInclusive;
-    let asInteger;
-
-    let randomNumber;
+    const randomNumber = {
+        min: -5,
+        minInclusive: true,
+        max: 10,
+        maxInclusive: false,
+        asInteger: false,
+        result: 0,
+    }
 
     function generateRandomNumber() {
-        randomNumber = getRandomNumber(min, max, minInclusive, maxInclusive, asInteger);
+        randomNumber.result = getRandomNumber(randomNumber.min, randomNumber.max, randomNumber.minInclusive, randomNumber.maxInclusive, randomNumber.asInteger);
     }
 
     function getRandomNumber(min, max, inclusiveMin, inclusiveMax, asInteger) {
@@ -33,49 +32,42 @@
     </div>
 </div>
 
-<div class="row mb-1">
-    <div class="col-auto">
-        <div class="d-flex flex-column gap-1 align-items-start">
+<div class="row">
+    <div class="col">
+        <h2>Random Number</h2>
+        <div class="d-flex flex-row gap-1 align-items-end">
             <label>
                 Minimum:
-                <input type="number" class="form-control" bind:value={min}/>
-            </label>
-            <label>
-                <input type="checkbox" class="form-check-input" bind:checked={minInclusive}/>
-                Inclusive
+                <input type="number" class="form-control" bind:value={randomNumber.min}/>
             </label>
 
             <label>
-                Maximum:
-                <input type="number" class="form-control" bind:value={max}/>
-            </label>
-            <label>
-                <input type="checkbox" class="form-check-input" bind:checked={maxInclusive}/>
-                Inclusive
+                Length:
+                <input type="number" class="form-control" bind:value={randomNumber.max}/>
             </label>
 
-            <label>
-                <input type="checkbox" class="form-check-input" bind:checked={asInteger}/>
-                Integer Result
-            </label>
-            <button type="button" class="btn btn-primary" onclick={generateRandomNumber}>Generate</button>
+            <div class="d-flex flex-column">
+                <label>
+                    <input type="checkbox" class="form-check-input" bind:checked={randomNumber.minInclusive}/>
+                    Min. Inclusive
+                </label>
+                <label>
+                    <input type="checkbox" class="form-check-input" bind:checked={randomNumber.maxInclusive}/>
+                    Max. Inclusive
+                </label>
+
+                <label>
+                    <input type="checkbox" class="form-check-input" bind:checked={randomNumber.asInteger}/>
+                    Integer Result
+                </label>
+            </div>
+
+            <button type="button" class="btn btn-primary align-self-center" onclick={generateRandomNumber}>Generate</button>
+
+            <span class="align-self-center">{randomNumber.result}</span>
         </div>
     </div>
-    <div class="col">
-        <span class="fs-1 align-self-center">{randomNumber}</span>
-    </div>
 </div>
-
-<!--
-<div class="row mb-1">
-    <div class="col">
-        <textarea class="form-control font-monospace" id="inputText" rows="20" bind:value="{flowtext}"></textarea>
-    </div>
-    <div class="col">
-        <textarea class="form-control font-monospace" id="inputText" rows="20" bind:value="{flowtext}"></textarea>
-    </div>
-</div>
--->
 
 <style>
 </style>
