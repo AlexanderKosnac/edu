@@ -1,8 +1,4 @@
 <script>
-/* To be implemented:
-keccak(data: IDataType, bits?: 224 | 256 | 384 | 512) // default is 512 bits
-sha3(data: IDataType, bits?: 224 | 256 | 384 | 512) // default is 512 bits
-*/
     import {
         adler32,
         md4, md5,
@@ -12,6 +8,7 @@ sha3(data: IDataType, bits?: 224 | 256 | 384 | 512) // default is 512 bits
         whirlpool,
         crc32, crc64,
         xxhash32, xxhash64, xxhash3, xxhash128,
+        keccak, sha3,
         blake2b, blake2s, blake3,
     } from "hash-wasm";
 
@@ -79,7 +76,6 @@ sha3(data: IDataType, bits?: 224 | 256 | 384 | 512) // default is 512 bits
                 {
                     name: "Polynomial",
                     type: "number",
-                    default: 0xedb88320,
                     value: 0xedb88320,
                 },
             ],
@@ -92,7 +88,6 @@ sha3(data: IDataType, bits?: 224 | 256 | 384 | 512) // default is 512 bits
                 {
                     name: "Polynomial",
                     type: "text",
-                    default: "c96c5795d7870f42",
                     value: "c96c5795d7870f42",
                 },
             ],
@@ -157,7 +152,6 @@ sha3(data: IDataType, bits?: 224 | 256 | 384 | 512) // default is 512 bits
                 {
                     name: "Bits",
                     type: "number",
-                    default: 512,
                     value: 512,
                 },
             ],
@@ -170,7 +164,6 @@ sha3(data: IDataType, bits?: 224 | 256 | 384 | 512) // default is 512 bits
                 {
                     name: "Bits",
                     type: "number",
-                    default: 256,
                     value: 256,
                 },
             ],
@@ -183,7 +176,32 @@ sha3(data: IDataType, bits?: 224 | 256 | 384 | 512) // default is 512 bits
                 {
                     name: "Bits",
                     type: "number",
-                    default: 256,
+                    value: 256,
+                },
+            ],
+        },
+        keccak: {
+            name: "Keccak",
+            func: keccak,
+            use: true,
+            params: [
+                {
+                    name: "Bits",
+                    type: "select",
+                    options: [224, 256, 384, 512],
+                    value: 256,
+                },
+            ],
+        },
+        sha3: {
+            name: "SHA-3",
+            func: sha3,
+            use: true,
+            params: [
+                {
+                    name: "Bits",
+                    type: "select",
+                    options: [224, 256, 384, 512],
                     value: 256,
                 },
             ],
@@ -313,7 +331,7 @@ sha3(data: IDataType, bits?: 224 | 256 | 384 | 512) // default is 512 bits
     <div class="col">
         <div class="d-flex flex-row gap-1 flex-wrap p-1">
             {#each Object.entries(crcs).filter(([_, value]) => value.params) as [key, crc]}
-            <div class="border p-1">
+            <div class="p-1" class:border={crc.use}>
                 <label>
                     <input type="checkbox" class="form-check-input" bind:checked={crc.use}/>
                     {crc.name ?? key}
@@ -324,7 +342,15 @@ sha3(data: IDataType, bits?: 224 | 256 | 384 | 512) // default is 512 bits
                         <div>
                             <label>
                                 {param.name}:
-                                <input type={param.type} class="form-control" bind:value={param.value} placeholder={param.default}>
+                                {#if param.type === "select"}
+                                    <select class="form-select" bind:value={param.value}>
+                                        {#each param.options as opt}
+                                            <option value={opt}>{opt}</option>
+                                        {/each}
+                                    </select>
+                                {:else}
+                                    <input type={param.type} class="form-control" bind:value={param.value}>
+                                {/if}
                             </label>
                         </div>
                     {/each}
