@@ -21,12 +21,12 @@
         }
     }
 
-	onMount(() => {
-		if (browser) {
-			theme = localStorage["edu-theme"] || light;
-			document.documentElement.setAttribute("data-bs-theme", theme);
-		}
-	});
+    onMount(() => {
+        if (browser) {
+            theme = localStorage["edu-theme"] || light;
+            document.documentElement.setAttribute("data-bs-theme", theme);
+        }
+    });
 </script>
 
 {#if theme}

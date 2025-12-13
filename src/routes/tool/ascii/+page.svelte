@@ -74,7 +74,7 @@
                 <tr>
                     <th>{i.toString(16).toUpperCase()}</th>
                     {#each { length: 16 } as _, j}
-                    	{@const idx = i * 16 + j}
+                        {@const idx = i * 16 + j}
                         {#if explicitMapping[idx]}
                             <td><kbd>{explicitMapping[idx]}</kbd></td>
                         {:else}

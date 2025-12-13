@@ -1,5 +1,5 @@
 <script>
-	import { onMount } from "svelte";
+    import { onMount } from "svelte";
     import { rgbAsHex, rgbToCmyk, rgbToHsl } from "./conversions";
 
     import Display from "./Display.svelte";
@@ -8,11 +8,11 @@
     import Cmyk from "./Cmyk.svelte";
 
     const values = [
-		{ label: "RGB", component: Rgb },
-		{ label: "HSL", component: Hsl },
-		{ label: "CMYK", component: Cmyk },
-	];
-	let selected = values[0];
+        { label: "RGB", component: Rgb },
+        { label: "HSL", component: Hsl },
+        { label: "CMYK", component: Cmyk },
+    ];
+    let selected = values[0];
 
     const colors = [
         { name: "Black",   rgb: { r:   0, g:   0, b:   0 } },

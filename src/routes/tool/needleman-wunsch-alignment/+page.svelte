@@ -1,5 +1,5 @@
 <script>
-	import { onMount } from "svelte";
+    import { onMount } from "svelte";
 
     class Element {
         constructor(value, direction) {
@@ -112,7 +112,7 @@
 
     onMount(() => {
         align();
-	});
+    });
 </script>
 
 <svelte:head>

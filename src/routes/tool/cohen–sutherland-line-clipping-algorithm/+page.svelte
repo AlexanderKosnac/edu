@@ -29,19 +29,19 @@
 
     function getOutcode(x, y)
     {
-    	let code = 0b0000;
+        let code = 0b0000;
 
-    	if (x < xmin)
-    		code |= LEFT;
-    	else if (x > xmax)
-    		code |= RIGHT;
+        if (x < xmin)
+            code |= LEFT;
+        else if (x > xmax)
+            code |= RIGHT;
 
         if (y < ymin)
-    		code |= TOP;
-    	else if (y > ymax)
-    		code |= BOTTOM;
+            code |= TOP;
+        else if (y > ymax)
+            code |= BOTTOM;
 
-    	return code;
+        return code;
     }
 
     function clipLine(x1, y1, x2, y2) {

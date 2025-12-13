@@ -1,5 +1,5 @@
 <script>
-	import { onMount } from "svelte";
+    import { onMount } from "svelte";
     import { matMult } from "$lib/math";
 
     import { katexAsHtml, toKatexVector, toKatexMatrix } from "$lib/katexUtility.js";
@@ -83,7 +83,7 @@
     onMount(() => {
         ctx = canvas.getContext("2d");
         onMatrixChange();
-	});
+    });
 </script>
 
 <svelte:head>
