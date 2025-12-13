@@ -1,6 +1,4 @@
 <script>
-import { onMount } from "svelte";
-
 let fileInput;
 
 let input;
@@ -59,21 +57,32 @@ function loadPreset(idx) {
 }
 
 function loadImage() {
-    if (fileInput.files.length < 1)
-        return;
-    const file = fileInput.files[0];
-    const url = URL.createObjectURL(file);
-    input.src = url;
+    return new Promise((resolve) => {
+        if (fileInput.files.length < 1) return resolve(false);
 
-    let dim = [input.naturalWidth, input.naturalHeight];
-    [original.width, original.height] = dim;
-    [convoluted.width, convoluted.height] = dim;
-    [original.naturalWidth, original.naturalHeight] = dim;
-    [convoluted.naturalWidth, convoluted.naturalHeight] = dim;
+        const file = fileInput.files[0];
+        const url = URL.createObjectURL(file);
+        input.onload = () => {
+            let dim = [input.naturalWidth, input.naturalHeight];
+            [canvas.width, canvas.height] = dim;
+            ctx.drawImage(input, 0, 0);
+            resolve(true);
+        };
+        input.src = url;
+    });
+}
+
+async function onFileChanged() {
+    const ok = await loadImage();
+    if (!ok) {
+        alert("Failed to load image.");
+        return;
+    }
 }
 
 function run() {
-    if (input.src === "") return;
+    if (input.src === "")
+        return;
 
     let dim = [input.naturalWidth, input.naturalHeight];
     [original.width, original.height] = dim;
@@ -112,10 +121,6 @@ function run() {
 
     ctxConvoluted.putImageData(imageDataConvoluted, 0, 0);
 }
-
-onMount(() => {
-    loadImage();
-});
 </script>
 
 <svelte:head>
@@ -132,7 +137,7 @@ onMount(() => {
     <div class="col-xl">
         <div class="d-flex flex-column gap-1 mb-1">
             <div class="input-group">
-                <input type="file" class="form-control" id="img" name="img" accept="image/*" bind:this={fileInput} onchange={loadImage}>
+                <input type="file" class="form-control" id="img" name="img" accept="image/*" bind:this={fileInput} onchange={onFileChanged}>
             </div>
             <div class="d-flex align-items-center">
                 <div class="input-group">
@@ -151,11 +156,10 @@ onMount(() => {
             <div class="d-flex align-items-center gap-2">
                 <button type="button" class="btn btn-primary" onclick={run}>Cast to Graylevel</button>
                 {#if input?.src === ""}
-                <span class="text-danger">No image loaded.</span>
+                    <span class="text-danger">No image loaded.</span>
                 {/if}
             </div>
             <div>
-                <h2>Presets</h2>
                 <ul>
                     {#each presets as preset, idx}
                     <li>
@@ -174,8 +178,8 @@ onMount(() => {
     </div>
     <div class="col">
         <div class="d-flex gap-1 justify-content-around">
-            <img    class="image-display hidden" bind:this={input} alt=" "/>
-            <canvas class="image-display" bind:this={original}></canvas>
+            <img    class="image-display" bind:this={input} alt=" "/>
+            <canvas class="image-display hidden" bind:this={original}></canvas>
             <canvas class="image-display" bind:this={convoluted}></canvas>
         </div>
     </div>

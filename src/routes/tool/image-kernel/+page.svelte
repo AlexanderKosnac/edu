@@ -1,6 +1,4 @@
 <script>
-import { onMount } from "svelte";
-
 import { clamp } from "$lib/math.js";
 
 import ConvolutionMask from "./ConvolutionMask.svelte";
@@ -26,16 +24,19 @@ function loadPreset(preset) {
 }
 
 function loadImage() {
-    if (fileInput.files.length < 1) return;
-    const file = fileInput.files[0];
-    const url = URL.createObjectURL(file);
-    input.src = url;
+    return new Promise((resolve) => {
+        if (fileInput.files.length < 1) return resolve(false);
 
-    let dim = [input.naturalWidth, input.naturalHeight];
-    [original.width, original.height] = dim;
-    [convoluted.width, convoluted.height] = dim;
-    [original.naturalWidth, original.naturalHeight] = dim;
-    [convoluted.naturalWidth, convoluted.naturalHeight] = dim;
+        const file = fileInput.files[0];
+        const url = URL.createObjectURL(file);
+        input.onload = () => {
+            let dim = [input.naturalWidth, input.naturalHeight];
+            [canvas.width, canvas.height] = dim;
+            ctx.drawImage(input, 0, 0);
+            resolve(true);
+        };
+        input.src = url;
+    });
 }
 
 function applyKernel(imageData, kernel, useGraylevel = false) {
@@ -123,10 +124,6 @@ function run() {
     const imageDataConvoluted = applyKernel(imageDataOriginal, $activeKernel, useGraylevel);
     ctxConvoluted.putImageData(imageDataConvoluted, 0, 0);
 }
-
-onMount(() => {
-    loadImage();
-});
 </script>
 
 {#snippet matrixKernel(matrix)}
