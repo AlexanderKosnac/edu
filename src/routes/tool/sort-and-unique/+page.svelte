@@ -1,17 +1,20 @@
 <script>
     let inputText = "Apples\nBananas\nApples\nPears";
-    let outputText = "";
     let splitCharacter = "\\n";
     let makeUnique = true;
 
+    let inputElements = [] 
+    let outputElements = [];
+
     function run() {
         const c = splitCharacter.replace(/\\n/g, '\n').replace(/\\t/g, '\t');
-        let elements = inputText.split(c);
+        inputElements = inputText.split(c);
+        outputElements = [... inputElements];
         if (makeUnique) {
-            elements = [...new Set(elements)];
+            outputElements = [...new Set(outputElements)];
         }
-        elements = elements.sort();
-        outputText = elements.join(c);
+        outputElements = outputElements.sort();
+        outputElements = elements;
     }
 </script>
 
@@ -48,7 +51,13 @@
     </div>
     <div class="col">
         <h2>Output</h2>
-        <textarea class="form-control" rows="20" bind:value="{outputText}" readonly></textarea>
+        <ul>
+            Number of input elements: {inputElements.length}<br>
+            Number of output elements: {outputElements.length}<br>
+            {#each outputElements as e}
+                <li>{e}</li>
+            {/each}
+        </ul>
     </div>
 </div>
 
