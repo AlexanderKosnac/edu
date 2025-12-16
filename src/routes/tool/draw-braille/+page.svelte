@@ -1,16 +1,17 @@
 <script>
     import { onMount } from "svelte";
-
     import { imageDataToBraille } from "$lib/brailleUtility.js";
 
     let canvasWidth = 16;
     let canvasHeight = 16;
 
     let canvas;
-
     let ctx;
 
     let braille = "";
+
+    let isDrawing = false;
+    let drawColor = [0, 0, 0];
 
     $: if (ctx && canvasWidth && canvasHeight) resizeCanvas();
 
@@ -26,27 +27,30 @@
         ctx.putImageData(imgData, x, y);
     }
 
-    function setPixelOnClick(e) {
-        setPixelOnClickToColor(e, 0, 0, 0);
+    function startDrawing(e, color) {
+        isDrawing = true;
+        drawColor = color;
+        draw(e);
     }
 
-    function clearPixelOnClick(e) {
-        setPixelOnClickToColor(e, 255, 255, 255);
+    function stopDrawing() {
+        isDrawing = false;
     }
 
-    function setPixelOnClickToColor(e, r, g, b) {
+    function draw(e) {
+        if (!isDrawing) return;
         const rect = canvas.getBoundingClientRect();
         const scaleX = canvas.width / rect.width;
         const scaleY = canvas.height / rect.height;
         const x = Math.floor((e.clientX - rect.left) * scaleX);
         const y = Math.floor((e.clientY - rect.top) * scaleY);
-        setPixel(x, y, r, g, b);
+        setPixel(x, y, ...drawColor);
         braille = imageDataToBraille(ctx.getImageData(0, 0, canvasWidth, canvasHeight));
     }
 
     function resizeCanvas() {
         const imageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
-        const data = imageData.data;
+        const data = structuredClone(imageData.data);
 
         for (let i = 0; i < data.length; i += 4) {
             const alpha = data[i + 3];
@@ -57,41 +61,42 @@
                 data[i + 3] = 255;
             }
         }
+        canvas.width = canvasWidth;
+        canvas.height = canvasHeight;
         ctx.putImageData(imageData, 0, 0);
     }
 
     function clearCanvas() {
         ctx.fillStyle = "white";
         ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+        braille = imageDataToBraille(ctx.getImageData(0, 0, canvasWidth, canvasHeight));
     }
 
-    onMount(()=> {
+    onMount(() => {
         ctx = canvas.getContext("2d");
         clearCanvas();
     });
 </script>
 
 <svelte:head>
-    <title>Draw braille</title>
+    <title>Draw Braille</title>
 </svelte:head>
 
 <div class="row">
     <div class="col">
-        <h1>Draw braille</h1>
+        <h1>Draw Braille</h1>
     </div>
 </div>
 
 <div class="row">
     <div class="col">
         <div class="d-flex flex-row gap-1 mb-1">
-            <button type="button" class="btn btn-secondary" onclick={clearCanvas}>Clear</button>
+            <button type="button" class="btn btn-secondary" on:click={clearCanvas}>Clear</button>
             <div class="input-group">
                 <span class="input-group-text">Dimensions</span>
-                <input type="number" class="form-control" placeholder="Width" aria-label="Grid Width" step="2" min="2"
-                    bind:value={canvasWidth}/>
+                <input type="number" class="form-control" placeholder="Width" aria-label="Grid Width" step="2" min="2" bind:value={canvasWidth}/>
                 <span class="input-group-text">x</span>
-                <input type="number" class="form-control" placeholder="Height" aria-label="Grid Height" step="4" min="4"
-                    bind:value={canvasHeight}/>
+                <input type="number" class="form-control" placeholder="Height" aria-label="Grid Height" step="4" min="4" bind:value={canvasHeight}/>
             </div>
         </div>
     </div>
@@ -99,9 +104,11 @@
 
 <div class="row">
     <div class="col">
-        <canvas width="16" height="16" bind:this={canvas}
-            onclick={setPixelOnClick}
-            oncontextmenu={e => { e.preventDefault(); clearPixelOnClick(e); }}>
+        <canvas width={canvasWidth} height={canvasHeight} bind:this={canvas}
+            on:mousedown={e => e.button === 0 ? startDrawing(e, [0, 0, 0]) : startDrawing(e, [255, 255, 255])}
+            on:mouseup={stopDrawing}
+            on:mouseleave={stopDrawing} on:mousemove={draw}
+            on:contextmenu={e => e.preventDefault()}>
         </canvas>
     </div>
     <div class="col">
@@ -122,6 +129,7 @@
     canvas {
         image-rendering: pixelated;
         height: 600px;
-        border: 1px solid var(--bs-body-color)
+        border: 1px solid var(--bs-body-color);
+        cursor: crosshair;
     }
 </style>
