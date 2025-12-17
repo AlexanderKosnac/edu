@@ -40,7 +40,7 @@
                 <input type="radio" name="flex-direction" value={val} bind:group={data["flex-direction"]}/>
                 <tt>{val}</tt>
             </label>
-            {/each}    
+            {/each}
         </div>
     </div>
 </div>
