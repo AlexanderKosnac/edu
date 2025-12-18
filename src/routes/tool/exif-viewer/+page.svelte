@@ -15,6 +15,13 @@
             includeUnknown: true,
         });
     }
+
+    function openJson(data) {
+        const json = JSON.stringify(data, null, 2);
+        const blob = new Blob([json], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        window.open(url, "_blank");
+    }
 </script>
 
 {#snippet descriptionTable(obj)}
@@ -47,7 +54,7 @@
     </div>
 </div>
 
-<div class="row">
+<div class="row mb-1">
     <div class="col-auto">
         <div class="d-flex flex-row gap-1 align-items-center">
             <input bind:this={imageInput} type="file" class="form-control" id="img" name="img" accept="image/*" onchange={loadData}>
@@ -57,6 +64,12 @@
 </div>
 
 {#if tags}
+<div class="row">
+    <div class="col">
+        <button type="button" class="btn btn-primary" onclick={() => openJson(tags)}>View JSON</button>
+    </div>
+</div>
+
 <div class="row">
     <h2>Thumbnail</h2>
     {#if tags.Thumbnail}
@@ -78,9 +91,6 @@
                 </tbody>
             </table>
             {@render descriptionTable(tags.Thumbnail)}
-        </div>
-        <div class="col">
-            <pre>{JSON.stringify(tags.Thumbnail, null, 2)}</pre>
         </div>
     {:else}
         <div class="col">
@@ -111,9 +121,6 @@
         <div class="col">
             {@render descriptionTable(tags.exif)}
         </div>
-        <div class="col">
-            <pre>{JSON.stringify(tags.exif, null, 2)}</pre>            
-        </div>
     {:else}
         <div class="col">
             No Exif data.
@@ -127,9 +134,6 @@
         <div class="col">
             {@render descriptionTable(tags.icc)}
         </div>
-        <div class="col">
-            <pre>{JSON.stringify(tags.icc, null, 2)}</pre>
-        </div>
     {:else}
         <div class="col">
             No ICC data.
@@ -142,9 +146,6 @@
     {#if tags.xmp}
         <div class="col">
             {@render descriptionTable(tags.xmp)}
-        </div>
-        <div class="col">
-            <pre>{JSON.stringify(tags.xmp, null, 2)}</pre>
         </div>
     {:else}
         <div class="col">
