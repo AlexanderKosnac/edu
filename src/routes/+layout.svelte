@@ -1,6 +1,6 @@
 <script>
     import "bootstrap/dist/css/bootstrap.min.css";
-    import scriptSrc from "bootstrap/dist/js/bootstrap.bundle.min.js?url";
+    import jsBootstrap from "bootstrap/dist/js/bootstrap.bundle.min.js?url";
     import "bootstrap-icons/font/bootstrap-icons.css";
 
     import MiniSearch from 'minisearch';
@@ -9,7 +9,7 @@
     import ThemeToggle from '$lib/ThemeToggle/ThemeToggle.svelte';
     import GitHubReference from '$lib/GitHubReference/GitHubReference.svelte';
 
-    import data from "./aggregate-overview-data.json";
+    import aggregateOverview from "./aggregate-overview-data.json";
 
     let minisearch = new MiniSearch({
         fields: ["name", "description"],
@@ -17,7 +17,7 @@
     });
 
     let i = 0;
-    minisearch.addAll(data.map(e => { return {...e, id: i++} }));
+    minisearch.addAll(aggregateOverview.map(e => { return {...e, id: i++} }));
 
     let search = "";
     $: results = minisearch.search(search);
@@ -28,7 +28,7 @@
 </script>
 
 <svelte:head>
-    <script src={scriptSrc}></script>
+    <script src={jsBootstrap}></script>
 </svelte:head>
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary flex-nowrap">
