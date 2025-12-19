@@ -1,6 +1,8 @@
 <script>
     import { onMount } from "svelte";
 
+    import MapLinks from "$lib/MapLinks/MapLinks.svelte";
+
     const options = {
         maximumAge: 0,
         timeout: 5000,
@@ -117,6 +119,10 @@
                         <tr>
                             <td>Speed:</td>
                             <td colspan="2">{value.coords.speed ?? "N/A"} m/s; Heading: {value.coords.heading ?? "N/A"}</td>
+                        </tr>
+                        <tr>
+                            <td>Viewer Links:</td>
+                            <td colspan="2"><MapLinks latitude={value.coords.latitude} longitude={value.coords.longitude} /></td>
                         </tr>
                     </tbody>
                 </table>
