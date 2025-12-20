@@ -49,25 +49,46 @@
     }
 
     function resizeCanvas() {
-        const imageData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
-        const data = structuredClone(imageData.data);
+        const oldImageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
-        for (let i = 0; i < data.length; i += 4) {
-            const alpha = data[i + 3];
-            if (alpha === 0) {
-                data[i] = 255;
-                data[i + 1] = 255;
-                data[i + 2] = 0;
-                data[i + 3] = 255;
-            }
-        }
         canvas.width = canvasWidth;
         canvas.height = canvasHeight;
-        ctx.putImageData(imageData, 0, 0);
+
+        const newImageData = ctx.createImageData(canvas.width, canvas.height);
+        for (let i = 0; i < newImageData.data.length; i += 4) {
+            newImageData.data[i] = 255;
+            newImageData.data[i + 1] = 255;
+            newImageData.data[i + 2] = 255;
+            newImageData.data[i + 3] = 255;
+        }
+
+        const minWidth = Math.min(oldImageData.width, newImageData.width);
+        const minHeight = Math.min(oldImageData.height, newImageData.height);
+
+        for (let y = 0; y < minHeight; y++) {
+            for (let x = 0; x < minWidth; x++) {
+                const oldIndex = (y * oldImageData.width + x) * 4;
+                const newIndex = (y * newImageData.width + x) * 4;
+                newImageData.data[newIndex] = oldImageData.data[oldIndex];
+                newImageData.data[newIndex + 1] = oldImageData.data[oldIndex + 1];
+                newImageData.data[newIndex + 2] = oldImageData.data[oldIndex + 2];
+                newImageData.data[newIndex + 3] = oldImageData.data[oldIndex + 3];
+            }
+        }
+
+        ctx.putImageData(newImageData, 0, 0);
+
+        braille = imageDataToBraille(ctx.getImageData(0, 0, canvas.width, canvas.height));
     }
 
     function clearCanvas() {
         ctx.fillStyle = "white";
+        ctx.fillRect(0, 0, canvasWidth, canvasHeight);
+        braille = imageDataToBraille(ctx.getImageData(0, 0, canvasWidth, canvasHeight));
+    }
+
+    function fillCanvas() {
+        ctx.fillStyle = "black";
         ctx.fillRect(0, 0, canvasWidth, canvasHeight);
         braille = imageDataToBraille(ctx.getImageData(0, 0, canvasWidth, canvasHeight));
     }
@@ -91,12 +112,13 @@
 <div class="row">
     <div class="col">
         <div class="d-flex flex-row gap-1 mb-1">
-            <button type="button" class="btn btn-secondary" on:click={clearCanvas}>Clear</button>
             <div class="input-group">
                 <span class="input-group-text">Dimensions</span>
-                <input type="number" class="form-control" placeholder="Width" aria-label="Grid Width" step="2" min="2" bind:value={canvasWidth}/>
+                <input type="number" class="form-control" placeholder="Width" aria-label="Grid Width" step="2" min="2" bind:value={canvasWidth} style="max-width: 5em;"/>
                 <span class="input-group-text">x</span>
-                <input type="number" class="form-control" placeholder="Height" aria-label="Grid Height" step="4" min="4" bind:value={canvasHeight}/>
+                <input type="number" class="form-control" placeholder="Height" aria-label="Grid Height" step="4" min="4" bind:value={canvasHeight} style="max-width: 5em;"/>
+                <button type="button" class="btn btn-primary" on:click={clearCanvas}>Clear</button>
+                <button type="button" class="btn btn-primary" on:click={fillCanvas}>Fill</button>
             </div>
         </div>
     </div>
@@ -104,10 +126,11 @@
 
 <div class="row">
     <div class="col">
-        <canvas width={canvasWidth} height={canvasHeight} bind:this={canvas}
+        <canvas width="16" height="16" bind:this={canvas}
             on:mousedown={e => e.button === 0 ? startDrawing(e, [0, 0, 0]) : startDrawing(e, [255, 255, 255])}
             on:mouseup={stopDrawing}
-            on:mouseleave={stopDrawing} on:mousemove={draw}
+            on:mouseleave={stopDrawing}
+            on:mousemove={draw}
             on:contextmenu={e => e.preventDefault()}>
         </canvas>
     </div>
