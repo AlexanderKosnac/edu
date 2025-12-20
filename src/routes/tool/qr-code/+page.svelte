@@ -54,10 +54,10 @@
     let qrcDim = 25;
     let cells = [];
 
-    function setCell(x, y, value, type) {
-        if (x >= 0 && y >= 0 && x < qrcDim && y < qrcDim) {
-            cells[x][y].value = value;
-            cells[x][y].type = type;
+    function setCell(row, column, value, type) {
+        if (row >= 0 && column >= 0 && row < qrcDim && column < qrcDim) {
+            cells[row][column].value = value;
+            cells[row][column].type = type;
         }
     }
 
@@ -68,17 +68,17 @@
         })));
     }
 
-    function drawPattern(x, y, pattern, type) {
-        pattern.forEach((row, dy) => {
-            row.forEach((cell, dx) => {
-                setCell(x + dx, y + dy, cell, type);
+    function drawPattern(row, column, pattern, type) {
+        pattern.forEach((r, dy) => {
+            r.forEach((c, dx) => {
+                setCell(row + dx, column + dy, c, type);
             });
         });
     }
 
     // x and y define the position of the top left corner of the ID pattern
-    function drawPositionSquare(x, y) {
-        drawPattern(x, y, [
+    function drawPositionSquare(row, column) {
+        drawPattern(row, column, [
             [1, 1, 1, 1, 1, 1, 1],
             [1, 0, 0, 0, 0, 0, 1],
             [1, 0, 1, 1, 1, 0, 1],
@@ -89,8 +89,8 @@
         ], POSITION_SQUARE);
     }
 
-    function drawAlignmentPattern(x, y) {
-        drawPattern(x-2, y-2, [
+    function drawAlignmentPattern(row, column) {
+        drawPattern(row-2, column-2, [
             [1, 1, 1, 1, 1],
             [1, 0, 0, 0, 1],
             [1, 0, 1, 0, 1],
@@ -99,37 +99,37 @@
         ], ALIGNMENT_PATTERN);
     }
 
-    function drawFormatInfoHorizontal(x, y, d) {
-        drawLinePattern(x, y, d, true, _ => 1, FORMAT_INFO);
+    function drawFormatInfoHorizontal(row, column, d) {
+        drawLinePattern(row, column, d, true, _ => 1, FORMAT_INFO);
     }
 
-    function drawFormatInfoVertical(x, y, d) {
-        drawLinePattern(x, y, d, false, _ => 1, FORMAT_INFO);
+    function drawFormatInfoVertical(row, column, d) {
+        drawLinePattern(row, column, d, false, _ => 1, FORMAT_INFO);
     }
 
-    function drawPatternStripHorizontal(x, y, pattern) {
-        drawLinePattern(x, y, pattern.length, true, i => pattern[i], FORMAT_INFO);
+    function drawPatternStripHorizontal(row, column, pattern) {
+        drawLinePattern(row, column, pattern.length, true, i => pattern[i], FORMAT_INFO);
     }
 
-    function drawPatternStripVertical(x, y, pattern) {
-        drawLinePattern(x, y, pattern.length, false, i => pattern[i], FORMAT_INFO);
+    function drawPatternStripVertical(row, column, pattern) {
+        drawLinePattern(row, column, pattern.length, false, i => pattern[i], FORMAT_INFO);
     }
 
-    function drawTimingStripHorizontal(x, y, d) {
-        drawLinePattern(x, y, d, true, i => i % 2 ? 0 : 1, TIMING_STRIP);
+    function drawTimingStripHorizontal(row, column, d) {
+        drawLinePattern(row, column, d, true, i => i % 2 ? 0 : 1, TIMING_STRIP);
     }
 
-    function drawTimingStripVertical(x, y, d) {
-        drawLinePattern(x, y, d, false, i => i % 2 ? 0 : 1, TIMING_STRIP);
+    function drawTimingStripVertical(row, column, d) {
+        drawLinePattern(row, column, d, false, i => i % 2 ? 0 : 1, TIMING_STRIP);
     }
 
-    function drawLinePattern(x, y, d, isHorizontal, patternFn, cellType) {
+    function drawLinePattern(row, column, d, isHorizontal, patternFn, cellType) {
         for (let i = 0; i < d; i++) {
             const value = patternFn(i);
             if (isHorizontal) {
-                setCell(x + i, y, value, cellType);
+                setCell(row + i, column, value, cellType);
             } else {
-                setCell(x, y + i, value, cellType);
+                setCell(row, column + i, value, cellType);
             }
         }
     }
@@ -148,12 +148,28 @@
     }
 
     function* yieldAvailableDataCells() {
-        for (let i = qrcDim - 1; i >= 0; i--) {
-            for (let j = qrcDim - 1; j >= 0; j--) {
-                if (cells[i][j].type == UNUSED) {
-                    yield { i, j };
+        const size = qrcDim;
+        let col = size - 1;
+        let upwards = true;
+
+        while (col > 0) {
+            if (col === 6) // Skip timing pattern at column 6
+                col--;
+
+            const rowIndices = [...Array(size).keys()];
+            if (upwards)
+                rowIndices.reverse();
+
+            for (const r of rowIndices) {
+                for (let c = col; c >= col - 1; c--) {
+                    if (cells[r][c].type === UNUSED) {
+                        yield { i: r, j: c };
+                    }
                 }
             }
+
+            col -= 2;
+            upwards = !upwards;
         }
     }
 
@@ -167,6 +183,10 @@
         }
     }
 
+    function addData() {
+        drawData([1], DATA);
+    }
+
     function createQrCode() {
         setupCells();
 
@@ -175,7 +195,7 @@
         drawPositionSquare(0, qrcDim-7);
         drawAlignmentPattern(18, 18);
 
-        setCell(8, 17, 1, FIXED_BLACK);
+        setCell(17, 8, 1, FIXED_BLACK);
 
         drawLinePattern(0, 7, 8, true, i => 0, SEPARATOR);
         drawLinePattern(7, 0, 8, false, i => 0, SEPARATOR);
@@ -189,23 +209,20 @@
         drawFormatInfoHorizontal(0, 8, 9);
         drawFormatInfoVertical(8, 0, 9);
 
-        drawFormatInfoHorizontal(17, 8, 8);
-        drawFormatInfoVertical(8, 18, 7);
+        drawFormatInfoHorizontal(18, 8, 7);
+        drawFormatInfoVertical(8, 17, 8);
 
-        drawPatternStripHorizontal(0, 8, selectedErrorCorrectionLevel.pattern);
-        drawPatternStripVertical(8, 23, selectedErrorCorrectionLevel.pattern.toReversed());
+        drawPatternStripVertical(8, 0, selectedErrorCorrectionLevel.pattern);
+        drawPatternStripHorizontal(23, 8, selectedErrorCorrectionLevel.pattern.toReversed());
 
         drawTimingStripHorizontal(8, 6, 9);
         drawTimingStripVertical(6, 8, 9);
 
         drawData(selectedEncodingOption.pattern, ENCODING);
-        /*
         drawData(byteAsBinaryList(inputAscii.length * 8), DATA_LENGTH);
+
         drawData(charsAsBinaryList(inputAscii), DATA);
-        //*/
     }
-
-
 </script>
 
 <svelte:head>
@@ -242,17 +259,21 @@
         </label>
 
         <button type="button" class="btn btn-primary" onclick={createQrCode}>Generate</button>
+        <button type="button" class="btn btn-primary" onclick={addData}>Add Data</button>
     </div>
 </div>
 
 <div class="row">
     <div class="col-auto">
-        <svg width="600" height="600" viewBox="0 0 {qrcDim*CELL_SIZE} {qrcDim*CELL_SIZE}">
-        {#each cells as row, i}
-            {#each row as cell, j}
+        <svg width="800" height="800" viewBox="0 0 {qrcDim*CELL_SIZE} {qrcDim*CELL_SIZE}">
+        {#each cells as row, j}
+            {#each row as cell, i}
             <rect class:highlighted={cell.type == selectedPart} class:white={cell.value == 0} class:black={cell.value == 1}
-                x="{i*CELL_SIZE}" y="{j*CELL_SIZE}" width="{CELL_SIZE}" height="{CELL_SIZE}"
-                part="{cell.type}"/>
+                x={i * CELL_SIZE} y={j * CELL_SIZE} width={CELL_SIZE} height={CELL_SIZE}
+                part={cell.type}/>
+            <text x={i * CELL_SIZE + 5} y={j * CELL_SIZE + 5} font-size="3" fill="grey" text-anchor="middle" dominant-baseline="middle">
+                {i},{j}
+            </text>
             {/each}
         {/each}
         </svg>
