@@ -12,13 +12,17 @@
     const formats = [
         {
             name: "Decimal degrees (DD)",
-            html: (degree) => `${degree}&deg;`,
+            html: (degree, positive, negative) => {
+                const sign = degree > 0 ? positive : negative;
+                return `${degree}&deg; ${sign}`;
+            },
         },
         {
             name: "Degrees, minutes, seconds (DMS)",
-            html: (degree) => {
+            html: (degree, positive, negative) => {
                 const ddg = decimalDegreesToDegreesMinutesSeconds(degree);
-                return `${ddg.deg}&deg; ${ddg.min}&prime; ${ddg.sec.toFixed(3)}&Prime;`;
+                const sign = degree > 0 ? positive : negative;
+                return `${ddg.deg}&deg; ${ddg.min}&prime; ${ddg.sec.toFixed(3)}&Prime; ${sign}`;
             },
         },
     ];
@@ -34,9 +38,11 @@
     }
 
     function decimalDegreesToDegreesMinutesSeconds(degree) {
-        const deg = Math.floor(degree)
-        const min = Math.floor((degree - deg) * 60)
-        const sec = ((degree - deg) * 60 - min) * 60
+        const abs = Math.abs(degree);
+        const deg = Math.floor(abs);
+        const minFloat = (abs - deg) * 60;
+        const min = Math.floor(minFloat);
+        const sec = (minFloat - min) * 60;
         return { deg, min, sec };
     }
 
@@ -96,7 +102,7 @@
                         </tr>
                         <tr>
                             <td>Latitude:</td>
-                            <td>{@html selectedFormat.html(value.coords.latitude)} (&#177; {value.coords.accuracy ?? "N/A"}m)</td>
+                            <td>{@html selectedFormat.html(value.coords.latitude, "N", "S")} (&#177; {value.coords.accuracy ?? "N/A"}m)</td>
                             <td rowspan="2" style="vertical-align: middle;">
                                 <div class="d-flex flex-column gap-1">
                                     {#each formats as format}
@@ -110,7 +116,7 @@
                         </tr>
                         <tr>
                             <td>Longitude:</td>
-                            <td>{@html selectedFormat.html(value.coords.longitude)} (&#177; {value.coords.accuracy ?? "N/A"}m)</td>
+                            <td>{@html selectedFormat.html(value.coords.longitude, "E", "W")} (&#177; {value.coords.accuracy ?? "N/A"}m)</td>
                         </tr>
                         <tr>
                             <td>Altitude:</td>
