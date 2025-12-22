@@ -2,6 +2,7 @@
     import { onMount } from "svelte";
 
     import MapLinks from "$lib/MapLinks/MapLinks.svelte";
+    import Map from "$lib/Map/Map.svelte";
 
     const options = {
         maximumAge: 0,
@@ -28,14 +29,10 @@
     ];
 
     let locationPromise;
+    let lon = -74.006;
+    let lat = 40.7128;
 
     let selectedFormat = formats[0];
-
-    function getCurrentPositionAsync(options) {
-        return new Promise((resolve, reject) => {
-            navigator.geolocation.getCurrentPosition(resolve, reject, options);
-        });
-    }
 
     function decimalDegreesToDegreesMinutesSeconds(degree) {
         const abs = Math.abs(degree);
@@ -46,8 +43,17 @@
         return { deg, min, sec };
     }
 
-    function updateLocation() {
+    function getCurrentPositionAsync(options) {
+        return new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, options);
+        });
+    }
+
+    async function updateLocation() {
         locationPromise = getCurrentPositionAsync(options);
+        let pos = await locationPromise;
+        lat = pos.coords.latitude;
+        lon = pos.coords.longitude;
     }
 
     onMount(() => {
@@ -65,9 +71,10 @@
     </div>
 </div>
 
+
 <div class="row">
     <div class="col-auto">
-        <div class="d-flex flex-row gap-2 align-items-end">
+        <div class="d-flex flex-row gap-1 align-items-end mb-1">
             <button type="button" class="btn btn btn-primary" onclick={updateLocation}>Fetch</button>
 
             <label class="d-flex align-items-center gap-1">
@@ -85,16 +92,12 @@
                 High Accuracy
             </label>
         </div>
-    </div>
-</div>
 
-<div class="row">
-    <div class="col">
         {#await locationPromise}
             Locating ...
         {:then value}
             {#if value}
-                <table class="table table-bordered w-auto mt-1">
+                <table class="table table-bordered w-auto">
                     <tbody>
                         <tr>
                             <td>Time:</td>
@@ -136,6 +139,9 @@
         {:catch error}
             <span class="text-danger">Failed to fetch location. {error.message}</span>
         {/await}
+    </div>
+    <div class="col">
+        <Map lat={lat} lon={lon} zoom={12}/>
     </div>
 </div>
 
