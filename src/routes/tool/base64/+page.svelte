@@ -9,6 +9,44 @@
     ]
     const padchar = "=";
 
+    const formats = [
+        {
+            name: "ASCII",
+            getBits: (input) => {
+                const result = { chars: [], octets: [], bits: [] };
+                for (let i = 0; i < input.length; i++) {
+                    const c = input.charAt(i);
+                    result.chars.push(c);
+                    result.octets.push(c.charCodeAt(0));
+                    result.bits.push(...c.charCodeAt(0).toString(2).padStart(8, "0").split(""));
+                }
+                return result;
+            },
+        },
+        {
+            name: "Binary",
+            getBits: (input) => {
+                const result = { chars: [], octets: [], bits: [] };
+                const clean = input.replace(/[^01]/g, "");
+
+                for (let i = 0; i < clean.length; i += 8) {
+                    let byte = clean.slice(i, i + 8);
+                    if (byte.length < 8)
+                        byte = byte.padEnd(8, "0");
+
+                    const value = parseInt(byte, 2);
+
+                    result.bits.push(...byte.split(""));
+                    result.octets.push(value);
+                    result.chars.push(String.fromCharCode(value));
+                }
+
+                return result;
+            },
+        },
+    ];
+
+    let selectedFormat = formats[0];
     let inputString = "Man";
 
     let chars = [];
@@ -22,19 +60,18 @@
     $: outputString = charsEnc.join("");
 
     function encodeData() {
-        chars = [];
-        octets = [];
-        bits = [];
         sextetsEnc = [];
         charsEnc = [];
         octetsEnc = [];
-        for (let i = 0; i < inputString.length; i++) {
-            const c = inputString.charAt(i);
-            chars.push(c);
-            octets.push(c.charCodeAt(0));
-            bits.push(...c.charCodeAt(0).toString(2).padStart(8, "0").split(""));
-        }
-        if (bits.length%6) bits.push(...Array(6-bits.length%6).fill("0")); // Padding to have a multiple of 6
+
+        const r = selectedFormat.getBits(inputString);
+        chars = r.chars;
+        octets = r.octets;
+        bits = r.bits;
+
+        if (bits.length % 6) // Padding to have a multiple of 6
+            bits.push(...Array(6 - bits.length % 6).fill("0"));
+
         for (let i = 0; i < bits.length; i+=6) {
             const encoded = parseInt(bits.slice(i, i+6).join(""), 2);
             const c = characters[encoded];
@@ -42,7 +79,7 @@
             charsEnc.push(c);
             octetsEnc.push(c.charCodeAt(0));
         }
-        padBlocks = (chars.length%3) ? 3-chars.length%3 : 0;
+        padBlocks = (chars.length % 3) ? 3 - chars.length % 3 : 0;
 
         for (let i = 0; i < padBlocks; i++) {
             charsEnc.push(padchar);
@@ -63,7 +100,15 @@
 
 <div class="row">
     <div class="col">
-        Unencoded Input String:
+        <div class="d-flex flex-row gap-2">
+            Unencoded Input:
+            {#each formats as format}
+                <label class="text-nowrap">
+                    <input type="radio" class="form-check-input" value={format} bind:group={selectedFormat}/>
+                    {format.name}
+                </label>
+            {/each}
+        </div>
         <div class="d-flex flex-row gap-1">
             <input type="text" class="form-control font-monospace" bind:value="{inputString}" oninput={encodeData}>
             <button type="button" class="btn btn-primary" onclick={encodeData}>Encode</button>
