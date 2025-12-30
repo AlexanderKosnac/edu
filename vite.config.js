@@ -1,6 +1,8 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { defineConfig } from 'vite';
 
+import mkcert from 'vite-plugin-mkcert';
+
 import { readdirSync, readFileSync, writeFileSync, statSync } from 'fs';
 import { resolve, join } from 'path';
 
@@ -67,5 +69,10 @@ export default defineConfig({
     plugins: [
         sveltekit(),
         aggregateOverviewDataPlugin(),
-    ]
+        mkcert(),
+    ],
+    server: {
+        https: process.env.HTTPS === "true",
+        host: process.env.EXPOSE === "true",
+    }
 });

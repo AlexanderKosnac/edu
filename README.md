@@ -20,6 +20,12 @@ Start development server:
 npm run dev
 ```
 
+If needed, use the environment variables `HTTPS` and `EXPOSE` to make the development server use HTTPS and expose the server to the network.
+
+```
+HTTPS=true EXPOSE=true npm run dev
+```
+
 ## Production
 
 To create a production version:

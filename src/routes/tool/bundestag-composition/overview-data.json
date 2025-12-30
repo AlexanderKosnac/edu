@@ -2,5 +2,6 @@
     "name": "Composition of the Bundestag",
     "description": "Visualization of the composition of the Bundestag.",
     "tags": [
-    ]
+    ],
+    "usable": false
 }
