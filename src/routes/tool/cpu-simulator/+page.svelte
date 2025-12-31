@@ -65,8 +65,8 @@
             <button type="button" class="btn btn-primary" onclick={doAssemble}>Assemble and load</button>
         </div>
     </div>
-    <div class="col">
-        <svg width="1024" height="1024" viewBox="0 0 1024 1024" xmlns="http://www.w3.org/2000/svg">
+    <div class="col-auto">
+        <svg width="100%" height="516" viewBox="0 0 1600 516" xmlns="http://www.w3.org/2000/svg">
             {#each cpu.regs as reg, i}
                 <g>
                     <rect x="0" y="{25*i}" width="20" height="20" stroke="currentColor" fill="transparent"/>
@@ -112,26 +112,41 @@
                 <text x="150" y="110" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="middle">{cpu.output}</text>
             </g>
 
-            {#each cpu.memory as m, i}
-                {@const col = i % 16}
-                {@const row = Math.floor(i / 16)}
-                <text x="{400+20*col}" y="{12*row}" font-size="12" fill={getMemoryIndexColor(i)}
-                    text-anchor="start" dominant-baseline="hanging">
-                    {toHex(m)}
-                </text>
-            {/each}
+            <foreignObject x="500" y="0" width="100%" height="100%">
+                <div class="overflow-auto" style="max-height: 500px">
+                    <svg width="400" height="2048" viewBox="0 0 400 2048" xmlns="http://www.w3.org/2000/svg">
+                        {#each assembly?.program as e, i}
+                            <text x="0" y="{12*i}" font-size="12" fill={cpu.pc === e.addr ? "red" : "currentColor"}
+                                text-anchor="start" dominant-baseline="hanging">
+                                {toHex(e.addr, 8)}: {e.source}
+                            </text>
+                        {/each}
+                    </svg>
+                </div>
+            </foreignObject>
 
-            {#each assembly?.program as e, i}
-                <text x="750" y="{12*i}" font-size="12" fill={cpu.pc === e.addr ? "red" : "currentColor"}
-                    text-anchor="start" dominant-baseline="hanging">
-                    {toHex(e.addr, 8)}: {e.source}
-                </text>
-            {/each}
+            <foreignObject x="1000" y="0" width="100%" height="100%">
+                <div class="overflow-auto" style="max-height: 500px">
+                    <svg width="400" height="2048" viewBox="0 0 400 2048" xmlns="http://www.w3.org/2000/svg">
+                        {#each cpu.memory as m, i}
+                            {@const col = i % 16}
+                            {@const row = Math.floor(i / 16)}
+                            {#if col == 0}
+                                <text x="0" y="{12*row}" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="hanging">
+                                    {toHex(row * 16, 4)}
+                                </text>
+                            {/if}
+                            <text x="{50+20*col}" y="{12*row}" font-size="12" fill={getMemoryIndexColor(i)} text-anchor="start" dominant-baseline="hanging">
+                                {toHex(m)}
+                            </text>
+                        {/each}        
+                    </svg>
+                </div>
+            </foreignObject>
         </svg>
     </div>
 </div>
-
-<div class="row">
+<div class="row pt-1">
     <div class="col-auto">
         <strong>Examples:</strong>
         <ul>
@@ -147,9 +162,6 @@
     <div class="col">
         <textarea class="form-control font-monospace" rows="20" bind:value={src}></textarea>
     </div>
-</div>
-
-<div class="row">
     <div class="col">
         <table class="table table-bordered w-auto mt-1">
             <thead>
@@ -163,23 +175,23 @@
             </thead>
             <tbody>
                 {#each Object.entries(OPCODES) as [_, d]}
-                <tr>
-                    <td>
-                        <samp>{d.mnemonic}</samp>
-                    </td>
-                    <td>
-                        <samp>{d.size}</samp>
-                    </td>
-                    <td>
-                        <samp>0x{toHex(d.opcode)}</samp>
-                    </td>
-                    <td>
-                        <samp>{d.encoding}</samp>
-                    </td>
-                    <td>
-                        <samp>{d.description}</samp>
-                    </td>
-                </tr>
+                    <tr>
+                        <td>
+                            <samp>{d.mnemonic}</samp>
+                        </td>
+                        <td>
+                            <samp>{d.size}</samp>
+                        </td>
+                        <td>
+                            <samp>0x{toHex(d.opcode)}</samp>
+                        </td>
+                        <td>
+                            <samp>{d.encoding}</samp>
+                        </td>
+                        <td>
+                            <samp>{d.description}</samp>
+                        </td>
+                    </tr>
                 {/each}
             </tbody>
         </table>
