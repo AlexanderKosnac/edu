@@ -5,7 +5,6 @@ underlying material.
 The name is derived from top-level domain [.edu](https://en.wikipedia.org/wiki/.edu)
 which was created for organizations with a focus on education.
 
-
 ## Development
 
 Install dependencies:
