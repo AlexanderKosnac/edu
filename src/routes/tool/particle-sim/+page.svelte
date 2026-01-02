@@ -12,84 +12,113 @@
     }
 
     let canvas;
-
     let ctx;
     let imageData;
 
+
+    let grid = [];
+
+    function resizeGrid() {
+        grid = new Array(canvasWidth * canvasHeight).fill(null);
+    }
+
+    function index(x, y) {
+        return y * canvasWidth + x;
+    }
+
+    function inBounds(x, y) {
+        return x >= 0 && x < canvasWidth && y >= 0 && y < canvasHeight;
+    }
+
+    function getParticle(x, y) {
+        if (!inBounds(x, y)) return null;
+        return grid[index(x, y)];
+    }
+
+    function setParticle(x, y, value) {
+        if (!inBounds(x, y)) return;
+        grid[index(x, y)] = value;
+    }
+
+    function clearGrid() {
+        grid.fill(null);
+        render();
+    }
+
     function setPixel(x, y, r, g, b) {
-        const index = (y * canvas.width + x) * 4;
-        imageData.data[index + 0] = r;
-        imageData.data[index + 1] = g;
-        imageData.data[index + 2] = b;
-        imageData.data[index + 3] = 255;
+        const i = (y * canvas.width + x) * 4;
+        imageData.data[i + 0] = r;
+        imageData.data[i + 1] = g;
+        imageData.data[i + 2] = b;
+        imageData.data[i + 3] = 255;
     }
 
     function render() {
-        if (canvas.width === 0 || canvas.height === 0) return;
-        imageData = ctx.createImageData(canvas.width, canvas.height);
-        for (let y = 0; y <= canvasHeight; y++) {
-            for (let x = 0; x <= canvasWidth; x++) {
+        if (!ctx || canvasWidth === 0 || canvasHeight === 0) return;
+
+        imageData = ctx.createImageData(canvasWidth, canvasHeight);
+
+        for (let y = 0; y < canvasHeight; y++) {
+            for (let x = 0; x < canvasWidth; x++) {
                 const p = getParticle(x, y);
                 if (p) {
-                    setPixel(x, y, p.color[0], p.color[1], p.color[2]);
+                    const [r, g, b] = p.color;
+                    setPixel(x, y, r, g, b);
                 } else {
                     setPixel(x, y, 0, 0, 0);
                 }
             }
         }
+
         ctx.putImageData(imageData, 0, 0);
     }
 
-    function clamp(value, min, max) {
-        return Math.min(Math.max(value, min), max);
-    }
-
-    let particles = new Map();
-
-    function key(x, y) {
-        return `${x},${y}`;
-    }
-
-    function xy(key) {
-        return key.split(',').map(Number);
-    }
-
-    function getParticle(x, y) {
-        return particles.get(key(x, y));
-    }
-
-    function setParticle(x, y, value) {
-        if (value) {
-            particles.set(key(x, y), value);
-        } else {
-            particles.delete(key(x, y));
+    function shuffle(array) {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
         }
     }
 
     function step() {
-        const nextGen = new Map();
+        const nextGrid = new Array(canvasWidth * canvasHeight).fill(null);
 
-        for (const cell of particles) {
-            let p = new Particle(cell[1].color, cell[1].behavior);
-            let [x, y] = xy(cell[0]);
+        const cells = [];
+        for (let y = 0; y < canvasHeight; y++) {
+            for (let x = 0; x < canvasWidth; x++) {
+                const p = getParticle(x, y);
+                if (p) cells.push({ x, y, p });
+            }
+        }
 
-            let xn = x, yn = y;
-            if (getParticle(x, y + 1) == null && y + 1 < canvasHeight) {
+        shuffle(cells);
+
+        for (const { x, y, p } of cells) {
+            let xn = x;
+            let yn = y;
+
+            if (inBounds(x, y + 1) && !getParticle(x, y + 1)) {
                 yn++;
             }
-            else if (getParticle(x - 1, y + 1) == null && x - 1 >= 0 && y + 1 < canvasHeight) {
+            else if (inBounds(x - 1, y + 1) && !getParticle(x - 1, y + 1)) {
                 xn--;
                 yn++;
             }
-            else if (getParticle(x + 1, y + 1) == null && x + 1 < canvasWidth && y + 1 < canvasHeight) {
+            else if (inBounds(x + 1, y + 1) && !getParticle(x + 1, y + 1)) {
                 xn++;
                 yn++;
             }
 
-            nextGen.set(key(xn, yn), p);
+            const i = index(xn, yn);
+
+            if (nextGrid[i] === null) {
+                nextGrid[i] = p;
+            } else {
+                nextGrid[index(x, y)] = p;
+            }
         }
 
-        particles = nextGen;
+        grid = nextGrid;
     }
 
     function nextGeneration() {
@@ -97,47 +126,42 @@
         render();
     }
 
-    function delay(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
-
-    function clearGrid() {
-        particles = new Map();
-        render();
-    }
-
     function setParticleOnClick(e) {
         const rect = canvas.getBoundingClientRect();
         const scaleX = canvas.width / rect.width;
         const scaleY = canvas.height / rect.height;
+
         const x = Math.floor((e.clientX - rect.left) * scaleX);
         const y = Math.floor((e.clientY - rect.top) * scaleY);
-        let p = new Particle([255, 0, 0], (particles, x, y) => {});
+
+        const p = new Particle([255, 0, 0]);
         setParticle(x, y, p);
         render();
+    }
+
+    function delay(ms) {
+        return new Promise((resolve) => setTimeout(resolve, ms));
     }
 
     async function startRun() {
         const FRAME_DURATION = 1000 / 60;
 
         while (true) {
-            const startTime = performance.now();
-
+            const start = performance.now();
             nextGeneration();
-
-            const endTime = performance.now();
-            const elapsed = endTime - startTime;
-            const delayTime = Math.max(0, FRAME_DURATION - elapsed);
-
-            await delay(delayTime);
+            const elapsed = performance.now() - start;
+            await delay(Math.max(0, FRAME_DURATION - elapsed));
         }
     }
 
-    onMount(()=> {
+    onMount(() => {
         ctx = canvas.getContext("2d");
+        resizeGrid();
         render();
         startRun();
     });
+
+    $: resizeGrid();
 </script>
 
 <svelte:head>
@@ -146,43 +170,25 @@
 
 <div class="row mb-1 mt-1">
     <div class="col">
-        <div class="d-flex gap-1 align-items-center">
-            <button type="button" class="btn btn-sm btn-primary" onclick={clearGrid}>Clear</button>
-        </div>
+        <button class="btn btn-sm btn-primary" on:click={clearGrid}> Clear </button>
     </div>
 </div>
 
 <div class="row">
     <div class="col-auto">
-        <canvas width="{canvasWidth}" height="{canvasHeight}" bind:this={canvas} onclick={setParticleOnClick}></canvas>
+        <canvas bind:this={canvas} width={canvasWidth} height={canvasHeight} on:click={setParticleOnClick}></canvas>
     </div>
-    <div class="col">
-        <div>
-            <h3>Settings:</h3>
-            <span>Grid Dimensions:</span>
-            <div class="input-group">
-                <input type="number" class="form-control" placeholder="Width" aria-label="Grid Width" step="1" bind:value={canvasWidth} min="1" />
-                {#if !keepOneToOne}
-                    <span class="input-group-text">x</span>
-                    <input type="number" class="form-control" placeholder="Height" aria-label="Grid Height" step="1" bind:value={canvasHeight} min="1" />
-                {/if}
-                <div class="input-group-text">
-                    <label>
-                        <input type="checkbox" aria-label="Keep 1:1" bind:checked={keepOneToOne}/>
-                        Keep 1:1
-                    </label>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="row">
     <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Falling-sand_game" target="_blank">Falling-sand game</a></li>
-        </ul>
+        <h3>Settings</h3>
+        <input type="number" bind:value={canvasWidth} min="1" />
+        {#if !keepOneToOne}
+            <input type="number" bind:value={canvasHeight} min="1" />
+        {/if}
+        <label>
+            <input type="checkbox" bind:checked={keepOneToOne} />
+            Keep 1:1
+        </label>
     </div>
 </div>
 
@@ -191,6 +197,6 @@
         image-rendering: pixelated;
         width: 600px;
         height: 600px;
-        border: 1px solid var(--bs-body-color)
+        border: 1px solid var(--bs-body-color);
     }
 </style>
