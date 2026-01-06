@@ -1,17 +1,30 @@
 <script>
+    import { onMount } from "svelte";
+
     import { get } from "$lib/apiRestUtility";
 
-    let culture = "en-US";
+    const API_BASE = "https://feiertage-api.de/api/";
+
+    let culture = "de-DE";
 
     let year = new Date().getFullYear();
 
-    function getYear(year) {
-        return get("https://feiertage-api.de/api/", { jahr: year });
-    }
+    let yearData = null;
+    let selectedLand = "NATIONAL";
 
-    $: promise = getYear(1999);
+    $: holidaysByDate = (() => {
+        const result = {};
 
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const landData = yearData?.[selectedLand];
+        if (!landData) return result;
+
+        for (const [name, { datum }] of Object.entries(landData)) {
+            result[datum] = name;
+        }
+        return result;
+    })();
+
+    const months = getMonthNames(culture);
 
     const daysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
 
@@ -21,6 +34,36 @@
     };
 
     const weekdayShort = (date) => date.toLocaleDateString(culture, { weekday: "short" });
+
+    const isoDate = (y, m, d) => `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+
+    let loading = false;
+    let error = null;
+
+    async function fetchYearData(y) {
+        yearData = null;
+        error = null;
+        loading = true;
+        try {
+            yearData = await get(API_BASE, { jahr: y });
+        } catch (e) {
+            error = e;
+        } finally {
+            loading = false;
+        }
+    }
+
+    function getMonthNames(locale, format = "long") {
+        return Array.from({ length: 12 }, (_, i) => new Intl.DateTimeFormat(locale, { month: format }).format(new Date(2000, i, 1)));
+    }
+
+    let mounted = false;
+    onMount(() => {
+        mounted = true;
+        fetchYearData(year);
+    });
+
+    $: if (mounted) fetchYearData(year);
 </script>
 
 <svelte:head>
@@ -37,8 +80,16 @@
     <div class="col">
         <label>
             Year:
-            <input type="number" class="form-control" bind:value={year}/>
+            <input type="number" class="form-control" bind:value={year} />
         </label>
+        <div class="d-flex flex-row gap-3">
+            {#each Object.keys(yearData ?? {}) as land}
+                <label class="text-nowrap">
+                    <input type="radio" class="form-check-input" value={land} bind:group={selectedLand} />
+                    {land}
+                </label>
+            {/each}
+        </div>
     </div>
 </div>
 
@@ -55,26 +106,16 @@
                 {#each months as _, monthIndex}
                     {#if day <= daysInMonth(year, monthIndex)}
                         {@const date = new Date(year, monthIndex, day)}
+                        {@const dateKey = isoDate(year, monthIndex, day)}
                         <div class="cell d-flex flex-column" class:today={isToday(year, monthIndex, day)}>
                             <span class="day-label">{day} {weekdayShort(date)}</span>
-                            <span>&nbsp;</span>
+                            <span class="text-nowrap">{@html holidaysByDate[dateKey] ?? "&nbsp;"}</span>
                         </div>
                     {:else}
                         <div class="cell empty"></div>
                     {/if}
                 {/each}
             {/each}
-        </div>
-    </div>
-    <div class="col">
-        <div class="overflow-auto">
-            {#await promise}
-                <div>Request pending</div>
-            {:then value}
-                <pre>{JSON.stringify(value, null, 2)}</pre>
-            {:catch error}
-                <div>Something went wrong: {error.message}</div>
-            {/await}
         </div>
     </div>
 </div>
@@ -104,6 +145,7 @@
         border-style: solid;
         border-color: var(--bs-body-color);
         padding: 2px;
+        font-size: 0.8em;
     }
 
     .label {
@@ -116,7 +158,6 @@
     }
 
     .day-label {
-        font-size: 0.7em;
         font-weight: bold;
     }
 </style>

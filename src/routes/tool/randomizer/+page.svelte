@@ -95,7 +95,7 @@
                         </label>
 
                         <label>
-                            Length:
+                            Maximum:
                             <input type="number" class="form-control" bind:value={randomNumber.max} />
                         </label>
                     </div>
