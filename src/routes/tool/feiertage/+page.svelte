@@ -28,14 +28,22 @@
 
     const daysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
 
-    const isToday = (y, m, d) => {
+    const isToday = (date) => {
         const t = new Date();
-        return y === t.getFullYear() && m === t.getMonth() && d === t.getDate();
+        return date.getFullYear() === t.getFullYear() && date.getMonth() === t.getMonth() && date.getDate() === t.getDate();
+    };
+
+    const isHoliday = (date) => holidaysByDate[isoDate(date)] ?? false;
+
+    const isWeekend = (date) => {
+        const day = date.getDay();
+        return day === 0 || day === 6;
     };
 
     const weekdayShort = (date) => date.toLocaleDateString(culture, { weekday: "short" });
 
-    const isoDate = (y, m, d) => `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
+    const isoDate = (date) => isoDate2(date.getFullYear(), date.getMonth(), date.getDate());
+    const isoDate2 = (y, m, d) => `${y}-${String(m + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
 
     let loading = false;
     let error = null;
@@ -95,7 +103,7 @@
 
 <div class="row">
     <div class="col">
-        <div class="calendar">
+        <div id="calendar">
             {#each months as month}
                 <div class="cell label">{month}</div>
             {/each}
@@ -106,8 +114,8 @@
                 {#each months as _, monthIndex}
                     {#if day <= daysInMonth(year, monthIndex)}
                         {@const date = new Date(year, monthIndex, day)}
-                        {@const dateKey = isoDate(year, monthIndex, day)}
-                        <div class="cell d-flex flex-column" class:today={isToday(year, monthIndex, day)}>
+                        {@const dateKey = isoDate(date)}
+                        <div class="cell d-flex flex-column" class:today={isToday(date)} class:holiday={isHoliday(date)} class:weekend={isWeekend(date)}>
                             <span class="day-label">{day} {weekdayShort(date)}</span>
                             <span class="text-nowrap">{@html holidaysByDate[dateKey] ?? "&nbsp;"}</span>
                         </div>
@@ -132,7 +140,7 @@
 </div>
 
 <style>
-    .calendar {
+    #calendar {
         display: grid;
         grid-template-columns: repeat(12, 1fr);
         border-width: 0px 1px 1px 0px;
@@ -153,11 +161,31 @@
         font-weight: bold;
     }
 
-    .cell.today {
-        border-color: red;
-    }
-
     .day-label {
         font-weight: bold;
+    }
+
+    :global(:root) {
+        --cell-today-bg: red;
+        --cell-holiday-bg: lightblue;
+        --cell-weekend-bg: lightgrey;
+    }
+
+    :global([data-bs-theme="dark"]) {
+        --cell-today-bg: darkred;
+        --cell-holiday-bg: darkblue;
+        --cell-weekend-bg: #555555;
+    }
+
+    .cell.today {
+        background-color: var(--cell-today-bg);
+    }
+
+    .cell.holiday {
+        background-color: var(--cell-holiday-bg);
+    }
+
+    .cell.weekend {
+        background-color: var(--cell-weekend-bg);
     }
 </style>
