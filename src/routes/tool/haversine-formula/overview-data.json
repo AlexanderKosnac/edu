@@ -1,0 +1,7 @@
+{
+    "name": "Haversine formula",
+    "description": "A formula to calculate the great-circle distance between two points on a sphere given their longitudes and latitudes.",
+    "tags": [
+        "Tool"
+    ]
+}
