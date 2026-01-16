@@ -10,10 +10,6 @@
   });
 </script>
 
-<svelte:head>
-    <title>edu</title>
-</svelte:head>
-
 <div class="row flex-row justify-content-center">
   <div class="col-lg-6">
     <div class="d-flex flex-column align-items-center">

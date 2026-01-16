@@ -29,6 +29,7 @@
 
 <svelte:head>
     <script src={jsBootstrap}></script>
+    <title>edu</title>
 </svelte:head>
 
 <nav class="navbar navbar-expand-lg bg-body-tertiary flex-nowrap">
