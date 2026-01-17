@@ -74,16 +74,6 @@
     });
 </script>
 
-<svelte:head>
-    <title>.obj Renderer</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>.obj Renderer</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col-auto">
         <Canvas3D bind:gl={gl} bind:objects={objects} bind:projectionMatrix={projectionMatrix} bind:viewMatrix={viewMatrix} width={600} height={600} />

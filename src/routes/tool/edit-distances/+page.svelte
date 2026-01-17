@@ -15,16 +15,6 @@
     };
 </script>
 
-<svelte:head>
-    <title>Edit distance</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Edit distance</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col">
         <div class="d-flex flex-column">

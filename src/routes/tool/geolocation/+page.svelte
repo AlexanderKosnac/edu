@@ -61,17 +61,6 @@
     });
 </script>
 
-<svelte:head>
-    <title>Geolocation</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Geolocation</h1>
-    </div>
-</div>
-
-
 <div class="row">
     <div class="col-auto">
         <div class="d-flex flex-row gap-1 align-items-end mb-1">

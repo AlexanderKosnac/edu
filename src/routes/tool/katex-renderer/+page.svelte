@@ -10,16 +10,6 @@
 
 </script>
 
-<svelte:head>
-    <title>KaTeX Renderer</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>KaTeX Renderer</h1>
-    </div>
-</div>
-
 <div class="row pb-5">
     <div class="col">
         <div class="form-group">

@@ -59,16 +59,6 @@
     });
 </script>
 
-<svelte:head>
-    <title>IPv4 Subnetting</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>IPv4 Subnetting</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col">
         <div class="input-group mb-3">

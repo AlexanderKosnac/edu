@@ -150,10 +150,6 @@
     });
 </script>
 
-<svelte:head>
-    <title>Conway's Game of Life</title>
-</svelte:head>
-
 <div class="row mb-1 mt-1">
     <div class="col">
         <div class="d-flex gap-1 align-items-center">

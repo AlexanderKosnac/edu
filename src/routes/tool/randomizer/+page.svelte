@@ -62,16 +62,6 @@
     }
 </script>
 
-<svelte:head>
-    <title>Randomizer</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Randomizer</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col">
         <ul class="nav nav-tabs" id="myTab" role="tablist">

@@ -107,16 +107,6 @@
     $: moonRotation = getMoonRotation(latitude);
 </script>
 
-<svelte:head>
-    <title>Lunar Phase</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Lunar Phase</h1>
-    </div>
-</div>
-
 {#snippet moon(size, radius, phaseFraction, rotation)}
     {@const offset = phaseFractionToIlluminationFraction(phaseFraction) * radius}
     <svg width={size} height={size} viewBox="-{Math.floor(size/2)} -{Math.floor(size/2)} {size} {size}" xmlns="http://www.w3.org/2000/svg">

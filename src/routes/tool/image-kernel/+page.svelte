@@ -138,16 +138,6 @@ function run() {
 </div>
 {/snippet}
 
-<svelte:head>
-    <title>Image Kernels</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Image Kernels</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col-lg-4">
         <div class="d-flex flex-column gap-1 mb-1">

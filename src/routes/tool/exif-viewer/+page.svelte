@@ -41,18 +41,7 @@
         {/each}
     </tbody>
 </table>
-
 {/snippet}
-
-<svelte:head>
-    <title>Exif Viewer</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Exif Viewer</h1>
-    </div>
-</div>
 
 <div class="row mb-1">
     <div class="col-auto">

@@ -153,16 +153,6 @@
     });
 </script>
 
-<svelte:head>
-    <title>Vandermonde Polynomial Interpolation</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Vandermonde Polynomial Interpolation</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col">
         <canvas bind:this={chartCanvas}></canvas>

@@ -156,16 +156,6 @@
     });
 </script>
 
-<svelte:head>
-    <title>Graham Scan</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Graham Scan</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col-auto">
         <svg id="canvas2d" {width} {height} viewBox="0 0 {svgWidth} {svgHeight}">

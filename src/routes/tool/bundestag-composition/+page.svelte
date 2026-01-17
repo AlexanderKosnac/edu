@@ -1,15 +1,7 @@
 <script>
 </script>
 
-<svelte:head>
-    <title>Composition of the Bundestag</title>
-</svelte:head>
 
-<div class="row">
-    <div class="col">
-        <h1>Composition of the Bundestag</h1>
-    </div>
-</div>
 
 <div class="row">
     <div class="col">

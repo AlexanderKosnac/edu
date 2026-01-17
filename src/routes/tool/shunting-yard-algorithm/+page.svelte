@@ -47,16 +47,6 @@
     });
 </script>
 
-<svelte:head>
-    <title>Shunting yard algorithm</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Shunting yard algorithm</h1>
-    </div>
-</div>
-
 <div class="row mb-3">
     <div class="col">
         <div class="form-floating">

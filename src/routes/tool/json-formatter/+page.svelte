@@ -12,16 +12,6 @@
     })();
 </script>
 
-<svelte:head>
-    <title>JSON Formatter</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>JSON Formatter</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col">
         <div class="form-group">

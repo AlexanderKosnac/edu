@@ -50,16 +50,6 @@
     }
 </script>
 
-<svelte:head>
-    <title>Inverted Index</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Inverted Index</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col">
         You can select multiple plaintext files:

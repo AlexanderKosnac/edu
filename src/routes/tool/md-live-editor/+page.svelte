@@ -32,16 +32,6 @@ And unordered lists:
 `;
 </script>
 
-<svelte:head>
-    <title>Markdown Live Editor</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Markdown Live Editor</h1>
-    </div>
-</div>
-
 <div class="row gap-1 p-1">
     <div class="col">
         <div class="form-group">

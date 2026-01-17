@@ -18,16 +18,6 @@
     }
 </script>
 
-<svelte:head>
-    <title>Sort and Unique</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Sort and Unique</h1>
-    </div>
-</div>
-
 <div class="row">
     <div>
         A basic tool that allows to sort and extract unique elements from a text.

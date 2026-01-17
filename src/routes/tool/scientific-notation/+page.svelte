@@ -22,16 +22,6 @@
     }
 </script>
 
-<svelte:head>
-    <title>Scientific Notation</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Scientific Notation</h1>
-    </div>
-</div>
-
 <div class="row mt-1">
     <div class="col">
         <div class="d-flex flex-column align-items-start">

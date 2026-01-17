@@ -23,16 +23,6 @@
     $: gehanAndGeorge = factorAndHeightAndWeightExponential(0.0235, 0.42246, 0.51456);
 </script>
 
-<svelte:head>
-    <title>Body Surface Area</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Body Surface Area</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col">            
         <div class="d-flex gap-1">

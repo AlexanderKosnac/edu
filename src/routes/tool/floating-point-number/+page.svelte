@@ -57,16 +57,6 @@
     $: katex = `(-1)^${signBits[0]} * ${mantissa} * {${base}}^{${exponent}} = ${result}`;
 </script>
 
-<svelte:head>
-    <title>Floating Point Number</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Floating Point Number</h1>
-    </div>
-</div>
-
 <div class="row mb-1">
     <div class="col">
         <div class="d-flex gap-1">

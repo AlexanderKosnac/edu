@@ -51,16 +51,6 @@
     }
 </script>
 
-<svelte:head>
-    <title>Roman Numerals</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Roman Numerals</h1>
-    </div>
-</div>
-
 <div class="row justify-content-center">
     <div class="col-auto">
         <table class="table table-bordered w-auto mt-1">

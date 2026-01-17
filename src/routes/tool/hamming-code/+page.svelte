@@ -80,16 +80,6 @@
     }
 </script>
 
-<svelte:head>
-    <title>Hamming Codes</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Hamming Codes</h1>
-    </div>
-</div>
-
 <div class="row mb-1">
     <div class="col">
         <div class="d-flex flex-column gap-1">

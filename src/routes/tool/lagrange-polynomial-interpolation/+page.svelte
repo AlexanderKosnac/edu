@@ -136,16 +136,6 @@
     });
 </script>
 
-<svelte:head>
-    <title>Lagrange Polynomial Interpolation</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Lagrange Polynomial Interpolation</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col">
         The goal of Lagrange interpolation is to find the polynomial {@html katexAsHtmlInline("p \\in P_n")} for

@@ -38,16 +38,6 @@
 
 </script>
 
-<svelte:head>
-    <title>XML Formatter</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>XML Formatter</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col">
         <div class="form-group">

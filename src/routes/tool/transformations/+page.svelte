@@ -86,16 +86,6 @@
     });
 </script>
 
-<svelte:head>
-    <title>Transformations</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Transformations</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col">
         <h2>Basic 2D</h2>

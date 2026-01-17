@@ -12,16 +12,6 @@
     }
 </script>
 
-<svelte:head>
-    <title>CSS display-flex</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>CSS display-flex</h1>
-    </div>
-</div>
-
 <div class="row">
     <h2><tt>flex-direction</tt></h2>
     <div class="col">

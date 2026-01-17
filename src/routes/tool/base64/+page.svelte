@@ -88,16 +88,6 @@
     }
 </script>
 
-<svelte:head>
-    <title>Base64</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Base64</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col">
         <div class="d-flex flex-row gap-2">

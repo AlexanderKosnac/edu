@@ -163,16 +163,6 @@
     });
 </script>
 
-<svelte:head>
-    <title>Vandermonde Polynomial Approximation</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Vandermonde Polynomial Approximation</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col">
         <canvas bind:this={chartCanvas}></canvas>

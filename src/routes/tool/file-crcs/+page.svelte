@@ -294,16 +294,6 @@
     }
 </script>
 
-<svelte:head>
-    <title>File CRCs</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>File CRCs</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col">
         <div class="d-flex flex-column gap-1">

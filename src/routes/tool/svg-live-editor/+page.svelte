@@ -8,16 +8,6 @@
 `;
 </script>
 
-<svelte:head>
-    <title>SVG Live Editor</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>SVG Live Editor</h1>
-    </div>
-</div>
-
 <div class="row gap-1 p-1">
     <div class="col">
         <div class="form-group">

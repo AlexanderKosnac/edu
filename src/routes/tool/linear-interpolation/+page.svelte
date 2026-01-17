@@ -125,16 +125,6 @@
     });
 </script>
 
-<svelte:head>
-    <title>Linear Interpolation</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Linear Interpolation</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col">
         For given points {@html katexAsHtmlInline("x_0")} and {@html katexAsHtmlInline("x_1")}, with {@html katexAsHtmlInline("x_0 \\ne x_1")}

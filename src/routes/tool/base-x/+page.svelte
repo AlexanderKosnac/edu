@@ -38,16 +38,6 @@
     }
 </script>
 
-<svelte:head>
-    <title>base-x</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>base-x</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col-auto">
         <div class="input-group">

@@ -3,16 +3,6 @@
     let text2 = "";
 </script>
 
-<svelte:head>
-    <title>Diff</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Diff</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col">
         <label for="inputText">Text 1:</label>

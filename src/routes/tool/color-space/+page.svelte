@@ -52,16 +52,6 @@
     onMount(onChange);
 </script>
 
-<svelte:head>
-    <title>Color space</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Color space</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col-sm">
         <div class="d-flex gap-1 mb-3">

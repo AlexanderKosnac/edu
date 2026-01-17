@@ -12,16 +12,6 @@
     ];
 </script>
 
-<svelte:head>
-    <title>Cistercian numerals</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Cistercian numerals</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col-auto">
         <CistercianNumber bind:number={number} size="256" borderWidth={4}/>

@@ -172,16 +172,6 @@
     });
 </script>
 
-<svelte:head>
-    <title>Projection Matrix</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Projection Matrix</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col-auto">
         <Canvas3D bind:gl={gl} bind:objects={objects} bind:projectionMatrix={projectionMatrix} bind:viewMatrix={viewMatrix} {width} {height} />

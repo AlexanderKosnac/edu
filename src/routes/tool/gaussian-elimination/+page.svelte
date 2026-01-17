@@ -108,16 +108,6 @@
     }
 </script>
 
-<svelte:head>
-    <title>Gaussian elimination</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Gaussian elimination</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col">
         Input matrix:

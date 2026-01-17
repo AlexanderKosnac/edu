@@ -80,16 +80,6 @@
     }
 </script>
 
-<svelte:head>
-    <title>Cholesky decomposition</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Cholesky decomposition</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col">
         Input matrix:

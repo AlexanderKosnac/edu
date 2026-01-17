@@ -112,16 +112,6 @@
     });
 </script>
 
-<svelte:head>
-    <title>Bresenham's Line Algorithm</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Bresenham's Line Algorithm</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col-auto">
         <svg width="700" height="700" viewBox="0 0 700 700">

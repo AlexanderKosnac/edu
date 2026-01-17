@@ -140,16 +140,6 @@
     });
 </script>
 
-<svelte:head>
-    <title>k-means Clustering</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>k-means Clustering</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col">
         <div class="d-flex flex-column gap-1">

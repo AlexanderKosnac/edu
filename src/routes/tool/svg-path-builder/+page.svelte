@@ -18,16 +18,6 @@
     }
 </script>
 
-<svelte:head>
-    <title>SVG path builder</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>SVG path builder</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col-auto">
         <div class="d-flex flex-column gap-1">

@@ -123,16 +123,6 @@ function run() {
 }
 </script>
 
-<svelte:head>
-    <title>Grayscale</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Grayscale</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col-xl">
         <div class="d-flex flex-column gap-1 mb-1">

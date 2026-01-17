@@ -33,16 +33,6 @@
     }
 </script>
 
-<svelte:head>
-    <title>ASCII</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>ASCII</h1>
-    </div>
-</div>
-
 <div class="row">
     <h2>Conversion</h2>
     <div class="col">

@@ -104,16 +104,6 @@
     }
 </script>
 
-<svelte:head>
-    <title>Page Replacement Algorithm</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Page Replacement Algorithm</h1>
-    </div>
-</div>
-
 <svelte:window onkeydown={onRequestPageKey} />
 
 <div class="row">

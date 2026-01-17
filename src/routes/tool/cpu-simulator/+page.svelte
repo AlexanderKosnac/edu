@@ -47,16 +47,6 @@
     }
 </script>
 
-<svelte:head>
-    <title>CPU simulator</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>CPU simulator</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col-auto">
         <div class="d-flex flex-column gap-1">

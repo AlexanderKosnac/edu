@@ -49,16 +49,6 @@
     runRoutine();
 </script>
 
-<svelte:head>
-    <title>Kaprekar constant</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Kaprekar constant</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col">
         <div class="input-group mb-2">

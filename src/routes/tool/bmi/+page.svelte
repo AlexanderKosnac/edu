@@ -45,16 +45,6 @@
     $: surfaceBasedBodyShapeIndexStarCalculationKatex = `\\frac{\\text{H}^2 * \\text{WC}}{\\text{BSA} * \\text{VTC}} = \\frac{${heightCm}^2 * ${waistCircumferenceCm}}{${bodySurfaceAreaCm2} * ${verticalTrunkCircumferenceCm}} = ${surfaceBasedBodyShapeIndexStar.toFixed(2)}`;
 </script>
 
-<svelte:head>
-    <title>Body Mass Index (BMI)</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Body Mass Index (BMI)</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col">            
         <div class="mb-2">

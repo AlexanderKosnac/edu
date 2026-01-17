@@ -99,16 +99,6 @@
     });
 </script>
 
-<svelte:head>
-    <title>Draw Braille</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Draw Braille</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col">
         <div class="d-flex flex-row gap-1 mb-1">

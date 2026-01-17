@@ -172,16 +172,6 @@
     }
 </script>
 
-<svelte:head>
-    <title>TF-IDF</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>TF-IDF</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col">
         You can select multiple plaintext files:

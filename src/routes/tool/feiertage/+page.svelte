@@ -74,16 +74,6 @@
     $: if (mounted) fetchYearData(year);
 </script>
 
-<svelte:head>
-    <title>Feiertage</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Feiertage</h1>
-    </div>
-</div>
-
 <div class="row mb-1">
     <div class="col">
         <label>

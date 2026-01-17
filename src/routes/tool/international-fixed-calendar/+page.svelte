@@ -52,16 +52,6 @@
     }
 </script>
 
-<svelte:head>
-    <title>International Fixed Calendar</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>International Fixed Calendar</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col-auto">
         <table class="date-overview-table">

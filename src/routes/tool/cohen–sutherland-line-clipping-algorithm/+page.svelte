@@ -104,16 +104,6 @@
     });
 </script>
 
-<svelte:head>
-    <title>Cohen-Sutherland Algorithm</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Cohen-Sutherland Algorithm</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col-auto">
         <svg {width} {height} viewBox="0 0 {width} {height}">

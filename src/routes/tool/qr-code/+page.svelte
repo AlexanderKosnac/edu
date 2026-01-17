@@ -225,16 +225,6 @@
     }
 </script>
 
-<svelte:head>
-    <title>QR Code</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>QR Code</h1>
-    </div>
-</div>
-
 <div class="row mb-1">
     <div class="col">
         <label for="asciiInput">ASCII Input:</label>
