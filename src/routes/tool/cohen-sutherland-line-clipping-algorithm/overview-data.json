@@ -1,9 +1,12 @@
 {
-    "name": "Cohen–Sutherland Line Clipping Algorithm",
+    "name": "Cohen-Sutherland line clipping algorithm",
     "description": "Algorithm used in computer graphics to clip lines along a rectangle.",
     "tags": [
         "Computer Graphics",
         "Computer Science",
         "Calculator"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Cohen%E2%80%93Sutherland_algorithm"
     ]
 }

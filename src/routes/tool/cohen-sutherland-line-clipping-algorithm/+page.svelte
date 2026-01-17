@@ -151,15 +151,6 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Cohen%E2%80%93Sutherland_algorithm" target="_blank">Cohen-Sutherland algorithm</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
     svg {
         border: 1px solid var(--bs-body-color);
