@@ -1,9 +1,12 @@
 {
-    "name": "k-means Clustering",
+    "name": "K-means clustering",
     "description": "A method of vector quantization, to partition n observations into k clusters.",
     "tags": [
         "Computer Science",
         "Mathematics",
         "Visualization"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/K-means_clustering"
     ]
 }

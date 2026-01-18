@@ -125,17 +125,6 @@ function massCollatzRun() {
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Collatz_conjecture" target="_blank">Collatz conjecture</a></li>
-            <li><a href="https://www.youtube.com/watch?v=094y1Z2wpJg" target="_blank">Veritasium video</a></li>
-            <li><a href="https://www.youtube.com/watch?v=5mFpVDpKX70" target="_blank">Numberphile video</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
 th {
     white-space: nowrap;

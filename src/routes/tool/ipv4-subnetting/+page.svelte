@@ -123,18 +123,6 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing" target="_blank">Classless Inter-Domain Routing</a></li>
-            <li><a href="https://en.wikipedia.org/wiki/Classful_network" target="_blank">Classful network</a></li>
-            <li><a href="https://www.elektronik-kompendium.de/sites/net/0907201.htm" target="_blank">Subnetting from Elektronik Kompendium (German)</a></li>
-            <li><a href="https://www.elektronik-kompendium.de/sites/net/2011231.htm" target="_blank">CIDR from Elektronik Kompendium (German)</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
     table {
         width: auto;

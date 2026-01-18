@@ -1,9 +1,12 @@
 {
-    "name": ".obj Renderer",
+    "name": ".obj renderer",
     "description": "A basic renderer for .obj files.",
     "tags": [
         "Computer Science",
         "Computer Graphics",
         "Rendering"
+    ],
+    "references": [
+        "https://de.wikipedia.org/wiki/Wavefront_OBJ"
     ]
 }

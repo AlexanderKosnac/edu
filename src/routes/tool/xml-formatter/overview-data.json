@@ -1,8 +1,14 @@
 {
-    "name": "XML Formatter",
+    "name": "XML formatter",
     "description": "Formats and pretty-prints XML to improve readability.",
     "tags": [
         "Tool",
         "Formatter"
+    ],
+    "references": [
+        {
+            "label": "xml-formatter npm package",
+            "url": "https://www.npmjs.com/package/xml-formatter"
+        }
     ]
 }

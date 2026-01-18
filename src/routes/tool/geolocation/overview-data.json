@@ -3,5 +3,12 @@
     "description": "Basic information retrieved through the geo location API of JavaScript.",
     "tags": [
         "Tool"
+    ],
+    "references": [
+        {
+            "label": "Geolocation API",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API"
+        },
+        "https://en.wikipedia.org/wiki/Geographic_coordinate_system"
     ]
 }

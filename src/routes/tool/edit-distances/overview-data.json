@@ -3,5 +3,9 @@
     "description": "A metric to measure the similarity between strings.",
     "tags": [
         "Computer Science"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Edit_distance",
+        "https://en.wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance"
     ]
 }

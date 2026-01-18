@@ -3,5 +3,8 @@
     "description": "The simple and widely known shift cipher.",
     "tags": [
         "Cryptography"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Caesar_cipher"
     ]
 }

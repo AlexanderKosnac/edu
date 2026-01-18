@@ -113,14 +113,5 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://de.wikipedia.org/wiki/Wavefront_OBJ" target="_blank">Wavefront OBJ</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
 </style>

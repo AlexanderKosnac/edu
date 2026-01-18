@@ -5,5 +5,16 @@
         "Computer Science",
         "Computer Graphics",
         "Calculator"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Orthographic_projection",
+        {
+            "label": "https://www.songho.ca/opengl/gl_projectionmatrix.html",
+            "url": "Article on OpenGL Projectionmatrices"
+        },
+        {
+            "label": "Article on perspective projection",
+            "url": "http://learnwebgl.brown37.net/08_projections/projections_perspective.html"
+        }
     ]
 }

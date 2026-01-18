@@ -376,15 +376,5 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Checksum" target="_blank">Checksum</a></li>
-            <li><a href="https://www.npmjs.com/package/hash-wasm" target="_blank">hash-wasm npm package</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
 </style>

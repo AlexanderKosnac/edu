@@ -4,5 +4,8 @@
     "tags": [
         "Computer Science",
         "Information Retrieval"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Tf%E2%80%93idf"
     ]
 }

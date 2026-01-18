@@ -3,5 +3,9 @@
     "description": "BMI and similar metrics used as approximations of fitness based on height and weight.",
     "tags": [
         "Tool"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Body_mass_index",
+        "https://de.wikipedia.org/wiki/DuBois-Formel"
     ]
 }

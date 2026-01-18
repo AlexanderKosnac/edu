@@ -4,5 +4,9 @@
     "tags": [
         "Mathematics",
         "Visualization"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Kaprekar%27s_routine",
+        "https://en.wikipedia.org/wiki/6174"
     ]
 }

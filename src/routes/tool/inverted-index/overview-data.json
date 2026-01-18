@@ -1,8 +1,15 @@
 {
-    "name": "Inverted Index",
+    "name": "Inverted index",
     "description": "Calculates the inverted index used in Information Retrieval over a set of documents.",
     "tags": [
         "Computer Science",
         "Information Retrieval"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Inverted_index",
+        {
+            "label": "Information Retrieval book by Stanford University (Section 1.2)",
+            "url": "https://nlp.stanford.edu/IR-book/pdf/01bool.pdf"
+        }
     ]
 }

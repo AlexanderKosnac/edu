@@ -1,10 +1,24 @@
 {
-    "name": "CSS Display Flex",
+    "name": "CSS display flex",
     "description": "A tool to test out the effects of different properties associated with display flex.",
     "tags": [
         "Computer Science",
         "Web Development",
         "CSS",
         "Tool"
+    ],
+    "references": [
+        {
+            "label": "mdn web docs article on flex",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/CSS/flex"
+        },
+        {
+            "label": "CSS-Tricks article on Flexbox",
+            "url": "https://css-tricks.com/snippets/css/a-guide-to-flexbox/"
+        },
+        {
+            "label": "Bootstrap 5.3 Flex classes",
+            "url": "https://getbootstrap.com/docs/5.3/utilities/flex/"
+        }
     ]
 }

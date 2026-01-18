@@ -1,7 +1,15 @@
 {
-    "name": "Floating Point Number",
+    "name": "Floating point number",
     "description": "Decimal number representation via a variable length, floating point format.",
     "tags": [
         "Computer Science"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Floating-point_arithmetic",
+        "https://en.wikipedia.org/wiki/IEEE_754",
+        {
+            "label": "IEEE 754 Float Converter",
+            "url": "https://www.h-schmidt.net/FloatConverter/IEEE754.html"
+        }
     ]
 }

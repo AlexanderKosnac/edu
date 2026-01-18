@@ -66,15 +66,6 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorials/SVG_from_scratch/Paths" target="_blank">MDN SVG Path documentation</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
     svg {
         border: 1px solid var(--bs-body-color);

@@ -1,8 +1,12 @@
 {
-    "name": "Body Surface Area",
+    "name": "Body surface area",
     "description": "Formulas to approximate the surface area of a human body based on height and weight.",
     "tags": [
         "Tool",
         "Fitness"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Body_mass_index",
+        "https://de.wikipedia.org/wiki/DuBois-Formel"
     ]
 }

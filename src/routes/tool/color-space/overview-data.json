@@ -5,5 +5,9 @@
         "Computer Science",
         "Colortheory",
         "Calculator"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Color_space",
+        "https://en.wikipedia.org/wiki/List_of_color_spaces_and_their_uses"
     ]
 }

@@ -224,17 +224,6 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Lunar_phase" target="_blank">Lunar phase</a></li>
-            <li><a href="https://en.wikipedia.org/wiki/Lunar_month" target="_blank">Lunar month</a></li>
-            <li><a href="https://science.nasa.gov/moon/moon-phases/" target="_blank">Lunar phase by NASA</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
     svg {
         border: 1px solid var(--bs-body-color);

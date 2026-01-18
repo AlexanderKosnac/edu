@@ -4,5 +4,11 @@
     "tags": [
         "Computer Science"
     ],
+    "references": [
+        {
+            "label": "MDN SVG Path documentation",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorials/SVG_from_scratch/Paths"
+        }
+    ],
     "usable": false
 }

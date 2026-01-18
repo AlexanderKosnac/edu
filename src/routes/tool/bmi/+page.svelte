@@ -129,16 +129,6 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Body_mass_index" target="_blank">Body mass index</a></li>
-            <li><a href="https://de.wikipedia.org/wiki/DuBois-Formel" target="_blank">DuBois-Formel</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
     td, th {
         vertical-align: middle;

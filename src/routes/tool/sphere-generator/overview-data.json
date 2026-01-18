@@ -1,9 +1,12 @@
 {
-    "name": "Sphere Generator",
+    "name": "Sphere generator",
     "description": "A tool to generate 3D models of spheres with different levels of detail.",
     "tags": [
         "Computer Science",
         "Computer Graphics",
         "Rendering"
+    ],
+    "references": [
+        "https://de.wikipedia.org/wiki/Wavefront_OBJ"
     ]
 }

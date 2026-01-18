@@ -193,16 +193,6 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Convex_hull_algorithms" target="_blank">Convex hull algorithms</a></li>
-            <li><a href="https://de.wikipedia.org/wiki/Graham_Scan" target="_blank">Graham Scan</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
     #canvas2d {
         border: 1px solid var(--bs-body-color);

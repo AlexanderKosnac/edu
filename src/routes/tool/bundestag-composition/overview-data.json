@@ -1,7 +1,16 @@
 {
     "name": "Composition of the Bundestag",
     "description": "Visualization of the composition of the Bundestag.",
-    "tags": [
+    "tags": [],
+    "references": [
+        {
+            "label": "Open Data Service by the Bundestag",
+            "url": "https://www.bundestag.de/services/opendata"
+        },
+        {
+            "label": "Bundestag API",
+            "url": "https://dip.bundestag.de/%C3%BCber-dip/hilfe/api"
+        }
     ],
     "usable": false
 }

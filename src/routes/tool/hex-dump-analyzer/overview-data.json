@@ -4,5 +4,8 @@
     "tags": [
         "Computer Science",
         "Tool"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Hex_dump"
     ]
 }

@@ -5,5 +5,12 @@
         "Computer Science",
         "Visualization"
     ],
+    "references": [
+        "https://en.wikipedia.org/wiki/QR_code",
+        {
+            "label": "Veritasium video on QR codes",
+            "url": "https://www.youtube.com/watch?v=w5ebcowAJD8"
+        }
+    ],
     "usable": false
 }

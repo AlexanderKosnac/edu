@@ -4,5 +4,9 @@
     "tags": [
         "Computer Science",
         "Mathematics"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Numeral_system",
+        "https://en.wikipedia.org/wiki/Hexadecimal"
     ]
 }

@@ -286,16 +286,6 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/QR_code" target="_blank">QR code</a></li>
-            <li><a href="https://www.youtube.com/watch?v=w5ebcowAJD8" target="_blank">Veritasium video on QR codes</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
     svg {
         background-color: white;

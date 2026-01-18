@@ -201,16 +201,6 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Base64" target="_blank">Base64 (Wikipedia)</a></li>
-            <li><a href="https://datatracker.ietf.org/doc/html/rfc4648" target="_blank">RFC 4648</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
     th, td {
         vertical-align: middle;

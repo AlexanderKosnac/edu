@@ -1,8 +1,12 @@
 {
-    "name": "Image Kernel",
+    "name": "Image kernel",
     "description": "A technique applied onto images to achieve different effects, like blurring, sharpening, embossing and even edge detection.",
     "tags": [
         "Computer Science",
         "Tool"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Kernel_(image_processing)",
+        "https://en.wikipedia.org/wiki/Sobel_operator"
     ]
 }

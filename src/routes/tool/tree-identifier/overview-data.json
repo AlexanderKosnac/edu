@@ -1,7 +1,10 @@
 {
-    "name": "Tree Identifier",
-    "description": "Identify a tree by describing properties.",
+    "name": "Tree identifier",
+    "description": "Identify a tree by describing its properties.",
     "tags": [
         "Tool"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Tree"
     ]
 }

@@ -1,7 +1,10 @@
 {
-    "name": "Particle Simulation",
+    "name": "Particle simulation",
     "description": "Particle simulation based on cellular automaton.",
     "tags": [
         "Computer Science"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Falling-sand_game"
     ]
 }

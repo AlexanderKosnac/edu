@@ -1,8 +1,16 @@
 {
-    "name": "Markdown Live Editor",
+    "name": "Markdown live editor",
     "description": "A basic tool that allows writing Markdown with a live preview.",
     "tags": [
         "Markdown",
         "Editor"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Markdown",
+        "https://www.npmjs.com/package/marked",
+        {
+            "label": "Markdown Guide",
+            "url": "https://www.markdownguide.org/"
+        }
     ]
 }

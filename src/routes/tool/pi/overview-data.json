@@ -4,5 +4,9 @@
     "tags": [
         "Mathematics",
         "Tool"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Pi",
+        "https://en.wikipedia.org/wiki/Chudnovsky_algorithm"
     ]
 }

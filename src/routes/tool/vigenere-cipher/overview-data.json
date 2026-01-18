@@ -3,5 +3,8 @@
     "description": "A cipher utilizing a key and multiple Caesar ciphers.",
     "tags": [
         "Cryptography"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Vigen%C3%A8re_cipher"
     ]
 }

@@ -97,16 +97,6 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/International_Fixed_Calendar" target="_blank">International Fixed Calendar</a></li>
-            <li><a href="https://en.wikipedia.org/wiki/Gregorian_calendar" target="_blank">Gregorian Calendar</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
     .calendar {
         max-width: 400px;

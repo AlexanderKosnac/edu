@@ -1,9 +1,12 @@
 {
-    "name": "Scientific Notation",
+    "name": "Scientific notation",
     "description": "Represents a number using a mantissa, exponent and base.",
     "tags": [
         "Computer Science",
         "Mathematics",
         "Tool"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Scientific_notation"
     ]
 }

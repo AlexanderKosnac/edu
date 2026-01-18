@@ -149,16 +149,6 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Shunting_yard_algorithm" target="_blank">Shunting yard algorithm</a></li>
-            <li><a href="https://www.youtube.com/watch?v=unh6aK8WMwM" target="_blank">Video on Shunting yard by Javid9x</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
     input.error {
         border: 1px solid red;

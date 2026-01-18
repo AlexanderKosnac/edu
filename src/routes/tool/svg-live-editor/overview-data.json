@@ -1,8 +1,15 @@
 {
-    "name": "SVG Live Editor",
+    "name": "SVG live editor",
     "description": "A basic tool that allows editing SVG code with a live preview while editing.",
     "tags": [
         "SVG",
         "Editor"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/SVG",
+        {
+            "label": "SVG Element Reference",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/SVG/Element"
+        }
     ]
 }

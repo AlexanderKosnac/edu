@@ -69,14 +69,5 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://www.npmjs.com/package/xml-formatter" target="_blank">xml-formatter npm package</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
 </style>

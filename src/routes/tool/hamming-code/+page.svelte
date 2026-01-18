@@ -142,15 +142,6 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Hamming_code" target="_blank">Hamming code</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
     #bitInput:invalid {
         color: red;

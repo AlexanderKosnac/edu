@@ -4,5 +4,8 @@
     "tags": [
         "Mathematics",
         "Visualization"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Vandermonde_matrix"
     ]
 }

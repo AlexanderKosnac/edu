@@ -166,17 +166,6 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Page_replacement_algorithm" target="_blank">Page replacement algorithm</a></li>
-            <li><a href="https://en.wikipedia.org/wiki/Memory_paging" target="_blank">Memory paging</a></li>
-            <li><a href="https://www.youtube.com/watch?v=P1icI9X3sR4" target="_blank">Second-chance explained</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
 .page {
     display: flex;

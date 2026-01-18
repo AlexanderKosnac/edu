@@ -45,15 +45,5 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Edit_distance" target="_blank">Edit distance</a></li>
-            <li><a href="https://en.wikipedia.org/wiki/Jaro%E2%80%93Winkler_distance" target="_blank">Jaro-Winkler distance</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
 </style>

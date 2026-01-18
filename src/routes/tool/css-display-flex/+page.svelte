@@ -172,17 +172,6 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://developer.mozilla.org/en-US/docs/Web/CSS/flex" target="_blank">mdn web docs article on flex</a></li>
-            <li><a href="https://css-tricks.com/snippets/css/a-guide-to-flexbox/" target="_blank">CSS-Tricks article on Flexbox</a></li>
-            <li><a href="https://getbootstrap.com/docs/5.3/utilities/flex/" target="_blank">Bootstrap 5.3 Flex classes</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
     .element {
         border: 4px solid var(--bs-body-color);

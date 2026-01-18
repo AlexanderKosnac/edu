@@ -1,7 +1,11 @@
 {
-    "name": "Calorie Calculator",
+    "name": "Calorie calculator",
     "description": "Approximate the daily caloric need of a person.",
     "tags": [
         "Tool"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Calorie",
+        "https://en.wikipedia.org/wiki/Basal_metabolic_rate"
     ]
 }

@@ -1,10 +1,13 @@
 {
-    "name": "Needleman-Wunsch Alignment",
+    "name": "Needleman-Wunsch alignment",
     "description": "Algorithm used in bioinformatics to create nucleotide sequence alignments.",
     "tags": [
         "Computer Science",
         "Biology",
         "Bioinformatics",
         "Tool"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Needleman%E2%80%93Wunsch_algorithm"
     ]
 }

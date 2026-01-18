@@ -134,15 +134,5 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://developer.mozilla.org/en-US/docs/Web/API/Geolocation_API" target="_blank">Geolocation API</a></li>
-            <li><a href="https://en.wikipedia.org/wiki/Geographic_coordinate_system" target="_blank">Geographic coordinate system</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
 </style>

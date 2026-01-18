@@ -1,8 +1,16 @@
 {
-    "name": "Page Replacement",
+    "name": "Page replacement",
     "description": "Algorithms used in operating systems to manage paging for virtual memory management.",
     "tags": [
         "Computer Science",
         "Calculator"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Page_replacement_algorithm",
+        "https://en.wikipedia.org/wiki/Memory_paging",
+        {
+            "label": "Second-chance explained",
+            "url": "https://www.youtube.com/watch?v=P1icI9X3sR4"
+        }
     ]
 }

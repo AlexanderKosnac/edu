@@ -1,6 +1,13 @@
 {
     "name": "Feiertage",
     "description": "Overview of public holidays in Germany.",
-    "tags": [
+    "tags": [],
+    "references": [
+        {
+            "label": "feiertage-api.de",
+            "url": "https://feiertage-api.de/"
+        },
+        "https://de.wikipedia.org/wiki/Feiertag_(Deutschland)",
+        "https://en.wikipedia.org/wiki/Public_holidays_in_Germany"
     ]
 }

@@ -95,14 +95,5 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Cholesky_decomposition" target="_blank">Cholesky decomposition</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
 </style>

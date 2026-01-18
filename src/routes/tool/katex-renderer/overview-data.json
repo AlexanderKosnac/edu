@@ -1,8 +1,11 @@
 {
-    "name": "KaTeX Renderer",
+    "name": "KaTeX renderer",
     "description": "Uses the KaTeX library to render equations into HTML.",
     "tags": [
         "KaTeX",
         "Editor"
+    ],
+    "references": [
+        "https://www.npmjs.com/package/katex"
     ]
 }

@@ -175,15 +175,6 @@ function run() {
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Grayscale" target="_blank">Grayscale</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
     .image-display {
         max-width: 40%;

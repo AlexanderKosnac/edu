@@ -21,16 +21,6 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/SVG" target="_blank">SVG (Wikipedia)</a></li>
-            <li><a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element" target="_blank">SVG Element Reference</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
     #inputText {
       font-family: "Courier New", monospace;

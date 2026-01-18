@@ -3,5 +3,8 @@
     "description": "ASCII character encoding table and conversions.",
     "tags": [
         "Computer Science"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/ASCII"
     ]
 }

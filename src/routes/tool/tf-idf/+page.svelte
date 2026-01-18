@@ -278,14 +278,5 @@
 </div>
 {/if}
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Tf%E2%80%93idf" target="_blank">tf-idf (Wikipedia)</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
 </style>

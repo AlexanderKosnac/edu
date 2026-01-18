@@ -66,14 +66,5 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Vigen%C3%A8re_cipher" target="_blank">Vigenere cipher</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
 </style>

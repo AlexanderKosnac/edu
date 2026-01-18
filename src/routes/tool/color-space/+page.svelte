@@ -131,16 +131,6 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Color_space" target="_blank">Color space</a></li>
-            <li><a href="https://en.wikipedia.org/wiki/List_of_color_spaces_and_their_uses" target="_blank">List of color spaces and their uses</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
     .color-showcase {
         width: 30px;

@@ -220,17 +220,6 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://www.songho.ca/opengl/gl_projectionmatrix.html" target="_blank">Article on OpenGL Projectionmatrices</a></li>
-            <li><a href="http://learnwebgl.brown37.net/08_projections/projections_perspective.html" target="_blank">Article on perspective projection</a></li>
-            <li><a href="https://en.wikipedia.org/wiki/Orthographic_projection" target="_blank">Orthographic projection</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
     #canvas2d {
         border: 1px solid var(--bs-body-color);

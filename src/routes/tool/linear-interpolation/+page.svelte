@@ -167,14 +167,5 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://en.wikipedia.org/" target="_blank">None</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
 </style>

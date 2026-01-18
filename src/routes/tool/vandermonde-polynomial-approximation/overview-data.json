@@ -4,5 +4,9 @@
     "tags": [
         "Mathematics",
         "Visualization"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Least_squares",
+        "https://en.wikipedia.org/wiki/Vandermonde_matrix"
     ]
 }

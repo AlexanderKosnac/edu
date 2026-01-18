@@ -1,9 +1,21 @@
 {
-    "name": "IPv4 Subnetting",
+    "name": "IPv4 subnetting",
     "description": "Visualization of how IPv4 subnetting with CIDR works.",
     "tags": [
         "Computer Science",
         "Networking",
         "Visualization"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Classless_Inter-Domain_Routing",
+        "https://en.wikipedia.org/wiki/Classful_network",
+        {
+            "label": "Subnetting from Elektronik Kompendium (German)",
+            "url": "https://www.elektronik-kompendium.de/sites/net/0907201.htm"
+        },
+        {
+            "label": "CIDR from Elektronik Kompendium (German)",
+            "url": "https://www.elektronik-kompendium.de/sites/net/2011231.htm"
+        }
     ]
 }

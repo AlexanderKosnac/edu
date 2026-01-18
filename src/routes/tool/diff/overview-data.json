@@ -4,5 +4,12 @@
     "tags": [
         "Computer Science"
     ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Diff",
+        {
+            "label": "\"An O(ND) Difference Algorithm and Its Variations\" by Eugene W. Myers",
+            "url": "http://www.xmailserver.org/diff2.pdf"
+        }
+    ],
     "usable": false
 }

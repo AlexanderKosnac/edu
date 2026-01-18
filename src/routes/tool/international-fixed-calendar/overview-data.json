@@ -5,5 +5,9 @@
         "Calendar",
         "Date",
         "Time"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/International_Fixed_Calendar",
+        "https://en.wikipedia.org/wiki/Gregorian_calendar"
     ]
 }

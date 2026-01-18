@@ -1,8 +1,16 @@
 {
-    "name": "Lunar Phase",
+    "name": "Lunar phase",
     "description": "Information on the moon phase.",
     "tags": [
         "Astronomy",
         "Tool"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Lunar_phase",
+        "https://en.wikipedia.org/wiki/Lunar_month",
+        {
+            "label": "Lunar phase by NASA",
+            "url": "https://science.nasa.gov/moon/moon-phases/"
+        }
     ]
 }

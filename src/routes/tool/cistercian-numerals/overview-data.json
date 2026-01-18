@@ -3,5 +3,8 @@
     "description": "A medieval number system by the Cistercian monastic order that allows representing integers from 1 to 9999 with a single glyph.",
     "tags": [
         "Calculator"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Cistercian_numerals"
     ]
 }

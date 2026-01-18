@@ -1,8 +1,12 @@
 {
-    "name": "Convex Hull",
+    "name": "Convex hull",
     "description": "Different algorithms to determine the convex hull of a finite set of points in a plane.",
     "tags": [
         "Computer Science",
         "Visualization"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Convex_hull_algorithms",
+        "https://de.wikipedia.org/wiki/Graham_Scan"
     ]
 }

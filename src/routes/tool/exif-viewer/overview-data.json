@@ -3,5 +3,12 @@
     "description": "View Exif data associated with an image.",
     "tags": [
         "Tool"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Exif",
+        {
+            "label": "exifreader npm package",
+            "url": "https://www.npmjs.com/package/exifreader/v/3.2.0"
+        }
     ]
 }

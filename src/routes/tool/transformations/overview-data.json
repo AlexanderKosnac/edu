@@ -5,5 +5,9 @@
         "Computer Science",
         "Computer Graphics",
         "Calculator"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Transformation_matrix",
+        "https://en.wikipedia.org/wiki/Rotations_and_reflections_in_two_dimensions"
     ]
 }

@@ -142,17 +142,6 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Floating-point_arithmetic" target="_blank">Floating-point arithmetic</a></li>
-            <li><a href="https://en.wikipedia.org/wiki/IEEE_754" target="_blank">IEEE 754 Wikipedia</a></li>
-            <li><a href="https://www.h-schmidt.net/FloatConverter/IEEE754.html" target="_blank">IEEE 754 Float Converter</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
     .bit {
         width: 35px;

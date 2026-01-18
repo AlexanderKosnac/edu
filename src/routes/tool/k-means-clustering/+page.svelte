@@ -210,15 +210,6 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/K-means_clustering" target="_blank">k-means clustering</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
     #canvas2d {
         border: 1px solid var(--bs-body-color);

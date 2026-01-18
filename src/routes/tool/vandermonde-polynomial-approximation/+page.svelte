@@ -217,16 +217,6 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Least_squares" target="_blank">Least squares</a></li>
-            <li><a href="https://en.wikipedia.org/wiki/Vandermonde_matrix" target="_blank">Vandermonde matrix</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
     .point-input {
         width: 100px;

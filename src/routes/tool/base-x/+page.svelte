@@ -87,15 +87,5 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Numeral_system" target="_blank">Numeral system</a></li>
-            <li><a href="https://en.wikipedia.org/wiki/Hexadecimal" target="_blank">Hexadecimal</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
 </style>

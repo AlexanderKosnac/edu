@@ -1,9 +1,12 @@
 {
-    "name": "Bresenham's Line Algorithm",
+    "name": "Bresenham's line algorithm",
     "description": "Algorithm used in computer graphics to rasterize lines.",
     "tags": [
         "Computer Graphics",
         "Computer Science",
         "Calculator"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm"
     ]
 }

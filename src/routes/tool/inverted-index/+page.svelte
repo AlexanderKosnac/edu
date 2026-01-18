@@ -96,15 +96,6 @@
 </div>
 {/if}
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://nlp.stanford.edu/IR-book/pdf/01bool.pdf" target="_blank">Information Retrieval book by Stanford University (Section1.2)</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
     div.entry {
         border: 1px solid var(--bs-body-color);

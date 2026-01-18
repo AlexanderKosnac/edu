@@ -1,7 +1,10 @@
 {
-    "name": "Roman Numerals",
+    "name": "Roman numerals",
     "description": "The number representation originating in Rome.",
     "tags": [
         "Tool"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Roman_numerals"
     ]
 }

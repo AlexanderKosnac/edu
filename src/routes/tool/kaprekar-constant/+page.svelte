@@ -73,15 +73,5 @@
     {/if}
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Kaprekar%27s_routine" target="_blank">Kaprekar's routine</a></li>
-            <li><a href="https://en.wikipedia.org/wiki/6174" target="_blank">6174</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
 </style>

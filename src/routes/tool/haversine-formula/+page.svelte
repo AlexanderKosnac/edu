@@ -90,15 +90,11 @@
     <div class="col">
         {@html katexAsHtml(distance.katex)}
     </div>
-</div>
 
-<div class="row">
     <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://en.wikipedia.org/wiki/Haversine_formula" target="_blank">Haversine formula</a></li>
-            <li><a href="https://en.wikipedia.org/wiki/Great-circle_distance" target="_blank">Great-circle distance</a></li>
-        </ul>
+        {#if browser}
+            <div bind:this={globeContainer} style="width: 100%; height: 500px;"></div>
+        {/if}
     </div>
 </div>
 

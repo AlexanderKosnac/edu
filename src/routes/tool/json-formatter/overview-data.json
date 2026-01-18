@@ -1,8 +1,11 @@
 {
-    "name": "JSON Formatter",
+    "name": "JSON formatter",
     "description": "Formats and pretty-prints JSON to improve readability.",
     "tags": [
         "Tool",
         "Formatter"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/JSON"
     ]
 }

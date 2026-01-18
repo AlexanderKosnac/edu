@@ -4,5 +4,12 @@
     "tags": [
         "Computer Science",
         "Calculator"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Shunting_yard_algorithm",
+        {
+            "label": "Video on Shunting yard by Javid9x",
+            "url": "https://www.youtube.com/watch?v=unh6aK8WMwM"
+        }
     ]
 }

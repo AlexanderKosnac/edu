@@ -3,5 +3,9 @@
     "description": "A tool to calculate many different checksums over a set of files.",
     "tags": [
         "Computer science"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Checksum",
+        "https://www.npmjs.com/package/hash-wasm"
     ]
 }

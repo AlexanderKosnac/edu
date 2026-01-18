@@ -1,8 +1,11 @@
 {
-    "name": "Hamming Code",
+    "name": "Hamming code",
     "description": "Hamming codes can detect one-bit and two-bit errors, or correct one-bit errors.",
     "tags": [
         "Computer Science",
         "Error Correction"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/Hamming_code"
     ]
 }

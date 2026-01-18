@@ -27,15 +27,6 @@
     </div>
 </div>
 
-<div class="row">
-    <div class="col">
-        <h2>References:</h2>
-        <ul>
-            <li><a href="https://www.npmjs.com/package/katex" target="_blank">KaTeX Library on npm</a></li>
-        </ul>
-    </div>
-</div>
-
 <style>
     .latex-result {
         font-size: 2.5em;
