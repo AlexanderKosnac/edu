@@ -8,8 +8,8 @@
     "references": [
         "https://en.wikipedia.org/wiki/Incidence_matrix",
         {
-            "label": "https://nlp.stanford.edu/IR-book/pdf/01bool.pdf",
-            "url": "Information Retrieval book by Stanford University (Section1.1)"
+            "label": "Information Retrieval book by Stanford University (Section1.1)",
+            "url": "https://nlp.stanford.edu/IR-book/pdf/01bool.pdf"
         }
     ]
 }

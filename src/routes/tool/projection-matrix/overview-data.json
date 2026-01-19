@@ -9,8 +9,8 @@
     "references": [
         "https://en.wikipedia.org/wiki/Orthographic_projection",
         {
-            "label": "https://www.songho.ca/opengl/gl_projectionmatrix.html",
-            "url": "Article on OpenGL Projectionmatrices"
+            "label": "Article on OpenGL Projectionmatrices",
+            "url": "https://www.songho.ca/opengl/gl_projectionmatrix.html"
         },
         {
             "label": "Article on perspective projection",
