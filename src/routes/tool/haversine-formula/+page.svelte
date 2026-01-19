@@ -46,16 +46,6 @@
     $: distance = haversineDistance(point1Lat, point1Lon, point2Lat, point2Lon, radiusKmEarth);
 </script>
 
-<svelte:head>
-    <title>Haversine formula</title>
-</svelte:head>
-
-<div class="row">
-    <div class="col">
-        <h1>Haversine formula</h1>
-    </div>
-</div>
-
 <div class="row">
     <div class="col-auto">
         <div class="d-flex flex-column gap-1">
@@ -89,12 +79,6 @@
     </div>
     <div class="col">
         {@html katexAsHtml(distance.katex)}
-    </div>
-
-    <div class="col">
-        {#if browser}
-            <div bind:this={globeContainer} style="width: 100%; height: 500px;"></div>
-        {/if}
     </div>
 </div>
 
