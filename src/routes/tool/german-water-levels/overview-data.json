@@ -1,0 +1,14 @@
+{
+    "name": "German water levels",
+    "description": "Information on water levels in Germany.",
+    "tags": [
+        "Tool"
+    ],
+    "references": [
+        "https://github.com/bundesAPI/pegel-online-api",
+        {
+            "label": "geoboundaries.org API",
+            "url": "https://www.geoboundaries.org/api.html#api"
+        }
+    ]
+}
