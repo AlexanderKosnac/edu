@@ -22,7 +22,9 @@ export function getStation(uuid) {
     });
 }
 
-export function getMeasurements(stationUuid, timeseries) {
+export function getMeasurementsPngUrl(stationUuid, timeseries, params = {}) {
+    const p = new URLSearchParams({ ...params, format: "json" });
+    return `${API_BASE}/stations/${stationUuid}/${timeseries}/measurements.png?${p.toString()}`;
 }
 
 export function getWaters(id = null) {

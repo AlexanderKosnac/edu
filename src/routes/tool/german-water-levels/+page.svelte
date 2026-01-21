@@ -3,10 +3,13 @@
     import { onMount } from "svelte";
 
     import { get, getProxiedUrl } from "$lib/apiRestUtility.js";
-    import { getStations, getStation } from "$lib/apiPegelOnline";
+    import { getStations, getStation, getMeasurementsPngUrl } from "$lib/apiPegelOnline";
+    import Scale from "./Scale.svelte";
 
     const svgWidth = 640;
     const svgHeight = 720;
+
+    let selectionMethod = "Map";
 
     let allStationsPromise = null;
     let stationPromise = null;
@@ -79,8 +82,28 @@
         }
     }
 
+    function niceStep(min, max, nPoints) {
+        const range = max - min;
+        if (range === 0 || nPoints <= 1) return 1;
+
+        const fractionalStep = range / (nPoints - 1);
+
+        const magnitude = 10 ** Math.floor(Math.log10(fractionalStep));
+        const normalized = fractionalStep / magnitude;
+
+        let niceNormalized;
+        if (normalized <= 1) niceNormalized = 1;
+        else if (normalized <= 2) niceNormalized = 2;
+        else if (normalized <= 5) niceNormalized = 5;
+        else niceNormalized = 10;
+
+        return niceNormalized * magnitude;
+    }
+
+    const roundDownToN = (value, n) => Math.floor(value / n) * n;
+    const roundUpToN = (value, n) => Math.ceil(value / n) * n;
+
     onMount(() => {
-        loadGeoJson();
         loadAllStations();
         markStations();
     });
@@ -88,17 +111,50 @@
 
 <div class="row">
     <div class="col-auto">
-        <svg id="map" width={svgWidth} height={svgHeight}></svg>
-    </div>
-    {#if stationPromise === null}
-        <div class="col">
-            <span>Select a station to view details.</span>
+        <h2>Stations</h2>
+        <div class="d-flex flex-row gap-1">
+            Display:
+            <label>
+                <input type="radio" class="form-check-input" value="List" bind:group={selectionMethod} />
+                List
+            </label>
+            <label>
+                <input type="radio" class="form-check-input" value="Map" bind:group={selectionMethod} />
+                Map
+            </label>
         </div>
-    {:else}
-        {#await stationPromise}
-            <div>Request pending</div>
-        {:then value}
-            <div class="col">
+        <div hidden={selectionMethod === "List"}>
+            <svg id="map" width={svgWidth} height={svgHeight}></svg>
+        </div>
+        <div hidden={selectionMethod === "Map"}>
+            {#await allStationsPromise}
+                <div>Request pending</div>
+            {:then value}
+                <div class="overflow-auto" style="max-height: 600px">
+                    <ul>
+                        {#each value as station}
+                            <li>
+                                <button type="button" class="btn btn-link p-0 align-baseline" onclick={() => loadStation(station.uuid)}>
+                                    {station.longname}
+                                </button>
+                            </li>
+                        {/each}
+                    </ul>
+                </div>
+            {:catch error}
+                <div>Something went wrong: {error.message}</div>
+            {/await}
+        </div>
+    </div>
+    <div class="col">
+        {#if stationPromise === null}
+            <h2>Station Details</h2>
+            <p>Select a station from the list or click a mark on the map to view detailed information on it.</p>
+        {:else}
+            {#await stationPromise}
+                <h2>Station Details</h2>
+                <div>Request pending</div>
+            {:then value}
                 <h2>{value.longname}</h2>
                 <ul>
                     <li><button type="button" class="btn btn-link p-0 align-baseline" onclick={() => openJson(value)}>Open json data</button></li>
@@ -118,6 +174,21 @@
                 </ul>
                 <div class="tab-content" id="myTabContent">
                     {#each value?.timeseries as timeseries, i}
+                        {@const allMarks = [
+                            {
+                                label: "Current Measurement",
+                                value: timeseries.currentMeasurement.value,
+                            },
+                            ...timeseries.characteristicValues.map((ts) => ({
+                                label: ts.longname,
+                                value: ts.value,
+                            })),
+                        ]}
+                        {@const allValues = allMarks.map((ts) => ts.value)}
+                        {@const valMin = Math.min(...allValues)}
+                        {@const valMax = Math.max(...allValues)}
+                        {@const valStep = niceStep(valMin, valMax, 10)}
+
                         <div class="tab-pane" class:show={i == 0} class:active={i == 0} id="ts-{timeseries.shortname}" role="tabpanel" aria-labelledby="ts-{timeseries.shortname}-tab">
                             <div class="d-flex flex-column">
                                 <ul>
@@ -133,43 +204,22 @@
                                 </ul>
                             </div>
 
-                            <pre>{JSON.stringify(timeseries, null, 2)}</pre>
+                            <div class="d-flex flex-row">
+                                <div>
+                                    {#if allValues.length > 1}
+                                        <Scale min={roundDownToN(valMin, valStep)} max={roundUpToN(valMax, valStep)} step={valStep} marks={allMarks} width={300} height={400} secondaryColor="#8080FF" fontSize="12" orientation="vertical" />
+                                    {/if}
+                                    <img src={getMeasurementsPngUrl(value.uuid, timeseries.shortname, {})} alt="Measurement URL" />
+                                </div>
+                            </div>
                         </div>
                     {/each}
                 </div>
-            </div>
-            <!--
-            <div class="col overflow-auto" style="max-height: 600px">
-                <pre>{JSON.stringify(value, null, 2)}</pre>
-            </div>
-            -->
-        {:catch error}
-            <div>Something went wrong: {error.message}</div>
-        {/await}
-    {/if}
-</div>
-
-<div class="row">
-    {#await allStationsPromise}
-        <div>Request pending</div>
-    {:then value}
-        <h2>All Stations</h2>
-        <div class="col overflow-auto" style="max-height: 600px">
-            <ul>
-                {#each value as station}
-                    <li>
-                        <span class="align-self-center">{station.longname}</span>
-                        <button type="button" class="btn btn-link p-0 align-baseline" onclick={() => loadStation(station.uuid)}>Load</button>
-                    </li>
-                {/each}
-            </ul>
-        </div>
-        <div class="col overflow-auto" style="max-height: 600px">
-            <pre>{JSON.stringify(value, null, 2)}</pre>
-        </div>
-    {:catch error}
-        <div>Something went wrong: {error.message}</div>
-    {/await}
+            {:catch error}
+                <p>Something went wrong: {error.message}</p>
+            {/await}
+        {/if}
+    </div>
 </div>
 
 <style>
