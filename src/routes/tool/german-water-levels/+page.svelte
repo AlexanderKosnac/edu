@@ -11,8 +11,8 @@
 
     let selectionMethod = "Map";
 
-    let allStationsPromise = null;
-    let stationPromise = null;
+    let allStationsPromise = Promise.resolve(null);
+    let stationPromise = Promise.resolve(null);
 
     function loadAllStations() {
         allStationsPromise = getStations();
@@ -112,27 +112,36 @@
 <div class="row">
     <div class="col-auto">
         <h2>Stations</h2>
-        <div class="d-flex flex-row gap-1">
-            Display:
-            <label>
-                <input type="radio" class="form-check-input" value="List" bind:group={selectionMethod} />
-                List
-            </label>
-            <label>
-                <input type="radio" class="form-check-input" value="Map" bind:group={selectionMethod} />
-                Map
-            </label>
-        </div>
-        <div hidden={selectionMethod === "List"}>
-            <svg id="map" width={svgWidth} height={svgHeight}></svg>
-        </div>
-        <div hidden={selectionMethod === "Map"}>
-            {#await allStationsPromise}
-                <div>Request pending</div>
-            {:then value}
+        {#await allStationsPromise}
+            <div>Request pending</div>
+        {:then value}
+            <div class="d-flex flex-row gap-5 mb-1">
+                <div>
+                    {value?.length} stations loaded
+                </div>
+                <div class="flex-grow-1"></div>
+                <div class="d-flex flex-row gap-2">
+                    Display:
+                    <label>
+                        <input type="radio" class="form-check-input" value="List" bind:group={selectionMethod} />
+                        List
+                    </label>
+                    <label>
+                        <input type="radio" class="form-check-input" value="Map" bind:group={selectionMethod} />
+                        Map
+                    </label>
+                </div>
+                <div class="flex-grow-1"></div>
+                <button type="button" class="btn btn-link p-0 align-baseline" onclick={() => openJson(value)}>Open json data</button>
+            </div>
+
+            <div hidden={selectionMethod === "List"}>
+                <svg id="map" width={svgWidth} height={svgHeight}></svg>
+            </div>
+            <div hidden={selectionMethod === "Map"}>
                 <div class="overflow-auto" style="max-height: 600px">
                     <ul>
-                        {#each value as station}
+                        {#each value?.sort((a, b) => a.longname.localeCompare(b.longname, undefined, { sensitivity: "base" })) as station}
                             <li>
                                 <button type="button" class="btn btn-link p-0 align-baseline" onclick={() => loadStation(station.uuid)}>
                                     {station.longname}
@@ -141,10 +150,10 @@
                         {/each}
                     </ul>
                 </div>
-            {:catch error}
-                <div>Something went wrong: {error.message}</div>
-            {/await}
-        </div>
+            </div>
+        {:catch error}
+            <div>Something went wrong: {error.message}</div>
+        {/await}
     </div>
     <div class="col">
         {#if stationPromise === null}
