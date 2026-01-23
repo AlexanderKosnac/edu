@@ -1,6 +1,6 @@
 {
-    "name": "Composition of the Bundestag",
-    "description": "Visualization of the composition of the Bundestag.",
+    "name": "Bundestag API",
+    "description": "A basic accessor for the API of the German Bundestag. To be extended.",
     "tags": [],
     "references": [
         {
@@ -11,6 +11,5 @@
             "label": "Bundestag API",
             "url": "https://dip.bundestag.de/%C3%BCber-dip/hilfe/api"
         }
-    ],
-    "usable": false
+    ]
 }
