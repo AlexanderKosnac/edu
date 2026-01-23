@@ -9,6 +9,13 @@
             }
             return "Unknown npm package";
         },
+        "github.com": (url) => {
+            const parts = new URL(url).pathname.split("/").filter(Boolean);
+            if (parts.length > 0) {
+                return `<tt>${parts.join("/")}</tt> (GitHub)`
+            }
+            return "Unknown GitHub repository";
+        },
         "wikipedia.org": (url) => {
             const parts = new URL(url).pathname.split("/").filter(Boolean);
             if (parts[0] === "wiki" && parts[1]) {
@@ -54,7 +61,7 @@
                 {#each data.overview.references as ref}
                     <li>
                         {#if typeof ref === "string"}
-                            <a href={ref} target="_blank">{autoLabel(ref)}</a>
+                            <a href={ref} target="_blank">{@html autoLabel(ref)}</a>
                         {:else if typeof ref === "object"}
                             <a href={ref.url} target="_blank">{ref.label}</a>
                         {:else}
