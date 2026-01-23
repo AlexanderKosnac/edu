@@ -20,8 +20,7 @@
             </p>
 
             <p>
-                This website is hosted on GitHub Pages and automatically deployed from the
-                <a href="https://github.com/AlexanderKosnac/edu">edu</a> repository. No guarantee is made regarding the accuracy or correctness of the provided tools or information.
+                This website is hosted on GitHub Pages and automatically deployed from the <a href="https://github.com/AlexanderKosnac/edu">edu</a> repository. No guarantee is made regarding the accuracy or correctness of the provided tools or information.
             </p>
         </div>
     </div>
