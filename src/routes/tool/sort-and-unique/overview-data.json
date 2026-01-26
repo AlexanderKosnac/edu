@@ -5,5 +5,18 @@
         "Tool",
         "Text Manipulation"
     ],
-    "references": []
+    "references": [
+        {
+            "label": "Javascript sort",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort"
+        },
+        {
+            "label": "Documentation of localCompare",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/localeCompare"
+        },
+        {
+            "label": "Documentation of Collator parameters",
+            "url": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/Collator/Collator#parameters"
+        }
+    ]
 }
