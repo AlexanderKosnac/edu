@@ -13,7 +13,7 @@
 
     const fuse = new Fuse(aggregateOverview, {
         keys: ["name", "description"],
-        threshold: 0.3,
+        threshold: 0.5,
         distance: 50,
         tokenize: true,
         matchAllTokens: true,

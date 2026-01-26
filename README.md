@@ -1,8 +1,15 @@
 # [edu](https://alexanderkosnac.github.io/edu)
 
-Collection of programs with a focus on transparency and understanding of the
-underlying material.
-The name is derived from top-level domain [.edu](https://en.wikipedia.org/wiki/.edu)
+edu is a growing collection of educational tools, visualizations, calculators, and small utilities. The goal is
+transparency of underlying processes and concepts, rather than efficient or production-ready implementations.
+
+Many tools expose intermediate steps, internal state, formulas, and transformations so that algorithms, ideas, and
+systems become easier to reason about.
+
+At the same time, the project also includes practical utilities and lightweight service tools, sometimes implemented as
+simple wrappers to enable interaction with complex libraries.
+
+The name is derived from the top-level domain [.edu](https://en.wikipedia.org/wiki/.edu),
 which was created for organizations with a focus on education.
 
 ## Development

@@ -12,7 +12,7 @@
         "github.com": (url) => {
             const parts = new URL(url).pathname.split("/").filter(Boolean);
             if (parts.length > 0) {
-                return `<tt>${parts.join("/")}</tt> (GitHub)`
+                return `<tt>${parts.join("/")}</tt> (GitHub)`;
             }
             return "Unknown GitHub repository";
         },
@@ -51,10 +51,10 @@
 
 <slot />
 
-{#if data.overview.references}
+{#if data.overview.references && data.overview.references.length > 0}
     <div class="row">
         <div class="col">
-            <hr/>
+            <hr />
 
             <h2>References:</h2>
             <ul>

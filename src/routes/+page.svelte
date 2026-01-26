@@ -1,61 +1,64 @@
 <script>
-    import data from "./aggregate-overview-data.json";
-
     import { base } from "$app/paths";
 
-    const sortedData = data.sort((a, b) => {
-        if (a.name < b.name) return -1;
-        if (a.name > b.name) return 1;
-        return 0;
-    });
+    import data from "./aggregate-overview-data.json";
+
+    const dataSorted = data.sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: "base" }));
 </script>
 
-<div class="row flex-row justify-content-center">
-    <div class="col-lg-6">
-        <div class="d-flex flex-column align-items-center">
-            <h1 class="edu-title">edu</h1>
+<div class="row justify-content-center">
+    <div class="col col-md-6 d-flex flex-column align-items-center">
+        <span class="edu-title">edu</span>
 
-            <p>
-                The edu project is a collection of tools, visualizations, and calculators focused on education and learning. The name is derived from the top-level domain <a href="https://en.wikipedia.org/wiki/.edu">.edu</a>, which was created for organizations with an educational focus.
-            </p>
+        <p>edu is a growing collection of educational tools, visualizations, calculators, and small utilities. The goal is transparency of underlying processes and concepts, rather than efficient or production-ready implementations.</p>
 
-            <p>
-                This website is hosted on GitHub Pages and automatically deployed from the <a href="https://github.com/AlexanderKosnac/edu">edu</a> repository. No guarantee is made regarding the accuracy or correctness of the provided tools or information.
-            </p>
-        </div>
+        <p>
+            The name is derived from the top-level domain <a href="https://en.wikipedia.org/wiki/.edu">.edu</a>, which was created for organizations with a focus on education.
+        </p>
+
+        <p>
+            This website is hosted on GitHub Pages and automatically deployed from the <a href="https://github.com/AlexanderKosnac/edu">edu</a> repository.
+        </p>
+
+        <p>No guarantee is made regarding the accuracy or correctness of the provided tools or information.</p>
     </div>
 </div>
 
-<div class="row justify-content-center mb-5">
-    <div class="col-lg-10">
-        <div class="d-flex flex-wrap justify-content-center gap-2">
-            {#each sortedData as entry}
-                {#if entry.usable ?? true}
-                    <div class="card tool-card">
-                        <div class="card-body">
-                            <h5 class="card-title">
-                                <a class="icon-link icon-link-hover" href="{base}/{entry.url}">
-                                    {entry.name}
-                                    <i class="bi bi-arrow-right-short"></i>
-                                </a>
-                            </h5>
-                            <p class="card-text">{entry.description}</p>
-                        </div>
+<div class="row justify-content-center">
+    <div class="col d-flex flex-wrap justify-content-center gap-2">
+        {#each dataSorted as entry}
+            {#if entry.usable ?? true}
+                <div class="card tool-card">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a class="icon-link icon-link-hover" href="{base}/{entry.url}">
+                                {entry.name}
+                                <i class="bi bi-arrow-right-short"></i>
+                            </a>
+                        </h5>
+                        <p class="card-text">{entry.description}</p>
                     </div>
-                {/if}
-            {/each}
-        </div>
+                </div>
+            {/if}
+        {/each}
     </div>
 </div>
 
 <style>
-    .tool-card {
-        width: 280px;
-        min-width: 280px;
-    }
     .edu-title {
         letter-spacing: 0.3rem;
         font-family: monospace;
         font-weight: 900;
+        font-size: 2.2em;
+    }
+
+    .tool-card {
+        width: 100%;
+    }
+
+    @media (min-width: 576px) {
+        .tool-card {
+            width: 290px;
+        }
     }
 </style>
