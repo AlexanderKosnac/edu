@@ -14,10 +14,14 @@
     $: labelA = formatXY(pixelCoord(pA));
     $: labelB = formatXY(pixelCoord(pB));
 
-    let pixels = Array(N_PIXELS_WIDTH).fill().map(() => Array(N_PIXELS_HEIGHT).fill());
+    let pixels = Array(N_PIXELS_WIDTH)
+        .fill()
+        .map(() => Array(N_PIXELS_HEIGHT).fill());
 
     let showPixelIndices = false;
-    let lineColor = "#ffaa00";
+    let lineColor = "orange";
+    let pAColor = "blue";
+    let pBColor = "green";
 
     function pixelCoord(point) {
         return {
@@ -35,7 +39,7 @@
     }
 
     function clear() {
-        pixels.forEach(row => row.forEach(e => e.style.fill = "transparent"));
+        pixels.forEach((row) => row.forEach((e) => (e.style.fill = "transparent")));
     }
 
     function plotLineLow(x0, y0, x1, y1) {
@@ -46,16 +50,16 @@
             yi = -1;
             dy = -dy;
         }
-        let D = (2*dy)-dx;
+        let D = 2 * dy - dx;
         let y = y0;
 
-        for (let x=x0; x<=x1; x++) {
+        for (let x = x0; x <= x1; x++) {
             setPixel(x, y);
             if (D > 0) {
                 y += yi;
-                D += 2*(dy-dx);
+                D += 2 * (dy - dx);
             } else {
-                D += 2*dy;
+                D += 2 * dy;
             }
         }
     }
@@ -63,21 +67,21 @@
     function plotLineHigh(x0, y0, x1, y1) {
         let dx = x1 - x0;
         let dy = y1 - y0;
-        let xi = 1
+        let xi = 1;
         if (dx < 0) {
             xi = -1;
             dx = -dx;
         }
-        let D = (2*dx)-dy
+        let D = 2 * dx - dy;
         let x = x0;
 
-        for (let y=y0; y<=y1; y++) {
+        for (let y = y0; y <= y1; y++) {
             setPixel(x, y);
             if (D > 0) {
                 x += xi;
-                D += 2*(dx-dy);
+                D += 2 * (dx - dy);
             } else {
-                D += 2*dx;
+                D += 2 * dx;
             }
         }
     }
@@ -98,8 +102,7 @@
         }
     }
 
-    function onDragPoint()
-    {
+    function onDragPoint() {
         let cA = pixelCoord(pA);
         let cB = pixelCoord(pB);
 
@@ -107,7 +110,7 @@
         plotLine(cA.x, cA.y, cB.x, cB.y);
     }
 
-    onMount(()=> {
+    onMount(() => {
         onDragPoint();
     });
 </script>
@@ -116,31 +119,39 @@
     <div class="col-auto">
         <svg width="700" height="700" viewBox="0 0 700 700">
             <g>
-            {#each {length: N_PIXELS_WIDTH} as _, i}
-                {#each {length: N_PIXELS_HEIGHT} as _, j}
-                <rect bind:this={pixels[i][j]} class="pixel" x="{i*PIXEL_WIDTH}" y="{j*PIXEL_HEIGHT}"></rect>
-                {#if showPixelIndices}
-                    <text x="{i*PIXEL_WIDTH+3}" y="{j*PIXEL_HEIGHT+10}" stroke="white" fill="white" style="font-size: .5em">{i}, {j}</text>
-                {/if}
+                {#each { length: N_PIXELS_WIDTH } as _, i}
+                    {#each { length: N_PIXELS_HEIGHT } as _, j}
+                        <rect bind:this={pixels[i][j]} class="pixel" x={i * PIXEL_WIDTH} y={j * PIXEL_HEIGHT}></rect>
+                        {#if showPixelIndices}
+                            <text x={i * PIXEL_WIDTH + 3} y={j * PIXEL_HEIGHT + 10} fill="currentColor" style="font-size: .5em">{i}, {j}</text>
+                        {/if}
+                    {/each}
                 {/each}
-            {/each}
             </g>
-            <path class="continuous-line" d="M {pA.x} {pA.y} L {pB.x} {pB.y}"/>
-            <SvgDraggablePoint bind:x={pA.x} bind:y={pA.y} bind:label={labelA} drag={onDragPoint} fill="green"/>
-            <SvgDraggablePoint bind:x={pB.x} bind:y={pB.y} bind:label={labelB} drag={onDragPoint} fill="blue"/>
+            <path class="continuous-line" d="M {pA.x} {pA.y} L {pB.x} {pB.y}" />
+            <SvgDraggablePoint bind:x={pA.x} bind:y={pA.y} bind:label={labelA} drag={onDragPoint} fill={pAColor} />
+            <SvgDraggablePoint bind:x={pB.x} bind:y={pB.y} bind:label={labelB} drag={onDragPoint} fill={pBColor} />
         </svg>
     </div>
     <div class="col">
         <h2>Settings</h2>
-        <div class="form-check">
+        <div class="d-flex flex-column gap-1">
             <label class="form-check-label">
-                <input class="form-check-input" type="checkbox" bind:checked={showPixelIndices}>
+                <input class="form-check-input" type="checkbox" bind:checked={showPixelIndices} />
                 Show pixel indices
             </label>
-        </div>
-        <div class="form-color">
-            <label for="lineColor">Line color</label>
-            <input type="color" class="form-control form-control-color" id="lineColor" onchange={onDragPoint} bind:value={lineColor}>
+            <label class="form-check-label d-flex flex-row gap-1 align-items-center">
+                <input type="color" class="form-control form-control-color" onchange={onDragPoint} bind:value={lineColor} />
+                Line color
+            </label>
+            <label class="form-check-label d-flex flex-row gap-1 align-items-center">
+                <input type="color" class="form-control form-control-color" onchange={onDragPoint} bind:value={pAColor} />
+                Point A color
+            </label>
+            <label class="form-check-label d-flex flex-row gap-1 align-items-center">
+                <input type="color" class="form-control form-control-color" onchange={onDragPoint} bind:value={pBColor} />
+                Point B color
+            </label>
         </div>
     </div>
 </div>
