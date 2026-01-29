@@ -1,12 +1,4 @@
 <script>
-    const characters = [
-        "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L",
-        "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X",
-        "Y", "Z", "a", "b", "c", "d", "e", "f", "g", "h", "i", "j",
-        "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v",
-        "w", "x", "y", "z", "0", "1", "2", "3", "4", "5", "6", "7",
-        "8", "9", "+", "/"
-    ]
     const padchar = "=";
 
     const formats = [
@@ -31,8 +23,7 @@
 
                 for (let i = 0; i < clean.length; i += 8) {
                     let byte = clean.slice(i, i + 8);
-                    if (byte.length < 8)
-                        byte = byte.padEnd(8, "0");
+                    if (byte.length < 8) byte = byte.padEnd(8, "0");
 
                     const value = parseInt(byte, 2);
 
@@ -46,6 +37,42 @@
         },
     ];
 
+    const alphabets = [
+        {
+            name: "Default",
+            chars: "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",
+        },
+        {
+            name: "Unix password",
+            chars: "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+        },
+        {
+            name: "GEDCOM",
+            chars: "./0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+        },
+        {
+            name: "bcrypt",
+            chars: "./ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
+        },
+        {
+            name: "Xxencoding",
+            chars: "+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz",
+        },
+        {
+            name: "Bash",
+            chars: "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@_",
+        },
+        {
+            name: "Uuencoding",
+            chars: " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[]^_",
+        },
+        {
+            name: "BinHex",
+            chars: "!\"#$%&'()*+,-012345689@ABCDEFGHIJKLMNPQRSTUVXYZ[`abcdefhijklmpqr",
+        },
+    ];
+
+    let selectedAlphabet = alphabets[0];
     let selectedFormat = formats[0];
     let inputString = "Man";
 
@@ -69,17 +96,16 @@
         octets = r.octets;
         bits = r.bits;
 
-        if (bits.length % 6) // Padding to have a multiple of 6
-            bits.push(...Array(6 - bits.length % 6).fill("0"));
+        if (bits.length % 6) bits.push(...Array(6 - (bits.length % 6)).fill("0")); // Padding to have a multiple of 6
 
-        for (let i = 0; i < bits.length; i+=6) {
-            const encoded = parseInt(bits.slice(i, i+6).join(""), 2);
-            const c = characters[encoded];
+        for (let i = 0; i < bits.length; i += 6) {
+            const encoded = parseInt(bits.slice(i, i + 6).join(""), 2);
+            const c = selectedAlphabet.chars[encoded];
             sextetsEnc.push(encoded);
             charsEnc.push(c);
             octetsEnc.push(c.charCodeAt(0));
         }
-        padBlocks = (chars.length % 3) ? 3 - chars.length % 3 : 0;
+        padBlocks = chars.length % 3 ? 3 - (chars.length % 3) : 0;
 
         for (let i = 0; i < padBlocks; i++) {
             charsEnc.push(padchar);
@@ -94,19 +120,29 @@
             Unencoded Input:
             {#each formats as format}
                 <label class="text-nowrap">
-                    <input type="radio" class="form-check-input" value={format} bind:group={selectedFormat}/>
+                    <input type="radio" class="form-check-input" value={format} bind:group={selectedFormat} />
                     {format.name}
                 </label>
             {/each}
         </div>
         <div class="d-flex flex-row gap-1">
-            <input type="text" class="form-control font-monospace" bind:value="{inputString}" oninput={encodeData}>
+            <input type="text" class="form-control font-monospace" bind:value={inputString} oninput={encodeData} />
             <button type="button" class="btn btn-primary" onclick={encodeData}>Encode</button>
         </div>
 
         Base64 Encoded Data:
         <div class="form-group">
-            <input type="text" class="form-control font-monospace" bind:value="{outputString}" readonly>
+            <input type="text" class="form-control font-monospace" bind:value={outputString} readonly />
+        </div>
+
+        <div class="d-flex flex-row gap-2">
+            Alphabet:
+            {#each alphabets as alphabet}
+                <label class="text-nowrap">
+                    <input type="radio" class="form-check-input" value={alphabet} bind:group={selectedAlphabet} />
+                    {alphabet.name}
+                </label>
+            {/each}
         </div>
     </div>
 </div>
@@ -118,16 +154,16 @@
             <table class="table table-bordered w-auto">
                 <tbody>
                     <tr>
-                        <th rowspan="2" class="position-sticky">Source<br>ASCII text</th>
+                        <th rowspan="2" class="position-sticky">Source<br />ASCII text</th>
                         <th>Character</th>
                         {#each chars as c}
                             <td colspan="8"><strong>{c}</strong></td>
                         {/each}
-                        {#if (8*chars.length)%6}
-                            <td rowspan="2" colspan="{6-(8*chars.length)%6}"></td>
+                        {#if (8 * chars.length) % 6}
+                            <td rowspan="2" colspan={6 - ((8 * chars.length) % 6)}></td>
                         {/if}
                         {#if padBlocks}
-                            <td rowspan="2" colspan="{padBlocks*6}"></td>
+                            <td rowspan="2" colspan={padBlocks * 6}></td>
                         {/if}
                     </tr>
                     <tr>
@@ -141,17 +177,17 @@
                         {#each bits as b}
                             <td>{b}</td>
                         {/each}
-                        {#each {length: padBlocks*6} as _}
+                        {#each { length: padBlocks * 6 } as _}
                             <td></td>
                         {/each}
                     </tr>
                     <tr>
-                        <th rowspan="3">Base64<br>encoded</th>
+                        <th rowspan="3">Base64<br />encoded</th>
                         <th>Sextets</th>
                         {#each sextetsEnc as se}
                             <td colspan="6">{se}</td>
                         {/each}
-                        {#each {length: padBlocks} as _}
+                        {#each { length: padBlocks } as _}
                             <td colspan="6"></td>
                         {/each}
                     </tr>
@@ -176,33 +212,35 @@
 <div class="row">
     <div class="col-auto">
         <h2>Base 64 Alphabet</h2>
+        <tt>{selectedAlphabet.chars}</tt>
         <div class="d-flex gap-2">
-            {#each {length: 4} as _, i}
-            <table class="table table-bordered">
-                <thead>
-                    <tr>
-                        <th>Index</th>
-                        <th>Binary</th>
-                        <th>Char</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {#each {length: 16} as _, j}
-                    <tr>
-                        <td>{i*16+j}</td>
-                        <td>{(i*16+j).toString(2).padStart(6, "0")}</td>
-                        <td><kbd>{characters[i*16+j]}</kbd></td>
-                    </tr>
-                    {/each}
-                </tbody>
-            </table>
+            {#each { length: 4 } as _, i}
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Index</th>
+                            <th>Binary</th>
+                            <th>Char</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {#each { length: 16 } as _, j}
+                            <tr>
+                                <td>{i * 16 + j}</td>
+                                <td>{(i * 16 + j).toString(2).padStart(6, "0")}</td>
+                                <td><kbd>{selectedAlphabet.chars[i * 16 + j]}</kbd></td>
+                            </tr>
+                        {/each}
+                    </tbody>
+                </table>
             {/each}
         </div>
     </div>
 </div>
 
 <style>
-    th, td {
+    th,
+    td {
         vertical-align: middle;
         text-align: center;
     }
