@@ -116,40 +116,6 @@
 
 <div class="row">
     <div class="col">
-        <div class="d-flex flex-row gap-2">
-            Unencoded Input:
-            {#each formats as format}
-                <label class="text-nowrap">
-                    <input type="radio" class="form-check-input" value={format} bind:group={selectedFormat} />
-                    {format.name}
-                </label>
-            {/each}
-        </div>
-        <div class="d-flex flex-row gap-1">
-            <input type="text" class="form-control font-monospace" bind:value={inputString} oninput={encodeData} />
-            <button type="button" class="btn btn-primary" onclick={encodeData}>Encode</button>
-        </div>
-
-        Base64 Encoded Data:
-        <div class="form-group">
-            <input type="text" class="form-control font-monospace" bind:value={outputString} readonly />
-        </div>
-
-        <div class="d-flex flex-row gap-2">
-            Alphabet:
-            {#each alphabets as alphabet}
-                <label class="text-nowrap">
-                    <input type="radio" class="form-check-input" value={alphabet} bind:group={selectedAlphabet} />
-                    {alphabet.name}
-                </label>
-            {/each}
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col">
-        Detailed Output:
         <div class="mw-100 overflow-auto">
             <table class="table table-bordered w-auto">
                 <tbody>
@@ -210,9 +176,40 @@
 </div>
 
 <div class="row">
+    <div class="col">
+        <div class="d-flex flex-row gap-2">
+            Unencoded Input:
+            {#each formats as format}
+                <label class="text-nowrap">
+                    <input type="radio" class="form-check-input" value={format} bind:group={selectedFormat} />
+                    {format.name}
+                </label>
+            {/each}
+        </div>
+        <div class="d-flex flex-row gap-1">
+            <input type="text" class="form-control font-monospace" bind:value={inputString} oninput={encodeData} />
+            <button type="button" class="btn btn-primary" onclick={encodeData}>Encode</button>
+        </div>
+
+        Base64 Encoded Data:
+        <div class="form-group">
+            <input type="text" class="form-control font-monospace" bind:value={outputString} readonly />
+        </div>
+
+        Alphabet:<code>{selectedAlphabet.chars}</code>
+        <div class="d-flex flex-row gap-2">
+            {#each alphabets as alphabet}
+                <label class="text-nowrap">
+                    <input type="radio" class="form-check-input" value={alphabet} bind:group={selectedAlphabet} />
+                    {alphabet.name}
+                </label>
+            {/each}
+        </div>
+    </div>
+</div>
+
+<div class="row">
     <div class="col-auto">
-        <h2>Base 64 Alphabet</h2>
-        <tt>{selectedAlphabet.chars}</tt>
         <div class="d-flex gap-2">
             {#each { length: 4 } as _, i}
                 <table class="table table-bordered">
