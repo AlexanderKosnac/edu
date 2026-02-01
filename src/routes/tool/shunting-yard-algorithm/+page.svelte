@@ -12,22 +12,28 @@
     let result;
 
     let storeInRpnHistory = (token, action, rpn, opStack) => {
-        historyRpn = [...historyRpn, {
-            token: structuredClone(token),
-            action: action,
-            rpn: structuredClone(rpn),
-            opStack: structuredClone(opStack),
-        }];
-    }
+        historyRpn = [
+            ...historyRpn,
+            {
+                token: structuredClone(token),
+                action: action,
+                rpn: structuredClone(rpn),
+                opStack: structuredClone(opStack),
+            },
+        ];
+    };
 
     let storeInSolveHistory = (token, action, rpn, nums) => {
-        historySolve = [...historySolve, {
-            token: structuredClone(token),
-            action: action,
-            rpn: structuredClone(rpn),
-            nums: structuredClone(nums),
-        }];
-    }
+        historySolve = [
+            ...historySolve,
+            {
+                token: structuredClone(token),
+                action: action,
+                rpn: structuredClone(rpn),
+                nums: structuredClone(nums),
+            },
+        ];
+    };
 
     let error;
 
@@ -42,7 +48,7 @@
         }
     }
 
-    onMount(()=> {
+    onMount(() => {
         run();
     });
 </script>
@@ -50,12 +56,13 @@
 <div class="row mb-3">
     <div class="col">
         <div class="form-floating">
-            <input type="text" class="form-control" class:error={error} id="input" placeholder=" " bind:value={inputString} oninput={run}>
+            <input type="text" class="form-control" class:error id="input" placeholder=" " bind:value={inputString} oninput={run} />
             <label for="input">Input String</label>
-            <div class="form-text">Available operators:
+            <div class="form-text">
+                Available operators:
                 {#each getAvailableOperators() as op, i}
-                {#if i},{/if}
-                <tt>{op}</tt>
+                    {#if i},{/if}
+                    <tt>{op}</tt>
                 {/each}
                 <span class="text-danger" style="margin-left: 30px">{error ?? ""}</span>
             </div>
@@ -68,7 +75,7 @@
         <h4>Tokenized Input:</h4>
         <div class="d-flex gap-1">
             {#each tokens as token}
-            <Token data={token} size="60"/>
+                <Token data={token} size="60" />
             {/each}
         </div>
     </div>
@@ -88,26 +95,26 @@
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">
-                {#each historyRpn as entry}
-                <tr>
-                    <td class="text-center">{entry.token.symbol ?? ""}</td>
-                    <td>{entry.action}</td>
-                    <td>
-                        <div class="d-flex gap-1">
-                            {#each entry.rpn as token}
-                            <Token data={token} size="30"/>
-                            {/each}
-                        </div>
-                    </td>
-                    <td>
-                        <div class="d-flex gap-1">
-                            {#each entry.opStack as token}
-                            <Token data={token} size="30"/>
-                            {/each}
-                        </div>
-                    </td>
-                </tr>
-                {/each}
+                    {#each historyRpn as entry}
+                        <tr>
+                            <td class="text-center">{entry.token.symbol ?? ""}</td>
+                            <td>{entry.action}</td>
+                            <td>
+                                <div class="d-flex gap-1">
+                                    {#each entry.rpn as token}
+                                        <Token data={token} size="30" />
+                                    {/each}
+                                </div>
+                            </td>
+                            <td>
+                                <div class="d-flex gap-1">
+                                    {#each entry.opStack as token}
+                                        <Token data={token} size="30" />
+                                    {/each}
+                                </div>
+                            </td>
+                        </tr>
+                    {/each}
                 </tbody>
             </table>
         </div>
@@ -128,20 +135,20 @@
                     </tr>
                 </thead>
                 <tbody class="table-group-divider">
-                {#each historySolve as entry}
-                <tr>
-                    <td class="text-center">{entry.token.symbol}</td>
-                    <td>{entry.action}</td>
-                    <td>
-                        <div class="d-flex gap-1">
-                            {#each entry.rpn as token}
-                            <Token data={token} size="30"/>
-                            {/each}
-                        </div>
-                    </td>
-                    <td>{JSON.stringify(entry.nums)}</td>
-                </tr>
-                {/each}
+                    {#each historySolve as entry}
+                        <tr>
+                            <td class="text-center">{entry.token.symbol}</td>
+                            <td>{entry.action}</td>
+                            <td>
+                                <div class="d-flex gap-1">
+                                    {#each entry.rpn as token}
+                                        <Token data={token} size="30" />
+                                    {/each}
+                                </div>
+                            </td>
+                            <td>{JSON.stringify(entry.nums)}</td>
+                        </tr>
+                    {/each}
                 </tbody>
             </table>
         </div>
