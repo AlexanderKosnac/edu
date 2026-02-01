@@ -1,47 +1,17 @@
 <script>
     export let data;
-    export let size = "normal";
+    export let size = 100;
+
+    const breakpoint = 60;
 </script>
 
-<div class="token {size}">
-    <div class="symbol">{data.symbol}</div>
-    {#if size === "normal"}
-    <div class="type">{data.type.name}</div>
+<svg xmlns="http://www.w3.org/2000/svg" width={size} height={size} viewBox="0 0 100 100">
+    <rect x="5" y="5" width="90" height="90" fill="none" stroke="currentColor" stroke-width="5" rx="10"/>
+    <text x="50" y="{size >= breakpoint ? 40 : 50}" fill="currentColor" text-anchor="middle" dominant-baseline="middle" font-size="3.5em">{data.symbol}</text>
+    {#if size >= breakpoint}
+        <text x="50" y="80" fill="currentColor" text-anchor="middle" dominant-baseline="middle">{data.type.name}</text>
     {/if}
-</div>
+</svg>
 
 <style>
-    .token {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-around;
-        align-items: center;
-
-        position: relative;
-
-        min-width: 40px;
-        height: 40px;
-        border: 1px solid var(--bs-body-color);
-        border-radius: 5px;
-    }
-    .token.small {
-        min-width: 25px;
-        height: 25px;
-    }
-    .token > .symbol {
-        padding: 0px 5px 15px;
-        font-size: 1.4em;
-        font-weight: 900;
-    }
-    .token.small > .symbol {
-        padding: 0px;
-        font-size: 1.3em;
-        font-weight: 900;
-    }
-    .token > .type {
-        position: absolute;
-        top: 65%;
-        font-size: .5em;
-        font-weight: 900;
-    }
 </style>

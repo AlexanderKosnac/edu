@@ -68,7 +68,7 @@
         <h4>Tokenized Input:</h4>
         <div class="d-flex gap-1">
             {#each tokens as token}
-            <Token data={token}/>
+            <Token data={token} size="60"/>
             {/each}
         </div>
     </div>
@@ -95,14 +95,14 @@
                     <td>
                         <div class="d-flex gap-1">
                             {#each entry.rpn as token}
-                            <Token data={token} size="small"/>
+                            <Token data={token} size="30"/>
                             {/each}
                         </div>
                     </td>
                     <td>
                         <div class="d-flex gap-1">
                             {#each entry.opStack as token}
-                            <Token data={token} size="small"/>
+                            <Token data={token} size="30"/>
                             {/each}
                         </div>
                     </td>
@@ -135,7 +135,7 @@
                     <td>
                         <div class="d-flex gap-1">
                             {#each entry.rpn as token}
-                            <Token data={token} size="small"/>
+                            <Token data={token} size="30"/>
                             {/each}
                         </div>
                     </td>
