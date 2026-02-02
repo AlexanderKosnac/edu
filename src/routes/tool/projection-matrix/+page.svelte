@@ -184,7 +184,7 @@
             <line class="axis" x1="0" y1="0" x2="0" y2="-{svgHeight}"/>
 
             {#each Object.entries(objects) as [_, obj]}
-            <rect x="-0.5" y="-0.5" width="1" height="1" fill="rgb({obj.color})"
+            <rect x="-0.5" y="-0.5" width="1" height="1" fill="rgb({obj.color})" stroke="currentColor" stroke-width="0.2%"
                 transform="rotate({obj.state?.rotation === undefined ? 0 : -orbiterRotation} 0 0)translate({obj.state.translation[0]} {obj.state.translation[2]})">
             </rect>
             {/each}
@@ -223,7 +223,6 @@
 <style>
     #canvas2d {
         border: 1px solid var(--bs-body-color);
-        background-color: black;
     }
     .camera {
         stroke: var(--bs-body-color);
