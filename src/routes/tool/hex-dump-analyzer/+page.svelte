@@ -1,18 +1,35 @@
 <script>
     import { hexStringToByteArray, bytesToHexString, toHex } from "$lib/hexUtility";
-    import { ByteType, hexHttpRequest } from "./data.js";
+    import { ByteType, exampleData } from "./data.js";
     import { getContrastingColor, getRandomColor, getEvenlySpacedColorsHex, generateHighContrastColorsHex } from "$lib/colorUtility";
 
-    let hexInput = hexHttpRequest;
-    let startAddress = 0x34;
+    let hexInput = "00 01 02 03 04 05 06 07 08 09 0A 0B 0C 0D 0E 0F 10 11 12";
+    let startAddress = 0;
     let highlights = [
-        { start: 0x36, size: 0x04, color: "#ed333b", type: ByteType.FLOAT32_LE },
-        { start: 0x40, size: 0x08, color: "#57e389", type: ByteType.INT64_LE },
+        { start: 0x00, size: 0x04, color: "#ed333b", type: ByteType.FLOAT32_LE },
+        { start: 0x05, size: 0x08, color: "#57e389", type: ByteType.INT64_LE },
     ];
-
     let separator = " ";
     let hexWith0x = false;
     let hexAsUpperCase = true;
+
+    function reset() {
+        hexInput = "";
+        startAddress = 0;
+        highlights = [{ start: 0x00, size: 0x04, color: "#ed333b", type: ByteType.INT32_LE }];
+        separator = " ";
+        hexWith0x = false;
+        hexAsUpperCase = true;
+    }
+
+    function loadExample() {
+        hexInput = exampleData.data;
+        startAddress = exampleData.startAddress;
+        highlights = exampleData.highlights;
+        separator = exampleData.separator;
+        hexWith0x = exampleData.hexWith0x;
+        hexAsUpperCase = exampleData.hexAsUpperCase;
+    }
 
     function exportHighlights() {
         prompt("Save the highlight export below:", JSON.stringify(highlights));
@@ -36,7 +53,7 @@
         highlights = highlights;
     }
 
-    $: sanitizedHexInput = hexInput.replace(/[^0-9a-fA-F]/g, '');
+    $: sanitizedHexInput = hexInput.replace(/[^0-9a-fA-F]/g, "");
     $: byteData = hexStringToByteArray(sanitizedHexInput);
     $: formattedHex = bytesToHexString(byteData, separator, {
         asUpperCase: hexAsUpperCase,
@@ -44,7 +61,7 @@
     });
     $: hexDumpString = formatHexDump(byteData ?? [], 16, startAddress, highlights);
     $: nBytes0x00 = countBytes(byteData, 0x00);
-    $: nBytes0xFF = countBytes(byteData, 0xFF);
+    $: nBytes0xFF = countBytes(byteData, 0xff);
 
     function interpretBytes(offset, length, type) {
         const slice = byteData.slice(offset, offset + length);
@@ -117,7 +134,7 @@
         let dump = "";
 
         function getHighlightForOffset(offset) {
-            return highlights.find(h => offset >= h.start && offset < h.start + h.size);
+            return highlights.find((h) => offset >= h.start && offset < h.start + h.size);
         }
 
         const baseAddress = Math.floor(startAddress / 16) * 16;
@@ -140,7 +157,7 @@
 
                 let b = atAddress(byteAddress);
                 let hex = b === undefined ? "  " : toHex(b);
-                let ascii = b === undefined ? " " : (b >= 0x20 && b <= 0x7E) ? String.fromCharCode(b) : ".";
+                let ascii = b === undefined ? " " : b >= 0x20 && b <= 0x7e ? String.fromCharCode(b) : ".";
 
                 if (highlight) {
                     const fontColor = getContrastingColor(highlight.color);
@@ -161,30 +178,35 @@
 
 <div class="row">
     <div class="col">
+        <div class="d-flex flex-row gap-1">
+            <button type="button" class="btn btn-primary" onclick={reset}>Clear</button>
+            <button type="button" class="btn btn-outline-primary" onclick={loadExample}>Load example</button>
+        </div>
+
         <div class="form-group">
             <label for="hexInput">Hex String:</label>
-            <input type="text" id="hexInput" class="form-control" bind:value={hexInput}/>
+            <input type="text" id="hexInput" class="form-control" bind:value={hexInput} />
         </div>
         <div class="form-group">
             <label for="startAddressInput">Start Address:</label>
-            <input type="number" id="startAddressInput" class="form-control" min="0" bind:value={startAddress}/>
+            <input type="number" id="startAddressInput" class="form-control" min="0" bind:value={startAddress} />
         </div>
         <div class="form-group">
             <label for="formattedHex">Sanitized Hex String:</label>
             <div class="input-group">
-                <input type="text" id="formattedHex" class="form-control" value={formattedHex} readonly/>
+                <input type="text" id="formattedHex" class="form-control" value={formattedHex} readonly />
 
                 <span class="input-group-text">Separator</span>
-                <input type="text" class="form-control" bind:value={separator} style="max-width: 5em"/>
+                <input type="text" class="form-control" bind:value={separator} style="max-width: 5em" />
 
                 <div class="input-group-text">
                     <label for="hexWith0x" class="d-block mx-2">0x</label>
-                    <input id="hexWith0x" class="form-check-input" type="checkbox" bind:checked={hexWith0x}/>
+                    <input id="hexWith0x" class="form-check-input" type="checkbox" bind:checked={hexWith0x} />
                 </div>
 
                 <div class="input-group-text">
                     <label for="hexAsUpperCase" class="d-block mx-2">aA</label>
-                    <input id="hexAsUpperCase" class="form-check-input" type="checkbox" bind:checked={hexAsUpperCase}/>
+                    <input id="hexAsUpperCase" class="form-check-input" type="checkbox" bind:checked={hexAsUpperCase} />
                 </div>
             </div>
         </div>
@@ -203,71 +225,69 @@
 
 <div class="row">
     <div class="col-auto">
-        <pre>{@html hexDumpString}</pre>
+        <pre>{@html hexDumpString === "" ? `No data.${" ".repeat(69)}` : hexDumpString}</pre>
     </div>
     <div class="col">
         <table class="table w-auto highlight-input-table">
-        <thead>
-            <tr>
-                <th scope="col">Value</th>
-                <th scope="col">Offset</th>
-                <th scope="col">Size</th>
-                <th scope="col">Color</th>
-                <th scope="col">Type</th>
-                <th scope="col"></th>
-            </tr>
-        </thead>
-        <tbody>
-            {#each highlights as _, i}
-            {@const highlightStartIdx = highlights[i].start - startAddress}
-            <tr>
-                <td>
-                    {#if highlightStartIdx >= 0 && highlightStartIdx + highlights[i].size <= byteData?.length }
-                        <samp>
-                            {interpretBytes(highlightStartIdx, highlights[i].size, highlights[i].type)}
-                        </samp>
-                    {:else}
-                        Out of bounds
-                    {/if}
-                </td>
-                <td><input type="number" class="form-control offset-input" min="0" bind:value={highlights[i].start}/></td>
-                <td><input type="number" class="form-control offset-input" min="0" bind:value={highlights[i].size}/></td>
-                <td><input type="color" class="form-control form-control-color" bind:value={highlights[i].color}></td>
-                <td>
-                    <select class="form-select" bind:value={highlights[i].type}>
-                        {#each Object.values(ByteType) as value}
-                            <option value={value}>{value}</option>
-                        {/each}
-                    </select>
-                </td>
-                <td><button type="button" class="btn btn-outline-secondary" onclick={() => removeHighlight(i)}>&#x1F5D1;</button></td>
-            </tr>
-            {/each}
-            <tr>
-                <td colspan="6">
-                    <div class="d-flex justify-content-between">
-                        <button type="button" class="btn btn-primary" onclick={addHighlight}>New</button>
+            <thead>
+                <tr>
+                    <th scope="col">Value</th>
+                    <th scope="col">Offset</th>
+                    <th scope="col">Size</th>
+                    <th scope="col">Color</th>
+                    <th scope="col">Type</th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {#each highlights as _, i}
+                    {@const highlightStartIdx = highlights[i].start - startAddress}
+                    <tr>
+                        <td>
+                            {#if highlightStartIdx >= 0 && highlightStartIdx + highlights[i].size <= byteData?.length}
+                                <samp>
+                                    {interpretBytes(highlightStartIdx, highlights[i].size, highlights[i].type)}
+                                </samp>
+                            {:else}
+                                Out of bounds
+                            {/if}
+                        </td>
+                        <td><input type="number" class="form-control offset-input" min="0" bind:value={highlights[i].start} /></td>
+                        <td><input type="number" class="form-control offset-input" min="0" bind:value={highlights[i].size} /></td>
+                        <td><input type="color" class="form-control form-control-color" bind:value={highlights[i].color} /></td>
+                        <td>
+                            <select class="form-select" bind:value={highlights[i].type}>
+                                {#each Object.values(ByteType) as value}
+                                    <option {value}>{value}</option>
+                                {/each}
+                            </select>
+                        </td>
+                        <td><button type="button" class="btn btn-outline-secondary" onclick={() => removeHighlight(i)}>&#x1F5D1;</button></td>
+                    </tr>
+                {/each}
+                <tr>
+                    <td colspan="6">
+                        <div class="d-flex justify-content-between gap-1">
+                            <button type="button" class="btn btn-primary" onclick={addHighlight}>New</button>
 
-                        <div>
-                            <div class="btn-group">
-                                <button type="button" id="colorDistributor" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Auto Colors
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#colorDistributor" onclick={() => autoAssignColors(getEvenlySpacedColorsHex)}>Evenly spaced</a></li>
-                                    <li><a class="dropdown-item" href="#colorDistributor" onclick={() => autoAssignColors(generateHighContrastColorsHex)}>High contrast</a></li>
-                                </ul>
+                            <div>
+                                <div class="btn-group">
+                                    <button type="button" id="colorDistributor" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"> Auto Colors </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#colorDistributor" onclick={() => autoAssignColors(getEvenlySpacedColorsHex)}>Evenly spaced</a></li>
+                                        <li><a class="dropdown-item" href="#colorDistributor" onclick={() => autoAssignColors(generateHighContrastColorsHex)}>High contrast</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div>
+                                <button type="button" class="btn btn-primary" onclick={exportHighlights}>Export</button>
+                                <button type="button" class="btn btn-primary" onclick={importHighlights}>Import</button>
                             </div>
                         </div>
-
-                        <div>
-                            <button type="button" class="btn btn-primary" onclick={exportHighlights}>Export</button>
-                            <button type="button" class="btn btn-primary" onclick={importHighlights}>Import</button>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
+                    </td>
+                </tr>
+            </tbody>
         </table>
     </div>
 </div>
