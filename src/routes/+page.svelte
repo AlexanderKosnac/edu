@@ -7,8 +7,8 @@
 </script>
 
 <div class="row justify-content-center">
-    <div class="col col-md-6 d-flex flex-column align-items-center">
-        <span class="edu-title">edu</span>
+    <div class="col col-md-6 d-flex flex-column align-items-start">
+        <span class="edu-title align-self-center">edu</span>
 
         <p>edu is a growing collection of educational tools, visualizations, calculators, and small utilities. The goal is transparency of underlying processes and concepts, rather than efficient or production-ready implementations.</p>
 
