@@ -74,6 +74,12 @@
     $: if (mounted) fetchYearData(year);
 </script>
 
+<div class="row">
+    <div class="col">
+        <div class="alert alert-info" role="alert">This page relies on API calls through a CORS proxy. If the proxy is overloaded, it may not work properly. Please come back later.</div>
+    </div>
+</div>
+
 <div class="row mb-1">
     <div class="col">
         <label>
