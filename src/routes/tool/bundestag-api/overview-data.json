@@ -11,5 +11,6 @@
             "label": "Bundestag API",
             "url": "https://dip.bundestag.de/%C3%BCber-dip/hilfe/api"
         }
-    ]
+    ],
+    "usable": false
 }

@@ -10,5 +10,6 @@
             "label": "geoboundaries.org API",
             "url": "https://www.geoboundaries.org/api.html#api"
         }
-    ]
+    ],
+    "usable": false
 }

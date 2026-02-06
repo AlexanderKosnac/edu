@@ -1,7 +1,9 @@
-const CORS_PROXY = "https://corsproxy.io/?";
+//export let proxyUrl = "https://corsproxy.io/?";
+//export let proxyUrl = "https://api.allorigins.win/get?url=";
+export let proxyUrl = "https://api.cors.lol/?url=";
 
 export function getProxiedUrl(url) {
-    return CORS_PROXY + encodeURIComponent(url)
+    return proxyUrl === "" ? url : `${proxyUrl}${encodeURIComponent(url)}`;
 }
 
 export async function get(path, params = {}) {
