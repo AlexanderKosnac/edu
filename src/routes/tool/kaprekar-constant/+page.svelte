@@ -20,6 +20,31 @@
         }
     }
 
+    const massAnalysis = {};
+
+    function runMassAnalysis() {
+        const errorCategorizer = (_, str) => {
+            if (str.startsWith("Loop detected")) return "looping";
+            if (str.startsWith("Exceeded maximum iterations")) return "timeout";
+            return "unknown";
+        };
+
+        for (let i = 1000; i <= 9999; i++) {
+            let k = kaprekarRoutineOrFallback(i, errorCategorizer);
+
+            if (!massAnalysis[k]) massAnalysis[k] = [];
+            massAnalysis[k].push(i);
+        }
+    }
+
+    function kaprekarRoutineOrFallback(number, fallback) {
+        try {
+            return kaprekarRoutine(number);
+        } catch (err) {
+            return fallback(number, err);
+        }
+    }
+
     function kaprekarRoutine(number, onIteration = (_a, _b, _c) => {}) {
         if (!number || number < 1000 || number > 9999) return;
 
@@ -34,7 +59,7 @@
             n = k[2];
 
             if (visited.includes(n)) throw `Loop detected for ${number} in iteration ${i} with value ${n}.`;
-            if (i++ > 50) throw "Over 50 iterations.";
+            if (i++ > 50) throw "Exceeded maximum iterations.";
 
             visited.push(n);
         }
@@ -65,18 +90,28 @@
 
         {#if error}
             (<span class="text-danger">{error}</span>)
-        {/if}
-
-        {#if kapIters}
+        {:else}
             <div>
                 {number} is a {kapIters}-Kaprekar number.
             </div>
 
             <div class="mt-4">
                 <h4>Calculations:</h4>
-                <pre>{#each history as step, i}#{i}:  {step}<br />{/each}</pre>
+                <pre>{#each history as step, i}#{i + 1}:  {step}<br />{/each}</pre>
             </div>
         {/if}
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <button type="button" class="btn btn-primary" disabled={!number} onclick={runMassAnalysis}>Calculate Statistics</button>
+
+        <ul>
+            {#each Object.entries(massAnalysis) as [k, e]}
+                <li>{k} = {e.length}</li>
+            {/each}
+        </ul>
     </div>
 </div>
 
