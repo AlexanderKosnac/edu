@@ -14,11 +14,11 @@ export function getRandomColor() {
     return `#${Math.floor(Math.random() * 0xFFFFFF).toString(16).padStart(6, '0')}`;
 }
 
-export function getEvenlySpacedColorsHsl(n) {
+export function getEvenlySpacedColorsHsl(n, s = 100, l = 50) {
     const colors = [];
     for (let i = 0; i < n; i++) {
         const hue = Math.round((360 / n) * i);
-        colors.push(`hsl(${hue}, 100%, 50%)`);
+        colors.push(`hsl(${hue}, ${s}%, ${l}%)`);
     }
     return colors;
 }
