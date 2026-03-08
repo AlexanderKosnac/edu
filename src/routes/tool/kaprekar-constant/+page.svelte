@@ -1,7 +1,7 @@
 <script>
     import SvgPieChart from "$lib/SvgPieChart/SvgPieChart.svelte";
 
-    import { getEvenlySpacedColorsHex, getEvenlySpacedColorsHsl } from "$lib/colorUtility";
+    import { getEvenlySpacedColorsHsl } from "$lib/colorUtility";
 
     const KAPREKAR_CONSTANT = 6174;
 
@@ -47,9 +47,9 @@
             massAnalysis[k].push(i);
         }
 
-        itersDistrChart = [];
         const colors = getEvenlySpacedColorsHsl(7, 80, 60);
 
+        itersDistrChart = [];
         let i = 0;
         for (let key in massAnalysis) {
             if (key === "0" || key === "looping" || key === "timeout") continue;
@@ -80,7 +80,7 @@
             n = k[2];
 
             if (visited.includes(n)) throw `Loop detected for ${number} in iteration ${i} with value ${n}.`;
-            if (i++ > 50) throw "Exceeded maximum iterations.";
+            if (i++ > 10) throw "Exceeded maximum iterations.";
 
             visited.push(n);
         }
@@ -101,7 +101,16 @@
         return [a, b, c];
     }
 
-    runMassAnalysis();
+    function openJson(data) {
+        const json = JSON.stringify(data, null, 2);
+        const blob = new Blob([json], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        window.open(url, "_blank");
+    }
+
+    function viewMassAnalysisData() {
+        openJson(massAnalysis);
+    }
 </script>
 
 <div class="row">
@@ -118,22 +127,26 @@
         {#if error}
             (<span class="text-danger">{error}</span>)
         {:else}
-            <div>
-                {number} is a {kapIters}-Kaprekar number.
-            </div>
-
-            <div class="mt-4">
-                <h4>Calculations:</h4>
-                <pre>{#each history as step, i}#{i + 1}:  {step}<br />{/each}</pre>
-            </div>
+            <h2>Iterations:</h2>
+            <pre>{#each history as step, i}#{i + 1}:  {step}<br />{/each}</pre>
+            {number} is a {kapIters}-Kaprekar number.
         {/if}
     </div>
     <div class="col">
-        {#if massAnalysis}
-            <div class="d-flex flex-row gap-1">
-                <div>
+        <h2>Iteration Distribution:</h2>
+        <div class="d-flex flex-row gap-1">
+            <div class="d-flex flex-column gap-1 align-items-center">
+                {#if massAnalysis}
                     <SvgPieChart data={itersDistrChart} radius={200} onClick={onSliceSelected} onMouseover={onSliceSelected} />
+                {/if}
+                <div>
+                    <button type="button" class="btn btn-secondary" onclick={runMassAnalysis}>Run Mass Analysis</button>
+                    {#if massAnalysis}
+                        <button type="button" class="btn btn-secondary" onclick={viewMassAnalysisData}>View Data</button>
+                    {/if}
                 </div>
+            </div>
+            {#if massAnalysis}
                 <div>
                     <table class="table table-bordered w-auto mt-1">
                         <thead>
@@ -152,8 +165,8 @@
                         </tbody>
                     </table>
                 </div>
-            </div>
-        {/if}
+            {/if}
+        </div>
     </div>
 </div>
 
