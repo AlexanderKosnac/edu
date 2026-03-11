@@ -30,23 +30,44 @@ And unordered lists:
 - B
 - C
 `;
+
+    function printMarkdown(nodeId) {
+        window.print();
+    }
 </script>
 
 <div class="row gap-1 p-1">
     <div class="col">
-        <div class="form-group">
-            <label for="inputText">Markdown Input:</label>
-            <textarea class="form-control" id="inputText" rows="20" bind:value="{mdInput}"></textarea>
-        </div>
+        <label for="inputText">Markdown Input:</label>
+        <textarea class="form-control" id="inputText" rows="20" bind:value={mdInput}></textarea>
     </div>
 
     <div class="col">
-        <div>{@html marked(mdInput)}</div>
+        <div class="d-flex flex-row">
+            <button type="button" class="btn btn-secondary" onclick={printMarkdown}>Print</button>
+        </div>
+        <div class="printable">{@html marked(mdInput)}</div>
     </div>
 </div>
 
 <style>
     #inputText {
-      font-family: "Courier New", monospace;
+        font-family: "Courier New", monospace;
+    }
+    @media print {
+        :global(body *) {
+            visibility: hidden;
+        }
+
+        :global(.printable),
+        :global(.printable *) {
+            visibility: visible;
+        }
+
+        :global(.printable) {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
     }
 </style>
