@@ -1,7 +1,7 @@
 <script>
     import { onMount } from "svelte";
 
-    import { imageDataToBraille } from "$lib/brailleUtility.js";
+    import { imageDataToBraille } from "$lib/charImageUtility.js";
 
     let fileInput;
     let threshold = 128;
