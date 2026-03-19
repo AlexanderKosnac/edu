@@ -1,0 +1,10 @@
+{
+    "name": "ASCIIfy",
+    "description": "A tool to convert an image into a character-based representation.",
+    "tags": [
+        "Image processing"
+    ],
+    "references": [
+        "https://en.wikipedia.org/wiki/ASCII"
+    ]
+}

@@ -1,3 +1,29 @@
+export function imageDataToChars(imageData, brightnessToChar, brightnessCoefficients = [0.299, 0.587, 0.114]) {
+    let data = imageData.data;
+    let width = imageData.width;
+    let height = imageData.height;
+
+    let output = "";
+
+    for (let y = 0; y < height; y += 4) {
+        for (let x = 0; x < width; x += 2) {
+            if (x >= width || y >= height)
+                continue;
+
+            const i = (y * width + x) * 4;
+            const r = data[i];
+            const g = data[i + 1];
+            const b = data[i + 2];
+            const c = brightnessCoefficients;
+            const brightness = c[0] * r + c[1] * g + c[2] * b;
+            output += brightnessToChar(brightness);
+        }
+        output += "\n";
+    }
+
+    return output;
+}
+
 export function imageDataToBraille(imageData, threshold = 128, brightnessCoefficients = [0.299, 0.587, 0.114]) {
     let data = imageData.data;
     let width = imageData.width;
