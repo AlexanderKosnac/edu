@@ -63,10 +63,10 @@
                 <input type="file" class="form-control" id="img" name="img" accept="image/*" bind:this={fileInput}>
             </div>
 
-            <label for="threshold">Luminescence</label>
+            <label for="red-luminescence">Luminescence</label>
             <div class="input-group">
                 <span class="input-group-text">Red</span>
-                <input type="number" class="form-control" step="0.01" bind:value={coefficients[0]}/>
+                <input type="number" class="form-control" id="red-luminescence" step="0.01" bind:value={coefficients[0]}/>
 
                 <span class="input-group-text">Green</span>
                 <input type="number" class="form-control" step="0.01" bind:value={coefficients[1]}/>
