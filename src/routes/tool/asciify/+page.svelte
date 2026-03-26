@@ -4,7 +4,6 @@
     import { imageDataToChars } from "$lib/charImageUtility.js";
 
     let fileInput;
-    let threshold = 128;
 
     let outputLineHeight = 1.2;
     let lineHeightUnit = "";
@@ -89,11 +88,6 @@
                 <input type="number" class="form-control" step="0.01" bind:value={coefficients[2]}/>
 
                 <span class="input-group-text">= {sum.toFixed(3)}</span>
-            </div>
-
-            <div class="input-group">
-                <span class="input-group-text" title="Threshold of the brightness value considered as a visible pixel.">Threshold</span>
-                <input type="number" class="form-control" id="threshold" bind:value={threshold} min="0" max="255"/>
             </div>
 
             <div class="d-flex align-items-center gap-2">
