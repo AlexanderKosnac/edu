@@ -20,19 +20,31 @@
     let coefficients = [0.2126, 0.7152, 0.0722];
     $: sum = coefficients.reduce((psum, a) => psum + a, 0);
 
-    const brightnessToChar = b => {
-        if (b < 25) return " ";
-        if (b < 50) return ".";
-        if (b < 75) return "-";
-        if (b < 100) return ":";
-        if (b < 125) return "+";
-        if (b < 150) return "=";
-        if (b < 175) return "F";
-        if (b < 200) return "H";
-        if (b < 225) return "E";
-        if (b < 250) return "%";
-        if (b < 255) return "#";
-    };
+    let selectedBrightnessConversions = "case1";
+
+    const brightnessConversions = {
+        "case1": b => {
+            if (b < 25) return " ";
+            if (b < 50) return ".";
+            if (b < 75) return "-";
+            if (b < 100) return ":";
+            if (b < 125) return "+";
+            if (b < 150) return "=";
+            if (b < 175) return "F";
+            if (b < 200) return "H";
+            if (b < 225) return "E";
+            if (b < 250) return "%";
+            return "#";
+        },
+        "case2": b => {
+            if (b < 50) return " ";
+            if (b < 100) return "-";
+            if (b < 150) return "=";
+            if (b < 200) return "H";
+            if (b < 250) return "%";
+            return "#";
+        },
+    }
 
     function loadImage() {
         return new Promise((resolve) => {
@@ -59,7 +71,7 @@
 
         chars = imageDataToChars(
             ctx.getImageData(0, 0, canvas.width, canvas.height),
-            brightnessToChar,
+            brightnessConversions[selectedBrightnessConversions],
             coefficients
         );
     }
@@ -89,6 +101,12 @@
 
                 <span class="input-group-text">= {sum.toFixed(3)}</span>
             </div>
+
+            <label for="">Luminescence Conversion</label>
+            <select class="form-select" bind:value={selectedBrightnessConversions}>
+                <option value="case1">case1</option>
+                <option value="case2">case2</option>
+            </select>
 
             <div class="d-flex align-items-center gap-2">
                 <button type="button" class="btn btn-primary" onclick={asciify}>ASCIIfy</button>
