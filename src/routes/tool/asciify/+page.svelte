@@ -20,31 +20,17 @@
     let coefficients = [0.2126, 0.7152, 0.0722];
     $: sum = coefficients.reduce((psum, a) => psum + a, 0);
 
-    let selectedBrightnessConversions = "case1";
+    let selectedBrightnessConversions = "smooth";
+
+    const evenlySpacedMap = chars => b => chars[Math.min(chars.length - 1, Math.floor(b * chars.length / 256))];
 
     const brightnessConversions = {
-        "case1": b => {
-            if (b < 25) return " ";
-            if (b < 50) return ".";
-            if (b < 75) return "-";
-            if (b < 100) return ":";
-            if (b < 125) return "+";
-            if (b < 150) return "=";
-            if (b < 175) return "F";
-            if (b < 200) return "H";
-            if (b < 225) return "E";
-            if (b < 250) return "%";
-            return "#";
-        },
-        "case2": b => {
-            if (b < 50) return " ";
-            if (b < 100) return "-";
-            if (b < 150) return "=";
-            if (b < 200) return "H";
-            if (b < 250) return "%";
-            return "#";
-        },
-    }
+        smooth: evenlySpacedMap(" .:-=+*#%@"),
+        detailed: evenlySpacedMap(" .'`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"),
+        blocks: evenlySpacedMap(" ░▒▓█"),
+        braille: evenlySpacedMap(" ⠂⠆⠖⠶⠷⠿⣿"),
+        inverted: evenlySpacedMap("@%#*+=-:. "),
+    };
 
     function loadImage() {
         return new Promise((resolve) => {
@@ -104,8 +90,9 @@
 
             <label for="">Luminescence Conversion</label>
             <select class="form-select" bind:value={selectedBrightnessConversions}>
-                <option value="case1">case1</option>
-                <option value="case2">case2</option>
+                {#each Object.entries(brightnessConversions) as conversion}
+                    <option value="{conversion[0]}">{conversion[0]}</option>
+                {/each}
             </select>
 
             <div class="d-flex align-items-center gap-2">
