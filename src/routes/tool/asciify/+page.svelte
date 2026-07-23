@@ -32,6 +32,9 @@
         detailed: evenlySpacedMap(" .'`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"),
         blocks: evenlySpacedMap(" ░▒▓█"),
         braille: evenlySpacedMap(" ⠂⠆⠖⠶⠷⠿⣿"),
+        circles: evenlySpacedMap("○◔◑◕●"),
+        hex: evenlySpacedMap("0123456789ABCDEF"),
+        highcontrast: evenlySpacedMap(".#"),
         custom: b => !customPattern.length ? " " : evenlySpacedMap(customPattern)(b),
     };
 
