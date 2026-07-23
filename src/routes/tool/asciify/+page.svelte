@@ -5,6 +5,8 @@
 
     let fileInput;
 
+    let customPattern = "";
+
     let outputLineHeight = 1.2;
     let lineHeightUnit = "";
     let outputFontSize = 12;
@@ -26,10 +28,11 @@
 
     const brightnessConversions = {
         smooth: evenlySpacedMap(" .:-=+*#%@"),
+        inverted: evenlySpacedMap("@%#*+=-:. "),
         detailed: evenlySpacedMap(" .'`^\",:;Il!i~+_-?][}{1)(|\\/tfjrxnuvczXYUJCLQ0OZmwqpdbkhao*#MW&8%B@$"),
         blocks: evenlySpacedMap(" ░▒▓█"),
         braille: evenlySpacedMap(" ⠂⠆⠖⠶⠷⠿⣿"),
-        inverted: evenlySpacedMap("@%#*+=-:. "),
+        custom: b => !customPattern.length ? " " : evenlySpacedMap(customPattern)(b),
     };
 
     function loadImage() {
@@ -94,6 +97,13 @@
                     <option value="{conversion[0]}">{conversion[0]}</option>
                 {/each}
             </select>
+
+            {#if selectedBrightnessConversions == "custom"}
+                <div class="input-group">
+                    <span class="input-group-text">Custom Pattern</span>
+                    <input type="text" class="form-control" id="custom-pattern" bind:value={customPattern}/>
+                </div>
+            {/if}
 
             <div class="d-flex align-items-center gap-2">
                 <button type="button" class="btn btn-primary" onclick={asciify}>ASCIIfy</button>
