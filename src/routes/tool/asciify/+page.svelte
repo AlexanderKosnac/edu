@@ -74,10 +74,14 @@
 </script>
 
 <div class="row">
-    <div class="col-auto">
+    <div class="col-4">
         <div class="d-flex flex-column gap-1 mb-1">
             <div class="input-group">
                 <input type="file" class="form-control" id="img" name="img" accept="image/*" bind:this={fileInput}>
+            </div>
+            <div class="d-flex gap-1 justify-content-around">
+                <img    class="image-display hidden" bind:this={input} alt=" "/>
+                <canvas class="image-display" bind:this={canvas}></canvas>
             </div>
 
             <label for="red-luminescence">Luminescence</label>
@@ -121,7 +125,10 @@
                     <span class="text-danger">No image loaded.</span>
                 {/if}
             </div>
-
+        </div>
+    </div>
+    <div class="col-8">
+        <div class="d-flex flex-column gap-1 mb-1">
             <div class="input-group">
                 <span class="input-group-text">Line height:</span>
                 <input type="number" class="form-control" step="0.01" min="0" bind:value={outputLineHeight}/>
@@ -139,18 +146,9 @@
                 </select>
             </div>
         </div>
-    </div>
-    <div class="col">
-        <div class="d-flex gap-1 justify-content-around">
-            <img    class="image-display hidden" bind:this={input} alt=" "/>
-            <canvas class="image-display" bind:this={canvas}></canvas>
+        <div class="overflow">
+            <pre style={`font-size: ${outputFontSize}${fontSizeUnit}; line-height: ${outputLineHeight}${lineHeightUnit};`}>{chars}</pre>
         </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col">
-        <pre style={`font-size: ${outputFontSize}${fontSizeUnit}; line-height: ${outputLineHeight}${lineHeightUnit};`}>{chars}</pre>
     </div>
 </div>
 
