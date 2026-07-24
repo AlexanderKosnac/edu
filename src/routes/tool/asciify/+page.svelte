@@ -102,11 +102,18 @@
             </select>
 
             {#if selectedBrightnessConversions == "custom"}
+                <label for="custom-pattern">Custom Pattern</label>
                 <div class="input-group">
-                    <span class="input-group-text">Custom Pattern</span>
                     <input type="text" class="form-control" id="custom-pattern" bind:value={customPattern}/>
                 </div>
             {/if}
+
+            <label for="full-palette">Palette (0-255)</label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="full-palette"
+                    value={Array.from({ length: 256 }, (_, i) => brightnessConversions[selectedBrightnessConversions](i)).join("")}
+                    readonly/>
+            </div>
 
             <div class="d-flex align-items-center gap-2">
                 <button type="button" class="btn btn-primary" onclick={asciify}>ASCIIfy</button>
