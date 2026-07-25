@@ -48,61 +48,66 @@
 </script>
 
 <div class="row">
-    <div class="col-auto">
-        <div class="d-flex flex-column gap-1">
+    <div class="col-auto pb-1">
+        <div class="d-flex flex-row gap-1">
+            <button type="button" class="btn btn-primary" onclick={doAssemble}>Assemble and load</button>
+
+
             <button type="button" class="btn btn-primary" onclick={doStep} disabled={cpu.halted}>Step</button>
             <button type="button" class="btn btn-primary" onclick={doReset}>Reset</button>
-            <button type="button" class="btn btn-primary" onclick={doAssemble}>Assemble and load</button>
         </div>
     </div>
+</div>
+
+<div class="row">
     <div class="col-auto">
-        <svg width="100%" height="516" viewBox="0 0 1600 516" xmlns="http://www.w3.org/2000/svg">
+        <svg width="1200" height="100%" viewBox="0 0 1150 516" xmlns="http://www.w3.org/2000/svg">
             {#each cpu.regs as reg, i}
                 <g>
                     <rect x="0" y="{25*i}" width="20" height="20" stroke="currentColor" fill="transparent"/>
                     <text x="0" y="{10+25*i}" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="middle">R{i}</text>
 
-                    <rect x="25" y="{25*i}" width="80" height="20" stroke="currentColor" fill="transparent"/>
+                    <rect x="25" y="{25*i}" width="70" height="20" stroke="currentColor" fill="transparent"/>
                     <text x="25" y="{10+25*i}" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="middle">{reg}</text>
                 </g>
             {/each}
             <g>
-                <rect x="150" y="0" width="20" height="20" stroke="currentColor" fill="transparent"/>
-                <text x="150" y="10" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="middle">PC</text>
+                <rect x="110" y="0" width="20" height="20" stroke="currentColor" fill="transparent"/>
+                <text x="110" y="10" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="middle">PC</text>
 
-                <rect x="175" y="0" width="80" height="20" stroke="currentColor" fill="transparent"/>
-                <text x="175" y="10" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="middle">0x{toHex(cpu.pc)}</text>
+                <rect x="135" y="0" width="80" height="20" stroke="currentColor" fill="transparent"/>
+                <text x="135" y="10" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="middle">0x{toHex(cpu.pc)}</text>
             </g>
 
             <g>
-                <rect x="150" y="25" width="20" height="20" stroke="currentColor" fill="transparent"/>
-                <text x="150" y="35" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="middle">SP</text>
+                <rect x="110" y="25" width="20" height="20" stroke="currentColor" fill="transparent"/>
+                <text x="110" y="35" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="middle">SP</text>
 
-                <rect x="175" y="25" width="80" height="20" stroke="currentColor" fill="transparent"/>
-                <text x="175" y="35" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="middle">0x{toHex(cpu.sp)}</text>
+                <rect x="135" y="25" width="80" height="20" stroke="currentColor" fill="transparent"/>
+                <text x="135" y="35" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="middle">0x{toHex(cpu.sp)}</text>
             </g>
 
             <g>
-                <rect x="150" y="50" width="40" height="20" stroke="currentColor" fill="transparent"/>
-                <text x="150" y="60" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="middle">Flags</text>
+                <rect x="110" y="50" width="40" height="20" stroke="currentColor" fill="transparent"/>
+                <text x="110" y="60" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="middle">Flags</text>
 
                 {#each Object.entries(cpu.flags) as [f, v], i}
-                    <rect x="{195+25*i}" y="50" width="20" height="20" stroke="currentColor" fill="{v === 0 ? "transparent" : "red"}"/>
-                    <text x="{195+25*i}" y="60" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="middle">{f}</text>
+                    <rect x="{160+25*i}" y="50" width="20" height="20" stroke="currentColor" fill="{v === 0 ? "transparent" : "red"}"/>
+                    <text x="{160+25*i}" y="60" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="middle">{f}</text>
                 {/each}
             </g>
 
             <g>
-                <rect x="150" y="75" width="50" height="20" stroke="currentColor" fill="{cpu.halted ? "red" : "transparent"}"/>
-                <text x="150" y="85" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="middle">Halted</text>
+                <rect x="110" y="75" width="50" height="20" stroke="currentColor" fill="{cpu.halted ? "red" : "transparent"}"/>
+                <text x="110" y="85" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="middle">Halted</text>
             </g>
 
             <g>
-                <rect x="150" y="100" width="200" height="200" stroke="currentColor" fill="transparent"/>
-                <text x="150" y="110" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="middle">{cpu.output}</text>
+                <rect x="110" y="100" width="200" height="200" stroke="currentColor" fill="transparent"/>
+                <text x="110" y="110" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="middle">{cpu.output}</text>
             </g>
 
-            <foreignObject x="400" y="0" width="100%" height="100%">
+            <foreignObject x="350" y="0" width="100%" height="100%">
                 <div class="overflow-auto" style="max-height: 500px">
                     <svg width="400" height="{assembly?.program.length * 12}" viewBox="0 0 400 {assembly?.program.length * 12}" xmlns="http://www.w3.org/2000/svg">
                         {#each assembly?.program as e, i}
@@ -115,8 +120,8 @@
                 </div>
             </foreignObject>
 
-            <foreignObject x="800" y="0" width="100%" height="100%">
-                <div class="overflow-auto" style="max-height: 500px">
+            <foreignObject x="750" y="0" width="100%" height="100%">
+                <div class="overflow-auto" style="max-height: 516px">
                     <svg width="400" height="{cpu.memory.length / 16 * 12}" viewBox="0 0 400 {cpu.memory.length / 16 * 12}" xmlns="http://www.w3.org/2000/svg">
                         {#each cpu.memory as m, i}
                             {@const col = i % 16}
