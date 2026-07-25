@@ -102,9 +102,9 @@
                 <text x="150" y="110" font-size="12" fill="currentColor" text-anchor="start" dominant-baseline="middle">{cpu.output}</text>
             </g>
 
-            <foreignObject x="500" y="0" width="100%" height="100%">
+            <foreignObject x="400" y="0" width="100%" height="100%">
                 <div class="overflow-auto" style="max-height: 500px">
-                    <svg width="400" height="2048" viewBox="0 0 400 2048" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="400" height="{assembly?.program.length * 12}" viewBox="0 0 400 {assembly?.program.length * 12}" xmlns="http://www.w3.org/2000/svg">
                         {#each assembly?.program as e, i}
                             <text x="0" y="{12*i}" font-size="12" fill={cpu.pc === e.addr ? "red" : "currentColor"}
                                 text-anchor="start" dominant-baseline="hanging">
@@ -115,9 +115,9 @@
                 </div>
             </foreignObject>
 
-            <foreignObject x="1000" y="0" width="100%" height="100%">
+            <foreignObject x="800" y="0" width="100%" height="100%">
                 <div class="overflow-auto" style="max-height: 500px">
-                    <svg width="400" height="2048" viewBox="0 0 400 2048" xmlns="http://www.w3.org/2000/svg">
+                    <svg width="400" height="{cpu.memory.length / 16 * 12}" viewBox="0 0 400 {cpu.memory.length / 16 * 12}" xmlns="http://www.w3.org/2000/svg">
                         {#each cpu.memory as m, i}
                             {@const col = i % 16}
                             {@const row = Math.floor(i / 16)}
