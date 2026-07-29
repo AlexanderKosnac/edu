@@ -33,7 +33,7 @@
 		"katex": "^0.16.11",
 		"leaflet": "^1.9.4",
 		"marked": "^16.1.2",
-		"mathjs": "^14.4.0",
+		"mathjs": "^15.2.0",
 		"xml-formatter": "^3.6.4"
 	}
 }
