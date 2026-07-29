@@ -12,12 +12,14 @@
     import aggregateOverview from "./aggregate-overview-data.json";
 
     const fuse = new Fuse(aggregateOverview, {
-        keys: ["name", "description"],
-        threshold: 0.5,
-        distance: 50,
-        tokenize: true,
-        matchAllTokens: true,
+        keys: [
+            { name: "name", weight: 0.6 },
+            { name: "description", weight: 0.3 },
+            { name: "tags", weight: 0.1 },
+        ],
+        threshold: 0.2,
         includeScore: true,
+        ignoreLocation: true,
         includeMatches: true,
     });
 
