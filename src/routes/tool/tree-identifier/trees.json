@@ -1,0 +1,386 @@
+[
+    {
+        "id": "quercus_robur",
+        "name": "English Oak",
+        "scientificName": "Quercus robur",
+        "traits": {
+            "leafType": "broad",
+            "leafShape": "lobed",
+            "leafMargin": "lobed",
+            "leafArrangement": "alternate",
+            "evergreen": false,
+            "fruitType": "acorn",
+            "barkTexture": "fissured",
+            "crownShape": "spreading",
+            "heightCategory": "tall"
+        }
+    },
+    {
+        "id": "quercus_petraea",
+        "name": "Sessile Oak",
+        "scientificName": "Quercus petraea",
+        "traits": {
+            "leafType": "broad",
+            "leafShape": "lobed",
+            "leafMargin": "lobed",
+            "leafArrangement": "alternate",
+            "evergreen": false,
+            "fruitType": "acorn",
+            "barkTexture": "fissured",
+            "crownShape": "rounded",
+            "heightCategory": "tall"
+        }
+    },
+    {
+        "id": "fagus_sylvatica",
+        "name": "European Beech",
+        "scientificName": "Fagus sylvatica",
+        "traits": {
+            "leafType": "broad",
+            "leafShape": "oval",
+            "leafMargin": "smooth",
+            "leafArrangement": "alternate",
+            "evergreen": false,
+            "fruitType": "nut",
+            "barkTexture": "smooth",
+            "crownShape": "rounded",
+            "heightCategory": "tall"
+        }
+    },
+    {
+        "id": "betula_pendula",
+        "name": "Silver Birch",
+        "scientificName": "Betula pendula",
+        "traits": {
+            "leafType": "broad",
+            "leafShape": "oval",
+            "leafMargin": "serrated",
+            "leafArrangement": "alternate",
+            "evergreen": false,
+            "fruitType": "nut",
+            "barkTexture": "peeling",
+            "crownShape": "rounded",
+            "heightCategory": "medium"
+        }
+    },
+    {
+        "id": "betula_pubescens",
+        "name": "Downy Birch",
+        "scientificName": "Betula pubescens",
+        "traits": {
+            "leafType": "broad",
+            "leafShape": "oval",
+            "leafMargin": "serrated",
+            "leafArrangement": "alternate",
+            "evergreen": false,
+            "fruitType": "nut",
+            "barkTexture": "peeling",
+            "crownShape": "rounded",
+            "heightCategory": "medium"
+        }
+    },
+    {
+        "id": "acer_platanoides",
+        "name": "Norway Maple",
+        "scientificName": "Acer platanoides",
+        "traits": {
+            "leafType": "broad",
+            "leafShape": "lobed",
+            "leafMargin": "lobed",
+            "leafArrangement": "opposite",
+            "evergreen": false,
+            "fruitType": "samara",
+            "barkTexture": "smooth",
+            "crownShape": "rounded",
+            "heightCategory": "tall"
+        }
+    },
+    {
+        "id": "acer_pseudoplatanus",
+        "name": "Sycamore Maple",
+        "scientificName": "Acer pseudoplatanus",
+        "traits": {
+            "leafType": "broad",
+            "leafShape": "lobed",
+            "leafMargin": "lobed",
+            "leafArrangement": "opposite",
+            "evergreen": false,
+            "fruitType": "samara",
+            "barkTexture": "smooth",
+            "crownShape": "rounded",
+            "heightCategory": "tall"
+        }
+    },
+    {
+        "id": "tilia_cordata",
+        "name": "Small-leaved Lime",
+        "scientificName": "Tilia cordata",
+        "traits": {
+            "leafType": "broad",
+            "leafShape": "oval",
+            "leafMargin": "serrated",
+            "leafArrangement": "alternate",
+            "evergreen": false,
+            "fruitType": "nut",
+            "barkTexture": "fissured",
+            "crownShape": "rounded",
+            "heightCategory": "tall"
+        }
+    },
+    {
+        "id": "tilia_platyphyllos",
+        "name": "Large-leaved Lime",
+        "scientificName": "Tilia platyphyllos",
+        "traits": {
+            "leafType": "broad",
+            "leafShape": "oval",
+            "leafMargin": "serrated",
+            "leafArrangement": "alternate",
+            "evergreen": false,
+            "fruitType": "nut",
+            "barkTexture": "fissured",
+            "crownShape": "rounded",
+            "heightCategory": "tall"
+        }
+    },
+    {
+        "id": "fraxinus_excelsior",
+        "name": "European Ash",
+        "scientificName": "Fraxinus excelsior",
+        "traits": {
+            "leafType": "broad",
+            "leafShape": "compound",
+            "leafMargin": "smooth",
+            "leafArrangement": "opposite",
+            "evergreen": false,
+            "fruitType": "samara",
+            "barkTexture": "fissured",
+            "crownShape": "rounded",
+            "heightCategory": "tall"
+        }
+    },
+    {
+        "id": "ulmus_glabra",
+        "name": "Wych Elm",
+        "scientificName": "Ulmus glabra",
+        "traits": {
+            "leafType": "broad",
+            "leafShape": "oval",
+            "leafMargin": "serrated",
+            "leafArrangement": "alternate",
+            "evergreen": false,
+            "fruitType": "samara",
+            "barkTexture": "fissured",
+            "crownShape": "spreading",
+            "heightCategory": "tall"
+        }
+    },
+    {
+        "id": "populus_tremula",
+        "name": "European Aspen",
+        "scientificName": "Populus tremula",
+        "traits": {
+            "leafType": "broad",
+            "leafShape": "oval",
+            "leafMargin": "serrated",
+            "leafArrangement": "alternate",
+            "evergreen": false,
+            "fruitType": "capsule",
+            "barkTexture": "smooth",
+            "crownShape": "rounded",
+            "heightCategory": "medium"
+        }
+    },
+    {
+        "id": "populus_nigra",
+        "name": "Black Poplar",
+        "scientificName": "Populus nigra",
+        "traits": {
+            "leafType": "broad",
+            "leafShape": "oval",
+            "leafMargin": "serrated",
+            "leafArrangement": "alternate",
+            "evergreen": false,
+            "fruitType": "capsule",
+            "barkTexture": "fissured",
+            "crownShape": "spreading",
+            "heightCategory": "tall"
+        }
+    },
+    {
+        "id": "salix_alba",
+        "name": "White Willow",
+        "scientificName": "Salix alba",
+        "traits": {
+            "leafType": "broad",
+            "leafShape": "oval",
+            "leafMargin": "serrated",
+            "leafArrangement": "alternate",
+            "evergreen": false,
+            "fruitType": "capsule",
+            "barkTexture": "fissured",
+            "crownShape": "spreading",
+            "heightCategory": "tall"
+        }
+    },
+    {
+        "id": "alnus_glutinosa",
+        "name": "Black Alder",
+        "scientificName": "Alnus glutinosa",
+        "traits": {
+            "leafType": "broad",
+            "leafShape": "oval",
+            "leafMargin": "serrated",
+            "leafArrangement": "alternate",
+            "evergreen": false,
+            "fruitType": "nut",
+            "barkTexture": "fissured",
+            "crownShape": "rounded",
+            "heightCategory": "medium"
+        }
+    },
+    {
+        "id": "corylus_avellana",
+        "name": "Common Hazel",
+        "scientificName": "Corylus avellana",
+        "traits": {
+            "leafType": "broad",
+            "leafShape": "oval",
+            "leafMargin": "serrated",
+            "leafArrangement": "alternate",
+            "evergreen": false,
+            "fruitType": "nut",
+            "barkTexture": "smooth",
+            "crownShape": "spreading",
+            "heightCategory": "small"
+        }
+    },
+    {
+        "id": "sorbus_aucuparia",
+        "name": "Rowan",
+        "scientificName": "Sorbus aucuparia",
+        "traits": {
+            "leafType": "broad",
+            "leafShape": "compound",
+            "leafMargin": "serrated",
+            "leafArrangement": "alternate",
+            "evergreen": false,
+            "fruitType": "berry",
+            "barkTexture": "smooth",
+            "crownShape": "rounded",
+            "heightCategory": "medium"
+        }
+    },
+    {
+        "id": "malus_sylvestris",
+        "name": "Wild Apple",
+        "scientificName": "Malus sylvestris",
+        "traits": {
+            "leafType": "broad",
+            "leafShape": "oval",
+            "leafMargin": "serrated",
+            "leafArrangement": "alternate",
+            "evergreen": false,
+            "fruitType": "berry",
+            "barkTexture": "fissured",
+            "crownShape": "rounded",
+            "heightCategory": "small"
+        }
+    },
+    {
+        "id": "prunus_avium",
+        "name": "Wild Cherry",
+        "scientificName": "Prunus avium",
+        "traits": {
+            "leafType": "broad",
+            "leafShape": "oval",
+            "leafMargin": "serrated",
+            "leafArrangement": "alternate",
+            "evergreen": false,
+            "fruitType": "berry",
+            "barkTexture": "peeling",
+            "crownShape": "rounded",
+            "heightCategory": "medium"
+        }
+    },
+    {
+        "id": "pinus_sylvestris",
+        "name": "Scots Pine",
+        "scientificName": "Pinus sylvestris",
+        "traits": {
+            "leafType": "needle",
+            "leafShape": "needle",
+            "leafMargin": "smooth",
+            "leafArrangement": "whorled",
+            "evergreen": true,
+            "fruitType": "cone",
+            "barkTexture": "scaly",
+            "crownShape": "conical",
+            "heightCategory": "tall"
+        }
+    },
+    {
+        "id": "picea_abies",
+        "name": "Norway Spruce",
+        "scientificName": "Picea abies",
+        "traits": {
+            "leafType": "needle",
+            "leafShape": "needle",
+            "leafMargin": "smooth",
+            "leafArrangement": "whorled",
+            "evergreen": true,
+            "fruitType": "cone",
+            "barkTexture": "scaly",
+            "crownShape": "conical",
+            "heightCategory": "tall"
+        }
+    },
+    {
+        "id": "abies_alba",
+        "name": "European Silver Fir",
+        "scientificName": "Abies alba",
+        "traits": {
+            "leafType": "needle",
+            "leafShape": "needle",
+            "leafMargin": "smooth",
+            "leafArrangement": "whorled",
+            "evergreen": true,
+            "fruitType": "cone",
+            "barkTexture": "smooth",
+            "crownShape": "conical",
+            "heightCategory": "tall"
+        }
+    },
+    {
+        "id": "larix_decidua",
+        "name": "European Larch",
+        "scientificName": "Larix decidua",
+        "traits": {
+            "leafType": "needle",
+            "leafShape": "needle",
+            "leafMargin": "smooth",
+            "leafArrangement": "whorled",
+            "evergreen": false,
+            "fruitType": "cone",
+            "barkTexture": "scaly",
+            "crownShape": "conical",
+            "heightCategory": "tall"
+        }
+    },
+    {
+        "id": "juniperus_communis",
+        "name": "Common Juniper",
+        "scientificName": "Juniperus communis",
+        "traits": {
+            "leafType": "needle",
+            "leafShape": "needle",
+            "leafMargin": "smooth",
+            "leafArrangement": "whorled",
+            "evergreen": true,
+            "fruitType": "berry",
+            "barkTexture": "scaly",
+            "crownShape": "conical",
+            "heightCategory": "small"
+        }
+    }
+]
