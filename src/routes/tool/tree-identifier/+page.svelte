@@ -79,8 +79,9 @@
 
 <div class="row">
     <div class="col">
+        <h3>Questions</h3>
         {#if remainingTrees.length > 1 && currentTrait}
-            <span>{traitLabel(currentTrait) ?? camelCaseToTitle(currentTrait)}</span>
+            <strong>{traitLabel(currentTrait) ?? camelCaseToTitle(currentTrait)}</strong>
 
             <div class="d-flex flex-row gap-1">
                 {#each TRAITS[currentTrait] as option}
@@ -92,16 +93,11 @@
             </div>
         {:else}
             <button type="button" class="btn btn-primary" on:click={reset}>Again</button>
-            {#if remainingTrees.length === 1}
-                <p>Identified tree: <strong>{remainingTrees[0].name}</strong></p>
-            {:else}
-                <p>No exact match found.</p>
-            {/if}
         {/if}
     </div>
 
     <div class="col">
-        <h2>Indexed trees ({remainingTrees.length})</h2>
+        <h3>Remaining trees ({remainingTrees.length})</h3>
         <ul>
             {#each remainingTrees as tree}
                 <li>
@@ -110,6 +106,20 @@
                 </li>
             {/each}
         </ul>
+    </div>
+
+    <div class="col">
+        <h3>Identified tree</h3>
+        {#if remainingTrees.length === 1}
+            <div>
+                <p style="font-size: 2em">
+                    <em>{remainingTrees[0].scientificName}</em> - {remainingTrees[0].name}
+                </p>
+                <a href={getWikipediaSearchLink(remainingTrees[0].scientificName)} target="_blank">Wikipedia</a>
+            </div>
+        {:else}
+            <p>No exact match found.</p>
+        {/if}
     </div>
 </div>
 
