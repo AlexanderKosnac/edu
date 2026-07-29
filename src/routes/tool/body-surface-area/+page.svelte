@@ -5,7 +5,7 @@
     let heightCm = 180;
     $: heightM = heightCm/100;
 
-    function factorAndHeightAndWeightExponential(factor, heightExp, weightExp) {
+    function factorAndHeightAndWeightExponential(massKg, heightCm, factor, heightExp, weightExp) {
         const value = factor * heightCm**heightExp * massKg**weightExp;
         return {
             value: factor * heightCm**heightExp * massKg**weightExp,
@@ -13,14 +13,14 @@
         }
     }
 
-    $: duBois = factorAndHeightAndWeightExponential(0.007184, 0.725, 0.425);
+    $: duBois = factorAndHeightAndWeightExponential(massKg, heightCm, 0.007184, 0.725, 0.425);
 
     $: mosteller = ((heightCm * massKg)/3600)**0.5;
     $: mostellerCalculationKatex = katexAsHtml(`\\sqrt{\\frac{${heightCm} * ${massKg}}{3600}} = ${mosteller.toFixed(2)}`);
 
-    $: haycock = factorAndHeightAndWeightExponential(0.024265, 0.3964, 0.5378);
+    $: haycock = factorAndHeightAndWeightExponential(massKg, heightCm, 0.024265, 0.3964, 0.5378);
 
-    $: gehanAndGeorge = factorAndHeightAndWeightExponential(0.0235, 0.42246, 0.51456);
+    $: gehanAndGeorge = factorAndHeightAndWeightExponential(massKg, heightCm, 0.0235, 0.42246, 0.51456);
 </script>
 
 <div class="row">
