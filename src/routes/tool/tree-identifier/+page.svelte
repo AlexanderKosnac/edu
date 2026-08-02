@@ -49,6 +49,7 @@
 
     function answer(trait, value) {
         askedTraits.add(trait);
+        askedTraits = askedTraits;
 
         remainingTrees = remainingTrees.filter((t) => t.traits[trait] === value);
 
@@ -57,6 +58,8 @@
 
     function skip() {
         askedTraits.add(currentTrait);
+        askedTraits = askedTraits;
+
         currentTrait = chooseBestTrait(remainingTrees, askedTraits);
     }
 
@@ -80,10 +83,18 @@
 <div class="row">
     <div class="col">
         <h3>Questions</h3>
-        {#if remainingTrees.length > 1 && currentTrait}
-            <strong>{traitLabel(currentTrait) ?? camelCaseToTitle(currentTrait)}</strong>
+        <div class="d-flex flex-column gap-1 pb-1">
+            {#each [...askedTraits] as o}
+                <div>
+                    <span>{camelCaseToTitle(o)}</span>
+                </div>
+            {/each}
+        </div>
 
-            <div class="d-flex flex-row gap-1">
+        {#if remainingTrees.length > 1 && currentTrait}
+            <div class="d-flex flex-row align-items-center gap-1">
+                <strong>{traitLabel(currentTrait) ?? camelCaseToTitle(currentTrait)}:</strong>
+
                 {#each TRAITS[currentTrait] as option}
                     {@const o = option === true ? "Yes" : option === false ? "No" : option}
                     <button type="button" class="btn btn-primary" on:click={() => answer(currentTrait, option)}>{camelCaseToTitle(o)}</button>
