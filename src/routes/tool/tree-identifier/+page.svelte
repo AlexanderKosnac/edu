@@ -63,6 +63,23 @@
         currentTrait = chooseBestTrait(remainingTrees, askedTraits);
     }
 
+    function unanswer(trait) {
+        askedTraits.delete(trait);
+        askedTraits = new Map(askedTraits);
+
+        remainingTrees = trees.filter((tree) => {
+            for (const [t, value] of askedTraits) {
+                if (value === null)
+                    continue;
+                if (tree.traits[t] !== value)
+                    return false;
+            }
+            return true;
+        });
+
+        currentTrait = chooseBestTrait(remainingTrees, askedTraits);
+    }
+
     function reset() {
         remainingTrees = [...trees];
         askedTraits = new Map();
@@ -87,13 +104,14 @@
             {#each [...askedTraits] as [trait, value]}
                 <div>
                     <span>{camelCaseToTitle(trait)}:</span>
-                    <strong>
+                    <span>
                         {value === true
                             ? "Yes"
                             : value === false
                                 ? "No"
                                 : camelCaseToTitle(value) ?? "Skipped"}
-                    </strong>
+                    </span>
+                    <button type="button" class="btn btn-outline-danger" on:click={() => unanswer(trait)}>Remove</button>
                 </div>
             {/each}
         </div>
