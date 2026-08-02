@@ -17,7 +17,7 @@
     }
 
     let remainingTrees = [...trees];
-    let askedTraits = new Set();
+    let askedTraits = new Map();
     let currentTrait = chooseBestTrait(remainingTrees, askedTraits);
 
     function chooseBestTrait(trees, asked) {
@@ -48,8 +48,8 @@
     }
 
     function answer(trait, value) {
-        askedTraits.add(trait);
-        askedTraits = askedTraits;
+        askedTraits.set(trait, value);
+        askedTraits = new Map(askedTraits);
 
         remainingTrees = remainingTrees.filter((t) => t.traits[trait] === value);
 
@@ -57,15 +57,15 @@
     }
 
     function skip() {
-        askedTraits.add(currentTrait);
-        askedTraits = askedTraits;
+        askedTraits.set(currentTrait, null);
+        askedTraits = new Map(askedTraits);
 
         currentTrait = chooseBestTrait(remainingTrees, askedTraits);
     }
 
     function reset() {
         remainingTrees = [...trees];
-        askedTraits = new Set();
+        askedTraits = new Map();
         currentTrait = chooseBestTrait(remainingTrees, askedTraits);
     }
 
@@ -84,9 +84,16 @@
     <div class="col">
         <h3>Questions</h3>
         <div class="d-flex flex-column gap-1 pb-1">
-            {#each [...askedTraits] as o}
+            {#each [...askedTraits] as [trait, value]}
                 <div>
-                    <span>{camelCaseToTitle(o)}</span>
+                    <span>{camelCaseToTitle(trait)}:</span>
+                    <strong>
+                        {value === true
+                            ? "Yes"
+                            : value === false
+                                ? "No"
+                                : camelCaseToTitle(value) ?? "Skipped"}
+                    </strong>
                 </div>
             {/each}
         </div>
