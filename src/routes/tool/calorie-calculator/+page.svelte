@@ -51,7 +51,9 @@
 
     const kcalPerDay = "\\frac{kcal}{day}";
 
-    let caloriesToDistribute = 2_000;
+    let caloriesToDistribute = $state(2_000);
+
+    let customDistribution = $state([60, 25, 15]);
 
     const calorieDistributions = [
         [60, 25, 15],
@@ -218,6 +220,15 @@
     </div>
 </div>
 
+{#snippet calculatedDistribution(distribution)}
+<td>{(caloriesToDistribute * distribution[0]/100).toFixed(0)}</td>
+<td>{(caloriesToDistribute * distribution[1]/100).toFixed(0)}</td>
+<td>{(caloriesToDistribute * distribution[2]/100).toFixed(0)}</td>
+<td>{(1/4 * caloriesToDistribute * distribution[0]/100).toFixed(0)}</td>
+<td>{(1/4 * caloriesToDistribute * distribution[1]/100).toFixed(0)}</td>
+<td>{(1/9 * caloriesToDistribute * distribution[2]/100).toFixed(0)}</td>
+{/snippet}
+
 <div class="row">
     <div class="col-auto">
         <table class="table table-bordered text-center">
@@ -245,14 +256,15 @@
                     <td>{d[0]}%</td>
                     <td>{d[1]}%</td>
                     <td>{d[2]}%</td>
-                    <td>{(caloriesToDistribute * d[0]/100).toFixed(0)}</td>
-                    <td>{(caloriesToDistribute * d[1]/100).toFixed(0)}</td>
-                    <td>{(caloriesToDistribute * d[2]/100).toFixed(0)}</td>
-                    <td>{(1/4 * caloriesToDistribute * d[0]/100).toFixed(0)}</td>
-                    <td>{(1/4 * caloriesToDistribute * d[1]/100).toFixed(0)}</td>
-                    <td>{(1/9 * caloriesToDistribute * d[2]/100).toFixed(0)}</td>
+                    {@render calculatedDistribution(d)}
                 </tr>
                 {/each}
+                <tr>
+                    <td><input type="number" class="form-control" min="0" max="100" style="width: 5em" bind:value={customDistribution[0]}/></td>
+                    <td><input type="number" class="form-control" min="0" max="100" style="width: 5em" bind:value={customDistribution[1]}/></td>
+                    <td><input type="number" class="form-control" min="0" max="100" style="width: 5em" bind:value={customDistribution[2]}/></td>
+                    {@render calculatedDistribution(customDistribution)}
+                </tr>
             </tbody>
         </table>
     </div>
