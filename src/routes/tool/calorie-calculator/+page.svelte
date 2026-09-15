@@ -1,30 +1,30 @@
 <script>
     import { katexAsHtml, katexAsHtmlInline } from "$lib/katexUtility.js";
 
-    let massKg = 80;
-    let heightCm = 180;
-    let ageYears = 25;
-    let bodyFatPercentageDecimal = 20;
-    $: bodyFatPercentageFractional = bodyFatPercentageDecimal / 100;
+    let massKg = $state(80);
+    let heightCm = $state(180);
+    let ageYears = $state(25);
+    let bodyFatPercentageDecimal = $state(20);
+    let bodyFatPercentageFractional = $derived(bodyFatPercentageDecimal / 100);
 
-    $: mifflinBmrMen = 10 * massKg + 6.25 * heightCm - 5 * ageYears + 5;
-    $: mifflinBmrWomen = 10 * massKg + 6.25 * heightCm - 5 * ageYears - 161;
+    let mifflinBmrMen = $derived(10 * massKg + 6.25 * heightCm - 5 * ageYears + 5);
+    let mifflinBmrWomen = $derived(10 * massKg + 6.25 * heightCm - 5 * ageYears - 161);
 
-    $: harrisBmrMen = 13.397 * massKg + 4.799 * heightCm - 5.677 * ageYears + 88.362;
-    $: harrisBmrWomen = 9.247 * massKg + 3.098 * heightCm - 4.330 * ageYears + 447.593;
+    let harrisBmrMen = $derived(13.397 * massKg + 4.799 * heightCm - 5.677 * ageYears + 88.362);
+    let harrisBmrWomen = $derived(9.247 * massKg + 3.098 * heightCm - 4.330 * ageYears + 447.593);
 
-    $: katchBmr = 370 + 21.6 * (1 - bodyFatPercentageFractional) * massKg;
+    let katchBmr = $derived(370 + 21.6 * (1 - bodyFatPercentageFractional) * massKg);
 
-    $: mifflinTdeeMen = mifflinBmrMen * selectedActivityFactor;
-    $: mifflinTdeeWomen = mifflinBmrWomen * selectedActivityFactor;
+    let mifflinTdeeMen = $derived(mifflinBmrMen * selectedActivityFactor);
+    let mifflinTdeeWomen = $derived(mifflinBmrWomen * selectedActivityFactor);
 
-    $: harrisTdeeMen = harrisBmrMen * selectedActivityFactor;
-    $: harrisTdeeWomen = harrisBmrWomen * selectedActivityFactor;
+    let harrisTdeeMen = $derived(harrisBmrMen * selectedActivityFactor);
+    let harrisTdeeWomen = $derived(harrisBmrWomen * selectedActivityFactor);
 
-    $: katchTdee = katchBmr * selectedActivityFactor;
+    let katchTdee = $derived(katchBmr * selectedActivityFactor);
 
-    let selectedActivity = "moderate";
-    let customActivityFactor = 1.0;
+    let selectedActivity = $state("moderate");
+    let customActivityFactor = $state(1.0);
 
     const activityFactors = {
         bmr: 1.0,
@@ -36,9 +36,9 @@
         extra: 1.9,
     };
 
-    $: selectedActivityFactor = selectedActivity === "custom" ? customActivityFactor : activityFactors[selectedActivity];
+    let selectedActivityFactor = $derived(selectedActivity === "custom" ? customActivityFactor : activityFactors[selectedActivity]);
 
-    let baseCaloricIntakePerDay = 2_000;
+    let baseCaloricIntakePerDay = $state(2_000);
     const weightChangeCategories = {
         "Extreme weight loss": -1_000,
         "Weight loss": -500,
