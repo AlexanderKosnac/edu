@@ -63,6 +63,11 @@
         [40, 30, 30],
         [40, 40, 20],
     ];
+
+    let macros = $state([300, 125, 33]);
+    let macrosSum = $derived(macros.reduce((a, b) => a + b, 0));
+    let kcals = $derived([macros[0] * 4, macros[1] * 4, macros[2] * 9]);
+    let kcalsSum = $derived(kcals.reduce((a, b) => a + b, 0));
 </script>
 
 <div class="row">
@@ -271,6 +276,54 @@
     <div class="col-auto">
         Calories to distribute:
         <input type="number" class="form-control" bind:value={caloriesToDistribute} min="0"/>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <h2>Calorie Sum</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-auto">
+        <table class="table table-bordered text-center">
+            <thead>
+                <tr>
+                    <th scope="col">Macro</th>
+                    <th scope="col" colspan="2">g</th>
+                    <th scope="col" colspan="2">kcal</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider">
+                <tr>
+                    <td>Carbs</td>
+                    <td><input type="number" class="form-control" style="width: 6em" min="0" bind:value={macros[0]}/></td>
+                    <td>{(macros[0] / macrosSum * 100).toFixed(0)}%</td>
+                    <td>{kcals[0]}</td>
+                    <td>{(kcals[0] / kcalsSum * 100).toFixed(0)}%</td>
+                </tr>
+                <tr>
+                    <td>Protein</td>
+                    <td><input type="number" class="form-control" style="width: 6em" min="0" bind:value={macros[1]}/></td>
+                    <td>{(macros[1] / macrosSum * 100).toFixed(0)}%</td>
+                    <td>{kcals[1]}</td>
+                    <td>{(kcals[1] / kcalsSum * 100).toFixed(0)}%</td>
+                </tr>
+                <tr>
+                    <td>Fat</td>
+                    <td><input type="number" class="form-control" style="width: 6em" min="0" bind:value={macros[2]}/></td>
+                    <td>{(macros[2] / macrosSum * 100).toFixed(0)}%</td>
+                    <td>{kcals[2]}</td>
+                    <td>{(kcals[2] / kcalsSum * 100).toFixed(0)}%</td>
+                </tr>
+                <tr>
+                    <td>Total</td>
+                    <td colspan="2">{macrosSum}</td>
+                    <td colspan="2">{kcalsSum}</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 
