@@ -40,6 +40,7 @@
 
 <svelte:head>
     <title>{data.overview.name ?? "No name defined"}</title>
+    <meta name="description" content="{data.overview.description}" />
 </svelte:head>
 
 <div class="row">
